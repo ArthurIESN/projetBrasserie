@@ -25,3 +25,9 @@ replay_pid*
 
 # MacOs files
 *.DS_STORE
+
+# properties files
+*.properties
+
+# Secret key gen
+AESEncryption.java
