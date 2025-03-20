@@ -15,6 +15,8 @@ public class Database
     {
        // use a mysql database
         String username = ConfigReader.getUsername();
+           
+        //Class.forName("com.mysql.cj.jdbc.Driver");
         String password = "";
         String url = "jdbc:mysql://localhost:3306/brasserie_java_db";
 
