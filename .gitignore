@@ -31,3 +31,5 @@ replay_pid*
 
 # Secret key gen
 AESEncryption.java
+
+.idea/misc.xml
