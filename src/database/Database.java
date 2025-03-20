@@ -1,4 +1,4 @@
-/*package database;
+package database;
 
 import Config.ConfigReader;
 import java.util.*;
@@ -44,4 +44,4 @@ public class Database
         return instance;
     }
 
-}*/
+}
