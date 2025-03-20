@@ -1,0 +1,14 @@
+# Utiliser l'image de base OpenJDK
+FROM openjdk
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le répertoire src dans le conteneur
+COPY . .
+
+# Compiler le fichier Main.java
+RUN javac Main.java
+
+# Définir la commande à exécuter lors du lancement du conteneur
+CMD ["java", "Main"]

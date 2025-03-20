@@ -1,4 +1,4 @@
-package database;
+/*package database;
 
 import Config.ConfigReader;
 import java.util.*;
@@ -17,7 +17,7 @@ public class Database
        // use a mysql database
         String username = ConfigReader.getUsername();
         String password = ConfigReader.getPassword();
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        //Class.forName("com.mysql.cj.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/brasserie_java_db";
 
         try {
@@ -44,4 +44,4 @@ public class Database
         return instance;
     }
 
-}
+}*/
