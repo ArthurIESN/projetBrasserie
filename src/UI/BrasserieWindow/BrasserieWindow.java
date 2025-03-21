@@ -1,6 +1,6 @@
 package UI.BrasserieWindow;
-package UI.Components.MenuBarBrasserie;
 
+import UI.Components.MenuBarBrasserie;
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,10 +20,13 @@ public class BrasserieWindow extends JFrame
         container = getContentPane();
         container.setLayout(new BorderLayout());
 
+        menuBarBrasserie = new MenuBarBrasserie(this);
+        setJMenuBar(menuBarBrasserie.getMenuBar());
+
         setVisible(true);
     }
 
-    private void updateWindowContent(JPanel panel)
+    public void updateWindowContent(JPanel panel)
     {
         if(contentPanel != null)
         {
