@@ -1,9 +1,9 @@
 package database;
 
-import Config.ConfigReader;
-
 import java.sql.*;
 import java.util.*;
+
+import Environement.EnvLoader;
 
 public class Database
 {
@@ -13,30 +13,28 @@ public class Database
 
     private Database()
     {
-       // use a mysql database
-        String username = ConfigReader.getUsername();
-           
-        //Class.forName("com.mysql.cj.jdbc.Driver");
-        String password = "";
-        String url = "jdbc:mysql://localhost:3306/brasserie_java_db";
+        // use a mysql database
+        String port = EnvLoader.getEnvValue("DB_PORT");
+        String host = EnvLoader.getEnvValue("DB_HOST");
+        String name = EnvLoader.getEnvValue("DB_NAME");
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
+        String username = EnvLoader.getEnvValue("DB_USERNAME");
+        String password = EnvLoader.getEnvValue("DB_PASSWORD");
 
         try {
+
+
             // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
             System.out.println("Connected to the database");
 
-            // test request get all employees
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
-            System.out.println("Request executed");
-
-            while (resultSet.next())
-            {
-                System.out.println(resultSet.getString("first_name") + " " + resultSet.getString("last_name"));
-            }
-
+         /*   // test récuperer tout les employés
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM employee");
+            while (rs.next()) {
+                System.out.println(rs.getString("last_name") + " " + rs.getString("first_name"));
+            } */
 
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver not found");
@@ -45,7 +43,6 @@ public class Database
             System.err.println("Error connecting to the database");
             e.printStackTrace();
         }
-
     }
 
     public static Database getInstance()
@@ -56,5 +53,4 @@ public class Database
         }
         return instance;
     }
-
 }

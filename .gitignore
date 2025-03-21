@@ -29,7 +29,13 @@ replay_pid*
 # properties files
 *.properties
 
-# Secret key gen
-AESEncryption.java
+# Environment file
+.env
 
-.idea/misc.xml
+# Idea files
+.idea/
+
+# iml
+projetBrasserie.iml
+
+
