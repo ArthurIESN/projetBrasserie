@@ -22,7 +22,7 @@ public class Database
         String password = EnvLoader.getEnvValue("DB_PASSWORD");
 
         try {
-            Thread.sleep(1000);
+
 
             // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -41,9 +41,6 @@ public class Database
             e.printStackTrace();
         } catch (SQLException e) {
             System.err.println("Error connecting to the database");
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            System.err.println("Thread interrupted");
             e.printStackTrace();
         }
     }
