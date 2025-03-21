@@ -13,29 +13,28 @@ public class Database
 
     private Database()
     {
-       // use a mysql database
-        String port = EnvLoader.getEnvValue( "DB_PORT");
+        // use a mysql database
+        String port = EnvLoader.getEnvValue("DB_PORT");
         String host = EnvLoader.getEnvValue("DB_HOST");
         String name = EnvLoader.getEnvValue("DB_NAME");
-        //String url = "jdbc:mysql://localhost:3306/brasserie_java_db";
         String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
         String username = EnvLoader.getEnvValue("DB_USERNAME");
         String password = EnvLoader.getEnvValue("DB_PASSWORD");
 
-
         try {
+            Thread.sleep(1000);
+
             // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
             System.out.println("Connected to the database");
 
-            // test récuperer tout les employés
-
+         /*   // test récuperer tout les employés
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM employee");
             while (rs.next()) {
                 System.out.println(rs.getString("last_name") + " " + rs.getString("first_name"));
-            }
+            } */
 
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver not found");
@@ -43,8 +42,10 @@ public class Database
         } catch (SQLException e) {
             System.err.println("Error connecting to the database");
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.err.println("Thread interrupted");
+            e.printStackTrace();
         }
-
     }
 
     public static Database getInstance()
@@ -55,5 +56,4 @@ public class Database
         }
         return instance;
     }
-
 }
