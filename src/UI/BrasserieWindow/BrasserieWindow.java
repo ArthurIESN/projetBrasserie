@@ -1,6 +1,8 @@
 package UI.BrasserieWindow;
 
 import UI.Components.MenuBarBrasserie;
+import UI.Search.SearchItemForm;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,6 +26,8 @@ public class BrasserieWindow extends JFrame
         setJMenuBar(menuBarBrasserie.getMenuBar());
 
         setVisible(true);
+
+        updateWindowContent(new SearchItemForm());
     }
 
     public void updateWindowContent(JPanel panel)
