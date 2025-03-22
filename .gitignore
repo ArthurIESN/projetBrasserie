@@ -37,3 +37,7 @@ replay_pid*
 
 # iml
 projetBrasserie.iml
+
+# out files
+out/
+
