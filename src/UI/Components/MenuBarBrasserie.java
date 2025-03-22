@@ -1,6 +1,7 @@
 package UI.Components;
 
 import UI.BrasserieWindow.BrasserieWindow;
+import UI.Search.SearchItemForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +26,9 @@ public class MenuBarBrasserie {
         recherche.add(recherche2);
         recherche.add(recherche3);
 
-        recherche1.addActionListener(e -> {
-            JPanel panel1 = new JPanel();
-            panel1.add(new JLabel("Recherche1 selected"));
-            brasserieWindow.updateWindowContent(panel1);
+        recherche1.addActionListener(e ->
+        {
+            brasserieWindow.updateWindowContent(new SearchItemForm());
         });
 
         recherche2.addActionListener(e -> {

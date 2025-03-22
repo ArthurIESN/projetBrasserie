@@ -4,7 +4,6 @@ import java.io.*;
 
 public class EnvLoader
 {
-
     private final static String filePath = ".env";
 
     public static String getEnvValue(String key)
@@ -23,7 +22,9 @@ public class EnvLoader
                     return line.substring(key.length() + 1).trim();
                 }
             }
-        } catch (IOException e) {
+            //@todo: custom exception
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
         return null;

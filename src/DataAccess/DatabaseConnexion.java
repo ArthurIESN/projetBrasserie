@@ -1,40 +1,33 @@
-package database;
-
-import java.sql.*;
-import java.util.*;
+package DataAccess;
 
 import Environement.EnvLoader;
 
-public class Database
-{
-    private static Database instance;
-    private Connection connection;
-    private static final String databaseName = "brasserie_java_db";
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    private Database()
+public class DatabaseConnexion
+{
+    private static Connection connection;
+
+
+    private DatabaseConnexion()
     {
-        // use a mysql database
         String port = EnvLoader.getEnvValue("DB_PORT");
         String host = EnvLoader.getEnvValue("DB_HOST");
         String name = EnvLoader.getEnvValue("DB_NAME");
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
         String username = EnvLoader.getEnvValue("DB_USERNAME");
         String password = EnvLoader.getEnvValue("DB_PASSWORD");
 
-        try {
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
 
-
+        try
+        {
             // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
             System.out.println("Connected to the database");
 
-         /*   // test récuperer tout les employés
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM employee");
-            while (rs.next()) {
-                System.out.println(rs.getString("last_name") + " " + rs.getString("first_name"));
-            } */
 
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver not found");
@@ -45,12 +38,15 @@ public class Database
         }
     }
 
-    public static Database getInstance()
+
+
+    public static Connection getInstance()
     {
-        if (instance == null)
+        if(connection == null)
         {
-            instance = new Database();
+            new DatabaseConnexion();
         }
-        return instance;
+
+        return connection;
     }
 }
