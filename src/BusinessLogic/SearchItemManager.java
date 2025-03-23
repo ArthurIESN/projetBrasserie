@@ -29,3 +29,5 @@ public class SearchItemManager
         return searchItemDBAccess.getMinMaxItemQuantityAndPrice();
     }
 }
+
+// Je fais un test
