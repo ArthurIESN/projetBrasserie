@@ -20,7 +20,7 @@ public class SearchItemForm extends JPanel
     {
         //@todo : just for testing, move this to the corresponding controller
         SearchItemDBAccess searchItemDBAccess = new SearchItemDBAccess();
-        ArrayList<Integer> minMaxItem = searchItemDBAccess.getMinMaxItemQuantityAndPrice();
+        int[] minMaxItem = searchItemDBAccess.getMinMaxItemQuantityAndPrice();
 
         // add a title
         setLayout(new BorderLayout());
@@ -36,11 +36,11 @@ public class SearchItemForm extends JPanel
         gridSearchForm.addField("TVA Code", tvaCodeField);
 
         // Item Stock Quantity Field
-        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem.getFirst(), minMaxItem.get(1), 300, 50);
+        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 300, 50);
         gridSearchForm.addField("Item Stock Quantity", nbItemInPackaging);
 
         // Item Price Field
-        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem.get(2), minMaxItem.getLast(), 300, 50);
+        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 300, 50);
         gridSearchForm.addField("Item Price", priceRange);
 
         add(searchForm, BorderLayout.CENTER);

@@ -16,7 +16,7 @@ public class SearchItemDBAccess
     {
     }
 
-    public ArrayList<Integer> getMinMaxItemQuantityAndPrice()
+    public int[] getMinMaxItemQuantityAndPrice()
     {
         Connection databaseConnexion = DatabaseConnexion.getInstance();
 
@@ -32,12 +32,13 @@ public class SearchItemDBAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
-            ArrayList<Integer> minMaxItem = new ArrayList<>();
-            if (resultSet.next()) {
-                minMaxItem.add(resultSet.getInt("min_item_quantity"));
-                minMaxItem.add(resultSet.getInt("max_item_quantity"));
-                minMaxItem.add(resultSet.getInt("min_item_price"));
-                minMaxItem.add(resultSet.getInt("max_item_price"));
+            int[] minMaxItem = new int[4];
+            if (resultSet.next())
+            {
+                minMaxItem[0] = (resultSet.getInt("min_item_quantity"));
+                minMaxItem[1] = (resultSet.getInt("max_item_quantity"));
+                minMaxItem[2] = (resultSet.getInt("min_item_price"));
+                minMaxItem[3] = (resultSet.getInt("max_item_price"));
             }
 
 
