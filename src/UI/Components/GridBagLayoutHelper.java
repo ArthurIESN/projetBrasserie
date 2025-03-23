@@ -6,8 +6,8 @@ import javax.swing.*;
 
 public class GridBagLayoutHelper
 {
-    private GridBagConstraints gbc;
-    private JPanel panel;
+    private final GridBagConstraints gbc;
+    private final JPanel panel;
 
     public GridBagLayoutHelper(JPanel panel)
     {
@@ -17,7 +17,7 @@ public class GridBagLayoutHelper
         gbc.fill = GridBagConstraints.HORIZONTAL;
     }
 
-    public void addComponent(String label, Component component)
+    public void addField(String label, Component component)
     {
         JLabel jLabel = new JLabel(label);
         gbc.gridx = 0;

@@ -1,9 +1,9 @@
 package UI.BrasserieWindow;
 
-import UI.Components.MenuBarBrasserie;
-
 import javax.swing.*;
 import java.awt.*;
+
+import UI.Components.MenuBarBrasserie;
 
 public class BrasserieWindow extends JFrame
 {

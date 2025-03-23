@@ -6,23 +6,26 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class JDualSliderPanel extends JPanel {
-    private final int[] values = new int[2];
+    private final int[] values = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean draggingThumb1 = false;
     private boolean draggingThumb2 = false;
     private final int padding = 60; // Left and right padding
     private final int min;
     private final int max;
 
-    public JDualSliderPanel(int minValue, int maxValue, int currentMin, int currentMax, int width, int height)
+    public JDualSliderPanel(int minValue, int maxValue, int width, int height)
     {
         this.min = minValue;
         this.max = maxValue;
-        setCurrentMin(currentMin);
-        setCurrentMax(currentMax);
+        setCurrentMin(min);
+        setCurrentMax(max);
         updateSize(width, height);
-        addMouseListener(new MouseAdapter() {
+
+        addMouseListener(new MouseAdapter()
+        {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent e)
+            {
                 int mouseX = e.getX();
                 int thumb1X = xPositionForValue(getCurrentMin());
                 int thumb2X = xPositionForValue(getCurrentMax());
@@ -62,14 +65,9 @@ public class JDualSliderPanel extends JPanel {
         });
     }
 
-    public JDualSliderPanel(int minValue, int maxValue, int currentMin, int currentMax)
-    {
-        this(minValue, maxValue, currentMin, currentMax, 200, 50);
-    }
-
     public JDualSliderPanel(int minValue, int maxValue)
     {
-        this(minValue, maxValue, minValue, maxValue);
+        this(minValue, maxValue, 200, 50);
     }
 
     public JDualSliderPanel()
@@ -121,7 +119,7 @@ public class JDualSliderPanel extends JPanel {
 
 
         int maxTextWidth = g2d.getFontMetrics().stringWidth(String.valueOf(max));
-        int maxX = getWidth() - padding - maxTextWidth - 10;
+        int maxX = getWidth() - padding - maxTextWidth;
         drawTextCentered(g2d, String.valueOf(max), maxX, getHeight() / 2, false);
 
         g2d.dispose();
@@ -140,7 +138,7 @@ public class JDualSliderPanel extends JPanel {
         int textWidth = fm.stringWidth(String.valueOf(value));
         int textHeight = fm.getHeight();
         int adjustedX = Math.min(Math.max(x - textWidth / 2, 0), getWidth() - textWidth);
-        int textY = isLeftThumb ? getHeight() / 2 - 10 : getHeight() / 2 + textHeight + 2;
+        int textY = isLeftThumb ? getHeight() / 2 - 10 : getHeight() / 2 + textHeight + 4;
         g2d.drawString(String.valueOf(value), adjustedX, textY);
     }
 
