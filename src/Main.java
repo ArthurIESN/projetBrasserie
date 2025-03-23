@@ -1,8 +1,9 @@
-import database.Database;
+import UI.BrasserieWindow.BrasserieWindow;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello World!");
-        Database db = Database.getInstance();
+
+        BrasserieWindow brasserieWindow = new BrasserieWindow();
     }
 }

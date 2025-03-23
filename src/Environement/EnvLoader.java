@@ -1,13 +1,14 @@
 package Environement;
 
+import Exceptions.Environement.BadEnvValueException;
+
 import java.io.*;
 
 public class EnvLoader
 {
-
     private final static String filePath = ".env";
 
-    public static String getEnvValue(String key)
+    public static String getEnvValue(String key) throws BadEnvValueException
     {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
         {
@@ -23,9 +24,12 @@ public class EnvLoader
                     return line.substring(key.length() + 1).trim();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (IOException e)
+        {
+            System.out.println(e.getMessage());
         }
-        return null;
+
+        throw new BadEnvValueException(key, "The key " + key + " was not found in the .env file");
     }
 }
