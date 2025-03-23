@@ -6,6 +6,7 @@ import Model.Vat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,6 +14,39 @@ public class SearchItemDBAccess
 {
     public SearchItemDBAccess()
     {
+    }
+
+    public ArrayList<Integer> getMinMaxItemQuantityAndPrice()
+    {
+        Connection databaseConnexion = DatabaseConnexion.getInstance();
+
+        String sql = "SELECT " +
+                "MIN(current_quantity) AS min_item_quantity, " +
+                "MAX(current_quantity) AS max_item_quantity, " +
+                "MIN(price) AS min_item_price, " +
+                "MAX(price) AS max_item_price " +
+                "FROM item";
+
+        try
+        {
+            PreparedStatement statement = databaseConnexion.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<Integer> minMaxItem = new ArrayList<>();
+            if (resultSet.next()) {
+                minMaxItem.add(resultSet.getInt("min_item_quantity"));
+                minMaxItem.add(resultSet.getInt("max_item_quantity"));
+                minMaxItem.add(resultSet.getInt("min_item_price"));
+                minMaxItem.add(resultSet.getInt("max_item_price"));
+            }
+
+
+            return minMaxItem;
+
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)
