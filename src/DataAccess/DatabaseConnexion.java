@@ -25,6 +25,7 @@ public class DatabaseConnexion
 
             String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
 
+            System.out.println("test");
             try
             {
                 // Load the MySQL JDBC driver
