@@ -90,7 +90,7 @@ public class DataAccessItem {
 
             }
         }catch (SQLException e){
-            throw new DatabaseConnectionFailedException("Database connection failed",e.getMessage());
+            throw new DatabaseConnectionFailedException("Database connection failed");
         }
 
         return items;

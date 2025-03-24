@@ -3,10 +3,14 @@ package Controller;
 
 import BusinessLogic.Search.SearchItemManager;
 import BusinessLogic.SearchDocumentWithEventManager;
+
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.tva.WrongTvaCodeException;
+import Exceptions.DataAccess.Search.SearchItemException;
+import Exceptions.DataAccess.Vat.UnkownVatCodeException;
+import Exceptions.Vat.WrongVatCodeException;
 import Model.Item.Item;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,8 +32,7 @@ public class SearchController {
         return instance;
     }
 
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, WrongTvaCodeException
-    {
+    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
         return searchItemManager.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
     }
 
