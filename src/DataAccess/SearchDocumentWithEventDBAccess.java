@@ -1,5 +1,7 @@
 package DataAccess;
 
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SearchDocumentWithEventDBAccess {
-    public List<Date> getDatesEvents(){
+    public List<Date> getDatesEvents() throws DatabaseConnectionFailedException {
         List<Date> dates = new ArrayList<>();
 
         String query = "SELECT start_date FROM event";

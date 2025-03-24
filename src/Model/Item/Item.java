@@ -13,14 +13,14 @@ public class Item
     private int restock_quantity;
     private int current_quantity;
     private int empty_returnable_bottle_quantity;
-    private int empty_returnable_bottle_price;
+    private float empty_returnable_bottle_price;
     private Date forecast_date;
     private int forecast_quantity;
     private int min_quantity;
     private Packaging packaging;
     private Vat code_vat;
 
-    public Item(Integer id, String label, float price, int restock_quantity, int current_quantity, int empty_returnable_bottle_quantity, int empty_returnable_bottle_price, Date forecast_date, int forecast_quantity, int min_quantity, Packaging packaging, Vat code_vat)
+    public Item(Integer id, String label, float price, int restock_quantity, int current_quantity, int empty_returnable_bottle_quantity, float empty_returnable_bottle_price, Date forecast_date, int forecast_quantity, int min_quantity, Packaging packaging, Vat code_vat)
     {
         this.id = id;
         this.label = label;
@@ -66,7 +66,7 @@ public class Item
         return empty_returnable_bottle_quantity;
     }
 
-    public int getEmpty_returnable_bottle_price()
+    public float getEmpty_returnable_bottle_price()
     {
         return empty_returnable_bottle_price;
     }

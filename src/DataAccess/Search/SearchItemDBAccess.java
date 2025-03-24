@@ -3,6 +3,7 @@ package DataAccess.Search;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.DataAccess.Search.SearchItemException;
 import Model.Item.Item;
 import Model.Packaging;
 import Model.Vat;
@@ -14,9 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchItemDBAccess
 {
+    private Map<String, Vat> vatCache = new HashMap<>();
+    private Map<Integer, Packaging> packagingCache = new HashMap<>();
+
     public SearchItemDBAccess()
     {
     }
@@ -52,16 +58,17 @@ public class SearchItemDBAccess
 
         } catch (SQLException e)
         {
-            throw new GetMinMaxItemQuantityAndPriceException(e.getMessage());
+            System.err.println("Sql error: " + e.getMessage());
+            throw new GetMinMaxItemQuantityAndPriceException();
         }
     }
 
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException
+    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException, SearchItemException
     {
         String sql = "SELECT *, packaging.label AS packaing_label " +
                 "FROM item " +
-                "JOIN vat ON item.code_vat LIKE vat.code " +
-                "JOIN packaging ON item.id_packaging LIKE packaging.id " +
+                "JOIN vat ON item.code_vat = vat.code " +
+                "JOIN packaging ON item.id_packaging = packaging.id " +
                 "WHERE vat.code = ? " +
                 "AND item.current_quantity BETWEEN ? AND ? " +
                 "AND item.price BETWEEN ? AND ? ";
@@ -83,14 +90,34 @@ public class SearchItemDBAccess
             ArrayList<Item> items = new ArrayList<>();
             while (statement.getResultSet().next())
             {
-                Vat vat = new Vat(
-                        statement.getResultSet().getString("code"),
-                        statement.getResultSet().getFloat("rate"));
+                Vat vat;
 
-                Packaging packaging = new Packaging(
-                        statement.getResultSet().getInt("id_packaging"),
-                        statement.getResultSet().getString("packaing_label"),
-                        statement.getResultSet().getInt("nb_articles"));
+                if(vatCache.containsKey(tvaCode))
+                {
+                    vat = vatCache.get(tvaCode);
+                }
+                else
+                {
+                    vat = new Vat(
+                            tvaCode,
+                            statement.getResultSet().getFloat("rate")
+                    );
+                    vatCache.put(tvaCode, vat);
+                }
+
+                int packagingId = statement.getResultSet().getInt("id_packaging");
+                Packaging packaging = packagingCache.computeIfAbsent(packagingId, id -> {
+                    try {
+                        return new Packaging(
+                                id,
+                                statement.getResultSet().getString("packaing_label"),
+                                statement.getResultSet().getInt("nb_articles")
+                        );
+                    } catch (SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                });
 
                 Item item = new Item(
                         statement.getResultSet().getInt("id"),
@@ -113,7 +140,8 @@ public class SearchItemDBAccess
 
         } catch (SQLException e)
         {
-            throw new RuntimeException(e);
+            System.err.println("Sql error: " + e.getMessage());
+            throw new SearchItemException();
         }
 
     }

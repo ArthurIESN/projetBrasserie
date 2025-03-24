@@ -34,17 +34,20 @@ public class DatabaseConnexion
             }
             catch (ClassNotFoundException e)
             {
-                throw new DatabaseConnectionFailedException("The MySQL JDBC driver was not found", e.getMessage());
+                System.err.println("My Sql driver error : " + e.getMessage());
+                throw new DatabaseConnectionFailedException("Missing dependency");
             }
             catch (SQLException e)
             {
-                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database", e.getMessage());
+                System.err.println("Connection error : " + e.getMessage());
+                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
             }
 
         }
         catch (BadEnvValueException e)
         {
-            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database", e.getMessage());
+            System.err.println("Error while loading the environment variables : " + e.getMessage());
+            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
         }
     }
 

@@ -1,13 +1,10 @@
 package Exceptions.DataAccess.Search;
 
-public class SearchItemException
-{
+public class SearchItemException extends Exception {
     private final String message;
-    private final String sqlErrorMessage;
 
-    public SearchItemException(String sqlErrorMessage)
+    public SearchItemException()
     {
-        this.sqlErrorMessage = sqlErrorMessage;
         this.message = "Error while searching for items.";
     }
 
@@ -15,8 +12,4 @@ public class SearchItemException
     {
         return this.message;
     }
-
-    public String getSqlErrorMessage()
-    {
-        return this.sqlErrorMessage;
-    }}
+}

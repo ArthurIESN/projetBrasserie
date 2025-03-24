@@ -1,6 +1,7 @@
 package UI.Search;
 
 import Controller.SearchController;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JLabel title;
     private List<Integer> years = new ArrayList<>();
 
-    public SearchDocumentWithEventForm(){
+    public SearchDocumentWithEventForm()  throws DatabaseConnectionFailedException {
         years = SearchController.getInstance().getDatesEvents();
         System.out.println(years);
     }
