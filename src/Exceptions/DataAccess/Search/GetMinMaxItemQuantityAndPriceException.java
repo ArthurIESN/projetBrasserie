@@ -1,13 +1,13 @@
-package Exceptions.DataAccess;
+package Exceptions.DataAccess.Search;
 
-public class DatabaseConnectionFailedException extends Exception
-{
+public class GetMinMaxItemQuantityAndPriceException extends Exception {
     private final String message;
     private final String sqlErrorMessage;
-    public DatabaseConnectionFailedException(String message, String sqlErrorMessage)
+
+    public GetMinMaxItemQuantityAndPriceException(String sqlErrorMessage)
     {
         this.sqlErrorMessage = sqlErrorMessage;
-        this.message = message;
+        this.message = "Error while getting the min and max item quantity and price.";
     }
 
     public String getMessage()

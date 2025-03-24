@@ -1,8 +1,13 @@
-package DataAccess;
+package DataAccess.Search;
 
+import DataAccess.DatabaseConnexion;
+
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
 import Model.Packaging;
 import Model.Vat;
+
+import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,9 +21,8 @@ public class SearchItemDBAccess
     {
     }
 
-    public int[] getMinMaxItemQuantityAndPrice()
+    public int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
     {
-        Connection databaseConnexion = DatabaseConnexion.getInstance();
 
         String sql = "SELECT " +
                 "MIN(current_quantity) AS min_item_quantity, " +
@@ -27,8 +31,11 @@ public class SearchItemDBAccess
                 "MAX(price) AS max_item_price " +
                 "FROM item";
 
+
         try
         {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -41,19 +48,16 @@ public class SearchItemDBAccess
                 minMaxItem[3] = (resultSet.getInt("max_item_price"));
             }
 
-
             return minMaxItem;
 
         } catch (SQLException e)
         {
-            throw new RuntimeException(e);
+            throw new GetMinMaxItemQuantityAndPriceException(e.getMessage());
         }
     }
 
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)
+    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException
     {
-        Connection databaseConnexion = DatabaseConnexion.getInstance();
-
         String sql = "SELECT *, packaging.label AS packaing_label " +
                 "FROM item " +
                 "JOIN vat ON item.code_vat LIKE vat.code " +
@@ -64,6 +68,8 @@ public class SearchItemDBAccess
 
         try
         {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
 
             statement.setString(1, tvaCode);

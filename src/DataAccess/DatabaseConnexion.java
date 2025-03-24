@@ -25,7 +25,6 @@ public class DatabaseConnexion
 
             String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
 
-            System.out.println("test");
             try
             {
                 // Load the MySQL JDBC driver
@@ -35,35 +34,27 @@ public class DatabaseConnexion
             }
             catch (ClassNotFoundException e)
             {
-                throw new DatabaseConnectionFailedException("The MySQL JDBC driver was not found");
+                throw new DatabaseConnectionFailedException("The MySQL JDBC driver was not found", e.getMessage());
             }
             catch (SQLException e)
             {
-                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database: " + e.getMessage());
+                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database", e.getMessage());
             }
 
         }
         catch (BadEnvValueException e)
         {
-            System.err.println(e.getMessage());
-            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
+            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database", e.getMessage());
         }
     }
 
 
 
-    public static Connection getInstance()
+    public static Connection getInstance() throws DatabaseConnectionFailedException
     {
         if(connection == null)
         {
-            try
-            {
-                new DatabaseConnexion();
-            }
-            catch (DatabaseConnectionFailedException e)
-            {
-                System.err.println(e.getMessage());
-            }
+            new DatabaseConnexion();
         }
 
         return connection;

@@ -1,13 +1,14 @@
-package Exceptions.DataAccess;
+package Exceptions.DataAccess.Search;
 
-public class DatabaseConnectionFailedException extends Exception
+public class SearchItemException
 {
     private final String message;
     private final String sqlErrorMessage;
-    public DatabaseConnectionFailedException(String message, String sqlErrorMessage)
+
+    public SearchItemException(String sqlErrorMessage)
     {
         this.sqlErrorMessage = sqlErrorMessage;
-        this.message = message;
+        this.message = "Error while searching for items.";
     }
 
     public String getMessage()
@@ -18,5 +19,4 @@ public class DatabaseConnectionFailedException extends Exception
     public String getSqlErrorMessage()
     {
         return this.sqlErrorMessage;
-    }
-}
+    }}
