@@ -26,9 +26,6 @@ replay_pid*
 # MacOs files
 *.DS_STORE
 
-# properties files
-*.properties
-
 # Environment file
 .env
 
