@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.tva.WrongTvaCodeException;
+import Exceptions.DataAccess.Search.SearchItemException;
+import Exceptions.DataAccess.Vat.UnkownVatCodeException;
+import Exceptions.Vat.WrongVatCodeException;
 import UI.Components.JDualSliderPanel;
 import UI.Components.GridBagLayoutHelper;
 
@@ -96,7 +98,8 @@ public class SearchItemForm extends JPanel
             table.setModel(new ItemTable(items));
             revalidate();
         }
-        catch (WrongTvaCodeException | DatabaseConnectionFailedException e)
+        catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |
+               SearchItemException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

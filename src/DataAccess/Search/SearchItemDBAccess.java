@@ -20,8 +20,7 @@ import java.util.Map;
 
 public class SearchItemDBAccess
 {
-    private Map<String, Vat> vatCache = new HashMap<>();
-    private Map<Integer, Packaging> packagingCache = new HashMap<>();
+    private final Map<Integer, Packaging> packagingCache = new HashMap<>();
 
     public SearchItemDBAccess()
     {
@@ -65,7 +64,7 @@ public class SearchItemDBAccess
 
     public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException, SearchItemException
     {
-        String sql = "SELECT *, packaging.label AS packaing_label " +
+        String sql = "SELECT *, packaging.label AS packaging_label " +
                 "FROM item " +
                 "JOIN vat ON item.code_vat = vat.code " +
                 "JOIN packaging ON item.id_packaging = packaging.id " +
@@ -90,34 +89,21 @@ public class SearchItemDBAccess
             ArrayList<Item> items = new ArrayList<>();
             while (statement.getResultSet().next())
             {
-                Vat vat;
+                Packaging packaging;
 
-                if(vatCache.containsKey(tvaCode))
+                if(packagingCache.containsKey(statement.getResultSet().getInt("id_packaging")))
                 {
-                    vat = vatCache.get(tvaCode);
+                    packaging = packagingCache.get(statement.getResultSet().getInt("id_packaging"));
                 }
                 else
                 {
-                    vat = new Vat(
-                            tvaCode,
-                            statement.getResultSet().getFloat("rate")
+                    packaging = new Packaging(
+                            statement.getResultSet().getInt("id_packaging"),
+                            statement.getResultSet().getString("packaging_label"),
+                            statement.getResultSet().getInt("nb_articles")
                     );
-                    vatCache.put(tvaCode, vat);
+                    packagingCache.put(statement.getResultSet().getInt("id_packaging"), packaging);
                 }
-
-                int packagingId = statement.getResultSet().getInt("id_packaging");
-                Packaging packaging = packagingCache.computeIfAbsent(packagingId, id -> {
-                    try {
-                        return new Packaging(
-                                id,
-                                statement.getResultSet().getString("packaing_label"),
-                                statement.getResultSet().getInt("nb_articles")
-                        );
-                    } catch (SQLException e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                });
 
                 Item item = new Item(
                         statement.getResultSet().getInt("id"),
@@ -131,7 +117,7 @@ public class SearchItemDBAccess
                         statement.getResultSet().getInt("forecast_quantity"),
                         statement.getResultSet().getInt("min_quantity"),
                         packaging,
-                        vat);
+                        null);
 
                 items.add(item);
             }

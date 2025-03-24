@@ -1,10 +1,10 @@
-package Exceptions.tva;
+package Exceptions.Vat;
 
-public class WrongTvaCodeException extends Exception {
+public class WrongVatCodeException extends Exception {
     private final String message;
     private final String tvaCode;
 
-    public WrongTvaCodeException(String tvaCode)
+    public WrongVatCodeException(String tvaCode)
     {
         this.tvaCode = tvaCode;
         this.message = "The tva code is not valid. format: x% or xx%.";

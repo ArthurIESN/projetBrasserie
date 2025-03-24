@@ -96,6 +96,11 @@ public class Item
         return code_vat;
     }
 
+    public void setVat(Vat vat)
+    {
+        this.code_vat = vat;
+    }
+
     @Override
     public String toString()
     {

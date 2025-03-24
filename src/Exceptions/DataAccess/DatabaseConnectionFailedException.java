@@ -8,6 +8,11 @@ public class DatabaseConnectionFailedException extends Exception
         this.message = message;
     }
 
+    public DatabaseConnectionFailedException()
+    {
+        this("Error while connecting to the database.");
+    }
+
     public String getMessage()
     {
         return this.message;
