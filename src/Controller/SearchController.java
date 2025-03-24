@@ -17,26 +17,19 @@ import java.util.Date;
 import java.util.List;
 
 public class SearchController {
-    private static final SearchController instance = new SearchController();
-    private final SearchDocumentWithEventManager searchDocumentWithEventManager = new SearchDocumentWithEventManager();
-    private final SearchItemManager searchItemManager = new SearchItemManager();
-
-    public SearchController(){}
+    private static final SearchDocumentWithEventManager searchDocumentWithEventManager = new SearchDocumentWithEventManager();
+    private static SearchItemManager searchItemManager = new SearchItemManager();
 
     // fonction qui récupères toutes les années des event (recherche par années des documents impliquant des events)
-    public List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
+    public static List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
         return searchDocumentWithEventManager.getDatesEvents();
     }
 
-    public static SearchController getInstance(){
-        return instance;
-    }
-
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
+    public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
         return searchItemManager.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
     }
 
-    public int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
+    public static int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
     {
         return searchItemManager.getMinMaxItemQuantityAndPrice();
     }
