@@ -20,7 +20,7 @@ public class VatDBAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
             statement.setString(1, code);
             ResultSet resultSet = statement.executeQuery();

@@ -4,12 +4,14 @@ import Environement.EnvLoader;
 import Exceptions.Environement.BadEnvValueException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnexion
 {
+    private static DatabaseConnexion databaseConnexionInstance;
     private static Connection connection;
 
 
@@ -51,28 +53,17 @@ public class DatabaseConnexion
         }
     }
 
-
-
-    public static Connection getInstance() throws DatabaseConnectionFailedException {
-
-        try
-        {
-            if (connection == null || connection.isClosed())
-            {
-                new DatabaseConnexion();
-            }
-        }
-        catch (SQLException e)
-        {
-            System.err.println("Connection error : " + e.getMessage());
-            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
-        }
-
-
-
-        // log connection
-        System.out.println(connection);
-
+    public Connection getConnection()
+    {
         return connection;
+    }
+
+    public static DatabaseConnexion getInstance() throws DatabaseConnectionFailedException
+    {
+        if (databaseConnexionInstance == null)
+        {
+            databaseConnexionInstance = new DatabaseConnexion();
+        }
+        return databaseConnexionInstance;
     }
 }

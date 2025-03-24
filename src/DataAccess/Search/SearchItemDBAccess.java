@@ -39,7 +39,7 @@ public class SearchItemDBAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
 
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
@@ -74,7 +74,7 @@ public class SearchItemDBAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();;
 
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
 

@@ -27,8 +27,9 @@ public class SearchDocumentWithEventForm extends JPanel {
         add(title, BorderLayout.NORTH);
 
 
+
         try{
-            years = SearchController.getInstance().getDatesEvents();
+            years = SearchController.getDatesEvents();
         }catch (DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
         }
@@ -40,12 +41,12 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
+
         try{
-            items = AppController.getInstance().getAllItems();
+            items = AppController.getAllItems();
         }catch (DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
         }
-
         System.out.println(items);
 
         filterPanel.add(yearsComboBox);

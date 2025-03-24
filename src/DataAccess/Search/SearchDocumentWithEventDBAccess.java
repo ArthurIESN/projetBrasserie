@@ -17,15 +17,19 @@ public class SearchDocumentWithEventDBAccess {
 
         String query = "SELECT start_date FROM event";
 
-        try(Connection connection = DatabaseConnexion.getInstance();
+        try
+        {
+            Connection connection = DatabaseConnexion.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery()){
+            ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 dates.add(resultSet.getDate("start_date"));
             }
-        } catch (SQLException e){
-            e.printStackTrace();
+        } catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+            throw new DatabaseConnectionFailedException();
         }
 
         return dates;

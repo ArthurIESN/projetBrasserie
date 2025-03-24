@@ -29,12 +29,13 @@ public class DataAccessItem {
                 " FROM item INNER JOIN packaging ON item.id_packaging = packaging.id " +
                 "INNER JOIN vat ON item.code_vat = vat.code";
 
-        try{
-            Connection dataBaseConnection = DatabaseConnexion.getInstance();
+        try
+        {
+            Connection dataBaseConnection = DatabaseConnexion.getInstance().getConnection();
 
             PreparedStatement statement = dataBaseConnection.prepareStatement(query);
 
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()){
 
@@ -90,6 +91,7 @@ public class DataAccessItem {
 
             }
         }catch (SQLException e){
+            System.err.println(e.getMessage());
             throw new DatabaseConnectionFailedException("Database connection failed");
         }
 
