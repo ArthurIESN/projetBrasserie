@@ -9,37 +9,51 @@ import java.awt.*;
 
 public class MenuBarBrasserie {
     private JMenuBar menuBar;
-    private JMenu recherche;
-    private final JMenuItem[] menuItems = new JMenuItem[3];
+    private JMenu brasserieMenu;
+    private JMenu searchMenu;
+    private final JMenuItem[] searchItems = new JMenuItem[3];
 
     public MenuBarBrasserie(BrasserieWindow brasserieWindow){
         menuBar = new JMenuBar();
 
-        recherche = new JMenu("Recherche");
+        brasserieMenu = new JMenu("Brasserie");
 
-        menuBar.add(recherche);
+        menuBar.add(brasserieMenu);
 
-        menuItems[0] = new JMenuItem("1 : Search Item");
-        menuItems[1] = new JMenuItem("Recherche2");
-        menuItems[2] = new JMenuItem("Recherche3");
+        JMenuItem quitItem = new JMenuItem("Quit");
 
-        for (JMenuItem menuItem : menuItems)
+        brasserieMenu.add(quitItem);
+
+        quitItem.addActionListener(e -> {
+            System.exit(0);
+        });
+
+
+        searchMenu = new JMenu("Searchs");
+
+        menuBar.add(searchMenu);
+
+        searchItems[0] = new JMenuItem("1 : Search Item");
+        searchItems[1] = new JMenuItem("Recherche2");
+        searchItems[2] = new JMenuItem("Recherche3");
+
+        for (JMenuItem menuItem : searchItems)
         {
-            recherche.add(menuItem);
+            searchMenu.add(menuItem);
         }
 
-        menuItems[0].addActionListener(e ->
+        searchItems[0].addActionListener(e ->
         {
             brasserieWindow.updateWindowContent(new SearchItemForm());
         });
 
-        menuItems[1].addActionListener(e -> {
+        searchItems[1].addActionListener(e -> {
             JPanel panel2 = new JPanel();
             panel2.add(new JLabel("Recherche2 selected"));
             brasserieWindow.updateWindowContent(new SearchDocumentWithEventForm());
         });
 
-        menuItems[2].addActionListener(e -> {
+        searchItems[2].addActionListener(e -> {
             JPanel panel3 = new JPanel();
             panel3.add(new JLabel("Recherche3 selected"));
             brasserieWindow.updateWindowContent(panel3);
