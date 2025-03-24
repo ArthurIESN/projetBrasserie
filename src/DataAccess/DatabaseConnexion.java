@@ -53,12 +53,25 @@ public class DatabaseConnexion
 
 
 
-    public static Connection getInstance() throws DatabaseConnectionFailedException
-    {
-        if(connection == null)
+    public static Connection getInstance() throws DatabaseConnectionFailedException {
+
+        try
         {
-            new DatabaseConnexion();
+            if (connection == null || connection.isClosed())
+            {
+                new DatabaseConnexion();
+            }
         }
+        catch (SQLException e)
+        {
+            System.err.println("Connection error : " + e.getMessage());
+            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
+        }
+
+
+
+        // log connection
+        System.out.println(connection);
 
         return connection;
     }
