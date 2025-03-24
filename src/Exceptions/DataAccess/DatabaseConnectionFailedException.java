@@ -3,20 +3,18 @@ package Exceptions.DataAccess;
 public class DatabaseConnectionFailedException extends Exception
 {
     private final String message;
-    private final String sqlErrorMessage;
-    public DatabaseConnectionFailedException(String message, String sqlErrorMessage)
+    public DatabaseConnectionFailedException(String message)
     {
-        this.sqlErrorMessage = sqlErrorMessage;
         this.message = message;
+    }
+
+    public DatabaseConnectionFailedException()
+    {
+        this("Error while connecting to the database.");
     }
 
     public String getMessage()
     {
         return this.message;
-    }
-
-    public String getSqlErrorMessage()
-    {
-        return this.sqlErrorMessage;
     }
 }
