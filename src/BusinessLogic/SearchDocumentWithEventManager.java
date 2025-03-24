@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SearchDocumentWithEventManager {
     private final SearchDocumentWithEventDBAccess searchDocumentWithEventDBAccess = new SearchDocumentWithEventDBAccess();
-    public List<Integer> getDatesEvents()  throws DatabaseConnectionFailedException{
+    public List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
         List<Date> dates = searchDocumentWithEventDBAccess.getDatesEvents();
         List<Integer> retournableDates = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();

@@ -1,5 +1,6 @@
-package DataAccess;
+package DataAccess.Search;
 
+import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import java.sql.Connection;
