@@ -1,6 +1,7 @@
 package UI.Components;
 
 import UI.BrasserieWindow.BrasserieWindow;
+import UI.Search.SearchDocumentWithEventForm;
 import UI.Search.SearchItemForm;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ public class MenuBarBrasserie {
         menuItems[1].addActionListener(e -> {
             JPanel panel2 = new JPanel();
             panel2.add(new JLabel("Recherche2 selected"));
-            brasserieWindow.updateWindowContent(panel2);
+            brasserieWindow.updateWindowContent(new SearchDocumentWithEventForm());
         });
 
         menuItems[2].addActionListener(e -> {
