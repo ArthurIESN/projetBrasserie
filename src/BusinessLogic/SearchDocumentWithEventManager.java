@@ -1,6 +1,7 @@
 package BusinessLogic;
 
-import DataAccess.SearchDocumentWithEventDBAccess;
+import DataAccess.Search.SearchDocumentWithEventDBAccess;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class SearchDocumentWithEventManager {
     private final SearchDocumentWithEventDBAccess searchDocumentWithEventDBAccess = new SearchDocumentWithEventDBAccess();
-    public List<Integer> getDatesEvents(){
+    public List<Integer> getDatesEvents() throws DatabaseConnectionFailedException {
         List<Date> dates = searchDocumentWithEventDBAccess.getDatesEvents();
         List<Integer> retournableDates = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();

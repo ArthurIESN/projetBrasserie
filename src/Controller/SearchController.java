@@ -20,7 +20,7 @@ public class SearchController {
     public SearchController(){}
 
     // fonction qui récupères toutes les années des event (recherche par années des documents impliquant des events)
-    public List<Integer> getDatesEvents(){
+    public List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
         return searchDocumentWithEventManager.getDatesEvents();
     }
 
