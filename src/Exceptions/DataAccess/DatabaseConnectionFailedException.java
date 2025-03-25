@@ -13,6 +13,7 @@ public class DatabaseConnectionFailedException extends Exception
         this("Error while connecting to the database.");
     }
 
+    @Override
     public String getMessage()
     {
         return this.message;

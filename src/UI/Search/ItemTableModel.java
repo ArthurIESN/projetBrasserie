@@ -1,15 +1,17 @@
-package Model.Item;
+package UI.Search;
+
+import Model.Item.Item;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class ItemTable extends AbstractTableModel
+public class ItemTableModel extends AbstractTableModel
 {
 
     private final ArrayList<Item> items;
     private final String[] columnNames = {"ID", "Label", "Price", "Current Quantity", "Restock Quantity", "Packaging ID", "Packaging Label", "Packaging Item Quantity", "VAT Code", "VAT Rate"};
 
-    public ItemTable(ArrayList<Item> items)
+    public ItemTableModel(ArrayList<Item> items)
     {
         this.items = items;
     }

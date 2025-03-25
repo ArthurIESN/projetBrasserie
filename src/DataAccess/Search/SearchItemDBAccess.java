@@ -6,7 +6,6 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Search.SearchItemException;
 import Model.Item.Item;
 import Model.Packaging;
-import Model.Vat;
 
 import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
 
@@ -29,11 +28,11 @@ public class SearchItemDBAccess
     public int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
     {
 
-        String sql = "SELECT " +
-                "MIN(current_quantity) AS min_item_quantity, " +
-                "MAX(current_quantity) AS max_item_quantity, " +
-                "MIN(price) AS min_item_price, " +
-                "MAX(price) AS max_item_price " +
+        String query = "SELECT " +
+                "MIN(current_quantity)  AS min_item_quantity, " +
+                "MAX(current_quantity)  AS max_item_quantity, " +
+                "MIN(price)             AS min_item_price, " +
+                "MAX(price)             AS max_item_price " +
                 "FROM item";
 
 
@@ -41,7 +40,7 @@ public class SearchItemDBAccess
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
 
-            PreparedStatement statement = databaseConnexion.prepareStatement(sql);
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
             int[] minMaxItem = new int[4];
@@ -64,7 +63,7 @@ public class SearchItemDBAccess
 
     public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException, SearchItemException
     {
-        String sql = "SELECT *, packaging.label AS packaging_label " +
+        String query = "SELECT *, packaging.label AS packaging_label " +
                 "FROM item " +
                 "JOIN vat ON item.code_vat = vat.code " +
                 "JOIN packaging ON item.id_packaging = packaging.id " +
@@ -76,7 +75,7 @@ public class SearchItemDBAccess
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();;
 
-            PreparedStatement statement = databaseConnexion.prepareStatement(sql);
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
             statement.setString(1, tvaCode);
             statement.setInt(2, minItem);

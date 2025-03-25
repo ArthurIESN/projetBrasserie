@@ -10,6 +10,7 @@ public class WrongVatCodeException extends Exception {
         this.message = "The tva code is not valid. format: x% or xx%.";
     }
 
+    @Override
     public String getMessage()
     {
         return this.message;

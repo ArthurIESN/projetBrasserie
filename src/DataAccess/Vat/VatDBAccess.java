@@ -12,8 +12,6 @@ import java.sql.SQLException;
 
 public class VatDBAccess
 {
-
-    // @todo : exception
     public Vat getVat(String code) throws DatabaseConnectionFailedException, UnkownVatCodeException
     {
         String sql = "SELECT * FROM vat WHERE code = ?";

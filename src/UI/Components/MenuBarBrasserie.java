@@ -1,6 +1,7 @@
 package UI.Components;
 
 import UI.BrasserieWindow.BrasserieWindow;
+import UI.Process.CreateProcessPanel;
 import UI.Search.SearchDocumentWithEventForm;
 import UI.Search.SearchItemForm;
 
@@ -12,6 +13,7 @@ public class MenuBarBrasserie {
     private JMenu brasserieMenu;
     private JMenu searchMenu;
     private final JMenuItem[] searchItems = new JMenuItem[3];
+    private final JMenuItem[] crudItem = new JMenuItem[2];
 
     public MenuBarBrasserie(BrasserieWindow brasserieWindow){
         menuBar = new JMenuBar();
@@ -58,6 +60,24 @@ public class MenuBarBrasserie {
             panel3.add(new JLabel("Recherche3 selected"));
             brasserieWindow.updateWindowContent(panel3);
         });
+
+        // CRUD
+        JMenu crudMenu = new JMenu("CRUD");
+
+        menuBar.add(crudMenu);
+
+        crudItem[0] = new JMenuItem("Process");
+        crudItem[1] = new JMenuItem("Document??");
+
+        for (JMenuItem menuItem : crudItem)
+        {
+            crudMenu.add(menuItem);
+        }
+
+        crudItem[0].addActionListener(e -> {
+            brasserieWindow.updateWindowContent(new CreateProcessPanel());
+        });
+
     }
 
     public JMenuBar getMenuBar(){

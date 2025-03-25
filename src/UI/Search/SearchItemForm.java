@@ -14,7 +14,6 @@ import UI.Components.JDualSliderPanel;
 import UI.Components.GridBagLayoutHelper;
 
 import Model.Item.Item;
-import Model.Item.ItemTable;
 
 import Controller.SearchController;
 
@@ -66,7 +65,7 @@ public class SearchItemForm extends JPanel
 
         // Empty table
         JTable table = new JTable();
-        table.setModel(new ItemTable(new ArrayList<>()));
+        table.setModel(new ItemTableModel(new ArrayList<>()));
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         searchButton.addActionListener(e ->
@@ -95,7 +94,7 @@ public class SearchItemForm extends JPanel
             ArrayList<Item> items = searchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
 
             // Update table
-            table.setModel(new ItemTable(items));
+            table.setModel(new ItemTableModel(items));
             revalidate();
         }
         catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |

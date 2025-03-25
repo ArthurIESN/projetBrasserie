@@ -5,7 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class JDualSliderPanel extends JPanel {
+public class JDualSliderPanel extends JPanel
+{
     private final int[] values = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean draggingThumb1 = false;
     private boolean draggingThumb2 = false;
