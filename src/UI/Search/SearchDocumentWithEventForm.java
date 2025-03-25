@@ -4,6 +4,8 @@ import Controller.AppController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
+import UI.Components.ItemComboBox;
+import UI.Components.YearComboBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +15,11 @@ import java.util.List;
 
 public class SearchDocumentWithEventForm extends JPanel {
     private JLabel title;
-    private JComboBox<Integer> yearsComboBox;
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
+    private YearComboBox yearsComboBox;
+    private ItemComboBox itemComboBox;
+    private int idItemSelected;
 
     public SearchDocumentWithEventForm(){
 
@@ -26,30 +30,34 @@ public class SearchDocumentWithEventForm extends JPanel {
         title.setHorizontalAlignment(SwingConstants.HORIZONTAL);
         add(title, BorderLayout.NORTH);
 
-
-
         try{
             years = SearchController.getDatesEvents();
         }catch (DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
         }
 
-
-        Integer[] yearsArray = years.toArray(new Integer[0]);
-        yearsComboBox = new JComboBox<>(yearsArray);
-
+        yearsComboBox = new YearComboBox(years);
 
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
+        filterPanel.add(yearsComboBox);
 
         try{
             items = AppController.getAllItems();
         }catch (DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
         }
-        System.out.println(items);
+
+        itemComboBox = new ItemComboBox(items);
+        filterPanel.add(itemComboBox);
 
         filterPanel.add(yearsComboBox);
         add(filterPanel, BorderLayout.CENTER);
+
+        System.out.println(itemComboBox.getSelectedItemId());
+
+
     }
+
+
 }
