@@ -28,7 +28,11 @@ public class SearchByLabelPanel<T> extends JPanel
         // Create list model and result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
-        add(new JScrollPane(resultList), BorderLayout.CENTER);
+        JScrollPane scrollPanel = new JScrollPane(resultList);
+
+        scrollPanel.setPreferredSize(new Dimension(300, 80));
+
+        add(scrollPanel, BorderLayout.CENTER);
 
         // Add document listener to search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
@@ -51,7 +55,19 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    private void updateList() {
+    public void onSelectedItemChange(Runnable runnable)
+    {
+        resultList.addListSelectionListener(e ->
+        {
+            if (!e.getValueIsAdjusting())
+            {
+                runnable.run();
+            }
+        });
+    }
+
+    private void updateList()
+    {
         String searchText = searchField.getText().toLowerCase();
         listModel.clear();
         for (T item : data)
@@ -65,6 +81,10 @@ public class SearchByLabelPanel<T> extends JPanel
 
     public T getSelectedItem()
     {
+        if (resultList.getSelectedIndex() < 0)
+        {
+            return null;
+        }
         return data.get(resultList.getSelectedIndex());
     }
 }

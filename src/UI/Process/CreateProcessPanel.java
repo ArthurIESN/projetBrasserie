@@ -1,9 +1,18 @@
 package UI.Process;
 
+import DataAccess.Customer.CustomerDBAccess;
 import DataAccess.Process.ProcessDBAccess;
+import DataAccess.ProcessStatus.ProcessStatusDBAccess;
+import DataAccess.Supplier.SupplierDBAccess;
+import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Process.GetAllProcessesException;
+import Exceptions.ProcessStatus.GetAllProcessStatusException;
+import Exceptions.Supplier.GetAllSuppliersException;
+import Model.Customer;
 import Model.Process;
+import Model.ProcessStatus;
+import Model.Supplier;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.SearchByLabelPanel;
 
@@ -32,36 +41,48 @@ public class CreateProcessPanel extends JPanel
         gridNewProcess.addField("Process Number", processNumberField);
 
         // Search for
-        SearchByLabelPanel<Process> searchByLabelPanel;
+        SearchByLabelPanel<Customer> customerSearch;
         try
         {
-            ProcessDBAccess processDBAccess = new ProcessDBAccess();
-            ArrayList<Process> processes = processDBAccess.getAllProcesses();
+            CustomerDBAccess customerDBAccess = new CustomerDBAccess();
+            ArrayList<Customer> customers = customerDBAccess.getAllCustomers();
 
-            searchByLabelPanel = new SearchByLabelPanel<>(processes, Process::getLabel);
-            gridNewProcess.addField("Search by label", searchByLabelPanel);
+            customerSearch = new SearchByLabelPanel<>(customers, customer -> customer.getLastName() + " - " + customer.getFirstName());
+            gridNewProcess.addField("Customer", customerSearch);
 
-            // button to show selected process
-            JButton showSelectedProcessButton = new JButton("Show selected process");
-            showSelectedProcessButton.addActionListener(e -> {
-                Process selectedProcess = (Process) searchByLabelPanel.getSelectedItem();
-                if (selectedProcess != null)
-                {
-                    JOptionPane.showMessageDialog(null, selectedProcess.getLabel(), "Selected process", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "No process selected", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
 
-            gridNewProcess.addField("", showSelectedProcessButton);
-
-        } catch (DatabaseConnectionFailedException | GetAllProcessesException e)
+        } catch (DatabaseConnectionFailedException | GetAllCustomersException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        SearchByLabelPanel<Supplier> supplierSearch;
+
+        try
+        {
+            SupplierDBAccess supplierDBAccess = new SupplierDBAccess();
+            ArrayList<Supplier> suppliers = supplierDBAccess.getAllSuppliers();
+
+            supplierSearch = new SearchByLabelPanel<>(suppliers, Supplier::getName);
+            gridNewProcess.addField("Supplier", supplierSearch);
+        } catch (DatabaseConnectionFailedException | GetAllSuppliersException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        SearchByLabelPanel<ProcessStatus> processStatusSearch;
+
+        try
+        {
+            ProcessStatusDBAccess processDBAccess = new ProcessStatusDBAccess();
+            ArrayList<ProcessStatus> processStatuses = processDBAccess.getAllProcessStatus();
+
+            processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
+            gridNewProcess.addField("Process Status", processStatusSearch);
+        } catch (DatabaseConnectionFailedException | GetAllProcessStatusException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
         add(searchForm, BorderLayout.CENTER);
 
