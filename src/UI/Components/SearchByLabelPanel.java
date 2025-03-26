@@ -7,22 +7,24 @@ import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
 
+
 public class SearchByLabelPanel<T> extends JPanel
 {
-    private JTextField searchField;
+    private JEnhancedTextField searchField;
     private JList<String> resultList;
     private DefaultListModel<String> listModel;
     private List<T> data;
     private Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
+    public SearchByLabelPanel(List<T> data, String searchPlaceholder, Function<T, String> toStringFunction)
     {
         this.data = data;
         this.toStringFunction = toStringFunction;
         setLayout(new BorderLayout());
 
         // Create search field
-        searchField = new JTextField();
+        searchField = new JEnhancedTextField(searchPlaceholder);
+
         add(searchField, BorderLayout.NORTH);
 
         // Create list model and result list
@@ -30,7 +32,7 @@ public class SearchByLabelPanel<T> extends JPanel
         resultList = new JList<>(listModel);
         JScrollPane scrollPanel = new JScrollPane(resultList);
 
-        scrollPanel.setPreferredSize(new Dimension(300, 80));
+        scrollPanel.setPreferredSize(new Dimension(300, 60));
 
         add(scrollPanel, BorderLayout.CENTER);
 
@@ -53,6 +55,11 @@ public class SearchByLabelPanel<T> extends JPanel
         });
 
         updateList();
+    }
+
+    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
+    {
+        this(data, "", toStringFunction);
     }
 
     public void onSelectedItemChange(Runnable runnable)
