@@ -15,7 +15,7 @@ import Model.ProcessStatus;
 
 
 
-public class ProcessStatusDBAccess
+public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 {
     public ArrayList<ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, GetAllProcessStatusException
     {

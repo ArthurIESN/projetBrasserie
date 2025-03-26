@@ -9,9 +9,9 @@ import Model.Process;
 
 public interface ProcessDataAccess
 {
-    public void createProcess(String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, CreateProcessException;
-    public void deleteProcess(Integer id) throws DatabaseConnectionFailedException, DeleteProcessException;
-    public void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, UpdateProcessException;
-    public Process getProcess(Integer id) throws DatabaseConnectionFailedException, GetProcessException;
-    public ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, GetAllProcessesException;
+    void createProcess(String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, CreateProcessException;
+    void deleteProcess(Integer id) throws DatabaseConnectionFailedException, DeleteProcessException;
+    void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, UpdateProcessException;
+    Process getProcess(Integer id) throws DatabaseConnectionFailedException, GetProcessException;
+    ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, GetAllProcessesException;
 }

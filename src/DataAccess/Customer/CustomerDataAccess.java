@@ -10,9 +10,9 @@ import Model.Customer;
 
 public interface CustomerDataAccess
 {
-    public ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException;
-    public Customer getCustomer(int id);
-    public void createCustomer(Customer customer);
-    public void deleteCustomer(int id);
-    public void updateCustomer(Customer customer);
+    ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException;
+    Customer getCustomer(int id);
+    void createCustomer(Customer customer);
+    void deleteCustomer(int id);
+    void updateCustomer(Customer customer);
 }

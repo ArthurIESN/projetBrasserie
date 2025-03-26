@@ -1,5 +1,6 @@
 package UI.Process;
 
+import Controller.AppController;
 import DataAccess.Customer.CustomerDBAccess;
 import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Process.ProcessDBAccess;
@@ -40,77 +41,33 @@ public class CreateProcessPanel extends JPanel
         processNumberField.setPreferredSize(new Dimension(300, 30));
         gridNewProcess.addField("Process Number", processNumberField);
 
-        // Search for
-        SearchByLabelPanel<Customer> customerSearch;
+        ArrayList<Customer> customers = new ArrayList<>();
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ArrayList<ProcessStatus> processStatuses = new ArrayList<>();
+        ArrayList<Employee> employees = new ArrayList<>();
+
         try
         {
-            CustomerDBAccess customerDBAccess = new CustomerDBAccess();
-            ArrayList<Customer> customers = customerDBAccess.getAllCustomers();
+            customers = AppController.getAllCustomers();
+            suppliers = AppController.getAllSuppliers();
+            processStatuses = AppController.getAllProcessStatus();
+            employees = AppController.getAllEmployees();
 
-            customerSearch = new SearchByLabelPanel<>(customers, "Search for a customer", customer -> customer.getLastName() + " - " + customer.getFirstName());
-            gridNewProcess.addField("Customer", customerSearch);
-
-
-        } catch (DatabaseConnectionFailedException | GetAllCustomersException e)
+        } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        SearchByLabelPanel<Supplier> supplierSearch;
+        SearchByLabelPanel<Customer> customerSearch = new SearchByLabelPanel<>(customers, "Search for a customer", customer -> customer.getFirstName() + " " + customer.getLastName());
+        SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
+        SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, "Search for a process status", ProcessStatus::getLabel);
+        SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getFirstName() + " " + employee.getLastName());
 
-        try
-        {
-            SupplierDBAccess supplierDBAccess = new SupplierDBAccess();
-            ArrayList<Supplier> suppliers = supplierDBAccess.getAllSuppliers();
+        gridNewProcess.addField("Customer", customerSearch);
+        gridNewProcess.addField("Supplier", supplierSearch);
+        gridNewProcess.addField("Process Status", processStatusSearch);
+        gridNewProcess.addField("Employee", employeeSearch);
 
-            supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
-            gridNewProcess.addField("Supplier", supplierSearch);
-        } catch (DatabaseConnectionFailedException | GetAllSuppliersException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        SearchByLabelPanel<ProcessStatus> processStatusSearch;
-
-        try
-        {
-            ProcessStatusDBAccess processDBAccess = new ProcessStatusDBAccess();
-            ArrayList<ProcessStatus> processStatuses = processDBAccess.getAllProcessStatus();
-
-            processStatusSearch = new SearchByLabelPanel<>(processStatuses, "", ProcessStatus::getLabel);
-            gridNewProcess.addField("Process Status", processStatusSearch);
-        } catch (DatabaseConnectionFailedException | GetAllProcessStatusException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        SearchByLabelPanel<Employee> employeeSearch;
-
-        try
-        {
-            EmployeeDBAccess employeeDBAccess = new EmployeeDBAccess();
-            ArrayList<Employee> employees = employeeDBAccess.getAllEmployees();
-
-            employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getLastName() + " " + employee.getFirstName());
-            gridNewProcess.addField("Employee", employeeSearch);
-        } catch (DatabaseConnectionFailedException | GetAllEmployeesException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        SearchByLabelPanel<Process> processSearch;
-
-        try
-        {
-            ProcessDBAccess processDBAccess = new ProcessDBAccess();
-            ArrayList<Process> processes = processDBAccess.getAllProcesses();
-
-            processSearch = new SearchByLabelPanel<>(processes, "", process -> process.getLabel() + " " + process.getNumber());
-            gridNewProcess.addField("Process", processSearch);
-        } catch (DatabaseConnectionFailedException | GetAllProcessesException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
 
         // Bttuon create
         JButton createButton = new JButton("Create Process");
@@ -120,17 +77,17 @@ public class CreateProcessPanel extends JPanel
             Supplier supplier = supplierSearch.getSelectedItem();
             ProcessStatus processStatus = processStatusSearch.getSelectedItem();
             Employee employee = employeeSearch.getSelectedItem();
-            Process process = processSearch.getSelectedItem();
 
 
-            try
-            {
-                ProcessDBAccess processDBAccess = new ProcessDBAccess();
-                processDBAccess.createProcess(processLabelField.getText(), Integer.parseInt(processNumberField.getText()), customer.getId(), supplier.getId(), processStatus.getId(), employee.getId(), process.getId());
-            } catch (DatabaseConnectionFailedException e1)
-            {
-                JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            // show in jOptionPane
+            JOptionPane.showMessageDialog(null, "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n" +
+                    "Supplier: " + supplier.getName() + "\n" +
+                    "Process Status: " + processStatus.getLabel() + "\n" +
+                    "Employee: " + employee.getFirstName() + " " + employee.getLastName() + "\n" +
+                    "Process Label: " + processLabelField.getText() + "\n" +
+                    "Process Number: " + processNumberField.getText() + "\n"
+            );
+
         });
 
         add(createButton, BorderLayout.SOUTH);

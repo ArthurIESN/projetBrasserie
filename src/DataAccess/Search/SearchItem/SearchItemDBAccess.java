@@ -1,4 +1,4 @@
-package DataAccess.Search;
+package DataAccess.Search.SearchItem;
 
 import DataAccess.DatabaseConnexion;
 
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchItemDBAccess
+public class SearchItemDBAccess implements SearchItemDataAccess
 {
     private final Map<Integer, Packaging> packagingCache = new HashMap<>();
 
