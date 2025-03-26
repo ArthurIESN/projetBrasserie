@@ -1,8 +1,18 @@
 package UI.Process;
 
+import Controller.AppController;
+import DataAccess.Customer.CustomerDBAccess;
+import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Process.ProcessDBAccess;
+import DataAccess.ProcessStatus.ProcessStatusDBAccess;
+import DataAccess.Supplier.SupplierDBAccess;
+import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Process.GetAllProcessesException;
+import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.ProcessStatus.GetAllProcessStatusException;
+import Exceptions.Supplier.GetAllSuppliersException;
+import Model.*;
 import Model.Process;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.SearchByLabelPanel;
@@ -24,45 +34,63 @@ public class CreateProcessPanel extends JPanel
         GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper(searchForm);
 
         JTextField processLabelField = new JTextField();
-        processLabelField.setPreferredSize(new Dimension(300, 50));
+        processLabelField.setPreferredSize(new Dimension(300, 30));
         gridNewProcess.addField("Process Label", processLabelField);
 
         JTextField processNumberField = new JTextField();
-        processNumberField.setPreferredSize(new Dimension(300, 50));
+        processNumberField.setPreferredSize(new Dimension(300, 30));
         gridNewProcess.addField("Process Number", processNumberField);
 
-        // Search for
-        SearchByLabelPanel<Process> searchByLabelPanel;
+        ArrayList<Customer> customers = new ArrayList<>();
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ArrayList<ProcessStatus> processStatuses = new ArrayList<>();
+        ArrayList<Employee> employees = new ArrayList<>();
+
         try
         {
-            ProcessDBAccess processDBAccess = new ProcessDBAccess();
-            ArrayList<Process> processes = processDBAccess.getAllProcesses();
+            customers = AppController.getAllCustomers();
+            suppliers = AppController.getAllSuppliers();
+            processStatuses = AppController.getAllProcessStatus();
+            employees = AppController.getAllEmployees();
 
-            searchByLabelPanel = new SearchByLabelPanel<>(processes, Process::getLabel);
-            gridNewProcess.addField("Search by label", searchByLabelPanel);
-
-            // button to show selected process
-            JButton showSelectedProcessButton = new JButton("Show selected process");
-            showSelectedProcessButton.addActionListener(e -> {
-                Process selectedProcess = (Process) searchByLabelPanel.getSelectedItem();
-                if (selectedProcess != null)
-                {
-                    JOptionPane.showMessageDialog(null, selectedProcess.getLabel(), "Selected process", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "No process selected", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            gridNewProcess.addField("", showSelectedProcessButton);
-
-        } catch (DatabaseConnectionFailedException | GetAllProcessesException e)
+        } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        SearchByLabelPanel<Customer> customerSearch = new SearchByLabelPanel<>(customers, "Search for a customer", customer -> customer.getFirstName() + " " + customer.getLastName());
+        SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
+        SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, "Search for a process status", ProcessStatus::getLabel);
+        SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getFirstName() + " " + employee.getLastName());
 
+        gridNewProcess.addField("Customer", customerSearch);
+        gridNewProcess.addField("Supplier", supplierSearch);
+        gridNewProcess.addField("Process Status", processStatusSearch);
+        gridNewProcess.addField("Employee", employeeSearch);
+
+
+        // Bttuon create
+        JButton createButton = new JButton("Create Process");
+
+        createButton.addActionListener(e -> {
+            Customer customer = customerSearch.getSelectedItem();
+            Supplier supplier = supplierSearch.getSelectedItem();
+            ProcessStatus processStatus = processStatusSearch.getSelectedItem();
+            Employee employee = employeeSearch.getSelectedItem();
+
+
+            // show in jOptionPane
+            JOptionPane.showMessageDialog(null, "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n" +
+                    "Supplier: " + supplier.getName() + "\n" +
+                    "Process Status: " + processStatus.getLabel() + "\n" +
+                    "Employee: " + employee.getFirstName() + " " + employee.getLastName() + "\n" +
+                    "Process Label: " + processLabelField.getText() + "\n" +
+                    "Process Number: " + processNumberField.getText() + "\n"
+            );
+
+        });
+
+        add(createButton, BorderLayout.SOUTH);
         add(searchForm, BorderLayout.CENTER);
 
     }

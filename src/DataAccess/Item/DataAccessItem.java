@@ -1,12 +1,10 @@
 package DataAccess.Item;
 
 import DataAccess.DatabaseConnexion;
-import DataAccess.Search.SearchItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
 import Model.Packaging;
 import Model.Vat;
-import jdk.jshell.spi.SPIResolutionException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

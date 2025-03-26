@@ -14,6 +14,7 @@ public class BrasserieWindow extends JFrame
     public BrasserieWindow()
     {
         super("Brasserie");
+
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

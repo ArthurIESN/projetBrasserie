@@ -31,7 +31,7 @@ import static java.sql.Types.INTEGER;
 
 
 
-public class ProcessDBAccess
+public class ProcessDBAccess implements ProcessDataAccess
 {
     private final Map<Integer, Supplier> supplierCache = new HashMap<>();
     private final Map<Integer, Type> typeCache = new HashMap<>();

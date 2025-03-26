@@ -16,19 +16,19 @@ import UI.Components.GridBagLayoutHelper;
 import Model.Item.Item;
 
 import Controller.SearchController;
-
+import UI.Components.JEnhancedTextField;
 
 
 public class SearchItemForm extends JPanel
 {
-    private final SearchController searchController = new SearchController();
+    //private final SearchController searchController = new SearchController();
 
     public SearchItemForm()
     {
         int[] minMaxItem;
         try
         {
-            minMaxItem = searchController.getMinMaxItemQuantityAndPrice();
+            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice();
         }
         catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
         {
@@ -46,7 +46,7 @@ public class SearchItemForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
 
         // TVA Code field
-        JTextField tvaCodeField = new JTextField();
+        JTextField tvaCodeField = new JEnhancedTextField("TVA Code");
         gridSearchForm.addField("TVA Code", tvaCodeField);
 
         // Item Stock Quantity Field
@@ -91,7 +91,7 @@ public class SearchItemForm extends JPanel
 
         try
         {
-            ArrayList<Item> items = searchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+            ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
 
             // Update table
             table.setModel(new ItemTableModel(items));
