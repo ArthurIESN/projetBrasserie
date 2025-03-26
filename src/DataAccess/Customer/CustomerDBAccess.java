@@ -14,7 +14,7 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Customer;
 import Model.CustomerStatus;
 
-public class CustomerDBAccess
+public class CustomerDBAccess implements CustomerDataAccess
 {
     public ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException
     {
@@ -43,6 +43,22 @@ public class CustomerDBAccess
             System.err.println(e.getMessage());
             throw new GetAllCustomersException();
         }
+    }
+
+    public Customer getCustomer(int id) {
+        return null;
+    }
+
+    public void createCustomer(Customer customer) {
+
+    }
+
+    public void deleteCustomer(int id) {
+
+    }
+
+    public void updateCustomer(Customer customer) {
+
     }
 
     private Customer crateCustomerClass(ResultSet resultSet) throws SQLException

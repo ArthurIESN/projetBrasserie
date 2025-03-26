@@ -15,7 +15,7 @@ import Model.Supplier;
 
 
 
-public class SupplierDBAccess
+public class SupplierDBAccess implements SupplierDataAccess
 {
     public ArrayList<Supplier> getAllSuppliers() throws DatabaseConnectionFailedException, GetAllSuppliersException
     {
@@ -42,6 +42,23 @@ public class SupplierDBAccess
             System.err.println(e.getMessage());
             throw new GetAllSuppliersException();
         }
+    }
+
+    public Supplier getSupplier(int id) {
+        return null;
+    }
+
+
+    public void createSupplier(Supplier supplier) {
+
+    }
+
+    public void deleteSupplier(int id) {
+
+    }
+
+    public void updateSupplier(Supplier supplier) {
+
     }
 
     private Supplier createSupplierClass(ResultSet resultSet) throws SQLException

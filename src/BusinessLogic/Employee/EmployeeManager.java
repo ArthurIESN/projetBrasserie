@@ -2,15 +2,24 @@ package BusinessLogic.Employee;
 
 import java.util.ArrayList;
 
+import DataAccess.Employee.EmployeeDBAccess;
+import DataAccess.Employee.EmployeeDataAccess;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Employee.GetAllEmployeesException;
 import Model.Employee;
 
 
 
 public class EmployeeManager
 {
-    public ArrayList<Employee> getAllEmployees()
+    private final EmployeeDataAccess employeeDataAccess;
+
+    public EmployeeManager()
     {
-        // todo
-        return null;
+        employeeDataAccess = new EmployeeDBAccess();
+    }
+    public ArrayList<Employee> getAllEmployees() throws DatabaseConnectionFailedException, GetAllEmployeesException
+    {
+        return employeeDataAccess.getAllEmployees();
     }
 }

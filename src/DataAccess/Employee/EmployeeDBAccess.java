@@ -13,7 +13,7 @@ import Exceptions.Employee.GetAllEmployeesException;
 import Model.Employee;
 import Model.EmployeeStatus;
 
-public class EmployeeDBAccess
+public class EmployeeDBAccess implements EmployeeDataAccess
 {
     public ArrayList<Employee> getAllEmployees() throws DatabaseConnectionFailedException, GetAllEmployeesException
     {
@@ -42,6 +42,22 @@ public class EmployeeDBAccess
             System.err.println(e.getMessage());
             throw new GetAllEmployeesException();
         }
+    }
+
+    public Employee getEmployee(int id) {
+        return null;
+    }
+
+    public void createEmployee(Employee employee) {
+
+    }
+
+    public void deleteEmployee(int id) {
+
+    }
+
+    public void updateEmployee(Employee employee) {
+
     }
 
 
