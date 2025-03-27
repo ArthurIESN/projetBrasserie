@@ -3,11 +3,11 @@ package DataAccess.Search.SearchItem;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Search.SearchItemException;
+import Exceptions.Search.SearchItemException;
 import Model.Item.Item;
 import Model.Packaging.Packaging;
 
-import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

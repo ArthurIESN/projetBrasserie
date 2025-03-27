@@ -2,7 +2,7 @@ package DataAccess.Vat;
 
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Vat.UnkownVatCodeException;
+import Exceptions.Vat.UnkownVatCodeException;
 
 import Model.Vat.Vat;
 import Model.Vat.MakeVat;

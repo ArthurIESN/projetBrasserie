@@ -23,7 +23,8 @@ public class SearchByLabelPanel<T> extends JPanel
         setLayout(new BorderLayout());
 
         // Create search field
-        searchField = new JEnhancedTextField(searchPlaceholder);
+        searchField = new JEnhancedTextField();
+        searchField.setPlaceholder(searchPlaceholder);
 
         add(searchField, BorderLayout.NORTH);
 

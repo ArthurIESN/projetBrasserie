@@ -1,4 +1,4 @@
-package Exceptions.DataAccess.Vat;
+package Exceptions.Vat;
 
 public class UnkownVatCodeException extends  Exception
 {

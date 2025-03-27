@@ -3,29 +3,21 @@ package DataAccess.Process;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Process.DeleteProcessException;
-import Exceptions.DataAccess.Process.GetAllProcessesException;
-import Exceptions.DataAccess.Process.CreateProcessException;
+import Exceptions.Process.DeleteProcessException;
+import Exceptions.Process.GetAllProcessesException;
+import Exceptions.Process.CreateProcessException;
 
-import Exceptions.DataAccess.Process.GetProcessException;
-import Exceptions.DataAccess.Process.UpdateProcessException;
+import Exceptions.Process.GetProcessException;
+import Exceptions.Process.UpdateProcessException;
 import Model.Process.MakeProcess;
 import Model.Process.Process;
-import Model.Supplier.Supplier;
-import Model.Type;
-import Model.ProcessStatus.ProcessStatus;
-import Model.Employee.Employee;
-import Model.EmployeeStatus.EmployeeStatus;
-import Model.Customer.Customer;
-import Model.CustomerStatus.CustomerStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import static java.sql.Types.INTEGER;
 
 
@@ -236,19 +228,9 @@ public class ProcessDBAccess implements ProcessDataAccess
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                /*
-                return MakeProcess.getProcess(
-                        resultSet.getInt("id"),
-                        resultSet.getString("label"),
-                        resultSet.getInt("number"),
-                        resultSet.getInt("id_supplier"),
-                        resultSet.getInt("id_type"),
-                        resultSet.getInt("id_process_status"),
-                        resultSet.getInt("id_employee"),
-                        resultSet.getInt("id_customer") */
-
-                return null;
+            if (resultSet.next())
+            {
+                return makeProcess(resultSet);
             }
             else
             {
@@ -286,8 +268,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
             while (resultSet.next())
             {
-                Process process = createProcessClass(resultSet);
-                processes.add(process);
+                processes.add(makeProcess(resultSet));
             }
 
             return processes;
@@ -297,5 +278,38 @@ public class ProcessDBAccess implements ProcessDataAccess
             System.err.println(e.getMessage());
             throw new GetAllProcessesException();
         }
+    }
+
+    private Process makeProcess(ResultSet resultSet) throws SQLException
+    {
+        return MakeProcess.getProcess(
+                resultSet.getInt("id"),
+                resultSet.getString("label"),
+                resultSet.getInt("number"),
+
+                resultSet.getInt("id_supplier"),
+                resultSet.getString("supplier.name"),
+
+                resultSet.getInt("id_type"),
+                resultSet.getString("type.label"),
+
+                resultSet.getInt("id_process_status"),
+                resultSet.getString("process_status.label"),
+
+                resultSet.getInt("id_employee"),
+                resultSet.getString("employee.last_name"),
+                resultSet.getString("employee.first_name"),
+                resultSet.getDate("employee.birth_date"),
+                resultSet.getInt("employee.id_employee_status"),
+                resultSet.getString("employee_status.label"),
+
+                resultSet.getInt("id_customer"),
+                resultSet.getString("customer.last_name"),
+                resultSet.getString("customer.first_name"),
+                resultSet.getFloat("customer.credit_limit"),
+                resultSet.getString("customer.num_vat"),
+                resultSet.getInt("customer.id_customer_status"),
+                resultSet.getString("customer_status.label")
+        );
     }
 }
