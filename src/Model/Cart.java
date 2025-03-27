@@ -1,5 +1,7 @@
 package Model;
 
+import Model.Customer.Customer;
+
 public class Cart
 {
     private final Integer id;

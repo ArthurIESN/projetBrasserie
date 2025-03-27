@@ -5,7 +5,7 @@ import DataAccess.ProcessStatus.ProcessStatusDataAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
-import Model.ProcessStatus;
+import Model.ProcessStatus.ProcessStatus;
 
 import java.util.ArrayList;
 

@@ -1,5 +1,7 @@
 package Model;
 
+import Model.Country.Country;
+
 public class Locality
 {
     private final Integer id;

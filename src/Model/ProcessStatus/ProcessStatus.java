@@ -1,4 +1,4 @@
-package Model;
+package Model.ProcessStatus;
 
 public class ProcessStatus {
     private Integer id;

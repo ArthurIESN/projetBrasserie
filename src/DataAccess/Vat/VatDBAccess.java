@@ -3,7 +3,9 @@ package DataAccess.Vat;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Vat.UnkownVatCodeException;
-import Model.Vat;
+
+import Model.Vat.Vat;
+import Model.Vat.MakeVat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,9 +27,7 @@ public class VatDBAccess implements VatDataAccess
 
             if (resultSet.next())
             {
-                return new Vat(
-                        resultSet.getString("code"),
-                        resultSet.getFloat("rate"));
+                return MakeVat.getVat(resultSet.getString("code"), resultSet.getFloat("rate"));
             }
             else
             {

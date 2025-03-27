@@ -8,7 +8,7 @@ import DataAccess.Supplier.SupplierDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Supplier.GetAllSuppliersException;
 
-import Model.Supplier;
+import Model.Supplier.Supplier;
 
 
 

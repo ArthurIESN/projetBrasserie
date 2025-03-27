@@ -2,7 +2,7 @@ package DataAccess.Vat;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Vat.UnkownVatCodeException;
-import Model.Vat;
+import Model.Vat.Vat;
 
 public interface VatDataAccess
 {

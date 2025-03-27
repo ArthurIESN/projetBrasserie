@@ -1,4 +1,4 @@
-package Model;
+package Model.DeliveryTruck;
 
 public class DeliveryTruck {
     private Integer id;

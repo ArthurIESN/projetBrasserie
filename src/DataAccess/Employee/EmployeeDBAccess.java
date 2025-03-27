@@ -10,8 +10,9 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 
-import Model.Employee;
-import Model.EmployeeStatus;
+import Model.Employee.Employee;
+import Model.Employee.MakeEmployee;
+import Model.EmployeeStatus.EmployeeStatus;
 
 public class EmployeeDBAccess implements EmployeeDataAccess
 {
@@ -32,7 +33,16 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
             while (resultSet.next())
             {
-                employees.add(createEmployeeClass(resultSet));
+                Employee employee = MakeEmployee.getEmployee(
+                        resultSet.getInt("id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getDate("birth_date"),
+                        resultSet.getInt("id_employee_status"),
+                        resultSet.getString("label")
+                );
+
+                employees.add(employee);
             }
 
             return employees;

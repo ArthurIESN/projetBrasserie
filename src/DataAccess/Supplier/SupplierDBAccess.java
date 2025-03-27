@@ -11,7 +11,8 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Supplier.GetAllSuppliersException;
 
-import Model.Supplier;
+import Model.Supplier.MakeSupplier;
+import Model.Supplier.Supplier;
 
 
 
@@ -32,7 +33,12 @@ public class SupplierDBAccess implements SupplierDataAccess
 
             while (resultSet.next())
             {
-                suppliers.add(createSupplierClass(resultSet));
+                Supplier supplier = MakeSupplier.getSupplier(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name")
+                );
+
+                suppliers.add(supplier);
             }
 
             return suppliers;
@@ -59,14 +65,6 @@ public class SupplierDBAccess implements SupplierDataAccess
 
     public void updateSupplier(Supplier supplier) {
 
-    }
-
-    private Supplier createSupplierClass(ResultSet resultSet) throws SQLException
-    {
-        return new Supplier(
-                resultSet.getInt("id"),
-                resultSet.getString("name")
-        );
     }
 }
 

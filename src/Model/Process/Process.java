@@ -1,4 +1,10 @@
-package Model;
+package Model.Process;
+
+import Model.Customer.Customer;
+import Model.Employee.Employee;
+import Model.ProcessStatus.ProcessStatus;
+import Model.Supplier.Supplier;
+import Model.Type;
 
 public class Process {
     private Integer id;
