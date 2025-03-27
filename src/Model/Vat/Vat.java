@@ -1,4 +1,4 @@
-package Model;
+package Model.Vat;
 
 public class Vat
 {

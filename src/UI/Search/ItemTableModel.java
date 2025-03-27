@@ -34,6 +34,20 @@ public class ItemTableModel extends AbstractTableModel
         return columnNames[i];
     }
 
+    public Class getColumnClass(int column)
+    {
+        Class c;
+
+        switch (column)
+        {
+            case 0, 3, 4, 5, 7 -> c = Integer.class;
+            case 2, 6, 8, 9 -> c = String.class;
+            default -> c = String.class;
+        }
+
+        return c;
+    }
+
     @Override
     public Object getValueAt(int i, int i1)
     {
@@ -47,7 +61,7 @@ public class ItemTableModel extends AbstractTableModel
             case 4 -> item.getRestock_quantity();
             case 5 -> item.getPackaging().getId();
             case 6 -> item.getPackaging().getLabel();
-            case 7 -> item.getPackaging().getItem_quantity();
+            case 7 -> item.getPackaging().getQuantity();
             case 8 -> item.getCode_vat().getCode();
             case 9 -> item.getCode_vat().getRate();
             default -> null;

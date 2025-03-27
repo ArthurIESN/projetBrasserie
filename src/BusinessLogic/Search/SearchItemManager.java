@@ -10,7 +10,7 @@ import Exceptions.DataAccess.Search.SearchItemException;
 import Exceptions.DataAccess.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Item.Item;
-import Model.Vat;
+import Model.Vat.Vat;
 
 import java.util.ArrayList;
 

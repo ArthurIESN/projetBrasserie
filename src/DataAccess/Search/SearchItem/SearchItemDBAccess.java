@@ -5,7 +5,7 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Search.SearchItemException;
 import Model.Item.Item;
-import Model.Packaging;
+import Model.Packaging.Packaging;
 
 import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
 

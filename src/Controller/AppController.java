@@ -11,10 +11,11 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.Supplier.GetAllSuppliersException;
 
-import Model.Customer;
-import Model.Employee;
+import Model.Customer.Customer;
+import Model.Employee.Employee;
 import Model.Item.Item;
-import Model.Supplier;
+import Model.ProcessStatus.ProcessStatus;
+import Model.Supplier.Supplier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class AppController {
     }
 
     // process status
-    public static ArrayList<Model.ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, Exceptions.ProcessStatus.GetAllProcessStatusException
+    public static ArrayList<ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, Exceptions.ProcessStatus.GetAllProcessStatusException
     {
         return processStatusManager.getAllProcessStatus();
     }

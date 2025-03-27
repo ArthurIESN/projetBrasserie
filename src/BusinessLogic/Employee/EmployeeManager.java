@@ -6,7 +6,7 @@ import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Employee.EmployeeDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
-import Model.Employee;
+import Model.Employee.Employee;
 
 
 

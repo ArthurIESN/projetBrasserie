@@ -1,10 +1,10 @@
-package Model;
+package Model.CustomerStatus;
 
-public class EmployeeStatus {
+public class CustomerStatus {
     private Integer id;
     private String label;
 
-    public EmployeeStatus(Integer id, String label) {
+    public CustomerStatus(Integer id, String label) {
         this.id = id;
         this.label = label;
     }

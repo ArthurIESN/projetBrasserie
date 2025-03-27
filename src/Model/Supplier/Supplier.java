@@ -1,4 +1,4 @@
-package Model;
+package Model.Supplier;
 
 public class Supplier {
     private Integer id;

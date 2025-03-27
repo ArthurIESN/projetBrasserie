@@ -3,8 +3,8 @@ package DataAccess.Item;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
-import Model.Packaging;
-import Model.Vat;
+import Model.Packaging.Packaging;
+import Model.Vat.Vat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

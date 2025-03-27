@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DataAccess.Process.*;
 
-import Model.Process;
+import Model.Process.Process;
 
 public interface ProcessDataAccess
 {

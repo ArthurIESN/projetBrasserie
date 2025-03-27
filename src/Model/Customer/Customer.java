@@ -1,4 +1,6 @@
-package Model;
+package Model.Customer;
+
+import Model.CustomerStatus.CustomerStatus;
 
 public class Customer {
     private Integer id;

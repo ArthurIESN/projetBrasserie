@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 
-import Model.Employee;
+import Model.Employee.Employee;
 
 
 

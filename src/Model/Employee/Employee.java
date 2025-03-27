@@ -1,4 +1,6 @@
-package Model;
+package Model.Employee;
+
+import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.Date;
 

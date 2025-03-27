@@ -11,7 +11,8 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 
-import Model.ProcessStatus;
+import Model.ProcessStatus.MakeProcessStatus;
+import Model.ProcessStatus.ProcessStatus;
 
 
 
@@ -32,7 +33,12 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
             while (resultSet.next())
             {
-                processStatuses.add(createProcessStatusClass(resultSet));
+                ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(
+                        resultSet.getInt("id"),
+                        resultSet.getString("label")
+                );
+
+                processStatuses.add(processStatus);
             }
 
             return processStatuses;
@@ -42,13 +48,5 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
             System.err.println(e.getMessage());
             throw new GetAllProcessStatusException();
         }
-    }
-
-    private ProcessStatus createProcessStatusClass(ResultSet resultSet) throws SQLException
-    {
-        return new ProcessStatus(
-                resultSet.getInt("id"),
-                resultSet.getString("label")
-        );
     }
 }

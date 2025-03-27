@@ -1,19 +1,15 @@
 package UI.Process;
 
 import Controller.AppController;
-import DataAccess.Customer.CustomerDBAccess;
-import DataAccess.Employee.EmployeeDBAccess;
-import DataAccess.Process.ProcessDBAccess;
-import DataAccess.ProcessStatus.ProcessStatusDBAccess;
-import DataAccess.Supplier.SupplierDBAccess;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Process.GetAllProcessesException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.Supplier.GetAllSuppliersException;
-import Model.*;
-import Model.Process;
+import Model.Customer.Customer;
+import Model.Employee.Employee;
+import Model.ProcessStatus.ProcessStatus;
+import Model.Supplier.Supplier;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.SearchByLabelPanel;
 

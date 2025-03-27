@@ -1,16 +1,16 @@
-package Model;
+package Model.Packaging;
 
 public class Packaging
 {
     private int id;
     private String label;
-    private int item_quantity;
+    private int quantity;
 
-    public Packaging(int id, String label, int item_quantity)
+    public Packaging(int id, String label, int quantity)
     {
         this.id = id;
         this.label = label;
-        this.item_quantity = item_quantity;
+        this.quantity = quantity;
     }
 
     public int getId()
@@ -23,9 +23,9 @@ public class Packaging
         return label;
     }
 
-    public int getItem_quantity()
+    public int getQuantity()
     {
-        return item_quantity;
+        return quantity;
     }
 
 
@@ -35,7 +35,7 @@ public class Packaging
         return "Packaging{ \n" +
                 "       id=" + id + ", \n" +
                 "       label='" + label + '\n' +
-                "       item_quantity=" + item_quantity + "\n" +
+                "       item_quantity=" + quantity + "\n" +
                 '}';
     }
 }
