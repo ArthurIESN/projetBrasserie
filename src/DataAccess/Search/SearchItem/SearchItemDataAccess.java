@@ -3,8 +3,8 @@ package DataAccess.Search.SearchItem;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.DataAccess.Search.SearchItemException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.SearchItemException;
 
 import Model.Item.Item;
 

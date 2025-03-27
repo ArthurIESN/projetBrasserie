@@ -6,11 +6,14 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.Supplier.GetAllSuppliersException;
+import Exceptions.Type.GetAllTypesException;
 import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
+import Model.Type.Type;
 import UI.Components.GridBagLayoutHelper;
+import UI.Components.JEnhancedTextField;
 import UI.Components.SearchByLabelPanel;
 
 import javax.swing.*;
@@ -29,18 +32,19 @@ public class CreateProcessPanel extends JPanel
         JPanel searchForm = new JPanel(new GridBagLayout());
         GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper(searchForm);
 
-        JTextField processLabelField = new JTextField();
-        processLabelField.setPreferredSize(new Dimension(300, 30));
+        JEnhancedTextField processLabelField = new JEnhancedTextField();
+        processLabelField.setPlaceholder("Process Label");
         gridNewProcess.addField("Process Label", processLabelField);
 
-        JTextField processNumberField = new JTextField();
-        processNumberField.setPreferredSize(new Dimension(300, 30));
+        JEnhancedTextField processNumberField = new JEnhancedTextField();
+        processNumberField.setPlaceholder("Process Number");
         gridNewProcess.addField("Process Number", processNumberField);
 
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Supplier> suppliers = new ArrayList<>();
         ArrayList<ProcessStatus> processStatuses = new ArrayList<>();
         ArrayList<Employee> employees = new ArrayList<>();
+        ArrayList<Type> types = new ArrayList<>();
 
         try
         {
@@ -48,8 +52,10 @@ public class CreateProcessPanel extends JPanel
             suppliers = AppController.getAllSuppliers();
             processStatuses = AppController.getAllProcessStatus();
             employees = AppController.getAllEmployees();
+            types = AppController.getAllTypes();
 
-        } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException e)
+    } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException |
+             GetAllTypesException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -58,11 +64,13 @@ public class CreateProcessPanel extends JPanel
         SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
         SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, "Search for a process status", ProcessStatus::getLabel);
         SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getFirstName() + " " + employee.getLastName());
+        SearchByLabelPanel<Type> typeSearch = new SearchByLabelPanel<>(types, "Search for a type", Type::getLabel);
 
-        gridNewProcess.addField("Customer", customerSearch);
         gridNewProcess.addField("Supplier", supplierSearch);
         gridNewProcess.addField("Process Status", processStatusSearch);
+        gridNewProcess.addField("Type", typeSearch);
         gridNewProcess.addField("Employee", employeeSearch);
+        gridNewProcess.addField("Customer", customerSearch);
 
 
         // Bttuon create

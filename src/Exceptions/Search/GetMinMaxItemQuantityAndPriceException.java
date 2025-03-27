@@ -1,4 +1,4 @@
-package Exceptions.DataAccess.Search;
+package Exceptions.Search;
 
 public class GetMinMaxItemQuantityAndPriceException extends Exception {
     private final String message;

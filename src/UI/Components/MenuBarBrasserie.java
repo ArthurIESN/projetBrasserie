@@ -2,6 +2,7 @@ package UI.Components;
 
 import UI.BrasserieWindow.BrasserieWindow;
 import UI.Process.CreateProcessPanel;
+import UI.Process.ProcessPanel;
 import UI.Search.SearchDocumentWithEventForm;
 import UI.Search.SearchItemForm;
 
@@ -75,7 +76,7 @@ public class MenuBarBrasserie {
         }
 
         crudItem[0].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new CreateProcessPanel());
+            brasserieWindow.updateWindowContent(new ProcessPanel());
         });
 
     }

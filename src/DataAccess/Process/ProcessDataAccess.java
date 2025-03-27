@@ -3,8 +3,8 @@ package DataAccess.Process;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Process.*;
 
+import Exceptions.Process.*;
 import Model.Process.Process;
 
 public interface ProcessDataAccess

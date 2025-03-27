@@ -1,4 +1,4 @@
-package Exceptions.DataAccess.Process;
+package Exceptions.Process;
 
 public class CreateProcessException extends Exception
 {

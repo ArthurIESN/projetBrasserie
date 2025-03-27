@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.DataAccess.Search.SearchItemException;
-import Exceptions.DataAccess.Vat.UnkownVatCodeException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.SearchItemException;
+import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import UI.Components.JDualSliderPanel;
 import UI.Components.GridBagLayoutHelper;
@@ -46,7 +46,8 @@ public class SearchItemForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
 
         // TVA Code field
-        JTextField tvaCodeField = new JEnhancedTextField("TVA Code");
+        JEnhancedTextField tvaCodeField = new JEnhancedTextField();
+        tvaCodeField.setPlaceholder("TVA Code");
         gridSearchForm.addField("TVA Code", tvaCodeField);
 
         // Item Stock Quantity Field

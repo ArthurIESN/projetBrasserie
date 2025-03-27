@@ -1,4 +1,4 @@
-package Model;
+package Model.Type;
 
 public class Type {
     private Integer id;
