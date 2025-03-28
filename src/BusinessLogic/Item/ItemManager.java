@@ -1,17 +1,17 @@
 package BusinessLogic.Item;
 
-import DataAccess.Item.DataAccessItem;
+import DataAccess.Item.ItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
 
 import java.util.List;
 
 public class ItemManager {
-    private final DataAccessItem dataAccessItem = new DataAccessItem();
+    private final ItemDBAccess itemDBAccess = new ItemDBAccess();
     public ItemManager(){}
 
     public List<Item> getAllItems() throws DatabaseConnectionFailedException
     {
-        return dataAccessItem.getAllItems();
+        return itemDBAccess.getAllItems();
     }
 }

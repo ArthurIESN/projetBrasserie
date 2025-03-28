@@ -17,8 +17,8 @@ public class ProcessTableModel extends AbstractTableModel
             "Customer VAT Number", "Customer Status ID", "Customer Status Label"
     };
 
-    public ProcessTableModel(ArrayList<Process> items) {
-        this.items = items;
+    public ProcessTableModel(ArrayList<Process> processes) {
+        this.items = processes;
     }
 
     @Override
