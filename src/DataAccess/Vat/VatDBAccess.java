@@ -2,15 +2,17 @@ package DataAccess.Vat;
 
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Vat.UnkownVatCodeException;
-import Model.Vat;
+import Exceptions.Vat.UnkownVatCodeException;
+
+import Model.Vat.Vat;
+import Model.Vat.MakeVat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class VatDBAccess
+public class VatDBAccess implements VatDataAccess
 {
     public Vat getVat(String code) throws DatabaseConnectionFailedException, UnkownVatCodeException
     {
@@ -25,9 +27,7 @@ public class VatDBAccess
 
             if (resultSet.next())
             {
-                return new Vat(
-                        resultSet.getString("code"),
-                        resultSet.getFloat("rate"));
+                return MakeVat.getVat(resultSet.getString("code"), resultSet.getFloat("rate"));
             }
             else
             {

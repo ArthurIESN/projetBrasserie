@@ -1,7 +1,7 @@
 package Model.Item;
 
-import Model.Packaging;
-import Model.Vat;
+import Model.Packaging.Packaging;
+import Model.Vat.Vat;
 
 import java.util.Date;
 

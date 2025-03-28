@@ -9,28 +9,35 @@ import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
 
+
 public class SearchByLabelPanel<T> extends JPanel
 {
-    private JTextField searchField;
+    private JEnhancedTextField searchField;
     private JList<String> resultList;
     private DefaultListModel<String> listModel;
     private List<T> data;
     private Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
+    public SearchByLabelPanel(List<T> data, String searchPlaceholder, Function<T, String> toStringFunction)
     {
         this.data = data;
         this.toStringFunction = toStringFunction;
         setLayout(new BorderLayout());
 
         // Create search field
-        searchField = new JTextField();
+        searchField = new JEnhancedTextField();
+        searchField.setPlaceholder(searchPlaceholder);
+
         add(searchField, BorderLayout.NORTH);
 
         // Create list model and result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
-        add(new JScrollPane(resultList), BorderLayout.CENTER);
+        JScrollPane scrollPanel = new JScrollPane(resultList);
+
+        scrollPanel.setPreferredSize(new Dimension(300, 60));
+
+        add(scrollPanel, BorderLayout.CENTER);
 
         // Add document listener to search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
@@ -53,7 +60,24 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    private void updateList() {
+    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
+    {
+        this(data, "", toStringFunction);
+    }
+
+    public void onSelectedItemChange(Runnable runnable)
+    {
+        resultList.addListSelectionListener(e ->
+        {
+            if (!e.getValueIsAdjusting())
+            {
+                runnable.run();
+            }
+        });
+    }
+
+    private void updateList()
+    {
         String searchText = searchField.getText().toLowerCase();
         listModel.clear();
         for (T item : data)
@@ -67,6 +91,10 @@ public class SearchByLabelPanel<T> extends JPanel
 
     public T getSelectedItem()
     {
+        if (resultList.getSelectedIndex() < 0)
+        {
+            return null;
+        }
         return data.get(resultList.getSelectedIndex());
     }
 

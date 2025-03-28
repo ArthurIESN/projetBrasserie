@@ -3,44 +3,29 @@ package DataAccess.Process;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Process.DeleteProcessException;
-import Exceptions.DataAccess.Process.GetAllProcessesException;
-import Exceptions.DataAccess.Process.CreateProcessException;
+import Exceptions.Process.DeleteProcessException;
+import Exceptions.Process.GetAllProcessesException;
+import Exceptions.Process.CreateProcessException;
 
-import Exceptions.DataAccess.Process.GetProcessException;
-import Exceptions.DataAccess.Process.UpdateProcessException;
-import Model.Process;
-import Model.Supplier;
-import Model.Type;
-import Model.ProcessStatus;
-import Model.Employee;
-import Model.EmployeeStatus;
-import Model.Customer;
-import Model.CustomerStatus;
+import Exceptions.Process.GetProcessException;
+import Exceptions.Process.UpdateProcessException;
+import Model.Process.MakeProcess;
+import Model.Process.Process;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import static java.sql.Types.INTEGER;
 
 
 
 
 
-public class ProcessDBAccess
+public class ProcessDBAccess implements ProcessDataAccess
 {
-    private final Map<Integer, Supplier> supplierCache = new HashMap<>();
-    private final Map<Integer, Type> typeCache = new HashMap<>();
-    private final Map<Integer, ProcessStatus> processStatusCache = new HashMap<>();
-    private final Map<Integer, Employee> employeeCache = new HashMap<>();
-    private final Map<Integer, EmployeeStatus> employeeStatusCache = new HashMap<>();
-    private final Map<Integer, Customer> customerCache = new HashMap<>();
-    private final Map<Integer, CustomerStatus> customerStatusCache = new HashMap<>();
-
     public ProcessDBAccess()
     {
     }
@@ -245,7 +230,7 @@ public class ProcessDBAccess
 
             if (resultSet.next())
             {
-                return createProcessClass(resultSet);
+                return makeProcess(resultSet);
             }
             else
             {
@@ -283,8 +268,7 @@ public class ProcessDBAccess
 
             while (resultSet.next())
             {
-                Process process = createProcessClass(resultSet);
-                processes.add(process);
+                processes.add(makeProcess(resultSet));
             }
 
             return processes;
@@ -296,85 +280,36 @@ public class ProcessDBAccess
         }
     }
 
-    private Process createProcessClass(ResultSet resultSet)
+    private Process makeProcess(ResultSet resultSet) throws SQLException
     {
-        try
-        {
-            Supplier supplier = supplierCache.getOrDefault(resultSet.getInt("id_supplier"),
-                    new Supplier(
-                            resultSet.getInt("id_supplier"),
-                            resultSet.getString("name")));
+        return MakeProcess.getProcess(
+                resultSet.getInt("id"),
+                resultSet.getString("label"),
+                resultSet.getInt("number"),
 
-            supplierCache.putIfAbsent(resultSet.getInt("id_supplier"), supplier);
+                resultSet.getInt("id_supplier"),
+                resultSet.getString("supplier.name"),
 
-            Type type = typeCache.getOrDefault(resultSet.getInt("id_type"),
-                    new Type(
-                            resultSet.getInt("id_type"),
-                            resultSet.getString("label")));
+                resultSet.getInt("id_type"),
+                resultSet.getString("type.label"),
 
-            typeCache.putIfAbsent(resultSet.getInt("id_type"), type);
+                resultSet.getInt("id_process_status"),
+                resultSet.getString("process_status.label"),
 
-            ProcessStatus processStatus = processStatusCache.getOrDefault(resultSet.getInt("id_process_status"),
-                    new ProcessStatus(
-                            resultSet.getInt("id_process_status"),
-                            resultSet.getString("label")));
+                resultSet.getInt("id_employee"),
+                resultSet.getString("employee.last_name"),
+                resultSet.getString("employee.first_name"),
+                resultSet.getDate("employee.birth_date"),
+                resultSet.getInt("employee.id_employee_status"),
+                resultSet.getString("employee_status.label"),
 
-            processStatusCache.putIfAbsent(resultSet.getInt("id_process_status"), processStatus);
-
-            EmployeeStatus employeeStatus = employeeStatusCache.getOrDefault(resultSet.getInt("id_employee_status"),
-                    new EmployeeStatus(
-                            resultSet.getInt("id_employee_status"),
-                            resultSet.getString("label")));
-
-            employeeStatusCache.putIfAbsent(resultSet.getInt("id_employee_status"), employeeStatus);
-
-            Employee employee = employeeCache.getOrDefault(resultSet.getInt("id_employee"),
-                    new Employee(
-                            resultSet.getInt("id_employee"),
-                            resultSet.getString("name"),
-                            resultSet.getString("first_name"),
-                            resultSet.getDate("birth_date"),
-                            employeeStatus));
-
-            employeeCache.putIfAbsent(resultSet.getInt("id_employee"), employee);
-
-            CustomerStatus customerStatus = customerStatusCache.getOrDefault(resultSet.getInt("id_customer_status"),
-                    new CustomerStatus(
-                            resultSet.getInt("id_customer_status"),
-                            resultSet.getString("label")));
-
-            customerStatusCache.putIfAbsent(resultSet.getInt("id_customer_status"), customerStatus);
-
-            Customer customer = customerCache.getOrDefault(resultSet.getInt("id_customer"),
-                    new Customer(resultSet.getInt("id_customer"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("first_name"),
-                            resultSet.getFloat("credit_limit"),
-                            resultSet.getString("num_vat"),
-                            customerStatus));
-
-            customerCache.putIfAbsent(resultSet.getInt("id_customer"), customer);
-
-            return new Process(
-                    resultSet.getInt("id"),
-                    resultSet.getString("label"),
-                    resultSet.getInt("number"),
-                    supplier,
-                    type,
-                    processStatus,
-                    employee,
-                    customer
-            );
-
-
-        }
-        catch (SQLException e)
-        {
-            System.err.println(e.getMessage());
-            //@todo : throw a custom exception
-            return null;
-        }
+                resultSet.getInt("id_customer"),
+                resultSet.getString("customer.last_name"),
+                resultSet.getString("customer.first_name"),
+                resultSet.getFloat("customer.credit_limit"),
+                resultSet.getString("customer.num_vat"),
+                resultSet.getInt("customer.id_customer_status"),
+                resultSet.getString("customer_status.label")
+        );
     }
-
-
 }

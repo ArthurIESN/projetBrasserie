@@ -1,20 +1,25 @@
 package DataAccess.Customer;
 
-import DataAccess.DatabaseConnexion;
-import Model.Customer;
-import Model.CustomerStatus;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CustomerDBAccess
+import DataAccess.DatabaseConnexion;
+
+import Exceptions.Customer.GetAllCustomersException;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+
+import Model.Customer.Customer;
+import Model.Customer.MakeCustomer;
+import Model.CustomerStatus.CustomerStatus;
+
+public class CustomerDBAccess implements CustomerDataAccess
 {
-    public ArrayList<Customer> getAllCustomers()
+    public ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException
     {
-        String query = "SELECT *, customer.num_customer AS id, customer.id_customer_status as id_customer_status" +
+        String query = "SELECT *, customer.num_customer AS id, customer.id_customer_status as id_customer_status, customer_status.label AS customer_status_label " +
                 " FROM customer " +
                 "JOIN customer_status ON customer.id_customer_status = customer_status.id";
 
@@ -29,40 +34,57 @@ public class CustomerDBAccess
 
             while (resultSet.next())
             {
-                customers.add(crateCustomerClass(resultSet));
+                Customer customer = MakeCustomer.getCustomer(
+                        resultSet.getInt("id"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("first_name"),
+                        resultSet.getFloat("credit_limit"),
+                        resultSet.getString("num_vat"),
+                        resultSet.getInt("id_customer_status"),
+                        resultSet.getString("customer_status_label")
+                );
+
+                customers.add(customer);
             }
 
             return customers;
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            throw new GetAllCustomersException();
         }
     }
 
-    private Customer crateCustomerClass(ResultSet resultSet)
+    public Customer getCustomer(int id) {
+        return null;
+    }
+
+    public void createCustomer(Customer customer) {
+
+    }
+
+    public void deleteCustomer(int id) {
+
+    }
+
+    public void updateCustomer(Customer customer) {
+
+    }
+
+    private Customer crateCustomerClass(ResultSet resultSet) throws SQLException
     {
-        try
-        {
-            CustomerStatus customerStatus = new CustomerStatus(
-                    resultSet.getInt("id_customer_status"),
-                    resultSet.getString("label_customer_status"));
+        CustomerStatus customerStatus = new CustomerStatus(
+                resultSet.getInt("id_customer_status"),
+                resultSet.getString("customer_status_label"));
 
-            return new Customer(
-                    resultSet.getInt("id"),
-                    resultSet.getString("last_name"),
-                    resultSet.getString("first_name"),
-                    resultSet.getFloat("credit_limit"),
-                    resultSet.getString("num_vat"),
-                    customerStatus
-            );
-
-
-        } catch (SQLException e)
-        {
-            System.err.println(e.getMessage());
-            //@todo : throw a custom exception
-            return null;
-        }
+        return new Customer(
+                resultSet.getInt("id"),
+                resultSet.getString("last_name"),
+                resultSet.getString("first_name"),
+                resultSet.getFloat("credit_limit"),
+                resultSet.getString("num_vat"),
+                customerStatus
+        );
     }
 }

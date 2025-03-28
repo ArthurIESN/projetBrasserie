@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DataAccess.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.DataAccess.Search.SearchItemException;
-import Exceptions.DataAccess.Vat.UnkownVatCodeException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.SearchItemException;
+import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import UI.Components.JDualSliderPanel;
 import UI.Components.GridBagLayoutHelper;
@@ -16,19 +16,19 @@ import UI.Components.GridBagLayoutHelper;
 import Model.Item.Item;
 
 import Controller.SearchController;
-
+import UI.Components.JEnhancedTextField;
 
 
 public class SearchItemForm extends JPanel
 {
-    private final SearchController searchController = new SearchController();
+    //private final SearchController searchController = new SearchController();
 
     public SearchItemForm()
     {
         int[] minMaxItem;
         try
         {
-            minMaxItem = searchController.getMinMaxItemQuantityAndPrice();
+            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice();
         }
         catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
         {
@@ -46,7 +46,8 @@ public class SearchItemForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
 
         // TVA Code field
-        JTextField tvaCodeField = new JTextField();
+        JEnhancedTextField tvaCodeField = new JEnhancedTextField();
+        tvaCodeField.setPlaceholder("TVA Code");
         gridSearchForm.addField("TVA Code", tvaCodeField);
 
         // Item Stock Quantity Field
@@ -91,7 +92,7 @@ public class SearchItemForm extends JPanel
 
         try
         {
-            ArrayList<Item> items = searchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+            ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
 
             // Update table
             table.setModel(new ItemTableModel(items));

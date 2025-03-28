@@ -1,5 +1,8 @@
 package Model;
 
+import Model.DeliveryTruck.DeliveryTruck;
+import Model.Process.Process;
+
 import java.util.Date;
 
 public class Document {
@@ -19,7 +22,7 @@ public class Document {
     private float totalVat;
     private float totalExclVat;
     private CollectionAgency collectionAgency;
-    private DeliveryTruck  deliveryTruck;
+    private DeliveryTruck deliveryTruck;
     private Process process;
 
     // Commande client
