@@ -1,5 +1,7 @@
 package UI.Components;
 
+import BusinessLogic.InterfaceSubject.Subject;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -95,4 +97,6 @@ public class SearchByLabelPanel<T> extends JPanel
         }
         return data.get(resultList.getSelectedIndex());
     }
+
+
 }

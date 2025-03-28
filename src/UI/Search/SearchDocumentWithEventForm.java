@@ -4,13 +4,12 @@ import Controller.AppController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
-import UI.Components.ItemComboBox;
+import UI.Components.SearchByLabelPanel;
 import UI.Components.YearComboBox;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SearchDocumentWithEventForm extends JPanel {
@@ -18,7 +17,9 @@ public class SearchDocumentWithEventForm extends JPanel {
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
     private YearComboBox yearsComboBox;
-    private ItemComboBox itemComboBox;
+    //private ItemComboBox itemComboBox;
+
+    private SearchByLabelPanel yearSearch;
     private int idItemSelected;
 
     public SearchDocumentWithEventForm(){
@@ -36,11 +37,12 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
+        //yearSearch = new SearchByLabelPanel<>(years,Event::getStartDate)
         yearsComboBox = new YearComboBox(years);
 
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        filterPanel.add(yearsComboBox);
+        //filterPanel.add(yearsComboBox);
 
         try{
             items = AppController.getAllItems();
@@ -48,13 +50,18 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        itemComboBox = new ItemComboBox(items);
-        filterPanel.add(itemComboBox);
+        SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
 
+
+
+        //itemComboBox = new ItemComboBox(items);
+        //filterPanel.add(itemComboBox);
+
+        filterPanel.add(itemSearch);
         filterPanel.add(yearsComboBox);
         add(filterPanel, BorderLayout.CENTER);
 
-        System.out.println(itemComboBox.getSelectedItemId());
+       // System.out.println(itemComboBox.getSelectedItemId());
 
 
     }
