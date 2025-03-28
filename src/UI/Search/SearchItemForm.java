@@ -1,26 +1,40 @@
 package UI.Search;
 
 import javax.swing.*;
-
-import UI.Components.JDualSliderPanel;
-import UI.Components.GridBagLayoutHelper;
-
-import Model.Item.Item;
-import Model.Item.ItemTable;
-
-import DataAccess.SearchItemDBAccess; // JUST FOR TESTING @todo replace with the corresponding controller
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.SearchItemException;
+import Exceptions.Vat.UnkownVatCodeException;
+import Exceptions.Vat.WrongVatCodeException;
+import UI.Components.JDualSliderPanel;
+import UI.Components.GridBagLayoutHelper;
+
+import Model.Item.Item;
+
+import Controller.SearchController;
+import UI.Components.JEnhancedTextField;
+
+
 public class SearchItemForm extends JPanel
 {
+    //private final SearchController searchController = new SearchController();
+
     public SearchItemForm()
     {
-        //@todo : just for testing, move this to the corresponding controller
-        SearchItemDBAccess searchItemDBAccess = new SearchItemDBAccess();
-        ArrayList<Integer> minMaxItem = searchItemDBAccess.getMinMaxItemQuantityAndPrice();
+        int[] minMaxItem;
+        try
+        {
+            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice();
+        }
+        catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            minMaxItem = new int[]{0, 100, 0, 100};
+        }
 
         // add a title
         setLayout(new BorderLayout());
@@ -32,15 +46,16 @@ public class SearchItemForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
 
         // TVA Code field
-        JTextField tvaCodeField = new JTextField();
+        JEnhancedTextField tvaCodeField = new JEnhancedTextField();
+        tvaCodeField.setPlaceholder("TVA Code");
         gridSearchForm.addField("TVA Code", tvaCodeField);
 
         // Item Stock Quantity Field
-        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem.getFirst(), minMaxItem.get(1), 300, 50);
+        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 300, 50);
         gridSearchForm.addField("Item Stock Quantity", nbItemInPackaging);
 
         // Item Price Field
-        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem.get(2), minMaxItem.getLast(), 300, 50);
+        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 300, 50);
         gridSearchForm.addField("Item Price", priceRange);
 
         add(searchForm, BorderLayout.CENTER);
@@ -51,12 +66,12 @@ public class SearchItemForm extends JPanel
 
         // Empty table
         JTable table = new JTable();
-        table.setModel(new ItemTable(new ArrayList<>()));
+        table.setModel(new ItemTableModel(new ArrayList<>()));
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         searchButton.addActionListener(e ->
         {
-            searchItem(searchItemDBAccess, tvaCodeField, nbItemInPackaging, priceRange, table);
+            searchItem(tvaCodeField, nbItemInPackaging, priceRange, table);
         });
 
         // add event lister on enter key
@@ -66,19 +81,28 @@ public class SearchItemForm extends JPanel
 
     }
 
-    private void searchItem(SearchItemDBAccess searchItemDBAccess, JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JTable table)
+    private void searchItem(JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JTable table)
     {
+        // get data from fields
         String tvaCode = tvaCodeField.getText();
         int minItem = nbItemInPackaging.getCurrentMin();
         int maxItem = nbItemInPackaging.getCurrentMax();
         int minPrice = priceRange.getCurrentMin();
         int maxPrice = priceRange.getCurrentMax();
 
-        // call the searchItem method from the SearchItemDBAccess class
-        ArrayList<Item> Items = searchItemDBAccess.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+        try
+        {
+            ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
 
-        // Update table
-        table.setModel(new ItemTable(Items));
-        revalidate();
+            // Update table
+            table.setModel(new ItemTableModel(items));
+            revalidate();
+        }
+        catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |
+               SearchItemException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 }

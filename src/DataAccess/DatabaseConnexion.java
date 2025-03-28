@@ -4,12 +4,15 @@ import Environement.EnvLoader;
 import Exceptions.Environement.BadEnvValueException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnexion
 {
+    private static DatabaseConnexion databaseConnexionInstance;
     private static Connection connection;
 
 
@@ -34,37 +37,34 @@ public class DatabaseConnexion
             }
             catch (ClassNotFoundException e)
             {
-                throw new DatabaseConnectionFailedException("The MySQL JDBC driver was not found");
+                System.err.println("My Sql driver error : " + e.getMessage());
+                throw new DatabaseConnectionFailedException("Missing dependency");
             }
             catch (SQLException e)
             {
-                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database: " + e.getMessage());
+                System.err.println("Connection error : " + e.getMessage());
+                throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
             }
 
         }
         catch (BadEnvValueException e)
         {
-            System.err.println(e.getMessage());
+            System.err.println("Error while loading the environment variables : " + e.getMessage());
             throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
         }
     }
 
-
-
-    public static Connection getInstance()
+    public Connection getConnection()
     {
-        if(connection == null)
-        {
-            try
-            {
-                new DatabaseConnexion();
-            }
-            catch (DatabaseConnectionFailedException e)
-            {
-                System.err.println(e.getMessage());
-            }
-        }
-
         return connection;
+    }
+
+    public static DatabaseConnexion getInstance() throws DatabaseConnectionFailedException
+    {
+        if (databaseConnexionInstance == null)
+        {
+            databaseConnexionInstance = new DatabaseConnexion();
+        }
+        return databaseConnexionInstance;
     }
 }

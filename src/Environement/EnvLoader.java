@@ -28,8 +28,9 @@ public class EnvLoader
         } catch (IOException e)
         {
             System.out.println(e.getMessage());
+            throw new BadEnvValueException(key, "The key " + key + " was not found in the .env file");
         }
 
-        throw new BadEnvValueException(key, "The key " + key + " was not found in the .env file");
+        return null;
     }
 }
