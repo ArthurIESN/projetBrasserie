@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -44,6 +46,39 @@ public class ReadProcessPanel extends JPanel
             column.setPreferredWidth(columnWidth);
             column.setMinWidth(columnWidth);
         }
+
+        // Créer le menu contextuel
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem menuItem1 = new JMenuItem("Update");
+        JMenuItem menuItem2 = new JMenuItem("Delete");
+        popupMenu.add(menuItem1);
+        popupMenu.add(menuItem2);
+
+        // Ajouter un MouseListener pour détecter les clics droits
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopup(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopup(e);
+                }
+            }
+
+            private void showPopup(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int column = table.columnAtPoint(e.getPoint());
+                if (!table.isRowSelected(row)) {
+                    table.changeSelection(row, column, false, false);
+                }
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
 
 // Ajouter le JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);

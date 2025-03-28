@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class DataAccessItem {
+public class ItemDBAccess {
 
     private Map<String, Vat> vatCache = new HashMap<>();
     private Map<Integer, Packaging> packagingCache = new HashMap<>();
 
-    public DataAccessItem(){}
+    public ItemDBAccess(){}
 
     public List<Item> getAllItems() throws DatabaseConnectionFailedException{
         List<Item> items = new ArrayList<>();
