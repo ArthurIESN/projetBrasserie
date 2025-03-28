@@ -1,12 +1,10 @@
 package DataAccess.Item;
 
 import DataAccess.DatabaseConnexion;
-import DataAccess.Search.SearchItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Item.Item;
 import Model.Packaging;
 import Model.Vat;
-import jdk.jshell.spi.SPIResolutionException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,12 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class DataAccessItem {
+public class ItemDBAccess {
 
     private Map<String, Vat> vatCache = new HashMap<>();
     private Map<Integer, Packaging> packagingCache = new HashMap<>();
 
-    public DataAccessItem(){}
+    public ItemDBAccess(){}
 
     public List<Item> getAllItems() throws DatabaseConnectionFailedException{
         List<Item> items = new ArrayList<>();
