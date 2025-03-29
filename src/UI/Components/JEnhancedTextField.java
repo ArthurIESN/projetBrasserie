@@ -10,6 +10,8 @@ public class JEnhancedTextField extends JTextField
 {
     private String placeholder;
     private boolean showingPlaceholder;
+    private static final Color textColor = Color.WHITE;
+    private static final Color placeholderColor = Color.GRAY;
 
     public JEnhancedTextField()
     {
@@ -24,7 +26,7 @@ public class JEnhancedTextField extends JTextField
             {
                 if (showingPlaceholder)
                 {
-                    setForeground(Color.BLACK);
+                    setForeground(textColor);
                     setText("");
                     showingPlaceholder = false;
                 }
@@ -56,7 +58,7 @@ public class JEnhancedTextField extends JTextField
         {
             showingPlaceholder = true;
             setText(placeholder);
-            setForeground(Color.GRAY);
+            setForeground(placeholderColor);
         }
     }
 }
