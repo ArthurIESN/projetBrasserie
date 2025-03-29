@@ -6,8 +6,8 @@ import Model.ProcessStatus.MakeProcessStatus;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.MakeSupplier;
 import Model.Supplier.Supplier;
-import Model.Type.Type;
-import Model.Type.MakeType;
+import Model.ProcessType.ProcessType;
+import Model.ProcessType.MakeProcessType;
 import Model.Employee.Employee;
 import Model.Employee.MakeEmployee;
 
@@ -33,7 +33,7 @@ public class MakeProcess
         else
         {
 
-            Type type = MakeType.getType(typeId, typeLabel);
+            ProcessType type = MakeProcessType.getType(typeId, typeLabel);
             ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(processStatusId, processStatusLabel);
             Supplier supplier;
             Employee employee;

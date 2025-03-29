@@ -54,9 +54,9 @@ public class JEnhancedTextField extends JTextField
     {
         if (getText().isEmpty())
         {
+            showingPlaceholder = true;
             setText(placeholder);
             setForeground(Color.GRAY);
-            showingPlaceholder = true;
         }
     }
 }

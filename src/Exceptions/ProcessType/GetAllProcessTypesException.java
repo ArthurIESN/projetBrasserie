@@ -1,10 +1,10 @@
-package Exceptions.Type;
+package Exceptions.ProcessType;
 
-public class GetAllTypesException extends Exception
+public class GetAllProcessTypesException extends Exception
 {
     private final String message;
 
-    public GetAllTypesException()
+    public GetAllProcessTypesException()
     {
         this.message = "Error while getting all types.";
     }

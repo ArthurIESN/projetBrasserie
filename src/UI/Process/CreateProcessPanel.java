@@ -6,12 +6,12 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.Supplier.GetAllSuppliersException;
-import Exceptions.Type.GetAllTypesException;
+import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
-import Model.Type.Type;
+import Model.ProcessType.ProcessType;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.JEnhancedTextField;
 import UI.Components.SearchByLabelPanel;
@@ -44,7 +44,7 @@ public class CreateProcessPanel extends JPanel
         ArrayList<Supplier> suppliers = new ArrayList<>();
         ArrayList<ProcessStatus> processStatuses = new ArrayList<>();
         ArrayList<Employee> employees = new ArrayList<>();
-        ArrayList<Type> types = new ArrayList<>();
+        ArrayList<ProcessType> types = new ArrayList<>();
 
         try
         {
@@ -55,7 +55,7 @@ public class CreateProcessPanel extends JPanel
             types = AppController.getAllTypes();
 
     } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException |
-             GetAllTypesException e)
+             GetAllProcessTypesException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -64,7 +64,7 @@ public class CreateProcessPanel extends JPanel
         SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
         SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, "Search for a process status", ProcessStatus::getLabel);
         SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getFirstName() + " " + employee.getLastName());
-        SearchByLabelPanel<Type> typeSearch = new SearchByLabelPanel<>(types, "Search for a type", Type::getLabel);
+        SearchByLabelPanel<ProcessType> typeSearch = new SearchByLabelPanel<>(types, "Search for a type", ProcessType::getLabel);
 
         gridNewProcess.addField("Supplier", supplierSearch);
         gridNewProcess.addField("Process Status", processStatusSearch);

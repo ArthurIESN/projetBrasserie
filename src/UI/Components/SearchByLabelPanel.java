@@ -79,7 +79,9 @@ public class SearchByLabelPanel<T> extends JPanel
     private void updateList()
     {
         String searchText = searchField.getText().toLowerCase();
+
         listModel.clear();
+
         for (T item : data)
         {
             if (toStringFunction.apply(item).toLowerCase().contains(searchText))

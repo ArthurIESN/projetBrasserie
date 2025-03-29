@@ -27,7 +27,8 @@ public class MenuBarBrasserie {
 
         brasserieMenu.add(quitItem);
 
-        quitItem.addActionListener(e -> {
+        quitItem.addActionListener(e ->
+        {
             System.exit(0);
         });
 
@@ -68,7 +69,7 @@ public class MenuBarBrasserie {
         menuBar.add(crudMenu);
 
         crudItem[0] = new JMenuItem("Process");
-        crudItem[1] = new JMenuItem("Document??");
+        crudItem[1] = new JMenuItem("Document");
 
         for (JMenuItem menuItem : crudItem)
         {

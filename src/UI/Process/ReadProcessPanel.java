@@ -27,14 +27,15 @@ public class ReadProcessPanel extends JPanel
         catch (DatabaseConnectionFailedException | GetAllProcessesException e)
         {
             processes = new ArrayList<>();
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         JTable table = new JTable();
         table.setModel(new ProcessTableModel(processes));
         table.setAutoCreateRowSorter(true);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Empêche JTable de forcer le redimensionnement
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-// Ajuster la largeur des colonnes selon la taille du texte des en-têtes
+
         TableColumnModel columnModel = table.getColumnModel();
         FontMetrics metrics = table.getFontMetrics(table.getFont());
 
@@ -42,19 +43,18 @@ public class ReadProcessPanel extends JPanel
             TableColumn column = columnModel.getColumn(i);
             String columnName = table.getColumnName(i);
 
-            int columnWidth = metrics.stringWidth(columnName) + 20; // Ajoute une marge
+            int columnWidth = metrics.stringWidth(columnName) + 20;
             column.setPreferredWidth(columnWidth);
             column.setMinWidth(columnWidth);
         }
 
-        // Créer le menu contextuel
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem("Update");
         JMenuItem menuItem2 = new JMenuItem("Delete");
         popupMenu.add(menuItem1);
         popupMenu.add(menuItem2);
 
-        // Ajouter un MouseListener pour détecter les clics droits
+
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -80,7 +80,7 @@ public class ReadProcessPanel extends JPanel
             }
         });
 
-// Ajouter le JScrollPane
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
