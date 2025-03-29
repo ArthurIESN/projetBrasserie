@@ -1,9 +1,9 @@
-package DataAccess.Type;
+package DataAccess.ProcessType;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Type.GetAllTypesException;
-import Model.Type.MakeType;
-import Model.Type.Type;
+import Exceptions.ProcessType.GetAllProcessTypesException;
+import Model.ProcessType.MakeProcessType;
+import Model.ProcessType.ProcessType;
 import DataAccess.DatabaseConnexion;
 
 import java.sql.Connection;
@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class TypeDBAccess implements TypeDataAccess
+public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 {
 
-    public ArrayList<Type> getAllTypes() throws DatabaseConnectionFailedException, GetAllTypesException
+    public ArrayList<ProcessType> getAllTypes() throws DatabaseConnectionFailedException, GetAllProcessTypesException
     {
-        String query = "SELECT * FROM type";
+        String query = "SELECT * FROM process_type";
 
         try
         {
@@ -27,11 +27,11 @@ public class TypeDBAccess implements TypeDataAccess
 
             ResultSet resultSet = statement.executeQuery();
 
-            ArrayList<Type> types = new ArrayList<>();
+            ArrayList<ProcessType> types = new ArrayList<>();
 
             while (resultSet.next())
             {
-                Type type = MakeType.getType(resultSet.getInt("id"), resultSet.getString("label"));
+                ProcessType type = MakeProcessType.getType(resultSet.getInt("id"), resultSet.getString("label"));
                 types.add(type);
             }
 
@@ -40,7 +40,7 @@ public class TypeDBAccess implements TypeDataAccess
         catch (SQLException e)
         {
             System.err.println(e.getMessage());
-            throw new GetAllTypesException();
+            throw new GetAllProcessTypesException();
         }
     }
 }

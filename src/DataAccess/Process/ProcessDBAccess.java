@@ -106,7 +106,7 @@ public class ProcessDBAccess implements ProcessDataAccess
                 "label = ?, " +
                 "number = ?, " +
                 "id_supplier = ?, " +
-                "id_type = ?, " +
+                "id_process_type = ?, " +
                 "id_process_status = ?, " +
                 "id_employee = ?, " +
                 "num_customer = ? " +
@@ -209,10 +209,10 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public Process getProcess(Integer id) throws DatabaseConnectionFailedException, GetProcessException
     {
-        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
+        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
                 "FROM process " +
                 "LEFT JOIN supplier          ON process.id_supplier = supplier.id " +
-                "JOIN type              ON process.id_type = type.id " +
+                "JOIN process_type              ON process.id_process_type = process_type.id " +
                 "JOIN process_status    ON process.id_process_status = process_status.id " +
                 "LEFT JOIN employee          ON process.id_employee = employee.id " +
                 "LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
@@ -247,10 +247,10 @@ public class ProcessDBAccess implements ProcessDataAccess
     public ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, GetAllProcessesException
     {
 
-        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
+        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
                 "FROM process " +
                 "LEFT JOIN supplier          ON process.id_supplier = supplier.id " +
-                "JOIN type              ON process.id_type = type.id " +
+                "JOIN process_type              ON process.id_process_type = process_type.id " +
                 "JOIN process_status    ON process.id_process_status = process_status.id " +
                 "LEFT JOIN employee          ON process.id_employee = employee.id " +
                 "LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
@@ -290,8 +290,8 @@ public class ProcessDBAccess implements ProcessDataAccess
                 resultSet.getInt("id_supplier"),
                 resultSet.getString("supplier.name"),
 
-                resultSet.getInt("id_type"),
-                resultSet.getString("type.label"),
+                resultSet.getInt("id_process_type"),
+                resultSet.getString("process_type.label"),
 
                 resultSet.getInt("id_process_status"),
                 resultSet.getString("process_status.label"),

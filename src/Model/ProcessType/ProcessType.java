@@ -1,10 +1,10 @@
-package Model.Type;
+package Model.ProcessType;
 
-public class Type {
+public class ProcessType {
     private Integer id;
     private String label;
 
-    public Type(Integer id, String label) {
+    public ProcessType(Integer id, String label) {
         this.id = id;
         this.label = label;
     }

@@ -4,19 +4,19 @@ import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
-import Model.Type.Type;
+import Model.ProcessType.ProcessType;
 
 public class Process {
     private Integer id;
     private String label;
     private int number;
     private Supplier supplier;
-    private Type type;
+    private ProcessType type;
     private ProcessStatus processStatus;
     private Employee employee;
     private Customer customer;
 
-    public Process(Integer id, String label, int number, Supplier supplier, Type type, ProcessStatus processStatus,
+    public Process(Integer id, String label, int number, Supplier supplier, ProcessType type, ProcessStatus processStatus,
                    Employee employee, Customer customer)
     {
         this.id = id;
@@ -45,7 +45,7 @@ public class Process {
         return supplier;
     }
 
-    public Type getType() {
+    public ProcessType getType() {
         return type;
     }
 

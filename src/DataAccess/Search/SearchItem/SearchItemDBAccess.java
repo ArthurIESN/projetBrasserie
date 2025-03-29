@@ -99,7 +99,7 @@ public class SearchItemDBAccess implements SearchItemDataAccess
                     packaging = new Packaging(
                             statement.getResultSet().getInt("id_packaging"),
                             statement.getResultSet().getString("packaging_label"),
-                            statement.getResultSet().getInt("nb_articles")
+                            statement.getResultSet().getInt("quantity")
                     );
                     packagingCache.put(statement.getResultSet().getInt("id_packaging"), packaging);
                 }
@@ -110,8 +110,8 @@ public class SearchItemDBAccess implements SearchItemDataAccess
                         statement.getResultSet().getFloat("price"),
                         statement.getResultSet().getInt("restock_quantity"),
                         statement.getResultSet().getInt("current_quantity"),
-                        statement.getResultSet().getInt("emptyReturnableBottle_quantity"),
-                        statement.getResultSet().getInt("emptyReturnableBottle_price"),
+                        statement.getResultSet().getInt("empty_returnable_bottle_quantity"),
+                        statement.getResultSet().getInt("empty_returnable_bottle_price"),
                         statement.getResultSet().getDate("forecast_date"),
                         statement.getResultSet().getInt("forecast_quantity"),
                         statement.getResultSet().getInt("min_quantity"),

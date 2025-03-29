@@ -30,8 +30,8 @@ public class SearchItemManager
     {
         ArrayList<Item> Items;
 
-        // @todo : change this to real vat code
-        if(!tvaCode.matches("^\\d{1,2}%$"))
+        // TVA CODE IS LIKE THIS : TVAX OR TVAXX or TVAX.X
+        if(!tvaCode.matches("TVA[0-9]{1,2}(\\.[0-9])?"))
         {
             throw new WrongVatCodeException(tvaCode);
         }
