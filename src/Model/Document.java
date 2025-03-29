@@ -128,6 +128,29 @@ public class Document {
     }
 
     // Faire le toString
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", date=" + date +
+                ", deadLine=" + deadLine +
+                ", reduction=" + reduction +
+                ", validity='" + validity + '\'' +
+                ", isDelivered=" + isDelivered +
+                ", deliveryDate=" + deliveryDate +
+                ", depositIsPaid=" + depositIsPaid +
+                ", depositAmount=" + depositAmount +
+                ", desiredDeliveryDate=" + desiredDeliveryDate +
+                ", VatAmount=" + VatAmount +
+                ", totalInclusiveOfTaxe=" + totalInclusiveOfTaxe +
+                ", totalVat=" + totalVat +
+                ", totalExclVat=" + totalExclVat +
+                ", collectionAgency=" + collectionAgency +
+                ", deliveryTruck=" + deliveryTruck +
+                ", process=" + process +
+                '}';
+    }
 
 
 }
