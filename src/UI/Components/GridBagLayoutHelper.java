@@ -27,4 +27,14 @@ public class GridBagLayoutHelper
         gbc.gridx = 1;
         panel.add(component, gbc);
     }
+
+    // Field without label. Takes the whole width
+    public void addField(Component component)
+    {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panel.add(component, gbc);
+        gbc.gridwidth = 1;
+    }
 }

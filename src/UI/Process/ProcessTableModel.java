@@ -20,6 +20,15 @@ public class ProcessTableModel extends AbstractTableModel
     public ProcessTableModel(ArrayList<Process> processes) {
         this.items = processes;
     }
+    public ProcessTableModel(Process process)
+    {
+        this.items = new ArrayList<>();
+        this.items.add(process);
+    }
+    public ProcessTableModel()
+    {
+        this.items = new ArrayList<>();
+    }
 
     @Override
     public int getRowCount() {

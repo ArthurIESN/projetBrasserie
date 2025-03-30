@@ -1,5 +1,6 @@
 package BusinessLogic.Process;
 
+import Exceptions.Process.CreateProcessException;
 import Model.Process.Process;
 
 import DataAccess.Process.ProcessDBAccess;
@@ -22,5 +23,10 @@ public class ProcessManager
     public ArrayList<Process> getAllProcessess() throws DatabaseConnectionFailedException, GetAllProcessesException
     {
         return processDataAccess.getAllProcesses();
+    }
+
+    public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
+    {
+        processDataAccess.createProcess(process);
     }
 }

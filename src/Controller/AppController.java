@@ -11,6 +11,7 @@ import BusinessLogic.ProcessType.ProcessTypeManager;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Process.CreateProcessException;
 import Exceptions.Supplier.GetAllSuppliersException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 
@@ -74,5 +75,10 @@ public class AppController {
     public static ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, Exceptions.Process.GetAllProcessesException
     {
         return processManager.getAllProcessess();
+    }
+
+    public static void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
+    {
+        processManager.createProcess(process);
     }
 }

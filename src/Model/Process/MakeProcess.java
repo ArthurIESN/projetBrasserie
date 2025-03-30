@@ -18,6 +18,28 @@ public class MakeProcess
 {
     private static final HashMap<Integer, Process> processMap = new HashMap<>();
 
+
+    public static Process getProcess(   Integer id, String label, Integer number,
+                                        Supplier supplier,
+                                        ProcessType type,
+                                        ProcessStatus processStatus,
+                                        Employee employee,
+                                        Customer customer)
+    {
+        if(processMap.containsKey(id))
+        {
+            return processMap.get(id);
+        }
+        else
+        {
+            Process process = new Process(id, label, number, supplier, type, processStatus, employee, customer);
+            processMap.put(id, process);
+
+            return process;
+        }
+    }
+
+    @Deprecated(since = "2021-03-30", forRemoval = true)
     public static Process getProcess(Integer id, String label, Integer number,
                                      Integer supplierId, String supplierName,
                                      Integer typeId, String typeLabel,
