@@ -4,14 +4,19 @@ import Controller.AppController;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Process.CreateProcessException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.Supplier.GetAllSuppliersException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
+
+import Model.Process.Process;
 import Model.Customer.Customer;
 import Model.Employee.Employee;
+import Model.Process.MakeProcess;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
 import Model.ProcessType.ProcessType;
+
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.JEnhancedTextField;
 import UI.Components.SearchByLabelPanel;
@@ -75,6 +80,7 @@ public class CreateProcessPanel extends JPanel
 
         // Bttuon create
         JButton createButton = new JButton("Create Process");
+        gridNewProcess.addField(createButton);
 
         createButton.addActionListener(e -> {
             Customer customer = customerSearch.getSelectedItem();
@@ -82,19 +88,22 @@ public class CreateProcessPanel extends JPanel
             ProcessStatus processStatus = processStatusSearch.getSelectedItem();
             Employee employee = employeeSearch.getSelectedItem();
 
+            Process process = new Process(null, processLabelField.getText(), Integer.parseInt(processNumberField.getText()), supplier, typeSearch.getSelectedItem(), processStatus, employee, customer);
 
-            // show in jOptionPane
-            JOptionPane.showMessageDialog(null, "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n" +
-                    "Supplier: " + supplier.getName() + "\n" +
-                    "Process Status: " + processStatus.getLabel() + "\n" +
-                    "Employee: " + employee.getFirstName() + " " + employee.getLastName() + "\n" +
-                    "Process Label: " + processLabelField.getText() + "\n" +
-                    "Process Number: " + processNumberField.getText() + "\n"
-            );
+
+            try
+            {
+                AppController.createProcess(process);
+
+                JOptionPane.showMessageDialog(null, "Process created", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            catch (DatabaseConnectionFailedException | CreateProcessException ee)
+            {
+                JOptionPane.showMessageDialog(null, ee.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
         });
 
-        add(createButton, BorderLayout.SOUTH);
         add(searchForm, BorderLayout.CENTER);
 
     }

@@ -46,6 +46,13 @@ public class JEnhancedTextField extends JTextField
         return showingPlaceholder ? "" : super.getText();
     }
 
+    public void updateText(String text)
+    {
+        setText(text);
+        setForeground(textColor);
+        showingPlaceholder = false;
+    }
+
     public void setPlaceholder(String placeholder)
     {
         this.placeholder = placeholder;

@@ -7,6 +7,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 
+import Model.Process.Process;
+
 public class ProcessPanel extends JPanel
 {
     private Container container;
@@ -28,16 +30,17 @@ public class ProcessPanel extends JPanel
         add(container, BorderLayout.CENTER);
     }
 
-    private void updateContent(int index)
+
+    public void updateContent(int index, Object data)
     {
         container.removeAll();
 
         JPanel panel = switch (index) {
             case 0 -> new CreateProcessPanel();
-            case 1 -> new ReadProcessPanel();
+            case 1 -> new ReadProcessPanel(this);
             case 2 -> new JPanel();
-            case 3 -> new JPanel();
-            default -> new JPanel();
+            case 3 -> new DeleteProcessPanel((Process)data);
+            default -> new CreateProcessPanel();
         };
 
         container.add(panel, BorderLayout.CENTER);

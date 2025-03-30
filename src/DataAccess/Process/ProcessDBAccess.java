@@ -30,24 +30,28 @@ public class ProcessDBAccess implements ProcessDataAccess
     {
     }
 
-    public void createProcess(String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, CreateProcessException
+    public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
     {
-        String query = "INSERT INTO process (label, number, id_supplier, id_type, id_process_status, id_employee, num_customer) " +
+        String query = "INSERT INTO process (label, number, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        if(label.isEmpty()) //@todo : put a character limit (the same as the database) ?
+        if(process == null)
+        {
+            throw new CreateProcessException("Process cannot be null");
+        }
+        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
         {
             throw new CreateProcessException("Label cannot be empty");
         }
-        else if(number <= 0)
+        else if(process.getNumber() <= 0)
         {
             throw new CreateProcessException("Number cannot be 0");
         }
-        else if(typeId == null)
+        else if(process.getType() == null)
         {
             throw new CreateProcessException("Type cannot be null");
         }
-        else if(processStatusId == null)
+        else if(process.getProcessStatus() == null)
         {
             throw new CreateProcessException("Process status cannot be null");
         }
@@ -56,37 +60,37 @@ public class ProcessDBAccess implements ProcessDataAccess
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
-            statement.setString(1, label);
-            statement.setInt(2, number);
+            statement.setString(1, process.getLabel());
+            statement.setInt(2, process.getNumber());
 
-            if(supplierId == null)
+            if(process.getSupplier() == null)
             {
                 statement.setNull(3, INTEGER);
             }
             else
             {
-                statement.setInt(3, supplierId);
+                statement.setInt(3, process.getSupplier().getId());
             }
 
-            statement.setInt(4, typeId);
-            statement.setInt(5, processStatusId);
+            statement.setInt(4, process.getType().getId());
+            statement.setInt(5, process.getProcessStatus().getId());
 
-            if(employeeId == null)
+            if(process.getEmployee() == null)
             {
                 statement.setNull(6, INTEGER);
             }
             else
             {
-                statement.setInt(6, employeeId);
+                statement.setInt(6, process.getEmployee().getId());
             }
 
-            if(customerId == null)
+            if(process.getCustomer() == null)
             {
                 statement.setNull(7, INTEGER);
             }
             else
             {
-                statement.setInt(7, customerId);
+                statement.setInt(7, process.getCustomer().getId());
             }
 
             statement.executeUpdate();

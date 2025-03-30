@@ -3,12 +3,12 @@ package UI.Components;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class NavbarPanel extends JPanel
 {
 
-    public NavbarPanel(ArrayList<String> items, Consumer<Integer> onItemClick)
+    public NavbarPanel(ArrayList<String> items, BiConsumer<Integer, Object> onItemClick)
     {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -21,13 +21,13 @@ public class NavbarPanel extends JPanel
             {
                 if (onItemClick != null)
                 {
-                    onItemClick.accept(index);
+                    onItemClick.accept(index, null);
                 }
             });
 
             add(button);
         }
 
-        onItemClick.accept(0);
+        onItemClick.accept(0, null);
     }
 }
