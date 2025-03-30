@@ -4,47 +4,60 @@ import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
-import Model.Payment;
+import Model.Payment.Payment;
+import Model.PaymentStatus.PaymentStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
 
+    private final Map<Integer, PaymentStatus> paymentStatusCache = new HashMap<>();
+
     public SearchPaymentDBAccess() {
     }
 
-    public ArrayList<Payment> searchPayment(boolean isValidated, double minAmount, String year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        String query ="SELECT * FROM payment "+
-                "JOIN document ON payment.id_document = document.id"+
-                "JOIN process ON document.id_process = process.id"+
-                "JOIN customer ON process.num_customer = customer.num_customer"+
-                "JOIN payment_status ON payment.id_payment_status = payment_status.id"+
-                "WHERE payment_status.id IN (?, ?)"+
-                "AND payment.amount > ?"+
+    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+        String query = "SELECT * FROM payment " +
+                "JOIN document ON payment.id_document = document.id " +
+                "JOIN process ON document.id_process = process.id " +
+                "JOIN customer ON process.num_customer = customer.num_customer " +
+                "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
+                "WHERE payment_status.id IN (?) " +
+                "AND payment.amount > ? " +
                 "AND YEAR(payment.payment_date) = ?;";
-        int statusId = isValidated ? 1 : 2; // Remplacez par les ID réels des statuts
 
         try (Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
              PreparedStatement statement = databaseConnexion.prepareStatement(query)) {
 
-            statement.setInt(1, statusId);
-            statement.setInt(2, statusId);
-            statement.setDouble(3, minAmount);
-            statement.setString(4, year);
+            statement.setString(1, status);
+            statement.setDouble(2, minAmount);
+            statement.setDate(3, year);
 
             ResultSet resultSet = statement.executeQuery();
             ArrayList<Payment> payments = new ArrayList<>();
 
             while (resultSet.next()) {
+                PaymentStatus paymentStatus;
+
+                if (paymentStatusCache.containsKey(statement.getResultSet().getInt("id_payment_status"))) {
+                    paymentStatus = paymentStatusCache.get(statement.getResultSet().getInt("id_payment_status"));
+                } else {
+                    paymentStatus = new PaymentStatus(
+                            resultSet.getInt("id_payment_status"),
+                            resultSet.getString("label")
+                    );
+                    paymentStatusCache.put(statement.getResultSet().getInt("id_payment_status"), paymentStatus);
+                }
+
                 Payment payment = new Payment(
                         resultSet.getInt("id"),
                         resultSet.getDouble("amount"),
-                        resultSet.getString("payment_date")
+                        resultSet.getDate("payment_date"),
+                        paymentStatus
                 );
                 payments.add(payment);
             }

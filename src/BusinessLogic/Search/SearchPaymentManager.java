@@ -1,20 +1,27 @@
 package BusinessLogic.Search;
 
-import DataAccess.Search.SearchPayment.SearchPaymentDBAccess;
 import DataAccess.Search.SearchPayment.SearchPaymentDataAccess;
+import DataAccess.Search.SearchPayment.SearchPaymentDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
-import Model.Payment;
+import Model.Payment.Payment;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class SearchPaymentManager {
 
-    public ArrayList<Payment> searchPayments(boolean isValidated, double minAmount, String year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        ArrayList<Payment> payments;
+    private final SearchPaymentDataAccess searchPaymentDataAccess;
 
-        payments = SearchPaymentDataAccess.searchPayment(isValidated, minAmount, year);
+    public SearchPaymentManager() {
+        searchPaymentDataAccess = new SearchPaymentDBAccess();
+    }
 
-        return payments;
+    public ArrayList<Payment> searchPayments(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+        ArrayList<Payment> Payments;
+
+        Payments = searchPaymentDataAccess.searchPayment(status, minAmount, year);
+
+        return Payments;
     }
 }

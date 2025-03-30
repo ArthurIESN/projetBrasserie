@@ -1,12 +1,26 @@
-package Model;
+package Model.Payment;
 import Model.Customer.Customer;
+import Model.Document;
+import Model.PaymentStatus.PaymentStatus;
+
+import java.util.Date;
+
 public class Payment {
     private int id;
     private double amount;
-    private String paymentDate;
+    private java.sql.Date paymentDate;
+    private PaymentStatus paymentStatus;
     private Document document;
     private Process process;
     private Customer customer;
+
+    // Constructeur
+    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus) {
+        this.id = id;
+        this.amount = amount;
+        this.paymentDate = paymentDate;
+        this.paymentStatus = paymentStatus;
+    }
 
     // Getters et setters pour chaque champ
 
@@ -26,12 +40,16 @@ public class Payment {
         this.amount = amount;
     }
 
-    public String getPaymentDate() {
+    public Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(String paymentDate) {
+    public void setPaymentDate(java.sql.Date paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
     }
 
     public Document getDocument() {

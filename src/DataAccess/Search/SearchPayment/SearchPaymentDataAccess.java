@@ -1,12 +1,13 @@
 package DataAccess.Search.SearchPayment;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
 
-import Model.Payment;
+import Model.Payment.Payment;
 
 public interface SearchPaymentDataAccess {
-    ArrayList<Payment> searchPayment(boolean isValidated, double minAmount, String year) throws DatabaseConnectionFailedException, SearchPaymentException;
+    ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException;
 }

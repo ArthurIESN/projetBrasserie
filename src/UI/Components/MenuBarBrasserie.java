@@ -5,6 +5,7 @@ import UI.Process.CreateProcessPanel;
 import UI.Process.ProcessPanel;
 import UI.Search.SearchDocumentWithEventForm;
 import UI.Search.SearchItemForm;
+import UI.Search.SearchPaymentForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +39,7 @@ public class MenuBarBrasserie {
 
         searchItems[0] = new JMenuItem("1 : Search Item");
         searchItems[1] = new JMenuItem("Recherche2");
-        searchItems[2] = new JMenuItem("Recherche3");
+        searchItems[2] = new JMenuItem("3 : Search Payment");
 
         for (JMenuItem menuItem : searchItems)
         {
@@ -57,9 +58,7 @@ public class MenuBarBrasserie {
         });
 
         searchItems[2].addActionListener(e -> {
-            JPanel panel3 = new JPanel();
-            panel3.add(new JLabel("Recherche3 selected"));
-            brasserieWindow.updateWindowContent(panel3);
+            brasserieWindow.updateWindowContent(new SearchPaymentForm());
         });
 
         // CRUD

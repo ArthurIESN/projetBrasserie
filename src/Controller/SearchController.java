@@ -12,8 +12,9 @@ import Exceptions.Search.SearchPaymentException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Item.Item;
-import Model.Payment;
+import Model.Payment.Payment;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class SearchController {
     }
 
     // Recherche des paiements en fonction des critères (validé, montant, année)
-    public static ArrayList<Payment> searchPayments(boolean isValidated, double minAmount, String year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        return searchPaymentManager.searchPayments(isValidated, minAmount, year);  // Appel au manager des paiements
+    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+        return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Appel au manager des paiements
     }
 }

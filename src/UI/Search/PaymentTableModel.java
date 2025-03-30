@@ -2,10 +2,10 @@ package UI.Search;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import Model.Payment;
+import Model.Payment.Payment;
 
 public class PaymentTableModel extends AbstractTableModel {
-    private final String[] columnNames = {"ID", "Amount", "Date", "Validated"};
+    private final String[] columnNames = {"ID", "Amount", "Date", "Status"};
     private final ArrayList<Payment> payments;
 
     public PaymentTableModel(ArrayList<Payment> payments) {
@@ -32,8 +32,8 @@ public class PaymentTableModel extends AbstractTableModel {
                 return payment.getAmount();
             case 2:
                 return payment.getPaymentDate();
-            /*/case 3:
-                return payment.isValidated();/*/
+            case 3:
+                return payment.getPaymentStatus();
             default:
                 return null;
         }

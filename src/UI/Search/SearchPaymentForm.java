@@ -2,14 +2,14 @@ package UI.Search;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
-import Model.Payment;
+import Model.Payment.Payment;
 
 public class SearchPaymentForm extends JPanel
 {
@@ -41,11 +41,11 @@ public class SearchPaymentForm extends JPanel
 
         // add a button to search
         JButton searchButton = new JButton("Search");
-        add(searchButton, BorderLayout.EAST);
+        gridSearchForm.addField("Search", searchButton);
 
         // Empty table
         JTable table = new JTable();
-        table.setModel(new ItemTableModel(new ArrayList<>()));
+        table.setModel(new PaymentTableModel(new ArrayList<>()));
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> {
@@ -65,11 +65,26 @@ public class SearchPaymentForm extends JPanel
     private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JTable table)
     {
         boolean isValidated = validatedPaymentCheckBox.isSelected();
-        double minAmount = ((Number) amountField.getValue()).doubleValue();
+        Number minAmountValue =  (Number) amountField.getValue();
+        double minAmount = (minAmountValue != null) ? minAmountValue.doubleValue() : 0;
         String selectedYear = (String) yearComboBox.getSelectedItem();
 
+        String paymentStatus;
+        if (isValidated){
+            // If the payment is validated, set the status to "Validated"
+            paymentStatus = "Validated";
+        } else {
+            // If the payment is not validated, set the status to "Not Validated"
+            paymentStatus = "Refused";
+        }
+
+        java.sql.Date sqlDate = null;
+        if (selectedYear != null) {
+            sqlDate = java.sql.Date.valueOf(selectedYear + "-01-01"); // Convert YYYY to SQL Date
+        }
+
         try {
-            ArrayList<Payment> payments = SearchController.searchPayments(isValidated, minAmount, selectedYear);
+            ArrayList<Payment> payments = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
             table.setModel(new PaymentTableModel(payments));
             revalidate();
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
