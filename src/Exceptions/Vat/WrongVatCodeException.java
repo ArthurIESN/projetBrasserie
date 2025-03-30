@@ -2,12 +2,12 @@ package Exceptions.Vat;
 
 public class WrongVatCodeException extends Exception {
     private final String message;
-    private final String tvaCode;
+    private final String vatCode;
 
     public WrongVatCodeException(String tvaCode)
     {
-        this.tvaCode = tvaCode;
-        this.message = "The tva code is not valid. format: TVAx, TVAxx or TVAx.x";
+        this.vatCode = tvaCode;
+        this.message = "The VAT code is not valid. format: VATx, VATxx or VATx.x";
     }
 
     @Override
@@ -18,6 +18,6 @@ public class WrongVatCodeException extends Exception {
 
     public String getTvaCode()
     {
-        return this.tvaCode;
+        return this.vatCode;
     }
 }
