@@ -26,22 +26,22 @@ public class SearchItemManager
         vatDataAccess = new VatDBAccess();
     }
 
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, WrongVatCodeException, UnkownVatCodeException, SearchItemException
+    public ArrayList<Item> searchItem(String vatCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, WrongVatCodeException, UnkownVatCodeException, SearchItemException
     {
         ArrayList<Item> Items;
 
         // TVA CODE IS LIKE THIS : TVAX OR TVAXX or TVAX.X
-        if(!tvaCode.matches("TVA[0-9]{1,2}(\\.[0-9])?"))
+        if(!vatCode.matches("VAT[0-9]{1,2}(\\.[0-9])?"))
         {
-            throw new WrongVatCodeException(tvaCode);
+            throw new WrongVatCodeException(vatCode);
         }
         else
         {
-            Items = searchItemDataAccess.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+            Items = searchItemDataAccess.searchItem(vatCode, minItem, maxItem, minPrice, maxPrice);
 
             // Get the vat
             // Vat code will be the same for each item
-            Vat vat = vatDataAccess.getVat(tvaCode);
+            Vat vat = vatDataAccess.getVat(vatCode);
 
             if(vat != null)
             {
