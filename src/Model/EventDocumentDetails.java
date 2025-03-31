@@ -1,5 +1,7 @@
 package Model;
 
+import Model.Event.Event;
+
 public class EventDocumentDetails {
     private Integer id;
     private DocumentDetails documentDetails;

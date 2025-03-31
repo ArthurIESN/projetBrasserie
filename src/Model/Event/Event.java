@@ -1,4 +1,4 @@
-package Model;
+package Model.Event;
 
 import java.util.Date;
 
