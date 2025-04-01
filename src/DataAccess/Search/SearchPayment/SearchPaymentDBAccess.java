@@ -21,21 +21,29 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
     }
 
     public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        String query = "SELECT * FROM payment " +
+        String query =  "SELECT payment.*, " +
+                "customer.num_customer, customer.last_name, customer.first_name, " +
+                "payment_status.label AS payment_status_label, " +
+                "document.label AS document_label, " +
+                "process.label AS process_label " +
+                "FROM payment " +
                 "JOIN document ON payment.id_document = document.id " +
                 "JOIN process ON document.id_process = process.id " +
                 "JOIN customer ON process.num_customer = customer.num_customer " +
                 "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
-                "WHERE payment_status.id IN (?) " +
+                "WHERE payment_status.label = ? " +
                 "AND payment.amount > ? " +
                 "AND YEAR(payment.payment_date) = ?;";
 
-        try (Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
-             PreparedStatement statement = databaseConnexion.prepareStatement(query)) {
+        try {
+            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
             statement.setString(1, status);
             statement.setDouble(2, minAmount);
-            statement.setDate(3, year);
+            statement.setInt(3, year.toLocalDate().getYear());
+
+            System.out.println("Executing query: " + statement.toString()); // Print the query for debugging
 
             ResultSet resultSet = statement.executeQuery();
             ArrayList<Payment> payments = new ArrayList<>();
@@ -48,7 +56,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                 } else {
                     paymentStatus = new PaymentStatus(
                             resultSet.getInt("id_payment_status"),
-                            resultSet.getString("label")
+                            resultSet.getString("payment_status_label")
                     );
                     paymentStatusCache.put(statement.getResultSet().getInt("id_payment_status"), paymentStatus);
                 }
@@ -61,6 +69,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                 );
                 payments.add(payment);
             }
+            System.out.println("Number of payments found: " + payments.size()); //vérifier le nombre de paiements trouvés
 
             return payments;
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Model.Payment.Payment;
 
 public class PaymentTableModel extends AbstractTableModel {
-    private final String[] columnNames = {"ID", "Amount", "Date", "Status"};
+    private final String[] columnNames = {"ID", "Amount", "Date", "Status", "Customer NB", "Customer Name", "Customer First Name", "Document", "Process"};
     private final ArrayList<Payment> payments;
 
     public PaymentTableModel(ArrayList<Payment> payments) {
