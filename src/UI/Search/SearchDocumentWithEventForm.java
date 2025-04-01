@@ -57,7 +57,9 @@ public class SearchDocumentWithEventForm extends JPanel {
                 try {
                     events = SearchController.getEventsWithSpecificItem(idItemSelected);
                     if(!events.isEmpty()){
-                        SearchByLabelPanel<Event> eventSearch = new SearchByLabelPanel<>(events,"Search an event",Event::getLabel);
+                        SearchByLabelPanel<Event> eventSearch = new SearchByLabelPanel<>(events,Event::getLabel);
+                        eventSearch.getSearchField().setPlaceholder("Search an event");
+
                         filterPanel.add(eventSearch);
                         filterPanel.revalidate();
                         filterPanel.repaint();
