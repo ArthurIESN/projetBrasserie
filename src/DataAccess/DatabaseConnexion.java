@@ -1,5 +1,7 @@
 package DataAccess;
 
+import com.mysql.cj.jdbc.Driver;
+
 import Environement.EnvLoader;
 import Exceptions.Environement.BadEnvValueException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -30,15 +32,8 @@ public class DatabaseConnexion
 
             try
             {
-                // Load the MySQL JDBC driver
-                Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(url, username, password);
                 System.out.println("Connected to the database");
-            }
-            catch (ClassNotFoundException e)
-            {
-                System.err.println("My Sql driver error : " + e.getMessage());
-                throw new DatabaseConnectionFailedException("Missing dependency");
             }
             catch (SQLException e)
             {

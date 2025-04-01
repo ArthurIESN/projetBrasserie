@@ -6,9 +6,9 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
 
 public class SearchByLabelPanel<T> extends JPanel
 {
@@ -16,9 +16,10 @@ public class SearchByLabelPanel<T> extends JPanel
     private JList<String> resultList;
     private DefaultListModel<String> listModel;
     private List<T> data;
+    private List<T> filteredData;
     private Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, String searchPlaceholder, Function<T, String> toStringFunction)
+    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
     {
         this.data = data;
         this.toStringFunction = toStringFunction;
@@ -26,7 +27,6 @@ public class SearchByLabelPanel<T> extends JPanel
 
         // Create search field
         searchField = new JEnhancedTextField();
-        searchField.setPlaceholder(searchPlaceholder);
 
         add(searchField, BorderLayout.NORTH);
 
@@ -60,11 +60,6 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
-    {
-        this(data, "", toStringFunction);
-    }
-
     public void onSelectedItemChange(Runnable runnable)
     {
         resultList.addListSelectionListener(e ->
@@ -79,14 +74,23 @@ public class SearchByLabelPanel<T> extends JPanel
     private void updateList()
     {
         String searchText = searchField.getText().toLowerCase();
+
         listModel.clear();
+        filteredData = new ArrayList<>();
+
         for (T item : data)
         {
             if (toStringFunction.apply(item).toLowerCase().contains(searchText))
             {
                 listModel.addElement(toStringFunction.apply(item));
+                filteredData.add(item);
             }
         }
+    }
+
+    public JEnhancedTextField getSearchField()
+    {
+        return searchField;
     }
 
     public T getSelectedItem()
@@ -95,8 +99,15 @@ public class SearchByLabelPanel<T> extends JPanel
         {
             return null;
         }
-        return data.get(resultList.getSelectedIndex());
+
+        return filteredData.get(resultList.getSelectedIndex());
     }
 
+    public void setSelectedItem(T item)
+    {
+        searchField.updateText(toStringFunction.apply(item));
+        updateList();
 
+        resultList.setSelectedIndex(filteredData.indexOf(item));
+    }
 }

@@ -35,7 +35,7 @@ public class Packaging
         return "Packaging{ \n" +
                 "       id=" + id + ", \n" +
                 "       label='" + label + '\n' +
-                "       item_quantity=" + quantity + "\n" +
+                "       quantity=" + quantity + "\n" +
                 '}';
     }
 }

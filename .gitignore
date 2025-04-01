@@ -32,9 +32,9 @@ replay_pid*
 # Idea files
 .idea/
 
-# iml
-projetBrasserie.iml
-
 # out files
 out/
+
+# lib files
+lib/
 

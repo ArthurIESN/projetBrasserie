@@ -4,24 +4,28 @@ import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
-import Model.Type.Type;
+import Model.ProcessType.ProcessType;
+
+import java.util.Date;
 
 public class Process {
     private Integer id;
     private String label;
     private int number;
+    private Date creationDate;
     private Supplier supplier;
-    private Type type;
+    private ProcessType type;
     private ProcessStatus processStatus;
     private Employee employee;
     private Customer customer;
 
-    public Process(Integer id, String label, int number, Supplier supplier, Type type, ProcessStatus processStatus,
+    public Process(Integer id, String label, int number, Date creationDate, Supplier supplier, ProcessType type, ProcessStatus processStatus,
                    Employee employee, Customer customer)
     {
         this.id = id;
         this.label = label;
         this.number = number;
+        this.creationDate = creationDate;
         this.supplier = supplier;
         this.type = type;
         this.processStatus = processStatus;
@@ -41,11 +45,15 @@ public class Process {
         return number;
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
 
-    public Type getType() {
+    public ProcessType getType() {
         return type;
     }
 
@@ -63,7 +71,7 @@ public class Process {
 
     @Override
     public String toString(){
-        return id + " - " + label + " - " + number + " - " + supplier + " - " + type + " - " + processStatus + " - " + employee + " - " + customer;
+        return id + " - " + label + " - " + number +  " - " + creationDate + " - " + supplier + " - " + type + " - " + processStatus + " - " + employee + " - " + customer;
     }
 
 }

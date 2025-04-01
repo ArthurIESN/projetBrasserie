@@ -6,20 +6,21 @@ import BusinessLogic.Item.ItemManager;
 import BusinessLogic.Process.ProcessManager;
 import BusinessLogic.Supplier.SupplierManager;
 import BusinessLogic.ProcessStatus.ProcessStatusManager;
-import BusinessLogic.Type.TypeManager;
+import BusinessLogic.ProcessType.ProcessTypeManager;
 
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Process.CreateProcessException;
 import Exceptions.Supplier.GetAllSuppliersException;
-import Exceptions.Type.GetAllTypesException;
+import Exceptions.ProcessType.GetAllProcessTypesException;
 
 import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.Item.Item;
 import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
-import Model.Type.Type;
+import Model.ProcessType.ProcessType;
 import Model.Process.Process;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class AppController {
     private static final SupplierManager supplierManager = new SupplierManager();
     private static final CustomerManager customerManager = new CustomerManager();
     private static final ProcessStatusManager processStatusManager = new ProcessStatusManager();
-    private static final TypeManager typeManager = new TypeManager();
+    private static final ProcessTypeManager typeManager = new ProcessTypeManager();
     private static final ProcessManager processManager = new ProcessManager();
 
 
@@ -65,7 +66,7 @@ public class AppController {
     }
 
     // Type
-    public static ArrayList<Type> getAllTypes() throws DatabaseConnectionFailedException, GetAllTypesException
+    public static ArrayList<ProcessType> getAllTypes() throws DatabaseConnectionFailedException, GetAllProcessTypesException
     {
         return typeManager.getAllTypes();
     }
@@ -74,5 +75,15 @@ public class AppController {
     public static ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, Exceptions.Process.GetAllProcessesException
     {
         return processManager.getAllProcessess();
+    }
+
+    public static void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
+    {
+        processManager.createProcess(process);
+    }
+
+    public static void deleteProcess(Integer id) throws DatabaseConnectionFailedException, Exceptions.Process.DeleteProcessException
+    {
+        processManager.deleteProcess(id);
     }
 }

@@ -1,7 +1,7 @@
 package UI.Components;
 
 import UI.BrasserieWindow.BrasserieWindow;
-import UI.Process.CreateProcessPanel;
+import UI.BrasserieWindow.BrasserieHomePanel;
 import UI.Process.ProcessPanel;
 import UI.Search.SearchDocumentWithEventForm;
 import UI.Search.SearchItemForm;
@@ -24,11 +24,21 @@ public class MenuBarBrasserie {
 
         menuBar.add(brasserieMenu);
 
+        JMenuItem homeItem = new JMenuItem("Home");
         JMenuItem quitItem = new JMenuItem("Quit");
 
+        brasserieMenu.add(homeItem);
         brasserieMenu.add(quitItem);
 
-        quitItem.addActionListener(e -> {
+        homeItem.addActionListener(e ->
+        {
+            brasserieWindow.updateWindowContent(new BrasserieHomePanel());
+        });
+
+        homeItem.doClick();
+
+        quitItem.addActionListener(e ->
+        {
             System.exit(0);
         });
 
@@ -67,7 +77,7 @@ public class MenuBarBrasserie {
         menuBar.add(crudMenu);
 
         crudItem[0] = new JMenuItem("Process");
-        crudItem[1] = new JMenuItem("Document??");
+        crudItem[1] = new JMenuItem("Document");
 
         for (JMenuItem menuItem : crudItem)
         {

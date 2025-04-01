@@ -16,6 +16,7 @@ import UI.Components.GridBagLayoutHelper;
 import Model.Item.Item;
 
 import Controller.SearchController;
+import UI.Components.JEnhancedTableScrollPanel;
 import UI.Components.JEnhancedTextField;
 
 
@@ -42,13 +43,13 @@ public class SearchItemForm extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
+        //JPanel searchForm = new JPanel(new GridBagLayout());
+        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // TVA Code field
         JEnhancedTextField tvaCodeField = new JEnhancedTextField();
-        tvaCodeField.setPlaceholder("TVA Code");
-        gridSearchForm.addField("TVA Code", tvaCodeField);
+        tvaCodeField.setPlaceholder("VAT Code");
+        gridSearchForm.addField("VAT Code", tvaCodeField);
 
         // Item Stock Quantity Field
         JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 300, 50);
@@ -58,30 +59,26 @@ public class SearchItemForm extends JPanel
         JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 300, 50);
         gridSearchForm.addField("Item Price", priceRange);
 
-        add(searchForm, BorderLayout.CENTER);
-
-        // add a button to search
         JButton searchButton = new JButton("Search");
-        add(searchButton, BorderLayout.EAST);
+        gridSearchForm.addField(searchButton);
+
+        add(gridSearchForm, BorderLayout.CENTER);
+
 
         // Empty table
-        JTable table = new JTable();
-        table.setModel(new ItemTableModel(new ArrayList<>()));
-        add(new JScrollPane(table), BorderLayout.SOUTH);
+        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(new ItemTableModel(), this);
+        add(tableScrollPanel, BorderLayout.SOUTH);
 
         searchButton.addActionListener(e ->
         {
-            searchItem(tvaCodeField, nbItemInPackaging, priceRange, table);
+            searchItem(tvaCodeField, nbItemInPackaging, priceRange, tableScrollPanel);
         });
 
         // add event lister on enter key
         tvaCodeField.addActionListener((ActionEvent e) -> searchButton.doClick());
-
-
-
     }
 
-    private void searchItem(JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JTable table)
+    private void searchItem(JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JEnhancedTableScrollPanel table)
     {
         // get data from fields
         String tvaCode = tvaCodeField.getText();
@@ -93,10 +90,13 @@ public class SearchItemForm extends JPanel
         try
         {
             ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+            table.updateModel(new ItemTableModel(items));
 
-            // Update table
-            table.setModel(new ItemTableModel(items));
-            revalidate();
+            if(items.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "No item found", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         }
         catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |
                SearchItemException e)

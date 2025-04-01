@@ -3,6 +3,8 @@ package UI.Search;
 import Controller.AppController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetEventsWithItemException;
+import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.SearchByLabelPanel;
 import UI.Components.YearComboBox;
@@ -16,10 +18,8 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JLabel title;
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
     private YearComboBox yearsComboBox;
-    //private ItemComboBox itemComboBox;
-
-    private SearchByLabelPanel yearSearch;
     private int idItemSelected;
 
     public SearchDocumentWithEventForm(){
@@ -37,12 +37,10 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        //yearSearch = new SearchByLabelPanel<>(years,Event::getStartDate)
         yearsComboBox = new YearComboBox(years);
 
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        //filterPanel.add(yearsComboBox);
 
         try{
             items = AppController.getAllItems();
@@ -52,16 +50,34 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
 
+        itemSearch.onSelectedItemChange(()->{
+            Item itemSelected = itemSearch.getSelectedItem();
+            if(itemSelected != null){
+                idItemSelected = itemSelected.getId();
+                try {
+                    events = SearchController.getEventsWithSpecificItem(idItemSelected);
+                    if(!events.isEmpty()){
+                        SearchByLabelPanel<Event> eventSearch = new SearchByLabelPanel<>(events,Event::getLabel);
+                        eventSearch.getSearchField().setPlaceholder("Search an event");
 
+                        filterPanel.add(eventSearch);
+                        filterPanel.revalidate();
+                        filterPanel.repaint();
+                    }
+                }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
+                    System.out.println(e.getMessage());
+                }
 
-        //itemComboBox = new ItemComboBox(items);
-        //filterPanel.add(itemComboBox);
+                System.out.println(itemSelected.getLabel());
+            }
+        });
+
 
         filterPanel.add(itemSearch);
-        filterPanel.add(yearsComboBox);
-        add(filterPanel, BorderLayout.CENTER);
 
-       // System.out.println(itemComboBox.getSelectedItemId());
+        filterPanel.add(yearsComboBox);
+
+        add(filterPanel, BorderLayout.CENTER);
 
 
     }

@@ -13,6 +13,9 @@ public class JDualSliderPanel extends JPanel
     private final int padding = 60; // Left and right padding
     private final int min;
     private final int max;
+    private static final Color thumbColor = new Color(100, 149, 237);
+    private static final Color trackColor = Color.GRAY;
+    private static final Color textColor = Color.WHITE;
 
     public JDualSliderPanel(int minValue, int maxValue, int width, int height)
     {
@@ -105,7 +108,7 @@ public class JDualSliderPanel extends JPanel
         Graphics2D g2d = (Graphics2D) g.create();
 
         // draw track
-        g2d.setColor(Color.GRAY);
+        g2d.setColor(trackColor);
         g2d.fillRect(padding, getHeight() / 2 - 2, getWidth() - 2 * padding, 4);
 
         // draw thumbs
@@ -129,9 +132,10 @@ public class JDualSliderPanel extends JPanel
     private void drawThumb(Graphics2D g2d, int x, int value, boolean isLeftThumb)
     {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(Color.BLUE);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setColor(thumbColor);
         g2d.fillOval(x - 6, getHeight() / 2 - 6, 12, 12);
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(textColor);
         g2d.drawOval(x - 6, getHeight() / 2 - 6, 12, 12);
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -151,7 +155,7 @@ public class JDualSliderPanel extends JPanel
         int textHeight = fm.getHeight();
         int adjustedX = isLeftText ? x - textWidth / 2 : x + (textWidth * 2);
         int adjustedY = y + textHeight / 4;
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(textColor);
         g2d.drawString(text, adjustedX, adjustedY);
     }
 

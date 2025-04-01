@@ -4,17 +4,18 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class GridBagLayoutHelper
+public class GridBagLayoutHelper extends JPanel
 {
     private final GridBagConstraints gbc;
-    private final JPanel panel;
 
-    public GridBagLayoutHelper(JPanel panel)
+    public GridBagLayoutHelper()
     {
-        this.panel = panel;
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        setLayout(new GridBagLayout());
+
     }
 
     public void addField(String label, Component component)
@@ -22,9 +23,19 @@ public class GridBagLayoutHelper
         JLabel jLabel = new JLabel(label);
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(jLabel, gbc);
+        add(jLabel, gbc);
 
         gbc.gridx = 1;
-        panel.add(component, gbc);
+        add(component, gbc);
+    }
+
+    // Field without label. Takes the whole width
+    public void addField(Component component)
+    {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        add(component, gbc);
+        gbc.gridwidth = 1;
     }
 }
