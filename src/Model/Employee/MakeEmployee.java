@@ -10,7 +10,7 @@ public class MakeEmployee
 {
     private static final HashMap<Integer, Employee> employeeMap = new HashMap<>();
 
-    public static Employee getEmployee(Integer id, String lastName, String firstName, Date birthDate, Integer employeeStatusId, String employeeStatusLabel)
+    public static Employee getEmployee(Integer id, String lastName, String firstName, Date birthDate, EmployeeStatus employeeStatus)
     {
         if(employeeMap.containsKey(id))
         {
@@ -18,7 +18,6 @@ public class MakeEmployee
         }
         else
         {
-            EmployeeStatus employeeStatus = MakeEmployeeStatus.getEmployeeStatus(employeeStatusId, employeeStatusLabel);
             Employee employee = new Employee(id, lastName, firstName, birthDate, employeeStatus);
             employeeMap.put(id, employee);
             return employee;

@@ -6,7 +6,7 @@ public class MakeProcessType
 {
     private static final HashMap<Integer, ProcessType> makeType = new HashMap<>();
 
-    public static ProcessType getType(Integer id, String label)
+    public static ProcessType getProcessType(Integer id, String label)
     {
         if (makeType.containsKey(id))
         {

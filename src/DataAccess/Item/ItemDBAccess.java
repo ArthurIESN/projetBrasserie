@@ -25,7 +25,7 @@ public class ItemDBAccess {
         List<Item> items = new ArrayList<>();
 
         String query = "SELECT *,packaging.id AS id_packaging,packaging.label AS packaging_label, " +
-                "packaging.nb_articles AS packaging_nb_articles,vat.code AS vat_code,vat.rate AS vat_rate " +
+                "packaging.quantity AS packaging_quantity,vat.code AS vat_code,vat.rate AS vat_rate " +
                 " FROM item INNER JOIN packaging ON item.id_packaging = packaging.id " +
                 "INNER JOIN vat ON item.code_vat = vat.code";
 
@@ -44,14 +44,14 @@ public class ItemDBAccess {
                 float price = resultSet.getFloat("price");
                 int restockQuantity = resultSet.getInt("restock_quantity");
                 int currentQuantity = resultSet.getInt("current_quantity");
-                int emptyReturnableBottleQuantity = resultSet.getInt("emptyReturnableBottle_quantity");
-                int emptyReturnableBottlePrice = resultSet.getInt("emptyReturnableBottle_price");
+                int emptyReturnableBottleQuantity = resultSet.getInt("empty_returnable_bottle_quantity");
+                int emptyReturnableBottlePrice = resultSet.getInt("empty_returnable_bottle_price");
                 Date forecastDate = resultSet.getDate("forecast_date");
                 int forecastQuantity = resultSet.getInt("forecast_quantity");
                 int minQuantity = resultSet.getInt("min_quantity");
                 int idPackaging = resultSet.getInt("id_packaging");
                 String labelPackaging = resultSet.getString("packaging_label");
-                int nbArticlesPackaging = resultSet.getInt("packaging_nb_articles");
+                int nbArticlesPackaging = resultSet.getInt("packaging_quantity");
                 String vatCode = resultSet.getString("vat_code");
 
 
@@ -77,7 +77,7 @@ public class ItemDBAccess {
                     packaging = new Packaging(
                             idPackaging,
                             statement.getResultSet().getString("packaging_label"),
-                            statement.getResultSet().getInt("packaging_nb_articles")
+                            statement.getResultSet().getInt("packaging_quantity")
                     );
 
                     packagingCache.put(idPackaging,packaging);

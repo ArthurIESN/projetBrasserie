@@ -19,7 +19,7 @@ public class SearchByLabelPanel<T> extends JPanel
     private List<T> filteredData;
     private Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, String searchPlaceholder, Function<T, String> toStringFunction)
+    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
     {
         this.data = data;
         this.toStringFunction = toStringFunction;
@@ -27,7 +27,6 @@ public class SearchByLabelPanel<T> extends JPanel
 
         // Create search field
         searchField = new JEnhancedTextField();
-        searchField.setPlaceholder(searchPlaceholder);
 
         add(searchField, BorderLayout.NORTH);
 
@@ -61,11 +60,6 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
-    {
-        this(data, "", toStringFunction);
-    }
-
     public void onSelectedItemChange(Runnable runnable)
     {
         resultList.addListSelectionListener(e ->
@@ -92,6 +86,11 @@ public class SearchByLabelPanel<T> extends JPanel
                 filteredData.add(item);
             }
         }
+    }
+
+    public JEnhancedTextField getSearchField()
+    {
+        return searchField;
     }
 
     public T getSelectedItem()

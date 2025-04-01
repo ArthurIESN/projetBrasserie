@@ -1,6 +1,7 @@
 package BusinessLogic.Process;
 
 import Exceptions.Process.CreateProcessException;
+import Exceptions.Process.DeleteProcessException;
 import Model.Process.Process;
 
 import DataAccess.Process.ProcessDBAccess;
@@ -28,5 +29,10 @@ public class ProcessManager
     public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
     {
         processDataAccess.createProcess(process);
+    }
+
+    public void deleteProcess(Integer id) throws DatabaseConnectionFailedException, DeleteProcessException
+    {
+        processDataAccess.deleteProcess(id);
     }
 }

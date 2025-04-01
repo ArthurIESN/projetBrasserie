@@ -2,6 +2,7 @@ package UI.Process;
 
 import Controller.AppController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Process.Process;
 import UI.Components.GridBagLayoutHelper;
@@ -16,10 +17,9 @@ import java.util.ArrayList;
 
 public class DeleteProcessPanel extends JPanel
 {
-    public DeleteProcessPanel(Process process)
+    public DeleteProcessPanel(ProcessPanel processPanel, Process process)
     {
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridDeleteProcess = new GridBagLayoutHelper(searchForm);
+        GridBagLayoutHelper gridDeleteProcess = new GridBagLayoutHelper();
 
         ArrayList<Process> processes = new ArrayList<>();
 
@@ -32,18 +32,46 @@ public class DeleteProcessPanel extends JPanel
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        SearchByLabelPanel<Process> processSearch = new SearchByLabelPanel<>( processes, "Search for a process", Process::getLabel);
+        SearchByLabelPanel<Process> processSearch = new SearchByLabelPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
+        processSearch.getSearchField().setPlaceholder("Search for a process");
+
         gridDeleteProcess.addField("Process", processSearch);
 
         JButton deleteButton = new JButton("Delete");
         deleteButton.addActionListener(e ->
         {
-            //@todo: delete the process
+
+            // Sur de vouloir supprimer le processus
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this process?", "Warning", JOptionPane.YES_NO_OPTION);
+
+            if(dialogResult == JOptionPane.NO_OPTION)
+            {
+                return;
+            }
+
+            Process selectedProcess = processSearch.getSelectedItem();
+            if (selectedProcess != null)
+            {
+                try
+                {
+                    AppController.deleteProcess(selectedProcess.getId());
+
+                    JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                    // refresh the panel
+                    processPanel.updateContent(3, null);
+
+                }
+                catch (DatabaseConnectionFailedException | DeleteProcessException e1)
+                {
+                    JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         gridDeleteProcess.addField(deleteButton);
 
-        add(searchForm, BorderLayout.CENTER);
+        add(gridDeleteProcess, BorderLayout.CENTER);
 
         JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(new ProcessTableModel(), this, 4);
         processSearch.onSelectedItemChange(() ->
@@ -62,8 +90,8 @@ public class DeleteProcessPanel extends JPanel
         }
     }
 
-    public DeleteProcessPanel()
+    public DeleteProcessPanel(ProcessPanel processPanel)
     {
-        this(null);
+        this(processPanel, null);
     }
 }

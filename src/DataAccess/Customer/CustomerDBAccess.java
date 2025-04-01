@@ -14,6 +14,7 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
 import Model.CustomerStatus.CustomerStatus;
+import Model.CustomerStatus.MakeCustomerStatus;
 
 public class CustomerDBAccess implements CustomerDataAccess
 {
@@ -34,14 +35,17 @@ public class CustomerDBAccess implements CustomerDataAccess
 
             while (resultSet.next())
             {
+                CustomerStatus customerStatus = MakeCustomerStatus.getCustomerStatus(
+                        resultSet.getInt("id_customer_status"),
+                        resultSet.getString("customer_status_label")
+                );
                 Customer customer = MakeCustomer.getCustomer(
-                        resultSet.getInt("id"),
+                        resultSet.getInt("num_customer"),
                         resultSet.getString("last_name"),
                         resultSet.getString("first_name"),
                         resultSet.getFloat("credit_limit"),
                         resultSet.getString("num_vat"),
-                        resultSet.getInt("id_customer_status"),
-                        resultSet.getString("customer_status_label")
+                        customerStatus
                 );
 
                 customers.add(customer);
