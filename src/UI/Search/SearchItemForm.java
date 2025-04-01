@@ -43,8 +43,8 @@ public class SearchItemForm extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
+        //JPanel searchForm = new JPanel(new GridBagLayout());
+        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // TVA Code field
         JEnhancedTextField tvaCodeField = new JEnhancedTextField();
@@ -62,7 +62,7 @@ public class SearchItemForm extends JPanel
         JButton searchButton = new JButton("Search");
         gridSearchForm.addField(searchButton);
 
-        add(searchForm, BorderLayout.CENTER);
+        add(gridSearchForm, BorderLayout.CENTER);
 
 
         // Empty table
@@ -90,8 +90,13 @@ public class SearchItemForm extends JPanel
         try
         {
             ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
-
             table.updateModel(new ItemTableModel(items));
+
+            if(items.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "No item found", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         }
         catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |
                SearchItemException e)

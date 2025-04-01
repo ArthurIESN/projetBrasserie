@@ -24,6 +24,7 @@ import UI.Components.SearchByLabelPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CreateProcessPanel extends JPanel
 {
@@ -34,8 +35,7 @@ public class CreateProcessPanel extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper(searchForm);
+        GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper();
 
         JEnhancedTextField processLabelField = new JEnhancedTextField();
         processLabelField.setPlaceholder("Process Label");
@@ -44,6 +44,17 @@ public class CreateProcessPanel extends JPanel
         JEnhancedTextField processNumberField = new JEnhancedTextField();
         processNumberField.setPlaceholder("Process Number");
         gridNewProcess.addField("Process Number", processNumberField);
+
+        // date
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        JSpinner dateSpinner = new JSpinner(dateModel);
+
+        // Définissez le format de la date
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy");
+        dateSpinner.setEditor(dateEditor);
+
+        // Ajoutez le champ de saisie de date au formulaire
+        gridNewProcess.addField("Date", dateSpinner);
 
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Supplier> suppliers = new ArrayList<>();
@@ -65,11 +76,20 @@ public class CreateProcessPanel extends JPanel
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        SearchByLabelPanel<Customer> customerSearch = new SearchByLabelPanel<>(customers, "Search for a customer", customer -> customer.getFirstName() + " " + customer.getLastName());
-        SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, "Search for a supplier", Supplier::getName);
-        SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, "Search for a process status", ProcessStatus::getLabel);
-        SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, "Search for an employee", employee -> employee.getFirstName() + " " + employee.getLastName());
-        SearchByLabelPanel<ProcessType> typeSearch = new SearchByLabelPanel<>(types, "Search for a type", ProcessType::getLabel);
+        SearchByLabelPanel<Customer> customerSearch = new SearchByLabelPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName());
+        customerSearch.getSearchField().setPlaceholder("Search for a customer");
+
+        SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, Supplier::getName);
+        supplierSearch.getSearchField().setPlaceholder("Search for a supplier");
+
+        SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
+        processStatusSearch.getSearchField().setPlaceholder("Search for a process status");
+
+        SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, employee -> employee.getFirstName() + " " + employee.getLastName());
+        employeeSearch.getSearchField().setPlaceholder("Search for an employee");
+
+        SearchByLabelPanel<ProcessType> typeSearch = new SearchByLabelPanel<>(types, ProcessType::getLabel);
+        typeSearch.getSearchField().setPlaceholder("Search for a type");
 
         gridNewProcess.addField("Supplier", supplierSearch);
         gridNewProcess.addField("Process Status", processStatusSearch);
@@ -88,7 +108,9 @@ public class CreateProcessPanel extends JPanel
             ProcessStatus processStatus = processStatusSearch.getSelectedItem();
             Employee employee = employeeSearch.getSelectedItem();
 
-            Process process = new Process(null, processLabelField.getText(), Integer.parseInt(processNumberField.getText()), supplier, typeSearch.getSelectedItem(), processStatus, employee, customer);
+            java.util.Date date = (Date) dateSpinner.getValue();
+
+            Process process = new Process(null, processLabelField.getText(), Integer.parseInt(processNumberField.getText()), new java.util.Date(date.getTime()), supplier, typeSearch.getSelectedItem(), processStatus, employee, customer);
 
 
             try
@@ -104,7 +126,7 @@ public class CreateProcessPanel extends JPanel
 
         });
 
-        add(searchForm, BorderLayout.CENTER);
+        add(gridNewProcess, BorderLayout.CENTER);
 
     }
 }

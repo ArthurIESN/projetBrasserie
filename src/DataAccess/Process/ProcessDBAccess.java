@@ -9,8 +9,21 @@ import Exceptions.Process.CreateProcessException;
 
 import Exceptions.Process.GetProcessException;
 import Exceptions.Process.UpdateProcessException;
+import Model.Customer.Customer;
+import Model.Customer.MakeCustomer;
+import Model.CustomerStatus.CustomerStatus;
+import Model.Employee.Employee;
+import Model.Employee.MakeEmployee;
+import Model.EmployeeStatus.EmployeeStatus;
 import Model.Process.MakeProcess;
 import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+import Model.ProcessStatus.MakeProcessStatus;
+import Model.ProcessType.ProcessType;
+import Model.ProcessType.MakeProcessType;
+import Model.Supplier.Supplier;
+import Model.Supplier.MakeSupplier;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +45,8 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
     {
-        String query = "INSERT INTO process (label, number, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO process (label, number, creation_date, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         if(process == null)
         {
@@ -62,35 +75,36 @@ public class ProcessDBAccess implements ProcessDataAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
+            statement.setDate(3, new java.sql.Date(process.getCreationDate().getTime()));
 
             if(process.getSupplier() == null)
             {
-                statement.setNull(3, INTEGER);
+                statement.setNull(4, INTEGER);
             }
             else
             {
-                statement.setInt(3, process.getSupplier().getId());
+                statement.setInt(4, process.getSupplier().getId());
             }
 
-            statement.setInt(4, process.getType().getId());
-            statement.setInt(5, process.getProcessStatus().getId());
+            statement.setInt(5, process.getType().getId());
+            statement.setInt(6, process.getProcessStatus().getId());
 
             if(process.getEmployee() == null)
-            {
-                statement.setNull(6, INTEGER);
-            }
-            else
-            {
-                statement.setInt(6, process.getEmployee().getId());
-            }
-
-            if(process.getCustomer() == null)
             {
                 statement.setNull(7, INTEGER);
             }
             else
             {
-                statement.setInt(7, process.getCustomer().getId());
+                statement.setInt(7, process.getEmployee().getId());
+            }
+
+            if(process.getCustomer() == null)
+            {
+                statement.setNull(8, INTEGER);
+            }
+            else
+            {
+                statement.setInt(8, process.getCustomer().getId());
             }
 
             statement.executeUpdate();
@@ -286,34 +300,87 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     private Process makeProcess(ResultSet resultSet) throws SQLException
     {
+        Supplier supplier;
+        ProcessType processType;
+        ProcessStatus processStatus;
+        Employee employee;
+        EmployeeStatus employeeStatus;
+        Customer customer;
+        CustomerStatus customerStatus;
+
+        if(resultSet.getInt("id_supplier") == 0)
+        {
+            supplier = null;
+        }
+        else
+        {
+            supplier = MakeSupplier.getSupplier(
+                    resultSet.getInt("id_supplier"),
+                    resultSet.getString("supplier.name")
+            );
+        }
+
+        processType = MakeProcessType.getProcessType(
+                resultSet.getInt("id_type"),
+                resultSet.getString("process_type.label")
+        );
+
+        processStatus = MakeProcessStatus.getProcessStatus(
+                resultSet.getInt("id_process_status"),
+                resultSet.getString("process_status.label")
+        );
+
+        if(resultSet.getInt("id_employee") == 0)
+        {
+            employee = null;
+        }
+        else
+        {
+            employeeStatus = new EmployeeStatus(
+                    resultSet.getInt("employee.id_employee_status"),
+                    resultSet.getString("employee_status.label")
+            );
+
+            employee = MakeEmployee.getEmployee(
+                    resultSet.getInt("id_employee"),
+                    resultSet.getString("employee.last_name"),
+                    resultSet.getString("employee.first_name"),
+                    resultSet.getDate("employee.birth_date"),
+                    employeeStatus
+            );
+        }
+
+        if(resultSet.getInt("id_customer") == 0)
+        {
+            customer = null;
+        }
+        else
+        {
+            customerStatus = new CustomerStatus(
+                    resultSet.getInt("customer.id_customer_status"),
+                    resultSet.getString("customer_status.label")
+            );
+
+            customer = new Customer(
+                    resultSet.getInt("id_customer"),
+                    resultSet.getString("customer.last_name"),
+                    resultSet.getString("customer.first_name"),
+                    resultSet.getFloat("customer.credit_limit"),
+                    resultSet.getString("customer.num_vat"),
+                    customerStatus
+            );
+        }
+
         return MakeProcess.getProcess(
                 resultSet.getInt("id"),
                 resultSet.getString("label"),
                 resultSet.getInt("number"),
-
-                resultSet.getInt("id_supplier"),
-                resultSet.getString("supplier.name"),
-
-                resultSet.getInt("id_process_type"),
-                resultSet.getString("process_type.label"),
-
-                resultSet.getInt("id_process_status"),
-                resultSet.getString("process_status.label"),
-
-                resultSet.getInt("id_employee"),
-                resultSet.getString("employee.last_name"),
-                resultSet.getString("employee.first_name"),
-                resultSet.getDate("employee.birth_date"),
-                resultSet.getInt("employee.id_employee_status"),
-                resultSet.getString("employee_status.label"),
-
-                resultSet.getInt("id_customer"),
-                resultSet.getString("customer.last_name"),
-                resultSet.getString("customer.first_name"),
-                resultSet.getFloat("customer.credit_limit"),
-                resultSet.getString("customer.num_vat"),
-                resultSet.getInt("customer.id_customer_status"),
-                resultSet.getString("customer_status.label")
+                resultSet.getDate("creation_date"),
+                supplier,
+                processType,
+                processStatus,
+                employee,
+                customer
         );
     }
 }

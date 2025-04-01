@@ -31,7 +31,7 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
             while (resultSet.next())
             {
-                ProcessType type = MakeProcessType.getType(resultSet.getInt("id"), resultSet.getString("label"));
+                ProcessType type = MakeProcessType.getProcessType(resultSet.getInt("id"), resultSet.getString("label"));
                 types.add(type);
             }
 

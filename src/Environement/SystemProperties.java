@@ -4,8 +4,6 @@ import Exceptions.Environement.BadEnvValueException;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 
-import Environement.EnvLoader;
-
 public class SystemProperties
 {
     public enum SystemType

@@ -81,4 +81,9 @@ public class AppController {
     {
         processManager.createProcess(process);
     }
+
+    public static void deleteProcess(Integer id) throws DatabaseConnectionFailedException, Exceptions.Process.DeleteProcessException
+    {
+        processManager.deleteProcess(id);
+    }
 }

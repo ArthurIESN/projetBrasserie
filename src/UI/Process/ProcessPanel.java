@@ -39,7 +39,7 @@ public class ProcessPanel extends JPanel
             case 0 -> new CreateProcessPanel();
             case 1 -> new ReadProcessPanel(this);
             case 2 -> new JPanel();
-            case 3 -> new DeleteProcessPanel((Process)data);
+            case 3 -> new DeleteProcessPanel(this, (Process)data);
             default -> new CreateProcessPanel();
         };
 

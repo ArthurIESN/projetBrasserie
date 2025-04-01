@@ -1,6 +1,10 @@
 package UI.Components;
 
 import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -16,35 +20,75 @@ public class JEnhancedTable extends JTable
         setAutoCreateRowSorter(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        updateColumnSize();
+        // addAncestorListener to wait until the table is added to a window
+        addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent event)
+            {
+                Window window = SwingUtilities.getWindowAncestor(JEnhancedTable.this);
+                if (window != null) {
+
+                    // When window is resized, update column size
+                    window.addComponentListener(new ComponentAdapter()
+                    {
+                        @Override
+                        public void componentResized(ComponentEvent e)
+                        {
+                            updateColumnSize();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {}
+            @Override
+            public void ancestorMoved(AncestorEvent event) {}
+        });
+
+        // delay the first updateColumnSize to wait for the table to be added to a window and then update the column size
+        SwingUtilities.invokeLater(this::updateColumnSize);
     }
 
     public void updateColumnSize()
     {
         TableColumnModel columnModel = getColumnModel();
         FontMetrics metrics = getFontMetrics(getFont());
+        int tableWidth = getParent() != null ? getParent().getWidth() : getWidth();
+        int totalColumnWidth = 0;
 
-        for (int i = 0; i < columnModel.getColumnCount(); i++)
-        {
+        int[] columnWidths = new int[columnModel.getColumnCount()];
+
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
             TableColumn column = columnModel.getColumn(i);
             String columnName = getColumnName(i);
+            int columnNameWidth = metrics.stringWidth(columnName) + 40;
 
-            // Calculez la largeur du nom de la colonne avec une marge supplémentaire
-            int columnNameWidth = metrics.stringWidth(columnName) + 40; // marge supplémentaire de 40 pixels
-
-            // Calculez la largeur maximale des valeurs des cellules
             int maxCellWidth = 0;
-            for (int row = 0; row < getRowCount(); row++)
-            {
+            for (int row = 0; row < getRowCount(); row++) {
                 Object cellValue = getValueAt(row, i);
                 int cellWidth = metrics.stringWidth(cellValue != null ? cellValue.toString() : "") + 20;
                 maxCellWidth = Math.max(maxCellWidth, cellWidth);
             }
 
-            // Définissez la largeur de la colonne en utilisant la plus grande valeur entre la largeur du nom de la colonne (avec marge) et la largeur maximale des valeurs des cellules
             int columnWidth = Math.max(columnNameWidth, maxCellWidth);
-            column.setPreferredWidth(columnWidth);
-            column.setMinWidth(columnWidth);
+            columnWidths[i] = columnWidth;
+            totalColumnWidth += columnWidth;
+        }
+
+        if (tableWidth > totalColumnWidth) {
+            int extraSpace = tableWidth - totalColumnWidth;
+            int extraPerColumn = extraSpace / columnModel.getColumnCount();
+
+            for (int i = 0; i < columnModel.getColumnCount(); i++) {
+                columnWidths[i] += extraPerColumn;
+            }
+        }
+
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setPreferredWidth(columnWidths[i]);
+            column.setMinWidth(columnWidths[i]);
         }
     }
 }
