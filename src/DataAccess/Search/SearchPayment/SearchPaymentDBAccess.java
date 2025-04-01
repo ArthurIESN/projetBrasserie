@@ -4,6 +4,7 @@ import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
+import Model.Document;
 import Model.Payment.Payment;
 import Model.PaymentStatus.PaymentStatus;
 
@@ -43,13 +44,21 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
             statement.setDouble(2, minAmount);
             statement.setInt(3, year.toLocalDate().getYear());
 
-            System.out.println("Executing query: " + statement.toString()); // Print the query for debugging
-
             ResultSet resultSet = statement.executeQuery();
             ArrayList<Payment> payments = new ArrayList<>();
 
             while (resultSet.next()) {
                 PaymentStatus paymentStatus;
+
+                if (paymentStatusCache.containsKey(statement.getResultSet().getInt("id_payment_status"))) {
+                    paymentStatus = paymentStatusCache.get(statement.getResultSet().getInt("id_payment_status"));
+                } else {
+                    paymentStatus = new PaymentStatus(
+                            resultSet.getInt("id_payment_status"),
+                            resultSet.getString("payment_status_label")
+                    );
+                    paymentStatusCache.put(statement.getResultSet().getInt("id_payment_status"), paymentStatus);
+                }
 
                 if (paymentStatusCache.containsKey(statement.getResultSet().getInt("id_payment_status"))) {
                     paymentStatus = paymentStatusCache.get(statement.getResultSet().getInt("id_payment_status"));
@@ -69,7 +78,6 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                 );
                 payments.add(payment);
             }
-            System.out.println("Number of payments found: " + payments.size()); //vérifier le nombre de paiements trouvés
 
             return payments;
 

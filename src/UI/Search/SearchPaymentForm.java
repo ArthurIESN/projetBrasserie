@@ -71,10 +71,8 @@ public class SearchPaymentForm extends JPanel
 
         String paymentStatus;
         if (isValidated){
-            // If the payment is validated, set the status to "Validated"
             paymentStatus = "Validated";
         } else {
-            // If the payment is not validated, set the status to "Not Validated"
             paymentStatus = "Refused";
         }
 

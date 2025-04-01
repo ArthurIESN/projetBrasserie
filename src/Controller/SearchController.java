@@ -21,10 +21,10 @@ import java.util.List;
 public class SearchController {
     private static final SearchDocumentWithEventManager searchDocumentWithEventManager = new SearchDocumentWithEventManager();
     private static SearchItemManager searchItemManager = new SearchItemManager();
-    private static SearchPaymentManager searchPaymentManager = new SearchPaymentManager();  // Instanciation du SearchPaymentManager
+    private static SearchPaymentManager searchPaymentManager = new SearchPaymentManager();  // Instantiating the SearchPaymentManager
 
 
-    // fonction qui récupères toutes les années des event (recherche par années des documents impliquant des events)
+    // function that retrieves all years of events (search by year for documents involving events)
     public static List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
         return searchDocumentWithEventManager.getDatesEvents();
     }
@@ -38,8 +38,8 @@ public class SearchController {
         return searchItemManager.getMinMaxItemQuantityAndPrice();
     }
 
-    // Recherche des paiements en fonction des critères (validé, montant, année)
+    // Search for payments based on criteria (validated, amount, year)
     public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Appel au manager des paiements
+        return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager
     }
 }
