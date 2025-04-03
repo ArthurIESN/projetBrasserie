@@ -1,4 +1,6 @@
-package Model;
+package Model.DocumentDetails;
+
+import Model.Document.Document;
 
 public class DocumentDetails {
     private Integer id;

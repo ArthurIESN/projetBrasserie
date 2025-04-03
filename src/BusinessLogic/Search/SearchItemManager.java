@@ -59,4 +59,5 @@ public class SearchItemManager
     {
         return searchItemDataAccess.getMinMaxItemQuantityAndPrice();
     }
+
 }
