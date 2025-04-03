@@ -1,18 +1,23 @@
 package UI.Components;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Date;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class JEnhancedTable extends JTable
 {
+    private static final Color backbroundRowColor = new Color(0, 0, 0, 0);
+    private static final Color alternateBackgroundRowColor = new Color(70, 70, 70);
+    private static final Color selectedRowColor = new Color(100, 100, 100);
+
     public JEnhancedTable(TableModel model)
     {
         super(model);
@@ -20,15 +25,12 @@ public class JEnhancedTable extends JTable
         setAutoCreateRowSorter(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        // addAncestorListener to wait until the table is added to a window
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event)
             {
                 Window window = SwingUtilities.getWindowAncestor(JEnhancedTable.this);
                 if (window != null) {
-
-                    // When window is resized, update column size
                     window.addComponentListener(new ComponentAdapter()
                     {
                         @Override
@@ -46,8 +48,13 @@ public class JEnhancedTable extends JTable
             public void ancestorMoved(AncestorEvent event) {}
         });
 
-        // delay the first updateColumnSize to wait for the table to be added to a window and then update the column size
         SwingUtilities.invokeLater(this::updateColumnSize);
+
+        setDefaultRenderer(Object.class, new AlternateColumnRenderer());
+        setDefaultRenderer(Number.class, new AlternateColumnRenderer());
+        setDefaultRenderer(Boolean.class, new AlternateColumnRenderer());
+        setDefaultRenderer(Date.class, new AlternateColumnRenderer());
+
     }
 
     public void updateColumnSize()
@@ -89,6 +96,22 @@ public class JEnhancedTable extends JTable
             TableColumn column = columnModel.getColumn(i);
             column.setPreferredWidth(columnWidths[i]);
             column.setMinWidth(columnWidths[i]);
+        }
+    }
+
+    private static class AlternateColumnRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (!isSelected)
+            {
+                cell.setBackground(column % 2 == 0 ? backbroundRowColor : alternateBackgroundRowColor);
+            }
+            else
+            {
+                cell.setBackground(selectedRowColor);
+            }
+            return cell;
         }
     }
 }

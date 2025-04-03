@@ -5,6 +5,8 @@ import UI.Components.JEnhancedTable;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 
@@ -25,6 +27,8 @@ public class JEnhancedTableScrollPanel extends JScrollPane
             // if rows is greater than 0, then the table will have a fixed height
             setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         }
+
+        setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
 
         target.setLayout(new BoxLayout(target, BoxLayout.Y_AXIS));
         setViewportView(table);
@@ -63,7 +67,9 @@ public class JEnhancedTableScrollPanel extends JScrollPane
             public void mousePressed(java.awt.event.MouseEvent e) {
                 if (e.isPopupTrigger())
                 {
-                    showPopup(e);
+                    // check if a row is selected
+                    if(table.getSelectedRow() != -1)
+                        showPopup(e);
                 }
             }
 
@@ -72,5 +78,16 @@ public class JEnhancedTableScrollPanel extends JScrollPane
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (hasFocus()) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(Color.RED); // Changez la couleur de la bordure ici
+            g2.setStroke(new BasicStroke(2)); // Définissez l'épaisseur de la bordure
+            g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1); // Dessinez la bordure
+        }
     }
 }

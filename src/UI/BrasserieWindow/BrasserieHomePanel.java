@@ -27,12 +27,6 @@ public class BrasserieHomePanel extends JPanel
         welcomeMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(welcomeMessage);
 
-        // GIF
-        ImageIcon gifIcon = new ImageIcon(getClass().getResource("/resources/images/dorianHome.gif"));
-        JLabel gifLabel = new JLabel(gifIcon, JLabel.CENTER);
-        gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.add(gifLabel);
-
         add(centerPanel, BorderLayout.CENTER);
     }
 }

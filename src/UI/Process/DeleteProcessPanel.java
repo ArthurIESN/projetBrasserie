@@ -74,7 +74,7 @@ public class DeleteProcessPanel extends JPanel
         add(gridDeleteProcess, BorderLayout.CENTER);
 
         JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(new ProcessTableModel(), this, 4);
-        processSearch.onSelectedItemChange(() ->
+        processSearch.onSelectedItemChange(e ->
         {
             Process selectedProcess = processSearch.getSelectedItem();
             if (selectedProcess != null)

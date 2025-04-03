@@ -1,5 +1,6 @@
 package UI.Components;
 
+import UI.BrasserieWindow.BrasserieCredits;
 import UI.BrasserieWindow.BrasserieWindow;
 import UI.BrasserieWindow.BrasserieHomePanel;
 import UI.Process.ProcessPanel;
@@ -25,9 +26,11 @@ public class MenuBarBrasserie {
         menuBar.add(brasserieMenu);
 
         JMenuItem homeItem = new JMenuItem("Home");
+        JMenuItem creditsItem = new JMenuItem("Credits");
         JMenuItem quitItem = new JMenuItem("Quit");
 
         brasserieMenu.add(homeItem);
+        brasserieMenu.add(creditsItem);
         brasserieMenu.add(quitItem);
 
         homeItem.addActionListener(e ->
@@ -36,6 +39,11 @@ public class MenuBarBrasserie {
         });
 
         homeItem.doClick();
+
+        creditsItem.addActionListener(e ->
+        {
+            brasserieWindow.updateWindowContent(new BrasserieCredits());
+        });
 
         quitItem.addActionListener(e ->
         {

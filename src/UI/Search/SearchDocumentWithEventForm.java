@@ -50,7 +50,7 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
 
-        itemSearch.onSelectedItemChange(()->{
+        itemSearch.onSelectedItemChange(e ->{
             Item itemSelected = itemSearch.getSelectedItem();
             if(itemSelected != null){
                 idItemSelected = itemSelected.getId();
@@ -64,8 +64,8 @@ public class SearchDocumentWithEventForm extends JPanel {
                         filterPanel.revalidate();
                         filterPanel.repaint();
                     }
-                }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
-                    System.out.println(e.getMessage());
+                }catch (DatabaseConnectionFailedException | GetEventsWithItemException ee){
+                    System.out.println(ee.getMessage());
                 }
 
                 System.out.println(itemSelected.getLabel());
