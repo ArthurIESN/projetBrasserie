@@ -1,5 +1,6 @@
-package Model;
+package Model.Document;
 
+import Model.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
@@ -32,7 +33,7 @@ public class Document {
                     Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, float depositAmount,
                     Date desiredDeliveryDate, float VatAmount, float totalInclusiveOfTaxe, float totalVat,
                     float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
-                    Process process, DocumentStatus documentStatus)
+                    Process process,DocumentStatus documentStatus)
     {
         this.id = id;
         this.label = label;
