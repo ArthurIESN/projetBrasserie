@@ -5,6 +5,7 @@ import BusinessLogic.Event.EventManager;
 import BusinessLogic.Search.SearchItemManager;
 import BusinessLogic.Search.SearchDocumentWithEventManager;
 
+import BusinessLogic.Search.SearchPaymentManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
