@@ -1,6 +1,5 @@
 package Model;
 
-import Model.DocumentDetails.DocumentDetails;
 import Model.Item.Item;
 
 public class ItemDocumentDetails {
