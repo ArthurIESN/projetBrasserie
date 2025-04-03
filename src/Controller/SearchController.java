@@ -8,6 +8,7 @@ import BusinessLogic.SearchDocumentWithEventManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
+import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
@@ -39,5 +40,9 @@ public class SearchController {
 
     public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws DatabaseConnectionFailedException, GetEventsWithItemException {
         return  searchEventManager.getEventsWithSpecificItem(idItem);
+    }
+
+    public static ArrayList<Float> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+        return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
     }
 }
