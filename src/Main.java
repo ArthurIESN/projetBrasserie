@@ -1,7 +1,8 @@
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import UI.BrasserieWindow.BrasserieWindow;
 import Environement.SystemProperties;
-public class Main {
+
+public class Main
+{
     public static void main(String[] args)
     {
         SystemProperties.enableFlatDarkLaf();
