@@ -4,7 +4,6 @@ import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
-import Model.Document;
 import Model.Payment.Payment;
 import Model.PaymentStatus.PaymentStatus;
 
