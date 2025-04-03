@@ -51,8 +51,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterLabelPanel.add(filterLabel);
 
 
-        JPanel filterPanel = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper helper = new GridBagLayoutHelper(filterPanel);
+        GridBagLayoutHelper filterPanel = new GridBagLayoutHelper();
 
 
 
@@ -67,14 +66,14 @@ public class SearchDocumentWithEventForm extends JPanel {
         currentPanelYears = new JPanel(new BorderLayout());
 
         SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
-        helper.addField(title);
-        helper.addField(filterLabelPanel);
-        helper.addField(itemSearch);
-        helper.addField(currentPanelEvent);
-        helper.addField(currentPanelQuantities);
-        helper.addField(currentPanelYears);
+        filterPanel.addField(title);
+        filterPanel.addField(filterLabelPanel);
+        filterPanel.addField(itemSearch);
+        filterPanel.addField(currentPanelEvent);
+        filterPanel.addField(currentPanelQuantities);
+        filterPanel.addField(currentPanelYears);
 
-        itemSearch.onSelectedItemChange(()->{
+        itemSearch.onSelectedItemChange(itemChanged->{
             Item itemSelected = itemSearch.getSelectedItem();
             if(itemSelected != null){
                 idItemSelected = itemSelected.getId();
@@ -89,7 +88,7 @@ public class SearchDocumentWithEventForm extends JPanel {
                         currentPanelEvent.revalidate();
                         currentPanelEvent.repaint();
 
-                        eventSearch.onSelectedItemChange(()->{
+                        eventSearch.onSelectedItemChange(eventChanged ->{
                             Event eventSelected = eventSearch.getSelectedItem();
                             if(eventSelected != null){
                                 idEventSelected = eventSelected.getId();
@@ -102,7 +101,7 @@ public class SearchDocumentWithEventForm extends JPanel {
                                     currentPanelQuantities.add(quantitySearch, BorderLayout.CENTER);
                                     currentPanelQuantities.revalidate();
                                     currentPanelQuantities.repaint();
-                                    quantitySearch.onSelectedItemChange(() -> {
+                                    quantitySearch.onSelectedItemChange(quantityChanged -> {
                                         quantitySelected = quantitySearch.getSelectedItem();
                                         currentIndexFilter = 2;
                                         filters(quantitySelected.toString());
@@ -115,7 +114,7 @@ public class SearchDocumentWithEventForm extends JPanel {
                                                 currentPanelYears.revalidate();
                                                 currentPanelYears.repaint();
 
-                                                yearSearch.onSelectedItemChange(() -> {
+                                                yearSearch.onSelectedItemChange(a -> {
                                                     yearSelected = yearSearch.getSelectedItem();
                                                     currentIndexFilter = 3;
                                                     filters(yearSelected.toString());

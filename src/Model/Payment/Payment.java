@@ -1,6 +1,7 @@
 package Model.Payment;
 import Model.Customer.Customer;
 import Model.PaymentStatus.PaymentStatus;
+import Model.Document.Document;
 
 import java.util.Date;
 
