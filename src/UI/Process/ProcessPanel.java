@@ -12,6 +12,7 @@ import Model.Process.Process;
 public class ProcessPanel extends JPanel
 {
     private Container container;
+    private final NavbarPanel navbarPanel;
     public ProcessPanel()
     {
         setLayout(new BorderLayout());
@@ -24,10 +25,15 @@ public class ProcessPanel extends JPanel
         items.add("Read Process");
         items.add("Update Process");
         items.add("Delete Process");
-        NavbarPanel navbarPanel = new NavbarPanel(items, this::updateContent);
+        navbarPanel = new NavbarPanel(items, this::updateContent);
 
         add(navbarPanel, BorderLayout.NORTH);
         add(container, BorderLayout.CENTER);
+    }
+
+    public void navbarClickItem(int index)
+    {
+        navbarPanel.clickItem(index);
     }
 
 
@@ -35,10 +41,11 @@ public class ProcessPanel extends JPanel
     {
         container.removeAll();
 
-        JPanel panel = switch (index) {
+        JPanel panel = switch (index)
+        {
             case 0 -> new CreateProcessPanel();
             case 1 -> new ReadProcessPanel(this);
-            case 2 -> new JPanel();
+            case 2 -> new UpdateProcessPanel((Process)data);
             case 3 -> new DeleteProcessPanel(this, (Process)data);
             default -> new CreateProcessPanel();
         };

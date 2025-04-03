@@ -35,73 +35,13 @@ public class CreateProcessPanel extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper();
+        ProcessModelPanel processModelPanel = new ProcessModelPanel(false, false);
+        processModelPanel.setButtonText("Create Process");
 
-        JEnhancedTextField processLabelField = new JEnhancedTextField();
-        processLabelField.setPlaceholder("Process Label");
-        gridNewProcess.addField("Process Label", processLabelField);
-
-        JEnhancedTextField processNumberField = new JEnhancedTextField();
-        processNumberField.setPlaceholder("Process Number");
-        gridNewProcess.addField("Process Number", processNumberField);
-
-        // date
-        SpinnerDateModel dateModel = new SpinnerDateModel();
-        JSpinner dateSpinner = new JSpinner(dateModel);
-
-        // Définissez le format de la date
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy");
-        dateSpinner.setEditor(dateEditor);
-
-        // Ajoutez le champ de saisie de date au formulaire
-        gridNewProcess.addField("Date", dateSpinner);
-
-        ArrayList<Customer> customers = new ArrayList<>();
-        ArrayList<Supplier> suppliers = new ArrayList<>();
-        ArrayList<ProcessStatus> processStatuses = new ArrayList<>();
-        ArrayList<Employee> employees = new ArrayList<>();
-        ArrayList<ProcessType> types = new ArrayList<>();
-
-        try
-        {
-            customers = AppController.getAllCustomers();
-            suppliers = AppController.getAllSuppliers();
-            processStatuses = AppController.getAllProcessStatus();
-            employees = AppController.getAllEmployees();
-            types = AppController.getAllTypes();
-
-    } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException | GetAllProcessStatusException | GetAllEmployeesException |
-             GetAllProcessTypesException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        SearchByLabelPanel<Customer> customerSearch = new SearchByLabelPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName());
-        customerSearch.getSearchField().setPlaceholder("Search for a customer");
-
-        SearchByLabelPanel<Supplier> supplierSearch = new SearchByLabelPanel<>(suppliers, Supplier::getName);
-        supplierSearch.getSearchField().setPlaceholder("Search for a supplier");
-
-        SearchByLabelPanel<ProcessStatus> processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
-        processStatusSearch.getSearchField().setPlaceholder("Search for a process status");
-
-        SearchByLabelPanel<Employee> employeeSearch = new SearchByLabelPanel<>(employees, employee -> employee.getFirstName() + " " + employee.getLastName());
-        employeeSearch.getSearchField().setPlaceholder("Search for an employee");
-
-        SearchByLabelPanel<ProcessType> typeSearch = new SearchByLabelPanel<>(types, ProcessType::getLabel);
-        typeSearch.getSearchField().setPlaceholder("Search for a type");
-
-        gridNewProcess.addField("Supplier", supplierSearch);
-        gridNewProcess.addField("Process Status", processStatusSearch);
-        gridNewProcess.addField("Type", typeSearch);
-        gridNewProcess.addField("Employee", employeeSearch);
-        gridNewProcess.addField("Customer", customerSearch);
+        add(processModelPanel, BorderLayout.CENTER);
 
 
-        // Bttuon create
-        JButton createButton = new JButton("Create Process");
-        gridNewProcess.addField(createButton);
-
+        /*
         createButton.addActionListener(e -> {
             Customer customer = customerSearch.getSelectedItem();
             Supplier supplier = supplierSearch.getSelectedItem();
@@ -126,7 +66,7 @@ public class CreateProcessPanel extends JPanel
 
         });
 
-        add(gridNewProcess, BorderLayout.CENTER);
+        */
 
     }
 }

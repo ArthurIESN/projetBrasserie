@@ -5,6 +5,8 @@
 Must be placed in the `lib` folder and renamed to `mysql-connector.jar`
 - [flatlaf-3.5.4](https://repo1.maven.org/maven2/com/formdev/flatlaf/3.5.4/flatlaf-3.5.4.jar)
 Must be placed in the `lib` folder and renamed to `flatlaf.jar`
+- [flatlaf-extras-3.5.4](https://repo1.maven.org/maven2/com/formdev/flatlaf-extras/3.5.4/flatlaf-extras-3.5.4.jar)
+Must be placed in the `lib` folder and renamed to `flatlaf-extras.jar`
 
 ## Environment
 - Copy the `.env.example` file and rename it to `.env`
