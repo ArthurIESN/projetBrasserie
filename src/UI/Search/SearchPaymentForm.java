@@ -21,8 +21,7 @@ public class SearchPaymentForm extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
+        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // Payment Validated Checkbox
         JCheckBox validatedPaymentCheckBox = new JCheckBox("Validated Payment");
@@ -37,7 +36,7 @@ public class SearchPaymentForm extends JPanel
         JComboBox<String> yearComboBox = new JComboBox<>(getYears());
         gridSearchForm.addField("Year", yearComboBox);
 
-        add(searchForm, BorderLayout.CENTER);
+        add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
         JButton searchButton = new JButton("Search");
