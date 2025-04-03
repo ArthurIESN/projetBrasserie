@@ -1,6 +1,5 @@
 package Model;
 
-import Model.DocumentDetails.DocumentDetails;
 import Model.Event.Event;
 
 public class EventDocumentDetails {

@@ -1,7 +1,5 @@
 package Model.DocumentDetails;
 
-import Model.Document.Document;
-
 import java.util.HashMap;
 
 public class MakeDocumentDetails {
