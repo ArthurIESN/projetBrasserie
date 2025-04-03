@@ -3,7 +3,7 @@ package Controller;
 
 import BusinessLogic.Event.EventManager;
 import BusinessLogic.Search.SearchItemManager;
-import BusinessLogic.SearchDocumentWithEventManager;
+import BusinessLogic.Search.SearchDocumentWithEventManager;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
@@ -25,8 +25,8 @@ public class SearchController {
     private static final EventManager searchEventManager = new EventManager();
 
     // fonction qui récupères toutes les années des event (recherche par années des documents impliquant des events)
-    public static List<Integer> getDatesEvents() throws DatabaseConnectionFailedException{
-        return searchDocumentWithEventManager.getDatesEvents();
+    public static List<Integer> getDatesEvents(Integer idEvent) throws DatabaseConnectionFailedException{
+        return searchDocumentWithEventManager.getDatesEvents(idEvent);
     }
 
     public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
