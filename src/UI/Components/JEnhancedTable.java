@@ -22,11 +22,13 @@ public class JEnhancedTable extends JTable
     {
         super(model);
         setModel(model);
-        setAutoCreateRowSorter(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // disable columns swapping
         getTableHeader().setReorderingAllowed(false);
+
+        // disable sorter
+        getTableHeader().setResizingAllowed(false);
 
         addAncestorListener(new AncestorListener() {
             @Override
