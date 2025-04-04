@@ -1,4 +1,4 @@
-package UI.Test;
+package UI.Models;
 
 import Model.Process.Process;
 import Model.ProcessStatus.ProcessStatus;
@@ -18,6 +18,12 @@ public class ProcessStatusEnhancedTableModel extends AbstractEnhancedTableModel<
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         ProcessStatus processStatus = getData().get(rowIndex);
+
+        if (processStatus == null)
+        {
+            return " - ";
+        }
+
         return switch (columnIndex) {
             case 0 -> processStatus.getId();
             case 1 -> processStatus.getLabel();

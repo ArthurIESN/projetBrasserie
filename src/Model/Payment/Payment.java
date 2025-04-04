@@ -8,14 +8,14 @@ import java.util.Date;
 public class Payment {
     private int id;
     private double amount;
-    private java.sql.Date paymentDate;
+    private Date paymentDate;
     private PaymentStatus paymentStatus;
     private Document document;
     private Process process;
     private Customer customer;
 
     // Constructeur
-    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus) {
+    public Payment(int id, double amount, Date paymentDate, PaymentStatus paymentStatus) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;

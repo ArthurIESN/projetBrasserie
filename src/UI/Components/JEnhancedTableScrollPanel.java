@@ -14,6 +14,7 @@ public class JEnhancedTableScrollPanel extends JScrollPane
 {
     private final JEnhancedTable table;
     private final int rows;
+
     public JEnhancedTableScrollPanel(TableModel model, JPanel target, int rows)
     {
         table = new JEnhancedTable(model);
@@ -29,6 +30,8 @@ public class JEnhancedTableScrollPanel extends JScrollPane
         }
 
         setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+
+        updateModel(model);
 
         target.setLayout(new BoxLayout(target, BoxLayout.Y_AXIS));
         setViewportView(table);
