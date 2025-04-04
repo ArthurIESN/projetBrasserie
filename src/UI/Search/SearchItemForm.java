@@ -10,19 +10,27 @@ import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
-import UI.Components.JDualSliderPanel;
-import UI.Components.GridBagLayoutHelper;
+import Model.Packaging.Packaging;
+import Model.Vat.Vat;
+import UI.Components.*;
 
 import Model.Item.Item;
 
 import Controller.SearchController;
-import UI.Components.JEnhancedTableScrollPanel;
-import UI.Components.JEnhancedTextField;
+import UI.Models.ItemEnhancedTableModel;
+import UI.Models.PackagingEnhancedTableModel;
+import UI.Models.VatEnhancedTableModel;
+import Utils.Utils;
 
 
 public class SearchItemForm extends JPanel
 {
-    //private final SearchController searchController = new SearchController();
+    private JEnhancedTableScrollPanel tableScrollPanel;
+    private TableModelMaker tableModelMaker;
+    private ItemEnhancedTableModel itemTableModel;
+    private PackagingEnhancedTableModel packagingEnhancedTableModel;
+    private VatEnhancedTableModel vatEnhancedTableModel;
+
 
     public SearchItemForm()
     {
@@ -66,7 +74,17 @@ public class SearchItemForm extends JPanel
 
 
         // Empty table
-        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(new ItemTableModel(), this);
+        tableModelMaker = new TableModelMaker();
+        itemTableModel = new ItemEnhancedTableModel(new ArrayList<>());
+        packagingEnhancedTableModel = new PackagingEnhancedTableModel(new ArrayList<>());
+        vatEnhancedTableModel = new VatEnhancedTableModel(new ArrayList<>());
+
+        tableModelMaker.addTableModel(itemTableModel);
+        tableModelMaker.addTableModel(packagingEnhancedTableModel);
+        tableModelMaker.addTableModel(vatEnhancedTableModel);
+
+        tableScrollPanel = new JEnhancedTableScrollPanel(new ItemTableModel(), this);
+        tableModelMaker.setTable(tableScrollPanel);
         add(tableScrollPanel, BorderLayout.SOUTH);
 
         searchButton.addActionListener(e ->
@@ -90,7 +108,15 @@ public class SearchItemForm extends JPanel
         try
         {
             ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
-            table.updateModel(new ItemTableModel(items));
+            ArrayList<Packaging> packagings = Utils.transformData(items, Item::getPackaging);
+            ArrayList<Vat> vatCodes = Utils.transformData(items, Item::getCode_vat);
+
+            itemTableModel.setData(items);
+            packagingEnhancedTableModel.setData(packagings);
+            vatEnhancedTableModel.setData(vatCodes);
+
+            tableScrollPanel.updateModel(tableModelMaker);
+
 
             if(items.isEmpty())
             {

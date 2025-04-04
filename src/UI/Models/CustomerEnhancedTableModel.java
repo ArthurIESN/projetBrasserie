@@ -1,4 +1,4 @@
-package UI.Test;
+package UI.Models;
 
 import Model.Customer.Customer;
 import UI.Components.AbstractEnhancedTableModel;

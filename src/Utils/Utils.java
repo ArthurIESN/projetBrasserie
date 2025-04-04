@@ -11,7 +11,7 @@ public class Utils
 {
     public static <D, T> ArrayList<T> transformData(ArrayList<D> data, Function<D, T> mapper) {
         return data.stream()
-                .map(mapper)
+                .map(item -> item == null ? null : mapper.apply(item))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

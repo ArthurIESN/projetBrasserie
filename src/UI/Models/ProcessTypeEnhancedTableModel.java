@@ -1,4 +1,4 @@
-package UI.Test;
+package UI.Models;
 
 import Model.ProcessType.ProcessType;
 import UI.Components.AbstractEnhancedTableModel;
@@ -17,6 +17,12 @@ public class ProcessTypeEnhancedTableModel extends AbstractEnhancedTableModel<Pr
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         ProcessType processType = getData().get(rowIndex);
+
+        if (processType == null)
+        {
+            return " - ";
+        }
+
         return switch (columnIndex) {
             case 0 -> processType.getId();
             case 1 -> processType.getLabel();

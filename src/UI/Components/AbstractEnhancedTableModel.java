@@ -37,6 +37,12 @@ public abstract class AbstractEnhancedTableModel<T> implements EnhancedTableMode
         return data;
     }
 
+    public void setData(ArrayList<T> data)
+    {
+        this.data.clear();
+        this.data.addAll(data);
+    }
+
     public boolean isOpen()
     {
         return isOpen;

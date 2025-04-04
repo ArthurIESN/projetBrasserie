@@ -6,15 +6,15 @@ import Exceptions.Process.GetAllProcessesException;
 import Model.ProcessStatus.ProcessStatus;
 import UI.Components.JEnhancedTableScrollPanel;
 import UI.Components.TableModelMaker;
-import UI.Test.CustomerEnhancedTableModel;
-import UI.Test.ProcessEnhancedTableModel;
-import UI.Test.ProcessStatusEnhancedTableModel;
+import UI.Models.CustomerEnhancedTableModel;
+import UI.Models.ProcessEnhancedTableModel;
+import UI.Models.ProcessStatusEnhancedTableModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import UI.Test.ProcessTypeEnhancedTableModel;
+import UI.Models.ProcessTypeEnhancedTableModel;
 import Utils.Utils;
 
 import Model.Process.Process;

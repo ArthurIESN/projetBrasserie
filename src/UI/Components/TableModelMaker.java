@@ -10,7 +10,8 @@ public class TableModelMaker extends AbstractTableModel {
     private JEnhancedTableScrollPanel table;
     private int currentColumnIndex = 0;
 
-    public TableModelMaker() {
+    public TableModelMaker()
+    {
 
     }
 
@@ -23,43 +24,35 @@ public class TableModelMaker extends AbstractTableModel {
         tableModels.add(tableModel);
     }
 
-    public void addEventOnAllFirstColumnsOfEachTableModel()
-    {
+    public void addEventOnAllFirstColumnsOfEachTableModel() {
         JTable jTable = table.getTable();
 
-        // Remove all mouse listeners from the table header (if needed)
+        // Supprime les anciens listeners
         for (MouseListener ml : jTable.getTableHeader().getMouseListeners()) {
             jTable.getTableHeader().removeMouseListener(ml);
         }
 
-        jTable.getTableHeader().addMouseListener(new MouseAdapter()
-        {
+        jTable.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 int clickedColumn = jTable.columnAtPoint(e.getPoint());
+                System.out.println("Clicked column: " + clickedColumn);
 
                 int currentColumnIndex = 0;
 
-                for (int i = 0; i < tableModels.size(); i++)
-                {
+                for (int i = 0; i < tableModels.size(); i++) {
                     AbstractEnhancedTableModel<?> model = tableModels.get(i);
 
-
-                    // If model is not open (and not the first one), we only show the first column
-                    // If the model is open, we show all columns
                     int modelColumnCount;
-                    if(model.isOpen() && i != 0)
-                    {
-                        modelColumnCount = 1;
-                    }
-                    else
-                    {
+                    if (i == 0) {
                         modelColumnCount = model.getColumnNames().length;
+                    } else {
+                        modelColumnCount = model.isOpen() ? model.getColumnNames().length : 1;
                     }
 
                     if (clickedColumn == currentColumnIndex && i != 0)
                     {
+
                         model.setOpen(!model.isOpen());
 
                         fireTableStructureChanged();

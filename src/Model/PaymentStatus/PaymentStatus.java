@@ -17,11 +17,11 @@ public class PaymentStatus {
         this.id = id;
     }
 
-    public String getlabel() {
+    public String getLabel() {
         return label;
     }
 
-    public void setlabel(String label) {
+    public void setLabel(String label) {
         this.label = label;
     }
 }
