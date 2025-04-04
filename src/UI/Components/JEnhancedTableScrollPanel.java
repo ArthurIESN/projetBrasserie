@@ -46,9 +46,7 @@ public class JEnhancedTableScrollPanel extends JScrollPane
 
     public void updateModel(TableModel model)
     {
-        table.setModel(model);
-        table.updateColumnSize();
-        table.revalidate();
+        table.updateModel(model);
     }
 
     public void addMenuOnRows(ArrayList<String> menuItems, ActionListener actionListener)
