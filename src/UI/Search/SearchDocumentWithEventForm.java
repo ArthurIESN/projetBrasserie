@@ -22,6 +22,7 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JPanel filterLabelPanel;
     private JLabel filterLabel;
     private int currentIndexFilter;
+    private List<JPanel> currentPanels = new ArrayList<>();
     private List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
@@ -34,7 +35,11 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JPanel currentPanelEvent;
     private JPanel currentPanelQuantities;
     private JPanel currentPanelYears;
+    private JPanel panelSearchButton;
 
+    private JButton searchButton;
+
+    // @todo : modifier le système de panel et searchByLabelPanel pour les filtres
     public SearchDocumentWithEventForm(){
 
         setLayout(new BorderLayout());
@@ -45,15 +50,16 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         filterLabel = new JLabel(String.join("", filters));
 
+        panelSearchButton = new JPanel();
+        searchButton = new JButton("Search");
+        searchButton.setVisible(false);
+
         filterLabelPanel = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.WHITE, 1);
         filterLabelPanel.setBorder(border);
         filterLabelPanel.add(filterLabel);
 
-
         GridBagLayoutHelper filterPanel = new GridBagLayoutHelper();
-
-
 
         try{
             items = AppController.getAllItems();
@@ -65,6 +71,12 @@ public class SearchDocumentWithEventForm extends JPanel {
         currentPanelQuantities = new JPanel(new BorderLayout());
         currentPanelYears = new JPanel(new BorderLayout());
 
+        currentPanels.add(currentPanelEvent);
+        currentPanels.add(currentPanelQuantities);
+        currentPanels.add(currentPanelYears);
+
+
+
         SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
         filterPanel.addField(title);
         filterPanel.addField(filterLabelPanel);
@@ -72,13 +84,19 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterPanel.addField(currentPanelEvent);
         filterPanel.addField(currentPanelQuantities);
         filterPanel.addField(currentPanelYears);
+        filterPanel.addField(searchButton);
+
+        System.out.println(currentPanels.size());
 
         itemSearch.onSelectedItemChange(itemChanged->{
             Item itemSelected = itemSearch.getSelectedItem();
             if(itemSelected != null){
-                idItemSelected = itemSelected.getId();
                 currentIndexFilter = 0;
+                idItemSelected = itemSelected.getId();
                 filters(itemSelected.getLabel());
+
+                clearPanelFilter();
+
                 try {
                     events = SearchController.getEventsWithSpecificItem(idItemSelected);
                     if(!events.isEmpty()){
@@ -91,8 +109,9 @@ public class SearchDocumentWithEventForm extends JPanel {
                         eventSearch.onSelectedItemChange(eventChanged ->{
                             Event eventSelected = eventSearch.getSelectedItem();
                             if(eventSelected != null){
-                                idEventSelected = eventSelected.getId();
                                 currentIndexFilter = 1;
+                                idEventSelected = eventSelected.getId();
+                                clearPanelFilter();
                                 filters(eventSelected.getLabel());
                                 try {
                                     quantities = SearchController.getQuantityItemWithSpecificEvent(eventSelected.getId());
@@ -103,9 +122,10 @@ public class SearchDocumentWithEventForm extends JPanel {
                                     currentPanelQuantities.repaint();
                                     quantitySearch.onSelectedItemChange(quantityChanged -> {
                                         quantitySelected = quantitySearch.getSelectedItem();
-                                        currentIndexFilter = 2;
-                                        filters(quantitySelected.toString());
                                         if(quantitySelected != null){
+                                            currentIndexFilter = 2;
+                                            filters(quantitySelected.toString());
+                                            clearPanelFilter();
                                             try{
                                                 years = SearchController.getDatesEvents(idEventSelected);
                                                 currentPanelYears.removeAll();
@@ -118,6 +138,9 @@ public class SearchDocumentWithEventForm extends JPanel {
                                                     yearSelected = yearSearch.getSelectedItem();
                                                     currentIndexFilter = 3;
                                                     filters(yearSelected.toString());
+                                                    if(yearSelected != null){
+                                                        searchButton.setVisible(true);
+                                                    }
                                                 });
                                             }catch (DatabaseConnectionFailedException e){
                                                 System.out.println(e.getMessage());
@@ -143,7 +166,12 @@ public class SearchDocumentWithEventForm extends JPanel {
 
     }
 
-    public void filters(String label) {
+    private void setFilterLabel(){
+        filterLabel.setText("<html><span style='font-family: Arial; font-size: 9px; font-weight: none; color: #136F63;'>"
+                + String.join(" ", filters) + "</span></html>");
+    }
+
+    private void filters(String label) {
         String formattedLabel = label + " / ";
 
         if (currentIndexFilter < filters.size()) {
@@ -151,7 +179,27 @@ public class SearchDocumentWithEventForm extends JPanel {
         } else {
             filters.add(currentIndexFilter, formattedLabel);
         }
-        filterLabel.setText("<html><span style='font-family: Arial; font-size: 9px; font-weight: none; color: #136F63;'>"
-                + String.join(" ", filters) + "</span></html>");
+
+        setFilterLabel();
+    }
+
+    private void clearPanelFilter(){
+       for (int i = currentIndexFilter; i < currentPanels.size(); i++) {
+            currentPanels.get(i).removeAll();
+            if(i == currentPanels.size() - 1){
+                yearSelected = null;
+            }
+        }
+
+       if (yearSelected == null) {
+            searchButton.setVisible(false);
+       }
+
+       for(int i = currentIndexFilter + 1; i < filters.size(); i++){
+           filters.remove(i);
+           i--;
+       }
+       setFilterLabel();
+
     }
 }
