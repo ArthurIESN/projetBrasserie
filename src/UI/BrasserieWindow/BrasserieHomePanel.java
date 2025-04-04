@@ -1,12 +1,23 @@
 package UI.BrasserieWindow;
 
+import Controller.AppController;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Process.GetAllProcessesException;
+import Model.ProcessStatus.ProcessStatus;
+import UI.Components.JEnhancedTableScrollPanel;
+import UI.Components.TableModelMaker;
+import UI.Test.ProcessEnhancedTableModel;
+import UI.Test.ProcessStatusEnhancedTableModel;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import Utils.Utils;
 
-public class BrasserieHomePanel extends JPanel
-{
-    public BrasserieHomePanel()
-    {
+import Model.Process.Process;
+
+public class BrasserieHomePanel extends JPanel {
+    public BrasserieHomePanel() {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Add padding around the panel
 
@@ -27,6 +38,28 @@ public class BrasserieHomePanel extends JPanel
         welcomeMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(welcomeMessage);
 
+        // get all processes
+
+        ArrayList<Process> processes = new ArrayList<>();
+
+        try {
+             processes = AppController.getAllProcesses();
+        } catch (DatabaseConnectionFailedException | GetAllProcessesException e) {
+            throw new RuntimeException(e);
+        }
+
+        TableModelMaker tableModelMaker = new TableModelMaker();
+        ProcessEnhancedTableModel processEnhancedTableModel = new ProcessEnhancedTableModel(processes);
+        ArrayList<ProcessStatus> processStatuses = Utils.transformData(processes, Process::getProcessStatus);
+        ProcessStatusEnhancedTableModel processStatusEnhancedTableModel = new ProcessStatusEnhancedTableModel(processStatuses);
+        tableModelMaker.addTableModel(processEnhancedTableModel);
+        tableModelMaker.addTableModel(processStatusEnhancedTableModel);
+
+        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, centerPanel);
+        tableModelMaker.setTable(tableScrollPanel);
+        centerPanel.add(tableScrollPanel);
+
         add(centerPanel, BorderLayout.CENTER);
     }
 }
+

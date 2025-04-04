@@ -1,0 +1,18 @@
+package Utils;
+
+import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+
+import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Utils
+{
+    public static <D, T> ArrayList<T> transformData(ArrayList<D> data, Function<D, T> mapper) {
+        return data.stream()
+                .map(mapper)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+}

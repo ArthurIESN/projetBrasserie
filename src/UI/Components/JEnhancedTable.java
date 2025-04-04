@@ -25,12 +25,16 @@ public class JEnhancedTable extends JTable
         setAutoCreateRowSorter(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
+        // disable columns swapping
+        getTableHeader().setReorderingAllowed(false);
+
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event)
             {
                 Window window = SwingUtilities.getWindowAncestor(JEnhancedTable.this);
-                if (window != null) {
+                if (window != null)
+                {
                     window.addComponentListener(new ComponentAdapter()
                     {
                         @Override
@@ -40,6 +44,8 @@ public class JEnhancedTable extends JTable
                         }
                     });
                 }
+
+                updateModel(model);
             }
 
             @Override
@@ -54,7 +60,13 @@ public class JEnhancedTable extends JTable
         setDefaultRenderer(Number.class, new AlternateColumnRenderer());
         setDefaultRenderer(Boolean.class, new AlternateColumnRenderer());
         setDefaultRenderer(Date.class, new AlternateColumnRenderer());
+    }
 
+    public void updateModel(TableModel model)
+    {
+        setModel(model);
+        updateColumnSize();
+        revalidate();
     }
 
     public void updateColumnSize()
@@ -66,13 +78,18 @@ public class JEnhancedTable extends JTable
 
         int[] columnWidths = new int[columnModel.getColumnCount()];
 
-        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+        // Calculate the width of each column base on header width and cell content width
+        // Column size is based on max width of header and cell content
+        for (int i = 0; i < columnModel.getColumnCount(); i++)
+        {
             TableColumn column = columnModel.getColumn(i);
             String columnName = getColumnName(i);
             int columnNameWidth = metrics.stringWidth(columnName) + 40;
 
+            // Calculate the maximum width of the cells in this column
             int maxCellWidth = 0;
-            for (int row = 0; row < getRowCount(); row++) {
+            for (int row = 0; row < getRowCount(); row++)
+            {
                 Object cellValue = getValueAt(row, i);
                 int cellWidth = metrics.stringWidth(cellValue != null ? cellValue.toString() : "") + 20;
                 maxCellWidth = Math.max(maxCellWidth, cellWidth);
@@ -83,15 +100,19 @@ public class JEnhancedTable extends JTable
             totalColumnWidth += columnWidth;
         }
 
-        if (tableWidth > totalColumnWidth) {
+        if (tableWidth > totalColumnWidth)
+        {
             int extraSpace = tableWidth - totalColumnWidth;
             int extraPerColumn = extraSpace / columnModel.getColumnCount();
 
-            for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            // Distribute extra space evenly among all columns
+            for (int i = 0; i < columnModel.getColumnCount(); i++)
+            {
                 columnWidths[i] += extraPerColumn;
             }
         }
 
+        // Set the size of each column
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
             TableColumn column = columnModel.getColumn(i);
             column.setPreferredWidth(columnWidths[i]);
