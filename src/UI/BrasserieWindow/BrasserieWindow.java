@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import UI.Components.MenuBarBrasserie;
+import UI.Test.Test;
 
 public class BrasserieWindow extends JFrame
 {
@@ -24,6 +25,8 @@ public class BrasserieWindow extends JFrame
 
         menuBarBrasserie = new MenuBarBrasserie(this);
         setJMenuBar(menuBarBrasserie.getMenuBar());
+
+        updateWindowContent(new Test());
 
         setVisible(true);
     }
