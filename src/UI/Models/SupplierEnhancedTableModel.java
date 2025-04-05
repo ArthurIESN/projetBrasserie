@@ -3,11 +3,18 @@ package UI.Models;
 import Model.Supplier.Supplier;
 import UI.Components.AbstractEnhancedTableModel;
 
+import java.util.ArrayList;
+
 public class SupplierEnhancedTableModel extends AbstractEnhancedTableModel<Supplier>
 {
-    public SupplierEnhancedTableModel(java.util.ArrayList<Supplier> data)
+    public SupplierEnhancedTableModel(ArrayList<Supplier> data)
     {
         super("Supplier", new String[]{"ID", "Name"}, data);
+    }
+
+    public SupplierEnhancedTableModel()
+    {
+        this(new ArrayList<Supplier>());
     }
 
     @Override

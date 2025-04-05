@@ -14,6 +14,10 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
         super("Employee", new String[]{"ID", "Last Name", "First Name", "Birthdate"}, employees);
     }
 
+    public EmployeeEnhancedTableModel()
+    {
+        this(new ArrayList<Employee>());
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)

@@ -14,6 +14,11 @@ public class ProcessStatusEnhancedTableModel extends AbstractEnhancedTableModel<
         super("Process Status", new String[]{"ID", "Label"}, data);
     }
 
+    public ProcessStatusEnhancedTableModel()
+    {
+        this(new ArrayList<ProcessStatus>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {

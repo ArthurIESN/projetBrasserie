@@ -2,41 +2,76 @@ package UI.Components;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class TableModelMaker extends AbstractTableModel {
     private final ArrayList<AbstractEnhancedTableModel<?>> tableModels = new ArrayList<>();
     private JEnhancedTableScrollPanel table;
-    private int currentColumnIndex = 0;
 
     public TableModelMaker()
     {
 
     }
 
-    public void setTable(JEnhancedTableScrollPanel table) {
+    public void setTable(JEnhancedTableScrollPanel table)
+    {
         this.table = table;
-        addEventOnAllFirstColumnsOfEachTableModel();
+        addMouseClickedListener();
     }
 
     public void addTableModel(AbstractEnhancedTableModel<?> tableModel) {
         tableModels.add(tableModel);
     }
 
-    public void addEventOnAllFirstColumnsOfEachTableModel() {
+
+    private void updateHeadingColor() {
         JTable jTable = table.getTable();
 
-        // Supprime les anciens listeners
+        int currentColumnIndex = 0;
+
+        for (int i = 0; i < tableModels.size(); i++) {
+            AbstractEnhancedTableModel<?> model = tableModels.get(i);
+            int columnIndex = (i == 0) ? 0 : currentColumnIndex;
+
+            if (columnIndex < jTable.getColumnModel().getColumnCount()) {
+                TableColumn column = jTable.getColumnModel().getColumn(columnIndex);
+                column.setHeaderRenderer(new DefaultTableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        Component header = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                        header.setBackground(new Color(0x888888));
+                        header.setForeground(Color.WHITE);
+                        return header;
+                    }
+                });
+            }
+
+            currentColumnIndex += model.isOpen() || i == 0 ? model.getColumnNames().length : 1;
+        }
+    }
+
+    public void addMouseClickedListener()
+    {
+        JTable jTable = table.getTable();
+
+        updateHeadingColor();
+
+        // Delete all mouse listeners on the table header
+        // This is to avoid multiple listeners being added when the table is updated
         for (MouseListener ml : jTable.getTableHeader().getMouseListeners()) {
             jTable.getTableHeader().removeMouseListener(ml);
         }
 
+        // Open/close the table model when clicking on the right column
         jTable.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e)
+            {
                 int clickedColumn = jTable.columnAtPoint(e.getPoint());
-                System.out.println("Clicked column: " + clickedColumn);
 
                 int currentColumnIndex = 0;
 
@@ -50,13 +85,13 @@ public class TableModelMaker extends AbstractTableModel {
                         modelColumnCount = model.isOpen() ? model.getColumnNames().length : 1;
                     }
 
-                    if (clickedColumn == currentColumnIndex && i != 0)
-                    {
+                    if (clickedColumn == currentColumnIndex && i != 0) {
 
                         model.setOpen(!model.isOpen());
 
                         fireTableStructureChanged();
                         table.updateModel(TableModelMaker.this);
+                        updateHeadingColor();
                         return;
                     }
 
@@ -65,8 +100,6 @@ public class TableModelMaker extends AbstractTableModel {
             }
         });
     }
-
-
 
 
     @Override
@@ -113,21 +146,17 @@ public class TableModelMaker extends AbstractTableModel {
 
         int currentColumnIndex = tableModels.getFirst().getColumnNames().length;
 
-        for (int i = 1; i < tableModels.size(); i++)
-        {
+        for (int i = 1; i < tableModels.size(); i++) {
             AbstractEnhancedTableModel<?> tableModel = tableModels.get(i); // process status
 
             if (tableModel.isOpen()) {
-                if (columnIndex - currentColumnIndex < tableModel.getColumnNames().length)
-                {
+                if (columnIndex - currentColumnIndex < tableModel.getColumnNames().length) {
                     // Return the column name of the current table model and adding the class name at the beginning
                     return tableModel.getClassName() + " " + tableModel.getColumnNames()[columnIndex - currentColumnIndex];
-                } else
-                {
+                } else {
                     currentColumnIndex += tableModel.getColumnNames().length;
                 }
-            } else
-            {
+            } else {
                 if (columnIndex == currentColumnIndex) {
                     return tableModel.getClassName() + " " + tableModel.getColumnNames()[0];
                 }

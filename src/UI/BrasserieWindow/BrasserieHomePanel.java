@@ -42,39 +42,6 @@ public class BrasserieHomePanel extends JPanel {
         welcomeMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(welcomeMessage);
 
-        // get all processes
-
-        ArrayList<Process> processes = new ArrayList<>();
-
-        try {
-             processes = AppController.getAllProcesses();
-        } catch (DatabaseConnectionFailedException | GetAllProcessesException e) {
-            throw new RuntimeException(e);
-        }
-
-        TableModelMaker tableModelMaker = new TableModelMaker();
-
-        ProcessEnhancedTableModel processEnhancedTableModel = new ProcessEnhancedTableModel(processes);
-
-        ArrayList<ProcessStatus> processStatuses = Utils.transformData(processes, Process::getProcessStatus);
-        ProcessStatusEnhancedTableModel processStatusEnhancedTableModel = new ProcessStatusEnhancedTableModel(processStatuses);
-
-        ArrayList<ProcessType> processTypes = Utils.transformData(processes, Process::getType);
-        ProcessTypeEnhancedTableModel processTypeEnhancedTableModel = new ProcessTypeEnhancedTableModel(processTypes);
-
-        ArrayList<Customer> customers = Utils.transformData(processes, Process::getCustomer);
-        CustomerEnhancedTableModel customerEnhancedTableModel = new CustomerEnhancedTableModel(customers);
-
-
-        tableModelMaker.addTableModel(processEnhancedTableModel);
-        tableModelMaker.addTableModel(processStatusEnhancedTableModel);
-        tableModelMaker.addTableModel(processTypeEnhancedTableModel);
-        tableModelMaker.addTableModel(customerEnhancedTableModel);
-
-        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, centerPanel);
-        tableModelMaker.setTable(tableScrollPanel);
-        centerPanel.add(tableScrollPanel);
-
         add(centerPanel, BorderLayout.CENTER);
     }
 }

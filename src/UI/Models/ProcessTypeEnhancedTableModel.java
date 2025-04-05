@@ -13,6 +13,11 @@ public class ProcessTypeEnhancedTableModel extends AbstractEnhancedTableModel<Pr
         super("Process Type", new String[]{"ID", "Label"}, processType);
     }
 
+    public ProcessTypeEnhancedTableModel()
+    {
+        this(new ArrayList<ProcessType>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {

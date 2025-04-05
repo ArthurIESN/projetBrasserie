@@ -15,4 +15,12 @@ public class Utils
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public static <D, T> ArrayList<T> transformData(D data, Function<D, T> mapper) {
+        ArrayList<T> result = new ArrayList<>();
+        if (data != null) {
+            result.add(mapper.apply(data));
+        }
+        return result;
+    }
+
 }

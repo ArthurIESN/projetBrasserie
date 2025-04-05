@@ -12,6 +12,11 @@ public class CustomerStatusEnhancedTableModel extends AbstractEnhancedTableModel
         super("Customer Status", new String[]{"ID", "Label"}, data);
     }
 
+    public CustomerStatusEnhancedTableModel()
+    {
+        this(new ArrayList<CustomerStatus>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {

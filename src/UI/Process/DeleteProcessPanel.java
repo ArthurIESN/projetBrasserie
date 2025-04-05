@@ -4,10 +4,20 @@ import Controller.AppController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
+import Model.Customer.Customer;
+import Model.CustomerStatus.CustomerStatus;
+import Model.Employee.Employee;
+import Model.EmployeeStatus.EmployeeStatus;
 import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+import Model.ProcessType.ProcessType;
+import Model.Supplier.Supplier;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.JEnhancedTableScrollPanel;
 import UI.Components.SearchByLabelPanel;
+import UI.Components.TableModelMaker;
+import UI.Models.*;
+import Utils.Utils;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
@@ -73,13 +83,56 @@ public class DeleteProcessPanel extends JPanel
 
         add(gridDeleteProcess, BorderLayout.CENTER);
 
-        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(new ProcessTableModel(), this, 4);
+        TableModelMaker tableModelMaker = new TableModelMaker();
+        ProcessEnhancedTableModel processTableModel = new ProcessEnhancedTableModel();
+        SupplierEnhancedTableModel supplierTableModel = new SupplierEnhancedTableModel();
+        ProcessTypeEnhancedTableModel processTypeTableModel = new ProcessTypeEnhancedTableModel();
+        ProcessStatusEnhancedTableModel processStatusTableModel = new ProcessStatusEnhancedTableModel();
+        EmployeeEnhancedTableModel employeeTableModel = new EmployeeEnhancedTableModel();
+        EmployeeStatusEnhancedTableModel employeeStatusTableModel = new EmployeeStatusEnhancedTableModel();
+        CustomerEnhancedTableModel customerTableModel = new CustomerEnhancedTableModel();
+        CustomerStatusEnhancedTableModel customerStatusTableModel = new CustomerStatusEnhancedTableModel();
+
+        tableModelMaker.addTableModel(processTableModel);
+        tableModelMaker.addTableModel(supplierTableModel);
+        tableModelMaker.addTableModel(processTypeTableModel);
+        tableModelMaker.addTableModel(processStatusTableModel);
+        tableModelMaker.addTableModel(employeeTableModel);
+        tableModelMaker.addTableModel(employeeStatusTableModel);
+        tableModelMaker.addTableModel(customerTableModel);
+        tableModelMaker.addTableModel(customerStatusTableModel);
+
+        JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, this, 4);
+        tableModelMaker.setTable(tableScrollPanel);
+
         processSearch.onSelectedItemChange(e ->
         {
             Process selectedProcess = processSearch.getSelectedItem();
+
+            ArrayList<Process> processes1 = new ArrayList<>();
+            processes1.add(selectedProcess);
+            ArrayList<Supplier> suppliers = Utils.transformData(selectedProcess, Process::getSupplier);
+            ArrayList<ProcessType> processTypes = Utils.transformData(selectedProcess, Process::getType);
+            ArrayList<ProcessStatus> processStatuses = Utils.transformData(selectedProcess, Process::getProcessStatus);
+            ArrayList<Employee> employees = Utils.transformData(selectedProcess, Process::getEmployee);
+            ArrayList<EmployeeStatus> employeeStatuses = Utils.transformData(employees, Employee::getEmployeeStatus);
+            ArrayList<Customer> customers = Utils.transformData(selectedProcess, Process::getCustomer);
+            ArrayList<CustomerStatus> customerStatuses = Utils.transformData(customers, Customer::getCustomerStatus);
+
+            processTableModel.setData(processes1);
+            supplierTableModel.setData(suppliers);
+            processTypeTableModel.setData(processTypes);
+            processStatusTableModel.setData(processStatuses);
+            employeeTableModel.setData(employees);
+            employeeStatusTableModel.setData(employeeStatuses);
+            customerTableModel.setData(customers);
+            customerStatusTableModel.setData(customerStatuses);
+
+            tableModelMaker.setTable(tableScrollPanel);
+
             if (selectedProcess != null)
             {
-                tableScrollPanel.updateModel(new ProcessTableModel(selectedProcess));
+                tableScrollPanel.updateModel(tableModelMaker);
             }
         });
         add(tableScrollPanel);
