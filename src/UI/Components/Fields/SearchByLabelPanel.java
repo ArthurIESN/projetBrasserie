@@ -145,11 +145,26 @@ public class SearchByLabelPanel<T> extends JPanel
         return filteredData.get(resultList.getSelectedIndex());
     }
 
+    public void setData(List<T> data)
+    {
+        this.data = data;
+        setSelectedItem(null);
+        updateList();
+    }
+
     public void setSelectedItem(T item)
     {
-        searchField.updateText(toStringFunction.apply(item));
-        updateList();
-
-        resultList.setSelectedIndex(filteredData.indexOf(item));
+        if(item == null)
+        {
+            searchField.updateText("");
+            updateList();
+            resultList.clearSelection();
+        }
+        else if (!filteredData.contains(item))
+        {
+            searchField.updateText(toStringFunction.apply(item));
+            updateList();
+            resultList.setSelectedIndex(filteredData.indexOf(item));
+        }
     }
 }

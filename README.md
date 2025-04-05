@@ -34,3 +34,30 @@ Must be placed in the `lib` folder and renamed to `flatlaf.jar`
   `JEnhancedTableScrollPanel` - A scrollable panel that contains a `JEnhancedTable`. Provides methods to update the table model and add context menus to the table rows.
 - `JDualSliderPanel` - A custom dual slider that can handle min and max values. The component can handle min and max values.
 - `GridBagLayoutHelper` - A helper class that simplifies the use of `GridBagLayout`.
+
+
+# Content
+## Searches
+### Search Item
+Search an `item` in the database. The search is done by the `VAT code` of the `item`, the min/max `current quantity` and the min/max `price`.
+
+### Search Document
+
+### Search Payment
+
+## CRUD
+
+### Process
+- `Create` a new process
+- `Read` all processes
+- `Update` an existing process
+- `Delete` a process
+
+### Document
+- `Create` a new document
+- `Read` all documents
+- `Update` an existing document
+- `Delete` a document
+
+## !!TACHE_METIER
+

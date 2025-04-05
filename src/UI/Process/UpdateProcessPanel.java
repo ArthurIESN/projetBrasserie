@@ -40,16 +40,22 @@ public class UpdateProcessPanel extends JPanel
         processModelPanel.getProcessNumberField().updateText(String.valueOf(selectedProcess.getNumber()));
         processModelPanel.getProcessStatusSearch().setSelectedItem(selectedProcess.getProcessStatus());
         processModelPanel.getTypeSearch().setSelectedItem(selectedProcess.getType());
-
         processModelPanel.getDateField().setDate(selectedProcess.getCreationDate());
+
         if(selectedProcess.getCustomer() != null)
             processModelPanel.getCustomerSearch().setSelectedItem(selectedProcess.getCustomer());
+        else
+            processModelPanel.getCustomerSearch().setSelectedItem(null);
 
 
         if(selectedProcess.getSupplier() != null)
             processModelPanel.getSupplierSearch().setSelectedItem(selectedProcess.getSupplier());
+        else
+            processModelPanel.getSupplierSearch().setSelectedItem(null);
 
         if(selectedProcess.getEmployee() != null)
             processModelPanel.getEmployeeSearch().setSelectedItem(selectedProcess.getEmployee());
+        else
+            processModelPanel.getEmployeeSearch().setSelectedItem(null);
     }
 }

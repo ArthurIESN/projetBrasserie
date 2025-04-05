@@ -104,7 +104,7 @@ public class ProcessModelPanel extends JPanel
         dateField.setMinDate(new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime());
 
 
-        customerSearch = new SearchByLabelPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName());
+        customerSearch = new SearchByLabelPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
         customerSearch.getSearchField().setPlaceholder("Search for a customer");
 
         supplierSearch = new SearchByLabelPanel<>(suppliers, Supplier::getName);
@@ -113,7 +113,7 @@ public class ProcessModelPanel extends JPanel
         processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
         processStatusSearch.getSearchField().setPlaceholder("Search for a process status");
 
-        employeeSearch = new SearchByLabelPanel<>(employees, employee -> employee.getFirstName() + " " + employee.getLastName());
+        employeeSearch = new SearchByLabelPanel<>(employees, employee -> employee != null ? employee.getFirstName() + " " + employee.getLastName() : "");
         employeeSearch.getSearchField().setPlaceholder("Search for an employee");
 
         typeSearch = new SearchByLabelPanel<>(types, ProcessType::getLabel);
