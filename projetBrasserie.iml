@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mysql-connector.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/flatlaf.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/flatlaf.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/mysql-connector.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

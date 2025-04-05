@@ -10,6 +10,7 @@ import Exceptions.Search.SearchPaymentException;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
+import UI.Components.JEnhancedTableScrollPanel;
 
 public class SearchPaymentForm extends JPanel
 {
@@ -21,8 +22,7 @@ public class SearchPaymentForm extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        JPanel searchForm = new JPanel(new GridBagLayout());
-        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper(searchForm);
+        GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // Payment Validated Checkbox
         JCheckBox validatedPaymentCheckBox = new JCheckBox("Validated Payment");
@@ -37,15 +37,15 @@ public class SearchPaymentForm extends JPanel
         JComboBox<String> yearComboBox = new JComboBox<>(getYears());
         gridSearchForm.addField("Year", yearComboBox);
 
-        add(searchForm, BorderLayout.CENTER);
+        add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
         JButton searchButton = new JButton("Search");
         gridSearchForm.addField("Search", searchButton);
 
         // Empty table
-        JTable table = new JTable();
-        table.setModel(new PaymentTableModel(new ArrayList<>()));
+        JEnhancedTableScrollPanel table = new JEnhancedTableScrollPanel(new PaymentTableModel() ,this );
+
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> {
@@ -62,7 +62,7 @@ public class SearchPaymentForm extends JPanel
         return years;
     }
 
-    private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JTable table)
+    private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JEnhancedTableScrollPanel table)
     {
         boolean isValidated = validatedPaymentCheckBox.isSelected();
         Number minAmountValue =  (Number) amountField.getValue();
@@ -83,8 +83,7 @@ public class SearchPaymentForm extends JPanel
 
         try {
             ArrayList<Payment> payments = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
-            table.setModel(new PaymentTableModel(payments));
-            revalidate();
+            table.updateModel(new PaymentTableModel(payments));
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

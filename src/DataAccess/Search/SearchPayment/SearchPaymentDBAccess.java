@@ -4,29 +4,30 @@ import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
+import Model.Customer.Customer;
+import Model.Customer.MakeCustomer;
 import Model.Document;
+import Model.Payment.MakePayment;
 import Model.Payment.Payment;
+import Model.PaymentStatus.MakePaymentStatus;
 import Model.PaymentStatus.PaymentStatus;
+import Model.Process.Process;
+import Model.Process.MakeProcess;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
-
-    private final Map<Integer, PaymentStatus> paymentStatusCache = new HashMap<>();
-
     public SearchPaymentDBAccess() {
     }
 
     public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
-        String query =  "SELECT payment.*, " +
-                "customer.num_customer, customer.last_name, customer.first_name, " +
-                "payment_status.label AS payment_status_label, " +
-                "document.label AS document_label, " +
-                "process.label AS process_label " +
+        String query =  "SELECT payment.*, payment_status.label AS payment_status_label, " +
+                "document.id AS document_id, document.label AS document_label, document.date AS document_date, " +
+                "process.id AS process_id, process.label AS process_label, process.id_process_type AS process_type, " +
+                "customer.num_customer, customer.last_name AS customer_name, customer.first_name AS customer_first_name, " +
+                "customer.credit_limit AS customer_credit_limit, customer.num_VAT AS customer_VAT " +
                 "FROM payment " +
                 "JOIN document ON payment.id_document = document.id " +
                 "JOIN process ON document.id_process = process.id " +
@@ -45,36 +46,39 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
             statement.setInt(3, year.toLocalDate().getYear());
 
             ResultSet resultSet = statement.executeQuery();
-            ArrayList<Payment> payments = new ArrayList<>();
 
+ArrayList<Payment> payments = new ArrayList<>();
             while (resultSet.next()) {
-                PaymentStatus paymentStatus;
+                PaymentStatus paymentStatus = MakePaymentStatus.getPaymentStatus(
+                        resultSet.getInt("id_payment_status"),
+                        resultSet.getString("payment_status_label"));
 
-                if (paymentStatusCache.containsKey(statement.getResultSet().getInt("id_payment_status"))) {
-                    paymentStatus = paymentStatusCache.get(statement.getResultSet().getInt("id_payment_status"));
-                } else {
-                    paymentStatus = new PaymentStatus(
-                            resultSet.getInt("id_payment_status"),
-                            resultSet.getString("payment_status_label")
-                    );
-                    paymentStatusCache.put(statement.getResultSet().getInt("id_payment_status"), paymentStatus);
-                }
+                Process process = MakeProcess.getProcess(
+                        resultSet.getInt("process_id"),
+                        resultSet.getString("process_label"),
+                        0,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null);
 
-                if (paymentStatusCache.containsKey(statement.getResultSet().getInt("id_payment_status"))) {
-                    paymentStatus = paymentStatusCache.get(statement.getResultSet().getInt("id_payment_status"));
-                } else {
-                    paymentStatus = new PaymentStatus(
-                            resultSet.getInt("id_payment_status"),
-                            resultSet.getString("payment_status_label")
-                    );
-                    paymentStatusCache.put(statement.getResultSet().getInt("id_payment_status"), paymentStatus);
-                }
+                Customer customer = MakeCustomer.getCustomer(
+                        resultSet.getInt("num_customer"),
+                        resultSet.getString("customer_name"),
+                        resultSet.getString("customer_first_name"),
+                        resultSet.getInt("customer_credit_limit"),
+                        resultSet.getString("customer_VAT"),
+                        null);
 
-                Payment payment = new Payment(
+                Payment payment = MakePayment.getPayment(
                         resultSet.getInt("id"),
                         resultSet.getDouble("amount"),
                         resultSet.getDate("payment_date"),
-                        paymentStatus
+                        paymentStatus,
+                        process,
+                        customer
                 );
                 payments.add(payment);
             }
