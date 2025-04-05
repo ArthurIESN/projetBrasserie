@@ -26,12 +26,6 @@ public class BrasserieWindow extends JFrame
         menuBarBrasserie = new MenuBarBrasserie(this);
         setJMenuBar(menuBarBrasserie.getMenuBar());
 
-        JNumberField numberField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
-        numberField.setMinMax(-20, 100);
-        numberField.setAllowNegative(false);
-        numberField.setPlaceholder("Enter a number");
-        add(numberField, BorderLayout.SOUTH);
-
         setVisible(true);
     }
 

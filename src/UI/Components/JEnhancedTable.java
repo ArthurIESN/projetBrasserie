@@ -7,10 +7,7 @@ import java.awt.event.ComponentEvent;
 import java.util.Date;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 
 public class JEnhancedTable extends JTable
 {
@@ -62,6 +59,10 @@ public class JEnhancedTable extends JTable
         setDefaultRenderer(Number.class, new AlternateColumnRenderer());
         setDefaultRenderer(Boolean.class, new AlternateColumnRenderer());
         setDefaultRenderer(Date.class, new AlternateColumnRenderer());
+
+        // Use the default table header renderer
+        // Avoid getting the default header style with over and background color
+        getTableHeader().setUI(new javax.swing.plaf.basic.BasicTableHeaderUI());
     }
 
     public void updateModel(TableModel model)
@@ -122,10 +123,12 @@ public class JEnhancedTable extends JTable
         }
     }
 
-    private static class AlternateColumnRenderer extends DefaultTableCellRenderer {
+    private static class AlternateColumnRenderer extends DefaultTableCellRenderer
+    {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
             if (!isSelected)
             {
                 cell.setBackground(column % 2 == 0 ? backbroundRowColor : alternateBackgroundRowColor);
@@ -136,5 +139,7 @@ public class JEnhancedTable extends JTable
             }
             return cell;
         }
+
+        // Set no over on header
     }
 }

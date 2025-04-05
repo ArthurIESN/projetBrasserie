@@ -1,5 +1,8 @@
 # Brasserie
 
+## Java
+- Java 21 is required to run the application.
+
 ## Dependencies
 - [mysql-connector-j-9.2.0](https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j-9.2.0.tar.gz)
 Must be placed in the `lib` folder and renamed to `mysql-connector.jar`

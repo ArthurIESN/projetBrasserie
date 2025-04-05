@@ -13,6 +13,11 @@ public class CustomerEnhancedTableModel extends AbstractEnhancedTableModel<Custo
         super("Customer", new String[]{"ID", "Last Name", "First Name", "Credit Limit", "VAT Number"}, customers);
     }
 
+    public CustomerEnhancedTableModel()
+    {
+        this(new ArrayList<Customer>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
