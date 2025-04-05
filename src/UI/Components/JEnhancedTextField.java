@@ -18,6 +18,8 @@ public class JEnhancedTextField extends JTextField
         this.showingPlaceholder = true;
         setPreferredSize(new Dimension(300, 25));
 
+        setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+
         // Add focus listener to manage placeholder visibility
         this.addFocusListener(new FocusAdapter()
         {
@@ -30,12 +32,16 @@ public class JEnhancedTextField extends JTextField
                     setText("");
                     showingPlaceholder = false;
                 }
+
+                setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
             }
 
             @Override
             public void focusLost(FocusEvent e)
             {
                 setPlaceholderText();
+
+                setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             }
         });
     }

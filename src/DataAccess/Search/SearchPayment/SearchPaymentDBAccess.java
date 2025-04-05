@@ -4,15 +4,16 @@ import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
+
+import Model.Payment.Payment;
+import Model.Payment.MakePayment;
+import Model.PaymentStatus.PaymentStatus;
+import Model.PaymentStatus.MakePaymentStatus;
+import Model.Process.Process;
+import Model.Process.MakeProcess;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
 import Model.Document;
-import Model.Payment.MakePayment;
-import Model.Payment.Payment;
-import Model.PaymentStatus.MakePaymentStatus;
-import Model.PaymentStatus.PaymentStatus;
-import Model.Process.Process;
-import Model.Process.MakeProcess;
 
 import java.sql.*;
 import java.util.ArrayList;

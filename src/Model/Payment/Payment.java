@@ -1,21 +1,22 @@
 package Model.Payment;
-import Model.Customer.Customer;
-import Model.Document;
 import Model.PaymentStatus.PaymentStatus;
+import Model.Customer.Customer;
 import Model.Process.Process;
+import Model.Document.Document;
 
 import java.util.Date;
 
 public class Payment {
     private int id;
     private double amount;
-    private java.sql.Date paymentDate;
+    private Date paymentDate;
     private PaymentStatus paymentStatus;
     private Document document;
     private Model.Process.Process process;
     private Customer customer;
 
     // Constructeur
+
     public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Model.Process.Process process, Customer customer) {
         this.id = id;
         this.amount = amount;

@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -33,7 +36,29 @@ public class SearchByLabelPanel<T> extends JPanel
         // Create list model and result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
+
+
+        resultList.setCellRenderer(new CustomListCellRenderer());
         JScrollPane scrollPanel = new JScrollPane(resultList);
+        scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+
+        resultList.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                resultList.setSelectionBackground(new Color(80,80, 80));
+
+                scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                    scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+            }
+
+
+
+        });
+
 
         scrollPanel.setPreferredSize(new Dimension(300, 60));
 
@@ -60,13 +85,14 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    public void onSelectedItemChange(Runnable runnable)
+    public void onSelectedItemChange(ActionListener actionListener)
     {
-        resultList.addListSelectionListener(e ->
-        {
-            if (!e.getValueIsAdjusting())
-            {
-                runnable.run();
+        // set background color of selected item
+        resultList.setSelectionBackground(new Color(80,80, 80));
+
+        resultList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                actionListener.actionPerformed(null);
             }
         });
     }
@@ -85,6 +111,24 @@ public class SearchByLabelPanel<T> extends JPanel
                 listModel.addElement(toStringFunction.apply(item));
                 filteredData.add(item);
             }
+        }
+    }
+
+    private class CustomListCellRenderer extends DefaultListCellRenderer
+    {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (isSelected)
+            {
+                component.setBackground(new Color(80, 80, 80));
+            }
+            else
+            {
+                component.setBackground(new Color(0, 0, 0, 0));
+            }
+            return component;
         }
     }
 

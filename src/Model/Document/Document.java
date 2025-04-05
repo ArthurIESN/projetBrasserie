@@ -1,6 +1,8 @@
-package Model;
+package Model.Document;
 
+import Model.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
+import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
 
 import java.util.Date;
@@ -24,13 +26,14 @@ public class Document {
     private CollectionAgency collectionAgency;
     private DeliveryTruck deliveryTruck;
     private Process process;
+    private DocumentStatus documentStatus;
 
     // Commande client
     public Document(Integer id, String label, Date date, Date deadLine, float reduction, String validity,
                     Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, float depositAmount,
                     Date desiredDeliveryDate, float VatAmount, float totalInclusiveOfTaxe, float totalVat,
                     float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
-                    Process process)
+                    Process process,DocumentStatus documentStatus)
     {
         this.id = id;
         this.label = label;
@@ -50,6 +53,7 @@ public class Document {
         this.collectionAgency = collectionAgency;
         this.deliveryTruck = deliveryTruck;
         this.process = process;
+        this.documentStatus = documentStatus;
     }
 
     // Commande fournisseur
@@ -127,29 +131,9 @@ public class Document {
         return process;
     }
 
-    // Faire le toString
     @Override
     public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", label='" + label + '\'' +
-                ", date=" + date +
-                ", deadLine=" + deadLine +
-                ", reduction=" + reduction +
-                ", validity='" + validity + '\'' +
-                ", isDelivered=" + isDelivered +
-                ", deliveryDate=" + deliveryDate +
-                ", depositIsPaid=" + depositIsPaid +
-                ", depositAmount=" + depositAmount +
-                ", desiredDeliveryDate=" + desiredDeliveryDate +
-                ", VatAmount=" + VatAmount +
-                ", totalInclusiveOfTaxe=" + totalInclusiveOfTaxe +
-                ", totalVat=" + totalVat +
-                ", totalExclVat=" + totalExclVat +
-                ", collectionAgency=" + collectionAgency +
-                ", deliveryTruck=" + deliveryTruck +
-                ", process=" + process +
-                '}';
+        return id + " - " + label + " - " + date + " - " + deadLine + " - " + reduction + " - " + validity + " - " + isDelivered + " - " + deliveryDate + " - " + depositIsPaid + " - " + depositAmount + " - " + desiredDeliveryDate + " - " + VatAmount + " - " + totalInclusiveOfTaxe + " - " + totalVat + " - " + totalExclVat + " - " + collectionAgency + " - " + deliveryTruck + " - " + process + " - " + documentStatus;
     }
 
 
