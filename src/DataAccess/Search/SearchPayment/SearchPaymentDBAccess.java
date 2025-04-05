@@ -13,7 +13,7 @@ import Model.Process.Process;
 import Model.Process.MakeProcess;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
-import Model.Document;
+import Model.Document.Document;
 
 import java.sql.*;
 import java.util.ArrayList;

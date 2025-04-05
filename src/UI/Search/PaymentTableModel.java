@@ -40,7 +40,7 @@ public class PaymentTableModel extends AbstractTableModel {
             case 2:
                 return payment.getPaymentDate();
             case 3:
-                return payment.getPaymentStatus().getlabel();
+                return payment.getPaymentStatus().getLabel();
             case 4:
                 return payment.getDocument() != null ? payment.getDocument().getId() : null;
             case 5:
