@@ -1,6 +1,7 @@
 package Model.Payment;
-import Model.Customer.Customer;
 import Model.PaymentStatus.PaymentStatus;
+import Model.Customer.Customer;
+import Model.Process.Process;
 import Model.Document.Document;
 
 import java.util.Date;
@@ -11,15 +12,19 @@ public class Payment {
     private Date paymentDate;
     private PaymentStatus paymentStatus;
     private Document document;
-    private Process process;
+    private Model.Process.Process process;
     private Customer customer;
 
     // Constructeur
-    public Payment(int id, double amount, Date paymentDate, PaymentStatus paymentStatus) {
+
+    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Model.Process.Process process, Customer customer) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentStatus = paymentStatus;
+        this.document = null;
+        this.process = process;
+        this.customer = customer;
     }
 
     // Getters et setters pour chaque champ
@@ -64,7 +69,7 @@ public class Payment {
         return process;
     }
 
-    public void setProcess(Process process) {
+    public void setProcess(Model.Process.Process process) {
         this.process = process;
     }
 

@@ -10,6 +10,7 @@ import Exceptions.Search.SearchPaymentException;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
+import UI.Components.JEnhancedTableScrollPanel;
 
 public class SearchPaymentForm extends JPanel
 {
@@ -43,8 +44,8 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Search", searchButton);
 
         // Empty table
-        JTable table = new JTable();
-        table.setModel(new PaymentTableModel(new ArrayList<>()));
+        JEnhancedTableScrollPanel table = new JEnhancedTableScrollPanel(new PaymentTableModel() ,this );
+
         add(new JScrollPane(table), BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> {
@@ -61,7 +62,7 @@ public class SearchPaymentForm extends JPanel
         return years;
     }
 
-    private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JTable table)
+    private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JEnhancedTableScrollPanel table)
     {
         boolean isValidated = validatedPaymentCheckBox.isSelected();
         Number minAmountValue =  (Number) amountField.getValue();
@@ -82,8 +83,7 @@ public class SearchPaymentForm extends JPanel
 
         try {
             ArrayList<Payment> payments = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
-            table.setModel(new PaymentTableModel(payments));
-            revalidate();
+            table.updateModel(new PaymentTableModel(payments));
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
