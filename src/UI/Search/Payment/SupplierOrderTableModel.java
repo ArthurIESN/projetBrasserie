@@ -1,4 +1,4 @@
-package UI.Search;
+package UI.Search.Payment;
 
 public class SupplierOrderTableModel {
 

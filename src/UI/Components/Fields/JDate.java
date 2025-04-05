@@ -1,7 +1,5 @@
-package UI.Components;
+package UI.Components.Fields;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
 import java.awt.event.FocusEvent;

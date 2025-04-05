@@ -1,4 +1,4 @@
-package UI.Search;
+package UI.Search.Document;
 
 import Controller.AppController;
 import Controller.SearchController;
@@ -8,8 +8,7 @@ import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.SearchByLabelPanel;
-import UI.Components.ComboBoxGen;
+import UI.Components.Fields.SearchByLabelPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;

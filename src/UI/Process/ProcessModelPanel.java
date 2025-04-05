@@ -17,9 +17,9 @@ import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.JDate;
-import UI.Components.JEnhancedTextField;
-import UI.Components.SearchByLabelPanel;
+import UI.Components.Fields.JDate;
+import UI.Components.Fields.JEnhancedTextField;
+import UI.Components.Fields.SearchByLabelPanel;
 
 import javax.swing.*;
 import java.awt.*;

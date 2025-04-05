@@ -1,7 +1,7 @@
 package UI.Models;
 
 import Model.PaymentStatus.PaymentStatus;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import java.util.ArrayList;
 

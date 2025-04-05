@@ -3,12 +3,7 @@ package UI.Process;
 import Controller.AppController;
 
 import javax.swing.*;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -22,8 +17,8 @@ import Model.ProcessStatus.ProcessStatus;
 import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 
-import UI.Components.JEnhancedTableScrollPanel;
-import UI.Components.TableModelMaker;
+import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Models.*;
 
 

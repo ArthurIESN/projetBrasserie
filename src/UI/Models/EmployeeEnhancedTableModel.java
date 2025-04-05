@@ -1,6 +1,6 @@
 package UI.Models;
 
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import Model.Employee.Employee;
 

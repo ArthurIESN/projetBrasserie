@@ -1,11 +1,9 @@
 package UI.Models;
 
-import Model.Process.Process;
 import Model.ProcessStatus.ProcessStatus;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class ProcessStatusEnhancedTableModel extends AbstractEnhancedTableModel<ProcessStatus>
 {

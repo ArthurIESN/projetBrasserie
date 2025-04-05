@@ -1,12 +1,8 @@
-package UI.Components;
-
-import UI.Components.JEnhancedTable;
+package UI.Components.EnhancedTable;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 

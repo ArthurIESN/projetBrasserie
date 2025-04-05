@@ -1,8 +1,7 @@
-package UI.Search;
+package UI.Search.Payment;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Date;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -10,7 +9,7 @@ import Exceptions.Search.SearchPaymentException;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
-import UI.Components.JEnhancedTableScrollPanel;
+import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
 
 public class SearchPaymentForm extends JPanel
 {

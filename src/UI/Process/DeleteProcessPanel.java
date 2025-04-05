@@ -13,15 +13,13 @@ import Model.ProcessStatus.ProcessStatus;
 import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.JEnhancedTableScrollPanel;
-import UI.Components.SearchByLabelPanel;
-import UI.Components.TableModelMaker;
+import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Models.*;
 import Utils.Utils;
 
 import javax.swing.*;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.ArrayList;
 

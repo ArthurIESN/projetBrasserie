@@ -1,9 +1,8 @@
 package UI.Models;
 
 import Model.Document.Document;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Document>

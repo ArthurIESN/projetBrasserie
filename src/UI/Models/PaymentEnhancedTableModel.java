@@ -1,9 +1,8 @@
 package UI.Models;
 
 import Model.Payment.Payment;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 

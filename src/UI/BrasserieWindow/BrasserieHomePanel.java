@@ -1,25 +1,8 @@
 package UI.BrasserieWindow;
 
-import Controller.AppController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Process.GetAllProcessesException;
-import Model.ProcessStatus.ProcessStatus;
-import UI.Components.JEnhancedTableScrollPanel;
-import UI.Components.TableModelMaker;
-import UI.Models.CustomerEnhancedTableModel;
-import UI.Models.ProcessEnhancedTableModel;
-import UI.Models.ProcessStatusEnhancedTableModel;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
-import UI.Models.ProcessTypeEnhancedTableModel;
-import Utils.Utils;
-
-import Model.Process.Process;
-import Model.ProcessType.ProcessType;
-import Model.Customer.Customer;
 public class BrasserieHomePanel extends JPanel {
     public BrasserieHomePanel() {
         setLayout(new BorderLayout());

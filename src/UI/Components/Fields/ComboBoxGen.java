@@ -1,4 +1,4 @@
-package UI.Components;
+package UI.Components.Fields;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
