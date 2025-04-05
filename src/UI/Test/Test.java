@@ -16,8 +16,7 @@ public class Test extends JPanel
 
         GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
 
-
-        // Je met des data par defaut pour tester mais on est pas obligé de le faire
+        // YA DES BUGS POUR L'INSTANT
 
         ArrayList<String> data = new ArrayList<>();
         data.add("Item 1");
@@ -47,27 +46,44 @@ public class Test extends JPanel
         StepByStepManager stepByStepManager = new StepByStepManager(gridBagLayoutHelper.getComponents());
 
         searchByLabelPanel.onSelectedItemChange(
-                selectedItem -> stepByStepManager.completeStep(0)
+                selectedItem -> {
+                    stepByStepManager.completeStep(0);
+
+                }
+        );
+
+        searchByLabelPanel2.onSelectedItemChange(
+                selectedItem -> {
+                    stepByStepManager.completeStep(1);
+
+                }
+        );
+
+        searchByLabelPanel3.onSelectedItemChange(
+                selectedItem -> {
+                    stepByStepManager.completeStep(2);
+
+                }
         );
 
         stepByStepManager.onStepShown(0, (v) ->
         {
-            System.out.println("Step 0 shown");
+            System.out.println("Step 1 shown");
         });
 
         stepByStepManager.onStepShown(1, (v) ->
         {
-            updateStepTwo(searchByLabelPanel, searchByLabelPanel2);
+            System.out.println("Step 2 shown");
+            searchByLabelPanel2.setSelectedItem(null);
         });
 
         stepByStepManager.onStepShown(2, (v) ->
         {
-            System.out.println("Step 2 shown");
+            System.out.println("Step 3 shown");
+            searchByLabelPanel3.setSelectedItem(null);
         });
 
-        searchByLabelPanel2.onSelectedItemChange(
-                selectedItem -> stepByStepManager.completeStep(1)
-        );
+
 
         add(gridBagLayoutHelper);
     }
@@ -77,10 +93,9 @@ public class Test extends JPanel
     {
 
         // Request with search1 SelectedItem
-        // result = AppController.getData(search1.getSelectedItem());
-
-        // Update search2 with the result of the request
-        //search2.setData(result);
+        // AppController.getData(search1.getSelectedItem());
+        //Update search2 with the result of the request
+        search2.setData(null);
 
     }
 }
