@@ -4,12 +4,11 @@ import UI.BrasserieWindow.BrasserieCredits;
 import UI.BrasserieWindow.BrasserieWindow;
 import UI.BrasserieWindow.BrasserieHomePanel;
 import UI.Process.ProcessPanel;
-import UI.Search.SearchDocumentWithEventForm;
-import UI.Search.SearchItemForm;
-import UI.Search.SearchPaymentForm;
+import UI.Search.Document.SearchDocumentWithEventForm;
+import UI.Search.Item.SearchItemForm;
+import UI.Search.Payment.SearchPaymentForm;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MenuBarBrasserie {
     private JMenuBar menuBar;

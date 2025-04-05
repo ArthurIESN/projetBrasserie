@@ -1,4 +1,4 @@
-package UI.Components;
+package UI.Components.EnhancedTable;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

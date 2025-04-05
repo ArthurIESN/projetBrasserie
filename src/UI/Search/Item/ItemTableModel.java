@@ -1,4 +1,4 @@
-package UI.Search;
+package UI.Search.Item;
 
 import Model.Item.Item;
 
@@ -61,13 +61,13 @@ public class ItemTableModel extends AbstractTableModel
             case 0 -> item.getId();
             case 1 -> item.getLabel();
             case 2 -> item.getPrice();
-            case 3 -> item.getCurrent_quantity();
-            case 4 -> item.getRestock_quantity();
+            case 3 -> item.getCurrentQuantity();
+            case 4 -> item.getRestockQuantity();
             case 5 -> item.getPackaging().getId();
             case 6 -> item.getPackaging().getLabel();
             case 7 -> item.getPackaging().getQuantity();
-            case 8 -> item.getCode_vat().getCode();
-            case 9 -> item.getCode_vat().getRate();
+            case 8 -> item.getVat().getCode();
+            case 9 -> item.getVat().getRate();
             default -> null;
         };
     }

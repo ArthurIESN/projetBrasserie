@@ -1,7 +1,7 @@
 package UI.Models;
 
 import Model.Item.Item;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import java.util.ArrayList;
 
@@ -26,13 +26,13 @@ public class ItemEnhancedTableModel extends AbstractEnhancedTableModel<Item>
             case 0 -> item.getId();
             case 1 -> item.getLabel();
             case 2 -> item.getPrice();
-            case 3 -> item.getRestock_quantity();
-            case 4 -> item.getCurrent_quantity();
-            case 5 -> item.getEmpty_returnable_bottle_quantity();
-            case 6 -> item.getEmpty_returnable_bottle_price();
-            case 7 -> item.getForecast_date();
-            case 8 -> item.getForecast_quantity();
-            case 9 -> item.getMin_quantity();
+            case 3 -> item.getRestockQuantity();
+            case 4 -> item.getCurrentQuantity();
+            case 5 -> item.getEmptyReturnableBottleQuantity();
+            case 6 -> item.getEmptyReturnableBottlePrice();
+            case 7 -> item.getForecastDate();
+            case 8 -> item.getForecastQuantity();
+            case 9 -> item.getMinQuantity();
             default -> null;
         };
     }

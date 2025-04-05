@@ -3,7 +3,6 @@ package UI.BrasserieWindow;
 import javax.swing.*;
 import java.awt.*;
 
-import UI.Components.JNumberField;
 import UI.Components.MenuBarBrasserie;
 
 public class BrasserieWindow extends JFrame

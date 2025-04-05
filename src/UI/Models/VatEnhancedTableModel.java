@@ -1,7 +1,7 @@
 package UI.Models;
 
 import Model.Vat.Vat;
-import UI.Components.AbstractEnhancedTableModel;
+import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 public class VatEnhancedTableModel extends AbstractEnhancedTableModel<Vat>
 {

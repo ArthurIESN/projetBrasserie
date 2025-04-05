@@ -1,4 +1,4 @@
-package UI.Search;
+package UI.Search.Payment;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

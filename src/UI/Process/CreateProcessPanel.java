@@ -1,30 +1,7 @@
 package UI.Process;
 
-import Controller.AppController;
-import Exceptions.Customer.GetAllCustomersException;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Employee.GetAllEmployeesException;
-import Exceptions.Process.CreateProcessException;
-import Exceptions.ProcessStatus.GetAllProcessStatusException;
-import Exceptions.Supplier.GetAllSuppliersException;
-import Exceptions.ProcessType.GetAllProcessTypesException;
-
-import Model.Process.Process;
-import Model.Customer.Customer;
-import Model.Employee.Employee;
-import Model.Process.MakeProcess;
-import Model.ProcessStatus.ProcessStatus;
-import Model.Supplier.Supplier;
-import Model.ProcessType.ProcessType;
-
-import UI.Components.GridBagLayoutHelper;
-import UI.Components.JEnhancedTextField;
-import UI.Components.SearchByLabelPanel;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class CreateProcessPanel extends JPanel
 {

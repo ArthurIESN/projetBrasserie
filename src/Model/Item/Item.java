@@ -10,30 +10,30 @@ public class Item
     private Integer id;
     private String label;
     private float price;
-    private int restock_quantity;
-    private int current_quantity;
-    private int empty_returnable_bottle_quantity;
-    private float empty_returnable_bottle_price;
-    private Date forecast_date;
-    private int forecast_quantity;
-    private int min_quantity;
+    private int restockQuantity;
+    private int currentQuantity;
+    private int emptyReturnableBottleQuantity;
+    private float emptyReturnableBottlePrice;
+    private Date forecastDate;
+    private int forecastQuantity;
+    private int minQuantity;
     private Packaging packaging;
-    private Vat code_vat;
+    private Vat vat;
 
-    public Item(Integer id, String label, float price, int restock_quantity, int current_quantity, int empty_returnable_bottle_quantity, float empty_returnable_bottle_price, Date forecast_date, int forecast_quantity, int min_quantity, Packaging packaging, Vat code_vat)
+    public Item(Integer id, String label, float price, int restockQuantity, int currentQuantity, int emptyReturnableBottleQuantity, float emptyReturnableBottlePrice, Date forecastDate, int forecastQuantity, int minQuantity, Packaging packaging, Vat vat)
     {
         this.id = id;
         this.label = label;
         this.price = price;
-        this.restock_quantity = restock_quantity;
-        this.current_quantity = current_quantity;
-        this.empty_returnable_bottle_quantity = empty_returnable_bottle_quantity;
-        this.empty_returnable_bottle_price = empty_returnable_bottle_price;
-        this.forecast_date = forecast_date;
-        this.forecast_quantity = forecast_quantity;
-        this.min_quantity = min_quantity;
+        this.restockQuantity = restockQuantity;
+        this.currentQuantity = currentQuantity;
+        this.emptyReturnableBottleQuantity = emptyReturnableBottleQuantity;
+        this.emptyReturnableBottlePrice = emptyReturnableBottlePrice;
+        this.forecastDate = forecastDate;
+        this.forecastQuantity = forecastQuantity;
+        this.minQuantity = minQuantity;
         this.packaging = packaging;
-        this.code_vat = code_vat;
+        this.vat = vat;
     }
 
     public Integer getId()
@@ -51,39 +51,39 @@ public class Item
         return price;
     }
 
-    public int getRestock_quantity()
+    public int getRestockQuantity()
     {
-        return restock_quantity;
+        return restockQuantity;
     }
 
-    public int getCurrent_quantity()
+    public int getCurrentQuantity()
     {
-        return current_quantity;
+        return currentQuantity;
     }
 
-    public int getEmpty_returnable_bottle_quantity()
+    public int getEmptyReturnableBottleQuantity()
     {
-        return empty_returnable_bottle_quantity;
+        return emptyReturnableBottleQuantity;
     }
 
-    public float getEmpty_returnable_bottle_price()
+    public float getEmptyReturnableBottlePrice()
     {
-        return empty_returnable_bottle_price;
+        return emptyReturnableBottlePrice;
     }
 
-    public Date getForecast_date()
+    public Date getForecastDate()
     {
-        return forecast_date;
+        return forecastDate;
     }
 
-    public int getForecast_quantity()
+    public int getForecastQuantity()
     {
-        return forecast_quantity;
+        return forecastQuantity;
     }
 
-    public int getMin_quantity()
+    public int getMinQuantity()
     {
-        return min_quantity;
+        return minQuantity;
     }
 
     public Packaging getPackaging()
@@ -91,14 +91,14 @@ public class Item
         return packaging;
     }
 
-    public Vat getCode_vat()
+    public Vat getVat()
     {
-        return code_vat;
+        return vat;
     }
 
     public void setVat(Vat vat)
     {
-        this.code_vat = vat;
+        this.vat = vat;
     }
 
     @Override
@@ -108,15 +108,15 @@ public class Item
                 "       id=" + id + ", \n" +
                 "       label='" + label + '\'' + ", \n" +
                 "       price=" + price + ", \n" +
-                "       restock_quantity=" + restock_quantity + ", \n" +
-                "       current_quantity=" + current_quantity + ", \n" +
-                "       empty_returnable_bottle_quantity=" + empty_returnable_bottle_quantity + ", \n" +
-                "       empty_returnable_bottle_price=" + empty_returnable_bottle_price + ", \n" +
-                "       forecast_date=" + forecast_date + ", \n" +
-                "       forecast_quantity=" + forecast_quantity + ", \n" +
-                "       min_quantity=" + min_quantity + ", \n" +
+                "       restock_quantity=" + restockQuantity + ", \n" +
+                "       current_quantity=" + currentQuantity + ", \n" +
+                "       empty_returnable_bottle_quantity=" + emptyReturnableBottleQuantity + ", \n" +
+                "       empty_returnable_bottle_price=" + emptyReturnableBottlePrice + ", \n" +
+                "       forecast_date=" + forecastDate + ", \n" +
+                "       forecast_quantity=" + forecastQuantity + ", \n" +
+                "       min_quantity=" + minQuantity + ", \n" +
                 "\n       packaging=" + packaging + ", \n" +
-                "       code_vat=" + code_vat + "\n" +
+                "       code_vat=" + vat + "\n" +
                 '}';
     }
 

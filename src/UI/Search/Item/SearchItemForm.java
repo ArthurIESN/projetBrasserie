@@ -1,4 +1,4 @@
-package UI.Search;
+package UI.Search.Item;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +11,15 @@ import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Packaging.Packaging;
-import Model.Vat.Vat;
 import UI.Components.*;
 
 import Model.Item.Item;
 
 import Controller.SearchController;
+import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Components.EnhancedTable.TableModelMaker;
+import UI.Components.Fields.JDualSliderPanel;
+import UI.Components.Fields.JEnhancedTextField;
 import UI.Models.ItemEnhancedTableModel;
 import UI.Models.PackagingEnhancedTableModel;
 import UI.Models.VatEnhancedTableModel;

@@ -1,4 +1,4 @@
-package UI.Components;
+package UI.Components.Fields;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

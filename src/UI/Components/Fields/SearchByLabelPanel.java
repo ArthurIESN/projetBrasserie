@@ -1,6 +1,4 @@
-package UI.Components;
-
-import BusinessLogic.InterfaceSubject.Subject;
+package UI.Components.Fields;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
