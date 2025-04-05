@@ -55,6 +55,9 @@ public class StepByStepManager
 
     public void completeStep(int stepIndex)
     {
+
+        System.out.println("Step " + (stepIndex + 1) + " completed");
+
         if (stepIndex >= components.length)
         {
             return; // component not found
@@ -73,13 +76,20 @@ public class StepByStepManager
         }
         else
         {
-            for(int i = stepIndex + 2; i < components.length; i++)
+            currentStep = stepIndex;
+            for (Component component : components)
             {
-                components[i].setVisible(false);
+                component.setVisible(false);
             }
 
-            executeStepShownAction(currentStep);
-            currentStep = stepIndex + 1;
+            // show the current step
+            currentStep += 2;
+            for(int i = 0; i < currentStep && i < components.length; i++)
+            {
+                components[i].setVisible(true);
+            }
+
+            executeStepShownAction(currentStep - 1);
         }
     }
 

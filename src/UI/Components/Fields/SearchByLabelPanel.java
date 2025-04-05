@@ -88,7 +88,8 @@ public class SearchByLabelPanel<T> extends JPanel
         // set background color of selected item
         resultList.setSelectionBackground(new Color(80,80, 80));
 
-        resultList.addListSelectionListener(e -> {
+        resultList.addListSelectionListener(e ->
+        {
             if (!e.getValueIsAdjusting()) {
                 actionListener.actionPerformed(null);
             }
@@ -149,7 +150,6 @@ public class SearchByLabelPanel<T> extends JPanel
     {
         this.data = data;
         setSelectedItem(null);
-        updateList();
     }
 
     public void setSelectedItem(T item)
@@ -158,7 +158,6 @@ public class SearchByLabelPanel<T> extends JPanel
         {
             searchField.updateText("");
             updateList();
-            resultList.clearSelection();
         }
         else if (!filteredData.contains(item))
         {
