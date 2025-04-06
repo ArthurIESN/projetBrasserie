@@ -79,7 +79,7 @@ public class ProcessModelPanel extends JPanel
             processSearch = new SearchByLabelPanel<>(processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
             processSearch.getSearchField().setPlaceholder("Search for a process");
 
-            gridNewProcess.addField("Process", processSearch);
+            gridNewProcess.addField(processSearch);
         }
 
         if(showId)
@@ -88,7 +88,7 @@ public class ProcessModelPanel extends JPanel
             processIdField.setPlaceholder("Process Id");
             processIdField.setEnabled(false);
 
-            gridNewProcess.addField("Process Id", processIdField);
+            gridNewProcess.addField(processIdField);
         }
 
         processLabelField = new JEnhancedTextField();
@@ -121,14 +121,14 @@ public class ProcessModelPanel extends JPanel
 
         button = new JButton();
 
-        gridNewProcess.addField("Process Label", processLabelField);
-        gridNewProcess.addField("Process Number", processNumberField);
-        gridNewProcess.addField("Creation Date", dateField);
-        gridNewProcess.addField("Supplier", supplierSearch);
-        gridNewProcess.addField("Process Status", processStatusSearch);
-        gridNewProcess.addField("Type", typeSearch);
-        gridNewProcess.addField("Employee", employeeSearch);
-        gridNewProcess.addField("Customer", customerSearch);
+        gridNewProcess.addField(processLabelField);
+        gridNewProcess.addField(processNumberField);
+        gridNewProcess.addField(dateField);
+        gridNewProcess.addField(supplierSearch);
+        gridNewProcess.addField(processStatusSearch);
+        gridNewProcess.addField(typeSearch);
+        gridNewProcess.addField(employeeSearch);
+        gridNewProcess.addField(customerSearch);
         gridNewProcess.addField(button);
 
         add(gridNewProcess, BorderLayout.CENTER);

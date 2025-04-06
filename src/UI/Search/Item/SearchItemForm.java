@@ -60,7 +60,7 @@ public class SearchItemForm extends JPanel
         // TVA Code field
         JEnhancedTextField tvaCodeField = new JEnhancedTextField();
         tvaCodeField.setPlaceholder("VAT Code");
-        gridSearchForm.addField("VAT Code", tvaCodeField);
+        gridSearchForm.addRightField(tvaCodeField);
 
         // Item Stock Quantity Field
         JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 300, 50);

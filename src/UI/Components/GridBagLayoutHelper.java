@@ -20,13 +20,21 @@ public class GridBagLayoutHelper extends JPanel
 
     public void addField(String label, Component component)
     {
-        JLabel jLabel = new JLabel(label);
+        JPanel fieldPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        fieldPanel.add(new JLabel(label, SwingConstants.RIGHT));
+        fieldPanel.add(component);
+
         gbc.gridx = 0;
         gbc.gridy++;
-        add(jLabel, gbc);
+        gbc.gridwidth = 2;
+        add(fieldPanel, gbc);
 
-        gbc.gridx = 1;
-        add(component, gbc);
+        gbc.gridwidth = 1;
+    }
+
+    public void addRightField(Component component)
+    {
+        addField("", component);
     }
 
     // Field without label. Takes the whole width

@@ -38,7 +38,7 @@ public class Test extends JPanel
         SearchByLabelPanel<String> searchByLabelPanel3 = new SearchByLabelPanel<>(data3, String::toString);
 
         gridBagLayoutHelper.addField(searchByLabelPanel);
-        gridBagLayoutHelper.addField(searchByLabelPanel2);
+        gridBagLayoutHelper.addField("Search 2", searchByLabelPanel2);
         gridBagLayoutHelper.addField(searchByLabelPanel3);
 
 
@@ -47,6 +47,7 @@ public class Test extends JPanel
 
         searchByLabelPanel.onSelectedItemChange(
                 selectedItem -> {
+                    System.out.println("Search 1 clicked");
                     stepByStepManager.completeStep(0);
 
                 }
@@ -54,6 +55,7 @@ public class Test extends JPanel
 
         searchByLabelPanel2.onSelectedItemChange(
                 selectedItem -> {
+                    System.out.println("Search 2 clicked");
                     stepByStepManager.completeStep(1);
 
                 }
@@ -61,6 +63,7 @@ public class Test extends JPanel
 
         searchByLabelPanel3.onSelectedItemChange(
                 selectedItem -> {
+                    System.out.println("Search 3 clicked");
                     stepByStepManager.completeStep(2);
 
                 }

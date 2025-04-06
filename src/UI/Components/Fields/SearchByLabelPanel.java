@@ -90,7 +90,8 @@ public class SearchByLabelPanel<T> extends JPanel
 
         resultList.addListSelectionListener(e ->
         {
-            if (!e.getValueIsAdjusting()) {
+            if (!e.getValueIsAdjusting() && resultList.getSelectedIndex() >= 0)
+            {
                 actionListener.actionPerformed(null);
             }
         });
