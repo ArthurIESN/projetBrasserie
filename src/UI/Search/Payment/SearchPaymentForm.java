@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
+import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
@@ -28,7 +29,9 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Payment Validated", validatedPaymentCheckBox);
 
         // Minimum Amount Field
-        JFormattedTextField amountField = new JFormattedTextField();
+        JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
+        amountField.setAllowNegative(false);
+        amountField.setPlaceholder("Minimum Amount");
         amountField.setColumns(10);
         gridSearchForm.addField("Minimum Amount", amountField);
 
@@ -61,10 +64,10 @@ public class SearchPaymentForm extends JPanel
         return years;
     }
 
-    private void searchPayments(JCheckBox validatedPaymentCheckBox, JFormattedTextField amountField, JComboBox<String> yearComboBox, JEnhancedTableScrollPanel table)
+    private void searchPayments(JCheckBox validatedPaymentCheckBox, JNumberField amountField, JComboBox<String> yearComboBox, JEnhancedTableScrollPanel table)
     {
         boolean isValidated = validatedPaymentCheckBox.isSelected();
-        Number minAmountValue =  (Number) amountField.getValue();
+        Float minAmountValue =  amountField.getFloat();
         double minAmount = (minAmountValue != null) ? minAmountValue.doubleValue() : 0;
         String selectedYear = (String) yearComboBox.getSelectedItem();
 
