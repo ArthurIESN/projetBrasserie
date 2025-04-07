@@ -5,6 +5,7 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
 
+import Model.Document.MakeDocument;
 import Model.Payment.Payment;
 import Model.Payment.MakePayment;
 import Model.PaymentStatus.PaymentStatus;
@@ -54,6 +55,28 @@ ArrayList<Payment> payments = new ArrayList<>();
                         resultSet.getInt("id_payment_status"),
                         resultSet.getString("payment_status_label"));
 
+                Document document = MakeDocument.getDocument(
+                        resultSet.getInt("document_id"),
+                        resultSet.getString("document_label"),
+                        resultSet.getDate("document_date"),
+                        null,
+                        0.0f,
+                        null,
+                        null,
+                        null,
+                        null,
+                        0.0f,
+                        null,
+                        0.0f,
+                        0.0f,
+                        0.0f,
+                        0.0f,
+                        null,
+                        null,
+                        null,
+                        null);
+
+
                 Process process = MakeProcess.getProcess(
                         resultSet.getInt("process_id"),
                         resultSet.getString("process_label"),
@@ -78,6 +101,7 @@ ArrayList<Payment> payments = new ArrayList<>();
                         resultSet.getDouble("amount"),
                         resultSet.getDate("payment_date"),
                         paymentStatus,
+                        document,
                         process,
                         customer
                 );
