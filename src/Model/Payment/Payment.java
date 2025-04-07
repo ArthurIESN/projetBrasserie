@@ -17,12 +17,12 @@ public class Payment {
 
     // Constructeur
 
-    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Model.Process.Process process, Customer customer) {
+    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,Model.Process.Process process, Customer customer) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentStatus = paymentStatus;
-        this.document = null;
+        this.document = document;
         this.process = process;
         this.customer = customer;
     }
