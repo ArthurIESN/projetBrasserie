@@ -10,21 +10,27 @@ import java.util.function.Consumer;
 // Display will not be handled here
 public class StepByStepManager
 {
-    private Component[] components;
+    private final Component[] components;
     private int currentStep = 0;
-    private boolean isLastStepCompleted = false;
-    private Map<Integer, Consumer<Void>> stepShownActions = new HashMap<>();
+    private final Map<Integer, Runnable> stepShownActions = new HashMap<>();
 
+    /**
+     * Constructor
+     *
+     * @param components the components to manage and use by the step by step logic
+     */
     public StepByStepManager(Component[] components)
     {
         this.components = components;
         reset();
     }
 
+    /**
+     * Reset the step by step manager to the first step
+     */
     public void reset()
     {
         currentStep = 0;
-        isLastStepCompleted = false;
         for (Component component : components)
         {
             component.setVisible(false);
@@ -35,41 +41,28 @@ public class StepByStepManager
         }
     }
 
-    public void nextStep()
-    {
-        if (currentStep < components.length)
-        {
-            components[currentStep].setVisible(false);
-            currentStep++;
-            if (currentStep < components.length)
-            {
-                components[currentStep].setVisible(true);
-            }
-        }
-    }
-
-    private boolean isLastStepCompleted()
-    {
-        return isLastStepCompleted;
-    }
-
+    //
+    //
+    /**
+     * Complete a step and move to the next step. If the step index is lower than the current step, all steps between step index and current step will be hidden
+     *
+     * @param stepIndex the index of the step to complete. can be a step already completed
+     */
     public void completeStep(int stepIndex)
     {
-
         System.out.println("Step " + (stepIndex + 1) + " completed");
 
-        if (stepIndex >= components.length)
-        {
-            return; // component not found
-        }
+        if (stepIndex >= components.length) return;
 
-        // If the component is the current step and it is completed, move to the next step
+
+        // if the step to complete is the current step, then we need to move to the next step
+        // otherwise we need to hide all steps after the 'stepIndex'
         if (stepIndex == currentStep)
         {
-            isLastStepCompleted = true;
             currentStep++;
             if (currentStep < components.length)
             {
+                // trigger the next step
                 executeStepShownAction(currentStep);
                 components[currentStep].setVisible(true);
             }
@@ -77,23 +70,27 @@ public class StepByStepManager
         else
         {
             currentStep = stepIndex;
-            for (Component component : components)
+
+            // hide all steps after the 'stepIndex'
+            int i = currentStep + 1;
+            while(i < components.length && components[i].isVisible())
             {
-                component.setVisible(false);
+                components[i].setVisible(false);
+                i++;
             }
 
-            // show the current step
-            currentStep += 2;
-            for(int i = 0; i < currentStep && i < components.length; i++)
-            {
-                components[i].setVisible(true);
-            }
-
-            executeStepShownAction(currentStep - 1);
+            // complete the current step to trigger the next step
+            completeStep(currentStep);
         }
     }
 
-    public void onStepShown(int stepIndex, Consumer<Void> action)
+    /**
+     * Callback when a step is shown. This will be called when the previous step is completed
+     *
+     * @param stepIndex the index of the step to show
+     * @param action    the action to execute when the step is shown
+     */
+    public void onStepShown(int stepIndex, Runnable action)
     {
         stepShownActions.put(stepIndex, action);
     }
@@ -102,7 +99,7 @@ public class StepByStepManager
     {
         if (stepShownActions.containsKey(stepIndex))
         {
-            stepShownActions.get(stepIndex).accept(null);
+            stepShownActions.get(stepIndex).run();
         }
     }
 
