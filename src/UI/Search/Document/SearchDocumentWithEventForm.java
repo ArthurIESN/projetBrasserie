@@ -9,6 +9,7 @@ import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.StepByStepManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -27,18 +28,17 @@ public class SearchDocumentWithEventForm extends JPanel {
     private List<Item> items = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     private List<Float> quantities = new ArrayList<>();
+    private SearchByLabelPanel<Item> itemSearch;
+    private SearchByLabelPanel<Event> eventSearch;
+    private SearchByLabelPanel<Float> quantitySearch;
+    private SearchByLabelPanel<Integer> yearSearch;
     private int idItemSelected;
     private int idEventSelected;
     private Float quantitySelected;
     private Integer yearSelected;
-    private JPanel currentPanelEvent;
-    private JPanel currentPanelQuantities;
-    private JPanel currentPanelYears;
     private JPanel panelSearchButton;
-
     private JButton searchButton;
 
-    // @todo : modifier le système de panel et searchByLabelPanel pour les filtres
     public SearchDocumentWithEventForm(){
 
         setLayout(new BorderLayout());
@@ -58,6 +58,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterLabelPanel.setBorder(border);
         filterLabelPanel.add(filterLabel);
 
+
         GridBagLayoutHelper filterPanel = new GridBagLayoutHelper();
 
         try{
@@ -66,103 +67,111 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        currentPanelEvent = new JPanel(new BorderLayout());
-        currentPanelQuantities = new JPanel(new BorderLayout());
-        currentPanelYears = new JPanel(new BorderLayout());
-
-        currentPanels.add(currentPanelEvent);
-        currentPanels.add(currentPanelQuantities);
-        currentPanels.add(currentPanelYears);
+        itemSearch = new SearchByLabelPanel<>(items, Item::getLabel);
+        eventSearch = new SearchByLabelPanel<>(new ArrayList<>(), Event::getLabel);
+        quantitySearch = new SearchByLabelPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
+        yearSearch = new SearchByLabelPanel<>(new ArrayList<>(), year -> Integer.toString(year));
 
 
+        Component[] stepsList = new Component[] {itemSearch,eventSearch,quantitySearch,yearSearch,searchButton};
 
-        SearchByLabelPanel<Item> itemSearch = new SearchByLabelPanel<>(items,Item::getLabel);
+
         filterPanel.addField(title);
         filterPanel.addField(filterLabelPanel);
+
         filterPanel.addField(itemSearch);
-        filterPanel.addField(currentPanelEvent);
-        filterPanel.addField(currentPanelQuantities);
-        filterPanel.addField(currentPanelYears);
+        filterPanel.addField(eventSearch);
+        filterPanel.addField(quantitySearch);
+        filterPanel.addField(yearSearch);
         filterPanel.addField(searchButton);
 
-        System.out.println(currentPanels.size());
 
-        itemSearch.onSelectedItemChange(itemChanged->{
+        StepByStepManager stepByStepManager = new StepByStepManager(stepsList);
+
+        itemSearch.onSelectedItemChange(itemChanged -> {
             Item itemSelected = itemSearch.getSelectedItem();
-            if(itemSelected != null){
-                currentIndexFilter = 0;
-                idItemSelected = itemSelected.getId();
-                filters(itemSelected.getLabel());
-
-                clearPanelFilter();
-
-                try {
-                    events = SearchController.getEventsWithSpecificItem(idItemSelected);
-                    if(!events.isEmpty()){
-                        currentPanelEvent.removeAll();
-                        SearchByLabelPanel<Event> eventSearch = new SearchByLabelPanel<>(events,Event::getLabel);
-                        currentPanelEvent.add(eventSearch, BorderLayout.CENTER);
-                        currentPanelEvent.revalidate();
-                        currentPanelEvent.repaint();
-
-                        eventSearch.onSelectedItemChange(eventChanged ->{
-                            Event eventSelected = eventSearch.getSelectedItem();
-                            if(eventSelected != null){
-                                currentIndexFilter = 1;
-                                idEventSelected = eventSelected.getId();
-                                clearPanelFilter();
-                                filters(eventSelected.getLabel());
-                                try {
-                                    quantities = SearchController.getQuantityItemWithSpecificEvent(eventSelected.getId());
-                                    currentPanelQuantities.removeAll();
-                                    SearchByLabelPanel<Float> quantitySearch = new SearchByLabelPanel<>(quantities, quantity -> Float.toString(quantity));
-                                    currentPanelQuantities.add(quantitySearch, BorderLayout.CENTER);
-                                    currentPanelQuantities.revalidate();
-                                    currentPanelQuantities.repaint();
-                                    quantitySearch.onSelectedItemChange(quantityChanged -> {
-                                        quantitySelected = quantitySearch.getSelectedItem();
-                                        if(quantitySelected != null){
-                                            currentIndexFilter = 2;
-                                            filters(quantitySelected.toString());
-                                            clearPanelFilter();
-                                            try{
-                                                years = SearchController.getDatesEvents(idEventSelected);
-                                                currentPanelYears.removeAll();
-                                                SearchByLabelPanel<Integer> yearSearch = new SearchByLabelPanel<>(years, year -> Integer.toString(year));
-                                                currentPanelYears.add(yearSearch, BorderLayout.CENTER);
-                                                currentPanelYears.revalidate();
-                                                currentPanelYears.repaint();
-
-                                                yearSearch.onSelectedItemChange(a -> {
-                                                    yearSelected = yearSearch.getSelectedItem();
-                                                    currentIndexFilter = 3;
-                                                    filters(yearSelected.toString());
-                                                    if(yearSelected != null){
-                                                        searchButton.setVisible(true);
-                                                    }
-                                                });
-                                            }catch (DatabaseConnectionFailedException e){
-                                                System.out.println(e.getMessage());
-                                            }
-                                        }
-                                    });
-                                }catch (DatabaseConnectionFailedException | GetQuantityItemWithSpecificEventException e){
-                                    System.out.println(e.getMessage());
-                                }
-                            }
-                        });
-
-                    }
-                }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
-                    System.out.println(e.getMessage());
-                }
-
-                System.out.println(itemSelected.getLabel());
-            }
+            idItemSelected = itemSelected.getId();
+            currentIndexFilter = 0;
+            stepByStepManager.completeStep(0);
         });
+
+        eventSearch.onSelectedItemChange(eventChanged -> {
+            Event eventSelected = eventSearch.getSelectedItem();
+            idEventSelected = eventSelected.getId();
+            currentIndexFilter = 1;
+            stepByStepManager.completeStep(1);
+        });
+
+        quantitySearch.onSelectedItemChange(quantityChanged -> {
+            quantitySelected = quantitySearch.getSelectedItem();
+            currentIndexFilter = 2;
+            stepByStepManager.completeStep(2);
+        });
+
+        yearSearch.onSelectedItemChange(yearChanged -> {
+            yearSelected = yearSearch.getSelectedItem();
+            System.out.println(
+                    yearSelected
+            );
+            currentIndexFilter = 3;
+            stepByStepManager.completeStep(3);
+        });
+
+
+        stepByStepManager.onStepShown(1, this::functionCalledWhenStepEventIsShown);
+        stepByStepManager.onStepShown(2, this::functionCalledWhenStepQuantitiesIsShown);
+        stepByStepManager.onStepShown(3, this::functionCalledWhenStepYearsIsShown);
+        stepByStepManager.onStepShown(4, this::functionCalledWhenStepButtonIsShown);
+
 
         add(filterPanel, BorderLayout.CENTER);
 
+    }
+
+    private void functionCalledWhenStepEventIsShown(){
+        try {
+            events = SearchController.getEventsWithSpecificItem(idItemSelected);
+        }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
+            System.out.println(e.getMessage());
+        }
+        if(!events.isEmpty()){
+            eventSearch.setSelectedItem(null);
+            eventSearch.setData(events);
+        }else {
+            eventSearch.setVisible(false);
+        }
+    }
+    private void functionCalledWhenStepQuantitiesIsShown(){
+        try {
+            quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected);
+        }catch (DatabaseConnectionFailedException | GetQuantityItemWithSpecificEventException e){
+            System.out.println(e.getMessage());
+        }
+        if(!quantities.isEmpty()){
+            quantitySearch.setSelectedItem(null);
+            quantitySearch.setData(quantities);
+
+        }else {
+            quantitySearch.setVisible(false);
+        }
+    }
+
+    private void functionCalledWhenStepYearsIsShown(){
+        try{
+            years = SearchController.getDatesEvents(idEventSelected);
+        }catch (DatabaseConnectionFailedException e){
+            System.out.println(e.getMessage());
+        }
+        if(!years.isEmpty()){
+            yearSearch.setSelectedItem(null);
+            yearSearch.setData(years);
+        }else {
+            yearSearch.setVisible(false);
+        }
+    }
+
+    private void functionCalledWhenStepButtonIsShown(){
+        searchButton.setVisible(true);
     }
 
     private void setFilterLabel(){
