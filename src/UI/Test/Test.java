@@ -98,9 +98,17 @@ public class Test extends JPanel
         System.out.println("Step 2 shown");
         searchByLabelPanel2.setSelectedItem(null);
 
+        int randomBoolean = (int) (Math.random() * 2);
+        if (randomBoolean == 0)
+        {
+            System.out.println("NOT STOPPED");
+        }
+        else
+        {
+            System.out.println("STOPPED");
+            stepByStepManager.stop();
+        }
 
-        // STOP HERE
-        stepByStepManager.stop();
     }
 
 

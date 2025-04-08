@@ -85,9 +85,11 @@ public class StepByStepManager
                 if(!isStopCalled)
                 {
                     components[currentStep].setVisible(true);
+                    System.out.println(components[currentStep]);
                 }
                 else
                 {
+                    isStopCalled = false;
                     currentStep--;
                 }
             }
