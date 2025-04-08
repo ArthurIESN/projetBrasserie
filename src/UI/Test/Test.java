@@ -15,6 +15,7 @@ public class Test extends JPanel
     private SearchByLabelPanel<String> searchByLabelPanel;
     private SearchByLabelPanel<String> searchByLabelPanel2;
     private SearchByLabelPanel<String> searchByLabelPanel3;
+    private StepByStepManager stepByStepManager;
 
     public Test()
     {
@@ -48,7 +49,7 @@ public class Test extends JPanel
 
 
 
-        StepByStepManager stepByStepManager = new StepByStepManager(gridBagLayoutHelper.getComponents());
+        stepByStepManager = new StepByStepManager(gridBagLayoutHelper.getComponents());
 
         searchByLabelPanel.onSelectedItemChange(
                 selectedItem -> {
@@ -67,7 +68,8 @@ public class Test extends JPanel
         );
 
         searchByLabelPanel3.onSelectedItemChange(
-                selectedItem -> {
+                selectedItem ->
+                {
                     System.out.println("Search 3 clicked");
                     stepByStepManager.completeStep(2);
 
@@ -95,6 +97,10 @@ public class Test extends JPanel
     {
         System.out.println("Step 2 shown");
         searchByLabelPanel2.setSelectedItem(null);
+
+
+        // STOP HERE
+        stepByStepManager.stop();
     }
 
 

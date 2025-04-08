@@ -7,6 +7,7 @@ import Model.Supplier.Supplier;
 import Model.ProcessType.ProcessType;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Process {
     private Integer id;

@@ -12,6 +12,7 @@ public class StepByStepManager
 {
     private final Component[] components;
     private int currentStep = 0;
+    private boolean isStopCalled = false;
     private final Map<Integer, Runnable> stepShownActions = new HashMap<>();
 
     /**
@@ -41,8 +42,24 @@ public class StepByStepManager
         }
     }
 
-    //
-    //
+    /**
+     * Get the current step index
+     *
+     * @return the current step index
+     */
+    public int getCurrentStep()
+    {
+        return currentStep;
+    }
+
+    /**
+     * Stop the step by step manager. This will hide all steps and stop the logic
+     */
+    public void stop()
+    {
+        isStopCalled = true;
+    }
+
     /**
      * Complete a step and move to the next step. If the step index is lower than the current step, all steps between step index and current step will be hidden
      *
@@ -64,7 +81,15 @@ public class StepByStepManager
             {
                 // trigger the next step
                 executeStepShownAction(currentStep);
-                components[currentStep].setVisible(true);
+
+                if(!isStopCalled)
+                {
+                    components[currentStep].setVisible(true);
+                }
+                else
+                {
+                    currentStep--;
+                }
             }
         }
         else

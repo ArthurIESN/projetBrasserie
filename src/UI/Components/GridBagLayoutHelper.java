@@ -8,6 +8,10 @@ public class GridBagLayoutHelper extends JPanel
 {
     private final GridBagConstraints gbc;
 
+    /**
+     * Constructor for GridBagLayoutHelper.
+     * Initializes the GridBagConstraints and sets the layout to GridBagLayout.
+     */
     public GridBagLayoutHelper()
     {
         gbc = new GridBagConstraints();
@@ -15,14 +19,25 @@ public class GridBagLayoutHelper extends JPanel
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         setLayout(new GridBagLayout());
-
     }
 
+    /**
+     * Adds a component to the panel with specified label and component.
+     * The component is added in a new row with the label on the left and the component on the right.
+     *
+     * @param label    the label for the component
+     * @param component the component to be added
+     */
     public void addField(String label, Component component)
     {
         JPanel fieldPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        fieldPanel.add(new JLabel(label, SwingConstants.RIGHT));
+        JLabel jLabel = new JLabel(label, SwingConstants.RIGHT);
+
+        fieldPanel.add(jLabel);
         fieldPanel.add(component);
+
+        fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 20, component.getPreferredSize().height ));
+
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -32,12 +47,23 @@ public class GridBagLayoutHelper extends JPanel
         gbc.gridwidth = 1;
     }
 
+    /**
+     * Adds a component to the panel with specified component.
+     * The component is added in a new row with no label. The component is forced to the right.
+     *
+     * @param component the component to be added
+     */
     public void addRightField(Component component)
     {
         addField("", component);
     }
 
-    // Field without label. Takes the whole width
+    /**
+     * Adds a component to the panel without a label.
+     * The component is added in a new row and will take the full width of the row.
+     *
+     * @param component the component to be added
+     */
     public void addField(Component component)
     {
         gbc.gridx = 0;

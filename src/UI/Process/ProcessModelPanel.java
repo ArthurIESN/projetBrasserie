@@ -16,10 +16,12 @@ import Model.ProcessStatus.ProcessStatus;
 import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 
+import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.SearchByLabelPanel;
+import Utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +38,7 @@ public class ProcessModelPanel extends JPanel
     private JEnhancedTextField IdField;
     private JEnhancedTextField processIdField;
     private JEnhancedTextField processLabelField;
-    private JEnhancedTextField processNumberField;
+    private JNumberField processNumberField;
     private JDateField dateField;
     private SearchByLabelPanel<Customer> customerSearch;
     private SearchByLabelPanel<Supplier> supplierSearch;
@@ -54,15 +56,25 @@ public class ProcessModelPanel extends JPanel
 
         try
         {
-            customers = AppController.getAllCustomers();
-            suppliers = AppController.getAllSuppliers();
-            processStatuses = AppController.getAllProcessStatus();
-            employees = AppController.getAllEmployees();
-            types = AppController.getAllTypes();
+
 
             if(showProcesses)
             {
                 processes = AppController.getAllProcesses();
+
+                customers = Utils.transformData(processes, Process::getCustomer);
+                suppliers = Utils.transformData(processes, Process::getSupplier);
+                processStatuses = Utils.transformData(processes, Process::getProcessStatus);
+                employees = Utils.transformData(processes, Process::getEmployee);
+                types = Utils.transformData(processes, Process::getType);
+            }
+            else
+            {
+                customers = AppController.getAllCustomers();
+                suppliers = AppController.getAllSuppliers();
+                processStatuses = AppController.getAllProcessStatus();
+                employees = AppController.getAllEmployees();
+                types = AppController.getAllTypes();
             }
         } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException |
                  GetAllProcessStatusException | GetAllEmployeesException | GetAllProcessesException |
@@ -94,8 +106,9 @@ public class ProcessModelPanel extends JPanel
         processLabelField = new JEnhancedTextField();
         processLabelField.setPlaceholder("Process Label");
 
-        processNumberField = new JEnhancedTextField();
+        processNumberField = new JNumberField();
         processNumberField.setPlaceholder("Process Number");
+        processNumberField.setAllowNegative(false);
 
         dateField = new JDateField();
         dateField.setPlaceholder("Creation Date");
@@ -107,7 +120,7 @@ public class ProcessModelPanel extends JPanel
         customerSearch = new SearchByLabelPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
         customerSearch.getSearchField().setPlaceholder("Search for a customer");
 
-        supplierSearch = new SearchByLabelPanel<>(suppliers, Supplier::getName);
+        supplierSearch = new SearchByLabelPanel<>(suppliers, supplier -> supplier != null ? supplier.getName() : "");
         supplierSearch.getSearchField().setPlaceholder("Search for a supplier");
 
         processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
@@ -134,7 +147,7 @@ public class ProcessModelPanel extends JPanel
         add(gridNewProcess, BorderLayout.CENTER);
     }
 
-    public ProcessModelPanel( boolean showId, boolean showProcesses)
+    public ProcessModelPanel(boolean showId, boolean showProcesses)
     {
         this(null, showId, showProcesses);
     }
@@ -164,7 +177,7 @@ public class ProcessModelPanel extends JPanel
         return processLabelField;
     }
 
-    public JEnhancedTextField getProcessNumberField()
+    public JNumberField getProcessNumberField()
     {
         return processNumberField;
     }

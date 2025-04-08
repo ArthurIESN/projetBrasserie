@@ -49,7 +49,6 @@ public class DeleteProcessPanel extends JPanel
         deleteButton.addActionListener(e ->
         {
 
-            // Sur de vouloir supprimer le processus
             int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this process?", "Warning", JOptionPane.YES_NO_OPTION);
 
             if(dialogResult == JOptionPane.NO_OPTION)
