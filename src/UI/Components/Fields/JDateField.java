@@ -9,14 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JDate extends JEnhancedTextField
+public class JDateField extends JEnhancedTextField
 {
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     private final Date[] minMaxDates = {new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)};
     private boolean isValidating = false;
 
-    public JDate()
+    public JDateField()
     {
         addFocusListener(new FocusListener()
         {

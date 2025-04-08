@@ -17,7 +17,7 @@ import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.Fields.JDate;
+import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.SearchByLabelPanel;
 
@@ -37,7 +37,7 @@ public class ProcessModelPanel extends JPanel
     private JEnhancedTextField processIdField;
     private JEnhancedTextField processLabelField;
     private JEnhancedTextField processNumberField;
-    private JDate dateField;
+    private JDateField dateField;
     private SearchByLabelPanel<Customer> customerSearch;
     private SearchByLabelPanel<Supplier> supplierSearch;
     private SearchByLabelPanel<ProcessStatus> processStatusSearch;
@@ -97,7 +97,7 @@ public class ProcessModelPanel extends JPanel
         processNumberField = new JEnhancedTextField();
         processNumberField.setPlaceholder("Process Number");
 
-        dateField = new JDate();
+        dateField = new JDateField();
         dateField.setPlaceholder("Creation Date");
         dateField.setMaxDate(new Date());
         // 2000 January 1st is the minimum date for the date field
@@ -169,7 +169,7 @@ public class ProcessModelPanel extends JPanel
         return processNumberField;
     }
 
-    public JDate getDateField()
+    public JDateField getDateField()
     {
         return dateField;
     }
