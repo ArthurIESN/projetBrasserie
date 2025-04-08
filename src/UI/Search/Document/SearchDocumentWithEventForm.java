@@ -23,7 +23,6 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JLabel filterLabel;
     private int currentIndexFilter;
     private StepByStepManager stepByStepManager;
-    private List<JPanel> currentPanels = new ArrayList<>();
     private List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
@@ -33,10 +32,6 @@ public class SearchDocumentWithEventForm extends JPanel {
     private SearchByLabelPanel<Event> eventSearch;
     private SearchByLabelPanel<Float> quantitySearch;
     private SearchByLabelPanel<Integer> yearSearch;
-    private int idItemSelected;
-    private int idEventSelected;
-    private Float quantitySelected;
-    private Integer yearSelected;
     private JPanel panelSearchButton;
     private JButton searchButton;
 
@@ -89,37 +84,20 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         stepByStepManager = new StepByStepManager(stepsList);
 
-        itemSearch.onSelectedItemChange(itemChanged -> {
-            Item itemSelected = itemSearch.getSelectedItem();
-            idItemSelected = itemSelected.getId();
-            filters(itemSelected.getLabel());
-            clearPanelFilter();
+        itemSearch.onSelectedItemChange(itemChanged ->
+        {
             stepByStepManager.completeStep(0);
         });
 
         eventSearch.onSelectedItemChange(eventChanged -> {
-            Event eventSelected = eventSearch.getSelectedItem();
-            idEventSelected = eventSelected.getId();
-            clearPanelFilter();
-            filters(eventSelected.getLabel());
             stepByStepManager.completeStep(1);
         });
 
         quantitySearch.onSelectedItemChange(quantityChanged -> {
-            quantitySelected = quantitySearch.getSelectedItem();
-            clearPanelFilter();
-            filters(quantitySelected.toString());
             stepByStepManager.completeStep(2);
         });
 
         yearSearch.onSelectedItemChange(yearChanged -> {
-            yearSelected = yearSearch.getSelectedItem();
-            clearPanelFilter();
-            filters(yearSelected.toString());
-            System.out.println(
-                    yearSelected
-            );
-            currentIndexFilter = 3;
             stepByStepManager.completeStep(3);
         });
 
@@ -136,12 +114,16 @@ public class SearchDocumentWithEventForm extends JPanel {
 
     private void functionCalledWhenStepEventIsShown(){
         try {
-            events = SearchController.getEventsWithSpecificItem(idItemSelected);
+            int itemId = itemSearch.getSelectedItem().getId();
+            events = SearchController.getEventsWithSpecificItem(itemId);
         }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
             System.out.println(e.getMessage());
         }
+
+        clearPanelFilter();
+        filters(itemSearch.getSelectedItem().getLabel());
+
         if(!events.isEmpty()){
-            eventSearch.setSelectedItem(null);
             eventSearch.setData(events);
         }else {
             stepByStepManager.stop();
@@ -149,12 +131,16 @@ public class SearchDocumentWithEventForm extends JPanel {
     }
     private void functionCalledWhenStepQuantitiesIsShown(){
         try {
+            int idEventSelected = eventSearch.getSelectedItem().getId();
             quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected);
         }catch (DatabaseConnectionFailedException | GetQuantityItemWithSpecificEventException e){
             System.out.println(e.getMessage());
         }
+
+        clearPanelFilter();
+        filters(eventSearch.getSelectedItem().getLabel());
+
         if(!quantities.isEmpty()){
-            quantitySearch.setSelectedItem(null);
             quantitySearch.setData(quantities);
 
         }else {
@@ -164,12 +150,15 @@ public class SearchDocumentWithEventForm extends JPanel {
 
     private void functionCalledWhenStepYearsIsShown(){
         try{
+            int idEventSelected = eventSearch.getSelectedItem().getId();
             years = SearchController.getDatesEvents(idEventSelected);
         }catch (DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
         }
+        clearPanelFilter();
+        filters(quantitySearch.getSelectedItem().toString());
+
         if(!years.isEmpty()){
-            yearSearch.setSelectedItem(null);
             yearSearch.setData(years);
         }else {
             stepByStepManager.stop();
@@ -177,7 +166,8 @@ public class SearchDocumentWithEventForm extends JPanel {
     }
 
     private void functionCalledWhenStepButtonIsShown(){
-        searchButton.setVisible(true);
+        clearPanelFilter();
+        filters(yearSearch.getSelectedItem().toString());
     }
 
     private void setFilterLabel(){
@@ -188,20 +178,24 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void filters(String label) {
         String formattedLabel = label + " / ";
 
-        if (stepByStepManager.getCurrentStep()  < filters.size()) {
+        if (stepByStepManager.getCurrentStep() < filters.size())
+        {
             filters.set(stepByStepManager.getCurrentStep(), formattedLabel);
         } else {
-            filters.add(stepByStepManager.getCurrentStep(), formattedLabel);
+            filters.add(formattedLabel);
         }
 
         setFilterLabel();
     }
 
-    private void clearPanelFilter(){
-       for(int i = stepByStepManager.getCurrentStep() + 1; i < filters.size(); i++){
-           filters.remove(i);
-           i--;
-       }
-       setFilterLabel();
+    private void clearPanelFilter()
+    {
+        for(int i = stepByStepManager.getCurrentStep() - 1;  i < filters.size(); i++)
+        {
+            filters.remove(i);
+            i--;
+        }
+
+        setFilterLabel();
     }
 }
