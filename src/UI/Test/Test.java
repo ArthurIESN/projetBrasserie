@@ -43,7 +43,7 @@ public class Test extends JPanel
         searchByLabelPanel3 = new SearchByLabelPanel<>(data3, String::toString);
 
         gridBagLayoutHelper.addField(searchByLabelPanel);
-        gridBagLayoutHelper.addField("Search 2", searchByLabelPanel2);
+        gridBagLayoutHelper.addField(searchByLabelPanel2);
         gridBagLayoutHelper.addField(searchByLabelPanel3);
 
 

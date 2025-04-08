@@ -81,11 +81,11 @@ public class SearchItemForm extends JPanel
         tableModelMaker = new TableModelMaker();
         itemTableModel = new ItemEnhancedTableModel(new ArrayList<>());
         packagingEnhancedTableModel = new PackagingEnhancedTableModel(new ArrayList<>());
-        vatEnhancedTableModel = new VatEnhancedTableModel(new ArrayList<>());
+        //vatEnhancedTableModel = new VatEnhancedTableModel(new ArrayList<>());
 
         tableModelMaker.addTableModel(itemTableModel);
         tableModelMaker.addTableModel(packagingEnhancedTableModel);
-        tableModelMaker.addTableModel(vatEnhancedTableModel);
+       // tableModelMaker.addTableModel(vatEnhancedTableModel);
 
         tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, this);
         tableModelMaker.setTable(tableScrollPanel);
@@ -113,11 +113,11 @@ public class SearchItemForm extends JPanel
         {
             ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
             ArrayList<Packaging> packagings = Utils.transformData(items, Item::getPackaging);
-            ArrayList<Vat> vatCodes = Utils.transformData(items, Item::getVat);
+            //ArrayList<Vat> vatCodes = Utils.transformData(items, Item::getVat);
 
             itemTableModel.setData(items);
             packagingEnhancedTableModel.setData(packagings);
-            vatEnhancedTableModel.setData(vatCodes);
+            //vatEnhancedTableModel.setData(vatCodes);
 
             tableScrollPanel.updateModel(tableModelMaker);
 
