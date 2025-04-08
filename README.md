@@ -52,7 +52,7 @@ Set to 0
 ![jEnhancedTextField_readme.png](resources%2FreadmeImages%2FjEnhancedTextField_readme.png)
 
 - `JDateField` - A derived class of `JEnhancedTextField` that can only handle dates. The component can also handle min and max dates.
-- `JNumberField` - A derived class of `JEnhancedTextField` that can only handle numbers (INTEGER or FLOAT). float can have custom decimal places. Component can handle min and max values.
+- `JNumberField` - A derived class of `JEnhancedTextField` that can only handle numbers (INTEGER or FLOAT). float can have custom decimal places. Component can handle min and max values and disable negative values.
 - `JEnhancedTable` - A responsive table. The table will automatically resize the columns to fit the content.
 
 ![jEnhancedTable_1_readme.png](resources%2FreadmeImages%2FjEnhancedTable_1_readme.png)
@@ -62,7 +62,7 @@ Set to 0
 
 ![jEnhancedTableScroll_readme.png](resources%2FreadmeImages%2FjEnhancedTableScroll_readme.png)
 
-- `JDualSliderPanel` - A custom dual slider that can handle min and max values. The component can handle min and max values.
+- `JDualSliderPanel` - A custom dual slider that can handle min and max values.
 
 ![jDualSlider_readme.png](resources%2FreadmeImages%2FjDualSlider_readme.png)
 

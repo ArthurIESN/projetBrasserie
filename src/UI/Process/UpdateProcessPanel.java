@@ -25,7 +25,6 @@ public class UpdateProcessPanel extends JPanel
         if(process != null)
         {
             processModelPanel.getProcessSearch().setSelectedItem(process);
-            updateProcess();
         }
 
 
@@ -46,7 +45,6 @@ public class UpdateProcessPanel extends JPanel
             processModelPanel.getCustomerSearch().setSelectedItem(selectedProcess.getCustomer());
         else
             processModelPanel.getCustomerSearch().setSelectedItem(null);
-
 
         if(selectedProcess.getSupplier() != null)
             processModelPanel.getSupplierSearch().setSelectedItem(selectedProcess.getSupplier());

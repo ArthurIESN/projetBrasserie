@@ -81,6 +81,7 @@ public class ReadProcessPanel extends JPanel
         tableModelMaker.setTable(tableScrollPanel);
 
         ArrayList<Process> finalProcesses = processes;
+
         tableScrollPanel.addMenuOnRows(menuItems, action ->
         {
             switch (action.getActionCommand())
@@ -90,6 +91,6 @@ public class ReadProcessPanel extends JPanel
             }
         });
 
-        add(tableScrollPanel, BorderLayout.CENTER);
+        add(tableScrollPanel);
     }
 }

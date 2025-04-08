@@ -79,6 +79,9 @@ public class JEnhancedTable extends JTable
         int tableWidth = getParent() != null ? getParent().getWidth() : getWidth();
         int totalColumnWidth = 0;
 
+
+        System.out.println("Table width: " + tableWidth);
+
         int[] columnWidths = new int[columnModel.getColumnCount()];
 
         // Calculate the width of each column base on header width and cell content width

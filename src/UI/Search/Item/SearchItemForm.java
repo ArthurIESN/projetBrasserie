@@ -64,11 +64,11 @@ public class SearchItemForm extends JPanel
         gridSearchForm.addRightField(tvaCodeField);
 
         // Item Stock Quantity Field
-        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 300, 50);
+        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 500, 50);
         gridSearchForm.addField("Item Stock Quantity", nbItemInPackaging);
 
         // Item Price Field
-        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 300, 50);
+        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 500, 50);
         gridSearchForm.addField("Item Price", priceRange);
 
         JButton searchButton = new JButton("Search");

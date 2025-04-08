@@ -1,23 +1,21 @@
 package Model.Vat;
 
-public class Vat
-{
+import java.util.Objects;
+
+public class Vat {
     private String code;
     private float rate;
 
-    public Vat(String code, float rate)
-    {
+    public Vat(String code, float rate) {
         this.code = code;
         this.rate = rate;
     }
 
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
-    public float getRate()
-    {
+    public float getRate() {
         return rate;
     }
 

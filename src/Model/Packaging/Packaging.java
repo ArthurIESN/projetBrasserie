@@ -1,5 +1,7 @@
 package Model.Packaging;
 
+import java.util.Objects;
+
 public class Packaging
 {
     private int id;
@@ -27,7 +29,6 @@ public class Packaging
     {
         return quantity;
     }
-
 
     @Override
     public String toString()

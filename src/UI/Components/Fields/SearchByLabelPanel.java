@@ -1,5 +1,8 @@
 package UI.Components.Fields;
 
+import Model.Customer.Customer;
+import Model.Employee.Employee;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -11,17 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class SearchByLabelPanel<T> extends JPanel
-{
-    private JEnhancedTextField searchField;
-    private JList<String> resultList;
-    private DefaultListModel<String> listModel;
+public class SearchByLabelPanel<T> extends JPanel {
+    private final JEnhancedTextField searchField;
+    private final JList<String> resultList;
+    private final DefaultListModel<String> listModel;
     private List<T> data;
     private List<T> filteredData;
-    private Function<T, String> toStringFunction;
+    private final Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction)
-    {
+    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction) {
         this.data = data;
         this.toStringFunction = toStringFunction;
         setLayout(new BorderLayout());
@@ -43,16 +44,15 @@ public class SearchByLabelPanel<T> extends JPanel
         resultList.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                resultList.setSelectionBackground(new Color(80,80, 80));
+                resultList.setSelectionBackground(new Color(80, 80, 80));
 
                 scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                    scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+                scrollPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             }
-
 
 
         });
@@ -83,85 +83,68 @@ public class SearchByLabelPanel<T> extends JPanel
         updateList();
     }
 
-    public void onSelectedItemChange(ActionListener actionListener)
-    {
+    public void onSelectedItemChange(ActionListener actionListener) {
         // set background color of selected item
-        resultList.setSelectionBackground(new Color(80,80, 80));
+        resultList.setSelectionBackground(new Color(80, 80, 80));
 
         resultList.addListSelectionListener(e ->
         {
-            if (!e.getValueIsAdjusting() && resultList.getSelectedIndex() >= 0)
-            {
+            if (!e.getValueIsAdjusting() && resultList.getSelectedIndex() >= 0) {
                 actionListener.actionPerformed(null);
             }
         });
     }
 
-    private void updateList()
-    {
+    private void updateList() {
         String searchText = searchField.getText().toLowerCase();
 
         listModel.clear();
         filteredData = new ArrayList<>();
 
-        for (T item : data)
-        {
-            if (toStringFunction.apply(item).toLowerCase().contains(searchText))
-            {
+        for (T item : data) {
+            if (toStringFunction.apply(item).toLowerCase().contains(searchText)) {
                 listModel.addElement(toStringFunction.apply(item));
                 filteredData.add(item);
             }
         }
     }
 
-    private class CustomListCellRenderer extends DefaultListCellRenderer
-    {
+    private static class CustomListCellRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (isSelected)
-            {
+            if (isSelected) {
                 component.setBackground(new Color(80, 80, 80));
-            }
-            else
-            {
+            } else {
                 component.setBackground(new Color(0, 0, 0, 0));
             }
             return component;
         }
     }
 
-    public JEnhancedTextField getSearchField()
-    {
+    public JEnhancedTextField getSearchField() {
         return searchField;
     }
 
-    public T getSelectedItem()
-    {
-        if (resultList.getSelectedIndex() < 0)
-        {
+    public T getSelectedItem() {
+        if (resultList.getSelectedIndex() < 0) {
             return null;
         }
 
         return filteredData.get(resultList.getSelectedIndex());
     }
 
-    public void setData(List<T> data)
-    {
+    public void setData(List<T> data) {
         this.data = data;
         setSelectedItem(null);
     }
 
     public void setSelectedItem(T item)
     {
-        if(item == null)
-        {
+        if (item == null) {
             searchField.updateText("");
             updateList();
-        }
-        else if (!filteredData.contains(item))
-        {
+        } else if (filteredData.contains(item)) {
             searchField.updateText(toStringFunction.apply(item));
             updateList();
             resultList.setSelectedIndex(filteredData.indexOf(item));

@@ -6,6 +6,9 @@ import java.awt.event.KeyEvent;
 
 public class JNumberField extends JEnhancedTextField
 {
+    /**
+     * Type of number to be entered in the field (INTEGER or FLOAT).
+     */
     public enum NumberType
     {
         INTEGER,
@@ -17,6 +20,11 @@ public class JNumberField extends JEnhancedTextField
     private final int[] minMax = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean allowNegative = true;
 
+    /**
+     * Constructor for JNumberField with specified number type and decimal places.
+     * @param numberType the type of number (INTEGER or FLOAT)
+     * @param decimalPlaces the number of decimal places for FLOAT type
+     */
     public JNumberField(NumberType numberType, int decimalPlaces)
     {
         this.numberType = numberType;
@@ -35,27 +43,49 @@ public class JNumberField extends JEnhancedTextField
         });
     }
 
+    /**
+     * Constructor for JNumberField with default decimal places.
+     * It creates a field that accepts NumberType and has no decimal places.
+     * @param numberType the type of number (INTEGER or FLOAT)
+     */
     public JNumberField(NumberType numberType)
     {
         this(numberType, 0);
     }
 
+    /**
+     * Constructor for JNumberField with default values.
+     * It creates a field that accepts integers and has no decimal places.
+     */
     public JNumberField()
     {
         this(NumberType.INTEGER, 0);
     }
 
+    /**
+     * Set the minimum and maximum values for the field.
+     * @param min the minimum value
+     * @param max the maximum value
+     */
     public void setMinMax(int min, int max)
     {
         this.minMax[0] = min;
         this.minMax[1] = max;
     }
 
+    /*
+     * Set if the field can accept negative numbers.
+     * @param allowNegative true if the field can accept negative numbers, false otherwise
+     */
     public void setAllowNegative(boolean allowNegative)
     {
         this.allowNegative = allowNegative;
     }
 
+    /**
+     * Get the integer value from the field.
+     * @return the integer value
+     */
     public int getInt()
     {
         validateNumber();
@@ -67,6 +97,10 @@ public class JNumberField extends JEnhancedTextField
         return Integer.parseInt(text);
     }
 
+    /**
+     * Get the float value from the field.
+     * @return the float value
+     */
     public float getFloat()
     {
         validateNumber();
@@ -99,7 +133,7 @@ public class JNumberField extends JEnhancedTextField
         switch (numberType) {
             case INTEGER:
 
-                if(c == '-' && allowNegative && text.isEmpty())
+                if(canWriteNegativeSign(c, text))
                 {
                     break;
                 }
@@ -113,30 +147,34 @@ public class JNumberField extends JEnhancedTextField
 
             case FLOAT:
 
-                if(c == '-' && allowNegative && text.isEmpty())
+                if(canWriteNegativeSign(c, text))
                 {
                     break;
                 }
 
-                if (!Character.isDigit(c) && c != '.') {
+                if (!Character.isDigit(c) && c != '.')
+                {
                     e.consume();
                     return;
                 }
 
-                // Ne pas autoriser deux points
-                if (c == '.' && text.contains(".")) {
+                // We only accept one decimal point
+                if (c == '.' && text.contains("."))
+                {
                     e.consume();
                     return;
                 }
 
-                // Si un point est déjà présent, on vérifie le nombre de décimales
+                // Check if the number of decimal places is exceeded
                 int pointIndex = text.indexOf('.');
-                if (pointIndex != -1 && Character.isDigit(c)) {
+                if (pointIndex != -1 && Character.isDigit(c))
+                {
                     int decimals = text.length() - pointIndex - 1;
 
-                    // Position du curseur après le point ?
+                    // If the number of decimals is exceeded, consume the event
                     int caretPos = getCaretPosition();
-                    if (caretPos > pointIndex && decimals >= decimalPlaces) {
+                    if (caretPos > pointIndex && decimals >= decimalPlaces)
+                    {
                         e.consume();
                         return;
                     }
@@ -145,9 +183,15 @@ public class JNumberField extends JEnhancedTextField
                 break;
         }
 
+        // process the key event if all checks are passed
         super.processKeyEvent(e);
     }
 
+    /**
+     * Validate the number in the field based on the type (INTEGER or FLOAT).
+     * It checks if the number is within the min and max range and if it has
+     * the correct number of decimal places. Also check if the number can be negative.
+     */
     private void validateNumber()
     {
         String text = getText();
@@ -205,5 +249,16 @@ public class JNumberField extends JEnhancedTextField
 
                 break;
         }
+    }
+
+    /**
+     *  * Check if the field can accept a negative sign.
+     * @param c the character to check (negative sign)
+     * @param text the current text in the field
+     * @return true if the field can accept a negative sign, false otherwise
+     */
+    private boolean canWriteNegativeSign(char c, String text)
+    {
+        return c == '-' && allowNegative && !text.contains("-") && getCaretPosition() == 0;
     }
 }
