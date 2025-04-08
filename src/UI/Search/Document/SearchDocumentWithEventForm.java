@@ -22,6 +22,7 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JPanel filterLabelPanel;
     private JLabel filterLabel;
     private int currentIndexFilter;
+    private StepByStepManager stepByStepManager;
     private List<JPanel> currentPanels = new ArrayList<>();
     private List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
@@ -86,30 +87,35 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterPanel.addField(searchButton);
 
 
-        StepByStepManager stepByStepManager = new StepByStepManager(stepsList);
+        stepByStepManager = new StepByStepManager(stepsList);
 
         itemSearch.onSelectedItemChange(itemChanged -> {
             Item itemSelected = itemSearch.getSelectedItem();
             idItemSelected = itemSelected.getId();
-            currentIndexFilter = 0;
+            filters(itemSelected.getLabel());
+            clearPanelFilter();
             stepByStepManager.completeStep(0);
         });
 
         eventSearch.onSelectedItemChange(eventChanged -> {
             Event eventSelected = eventSearch.getSelectedItem();
             idEventSelected = eventSelected.getId();
-            currentIndexFilter = 1;
+            clearPanelFilter();
+            filters(eventSelected.getLabel());
             stepByStepManager.completeStep(1);
         });
 
         quantitySearch.onSelectedItemChange(quantityChanged -> {
             quantitySelected = quantitySearch.getSelectedItem();
-            currentIndexFilter = 2;
+            clearPanelFilter();
+            filters(quantitySelected.toString());
             stepByStepManager.completeStep(2);
         });
 
         yearSearch.onSelectedItemChange(yearChanged -> {
             yearSelected = yearSearch.getSelectedItem();
+            clearPanelFilter();
+            filters(yearSelected.toString());
             System.out.println(
                     yearSelected
             );
@@ -138,7 +144,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             eventSearch.setSelectedItem(null);
             eventSearch.setData(events);
         }else {
-            eventSearch.setVisible(false);
+            stepByStepManager.stop();
         }
     }
     private void functionCalledWhenStepQuantitiesIsShown(){
@@ -152,7 +158,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             quantitySearch.setData(quantities);
 
         }else {
-            quantitySearch.setVisible(false);
+            stepByStepManager.stop();
         }
     }
 
@@ -166,7 +172,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             yearSearch.setSelectedItem(null);
             yearSearch.setData(years);
         }else {
-            yearSearch.setVisible(false);
+            stepByStepManager.stop();
         }
     }
 
@@ -182,32 +188,20 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void filters(String label) {
         String formattedLabel = label + " / ";
 
-        if (currentIndexFilter < filters.size()) {
-            filters.set(currentIndexFilter, formattedLabel);
+        if (stepByStepManager.getCurrentStep()  < filters.size()) {
+            filters.set(stepByStepManager.getCurrentStep(), formattedLabel);
         } else {
-            filters.add(currentIndexFilter, formattedLabel);
+            filters.add(stepByStepManager.getCurrentStep(), formattedLabel);
         }
 
         setFilterLabel();
     }
 
     private void clearPanelFilter(){
-       for (int i = currentIndexFilter; i < currentPanels.size(); i++) {
-            currentPanels.get(i).removeAll();
-            if(i == currentPanels.size() - 1){
-                yearSelected = null;
-            }
-        }
-
-       if (yearSelected == null) {
-            searchButton.setVisible(false);
-       }
-
-       for(int i = currentIndexFilter + 1; i < filters.size(); i++){
+       for(int i = stepByStepManager.getCurrentStep() + 1; i < filters.size(); i++){
            filters.remove(i);
            i--;
        }
        setFilterLabel();
-
     }
 }
