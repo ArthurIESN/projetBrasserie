@@ -1,12 +1,15 @@
 package UI.Test;
 
+import Controller.AppController;
+import Exceptions.Customer.GetAllCustomersException;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Model.Customer.Customer;
+import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.SearchByLabelPanel;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.StepByStepManager;
 
 import javax.swing.*;
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Test extends JPanel
@@ -43,9 +46,24 @@ public class Test extends JPanel
         data3.add("beta 3");
         searchByLabelPanel3 = new SearchByLabelPanel<>(data3, String::toString);
 
-        gridBagLayoutHelper.addField(searchByLabelPanel);
-        gridBagLayoutHelper.addField(searchByLabelPanel2);
-        gridBagLayoutHelper.addField(searchByLabelPanel3);
+        try{
+            ArrayList<Customer> customers = AppController.getAllCustomers();
+
+            ComboBoxPanel<Customer> comboBoxPanel = new ComboBoxPanel<>(customers, customer ->
+                    customer.getFirstName() + " " + customer.getLastName()
+            );
+
+            comboBoxPanel.onSelectedItemChange(
+                    selectedItem -> {
+                        System.out.println("Selected item: " + selectedItem);
+                    }
+            );
+            gridBagLayoutHelper.addField(comboBoxPanel);
+        } catch (DatabaseConnectionFailedException | GetAllCustomersException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
 
 
