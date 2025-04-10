@@ -1,5 +1,7 @@
 package Model.DeliveryTruck;
 
+import java.util.Objects;
+
 public class DeliveryTruck {
     private Integer id;
     private String licensePlate;
@@ -27,6 +29,26 @@ public class DeliveryTruck {
 
     public float getMileage(){
         return this.mileage;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        DeliveryTruck deliveryTruck = (DeliveryTruck) obj;
+
+        return Objects.equals(id, deliveryTruck.id) &&
+                Objects.equals(licensePlate, deliveryTruck.licensePlate) &&
+                Objects.equals(fuelQuantity, deliveryTruck.fuelQuantity) &&
+                Objects.equals(mileage, deliveryTruck.mileage);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, licensePlate, fuelQuantity, mileage);
     }
 
     @Override

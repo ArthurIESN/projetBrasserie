@@ -2,6 +2,8 @@ package Model.Customer;
 
 import Model.CustomerStatus.CustomerStatus;
 
+import java.util.Objects;
+
 public class Customer {
     private Integer id;
     private String lastName;
@@ -43,6 +45,27 @@ public class Customer {
 
     public CustomerStatus getCustomerStatus() {
         return customerStatus;
+    }
+
+    // equals
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Customer customer = (Customer) obj;
+
+        return  Objects.equals(id, customer.id) &&
+                Objects.equals(lastName, customer.lastName) &&
+                Objects.equals(firstName, customer.firstName) &&
+                Objects.equals(creditLimit, customer.creditLimit) &&
+                Objects.equals(numVAT, customer.numVAT) &&
+                Objects.equals(customerStatus, customer.customerStatus);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, creditLimit, numVAT, customerStatus);
     }
 
     @Override

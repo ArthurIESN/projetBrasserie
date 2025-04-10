@@ -1,5 +1,7 @@
 package Model.EmployeeStatus;
 
+import java.util.Objects;
+
 public class EmployeeStatus {
     private Integer id;
     private String label;
@@ -15,6 +17,23 @@ public class EmployeeStatus {
 
     public String getLabel() {
         return label;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        EmployeeStatus that = (EmployeeStatus) obj;
+
+        return Objects.equals(id, that.id) &&
+                Objects.equals(label, that.label);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label);
     }
 
     @Override

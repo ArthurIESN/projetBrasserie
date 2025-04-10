@@ -1,5 +1,7 @@
 package Model.Country;
 
+import java.util.Objects;
+
 public class Country
 {
     private final Integer id;
@@ -13,6 +15,24 @@ public class Country
         this.deliveryCost = deliveryCost;
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Country country = (Country) obj;
+
+        return Objects.equals(id, country.id) &&
+                Objects.equals(name, country.name) &&
+                Objects.equals(deliveryCost, country.deliveryCost);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, name, deliveryCost);
+    }
 
     @Override
     public String toString()

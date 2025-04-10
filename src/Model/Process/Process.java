@@ -70,6 +70,30 @@ public class Process {
         return customer;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Process process = (Process) obj;
+
+        return Objects.equals(id, process.id) &&
+                Objects.equals(label, process.label) &&
+                Objects.equals(number, process.number) &&
+                Objects.equals(creationDate, process.creationDate) &&
+                Objects.equals(supplier, process.supplier) &&
+                Objects.equals(type, process.type) &&
+                Objects.equals(processStatus, process.processStatus) &&
+                Objects.equals(employee, process.employee) &&
+                Objects.equals(customer, process.customer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
+    }
+
     @Override
     public String toString(){
         return id + " - " + label + " - " + number +  " - " + creationDate + " - " + supplier + " - " + type + " - " + processStatus + " - " + employee + " - " + customer;

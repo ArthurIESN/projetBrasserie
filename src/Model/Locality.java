@@ -2,6 +2,8 @@ package Model;
 
 import Model.Country.Country;
 
+import java.util.Objects;
+
 public class Locality
 {
     private final Integer id;
@@ -17,6 +19,27 @@ public class Locality
         this.postalCode = postalCode;
         this.number = number;
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Locality locality = (Locality) obj;
+
+        return Objects.equals(id, locality.id) &&
+                Objects.equals(address, locality.address) &&
+                Objects.equals(postalCode, locality.postalCode) &&
+                Objects.equals(number, locality.number) &&
+                Objects.equals(country, locality.country);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, address, postalCode, number, country);
     }
 
     @Override

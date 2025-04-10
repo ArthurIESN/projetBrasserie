@@ -20,6 +20,22 @@ public class Vat {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Vat vat = (Vat) obj;
+
+        return Objects.equals(code, vat.code) &&
+                Objects.equals(rate, vat.rate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, rate);
+    }
+
+    @Override
     public String toString()
     {
         return "Vat{ \n" +
