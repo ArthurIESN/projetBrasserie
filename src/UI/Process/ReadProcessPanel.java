@@ -86,9 +86,10 @@ public class ReadProcessPanel extends JPanel
         {
             switch (action.getActionCommand())
             {
-                case "Update" -> processPanel.updateContent(2, finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
-                case "Delete" -> processPanel.updateContent(3, finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
+                case "Update" -> processPanel.navbarClick(2);
+                case "Delete" -> processPanel.navbarClick(3);
             }
+            processPanel.notifyObservers(finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
         });
 
         add(tableScrollPanel);

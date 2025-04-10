@@ -1,15 +1,16 @@
-package UI.Components;
+package UI.Components.Navbar;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class NavbarPanel extends JPanel
 {
     private int currentIndex = 0;
 
-    public NavbarPanel(ArrayList<String> items, BiConsumer<Integer, Object> onItemClick)
+    public NavbarPanel(ArrayList<String> items, Consumer<Integer> onItemClick)
     {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -24,14 +25,14 @@ public class NavbarPanel extends JPanel
                 if (onItemClick != null && currentIndex != index)
                 {
                     currentIndex = index;
-                    onItemClick.accept(index, null);
+                    onItemClick.accept(index);
                 }
             });
 
             add(button);
         }
 
-        onItemClick.accept(0, null);
+        onItemClick.accept(0);
     }
 
     public void clickItem(int index)
@@ -40,6 +41,8 @@ public class NavbarPanel extends JPanel
         {
             JButton button = (JButton) getComponent(index);
             button.doClick();
+
+            currentIndex = index;
         }
     }
 }

@@ -1,8 +1,5 @@
 package UI.Components.Fields;
 
-import Model.Customer.Customer;
-import Model.Employee.Employee;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

@@ -23,9 +23,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class DeleteProcessPanel extends JPanel
+public class DeleteProcessPanel extends JPanel implements ProcessObserver
 {
-    public DeleteProcessPanel(ProcessPanel processPanel, Process process)
+    private final SearchByLabelPanel<Process> processSearch;
+    public DeleteProcessPanel(ProcessPanel processPanel)
     {
         GridBagLayoutHelper gridDeleteProcess = new GridBagLayoutHelper();
 
@@ -40,7 +41,9 @@ public class DeleteProcessPanel extends JPanel
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        SearchByLabelPanel<Process> processSearch = new SearchByLabelPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
+        processPanel.addObserver(this);
+
+        processSearch = new SearchByLabelPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
         processSearch.getSearchField().setPlaceholder("Search for a process");
 
         gridDeleteProcess.addField("Process", processSearch);
@@ -66,7 +69,7 @@ public class DeleteProcessPanel extends JPanel
                     JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                     // refresh the panel
-                    processPanel.updateContent(3, null);
+                    processPanel.navbarClick(3);
 
                 }
                 catch (DatabaseConnectionFailedException | DeleteProcessException e1)
@@ -133,15 +136,15 @@ public class DeleteProcessPanel extends JPanel
             }
         });
         add(tableScrollPanel);
+    }
 
-        if(process != null)
+    @Override
+    public void update(Object object)
+    {
+        if(object instanceof Process process)
         {
             processSearch.setSelectedItem(process);
         }
     }
 
-    public DeleteProcessPanel(ProcessPanel processPanel)
-    {
-        this(processPanel, null);
-    }
 }

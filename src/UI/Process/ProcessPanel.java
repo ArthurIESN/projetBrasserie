@@ -1,11 +1,11 @@
 package UI.Process;
 
-import UI.Components.NavbarPanel;
+import UI.Components.Navbar.NavbarPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import Model.Process.Process;
 
@@ -13,6 +13,7 @@ public class ProcessPanel extends JPanel
 {
     private Container container;
     private final NavbarPanel navbarPanel;
+    private final List<ProcessObserver> observers = new ArrayList<>();
     public ProcessPanel()
     {
         setLayout(new BorderLayout());
@@ -31,13 +32,29 @@ public class ProcessPanel extends JPanel
         add(container, BorderLayout.CENTER);
     }
 
-    public void navbarClickItem(int index)
+    public void navbarClick(int index)
     {
         navbarPanel.clickItem(index);
     }
 
+    public void addObserver(ProcessObserver observer) {
+        observers.add(observer);
+    }
 
-    public void updateContent(int index, Object data)
+    public void removeObserver(ProcessObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(Object data)
+    {
+        for (ProcessObserver observer : observers)
+        {
+            observer.update(data);
+        }
+    }
+
+
+    public void updateContent(int index)
     {
         container.removeAll();
 
@@ -45,8 +62,8 @@ public class ProcessPanel extends JPanel
         {
             case 0 -> new CreateProcessPanel();
             case 1 -> new ReadProcessPanel(this);
-            case 2 -> new UpdateProcessPanel((Process)data);
-            case 3 -> new DeleteProcessPanel(this, (Process)data);
+            case 2 -> new UpdateProcessPanel(this);
+            case 3 -> new DeleteProcessPanel(this);
             default -> new CreateProcessPanel();
         };
 

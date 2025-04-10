@@ -3,17 +3,12 @@ package UI.Components.Fields;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.function.Function;
 
 public class ComboBoxPanel<T> extends JComboBox<String>
 {
-    private Function<T, String> toStringFunction;
-    private ArrayList<T> items;
     public ComboBoxPanel(ArrayList<T> items, Function<T, String> toStringFunction)
     {
-        this.items = items;
-        this.toStringFunction = toStringFunction;
 
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         for (T item : items)
