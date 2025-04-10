@@ -60,7 +60,7 @@ public class Test extends JPanel
             );
             gridBagLayoutHelper.addField(comboBoxPanel);
         } catch (DatabaseConnectionFailedException | GetAllCustomersException e) {
-            throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 

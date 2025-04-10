@@ -5,15 +5,17 @@ import Model.Process.Process;
 import javax.swing.*;
 import java.awt.*;
 
-public class UpdateProcessPanel extends JPanel
+public class UpdateProcessPanel extends JPanel implements ProcessObserver
 {
     private final ProcessModelPanel processModelPanel;
-    public UpdateProcessPanel(Process process)
+    public UpdateProcessPanel(ProcessPanel processPanel)
     {
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Update a process");
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
+
+        processPanel.addObserver(this);
 
         processModelPanel = new ProcessModelPanel(true, true);
         processModelPanel.setButtonText("Update Process");
@@ -21,12 +23,6 @@ public class UpdateProcessPanel extends JPanel
         processModelPanel.onButtonClicked(e -> JOptionPane.showMessageDialog(null, "Process updated", "Success", JOptionPane.INFORMATION_MESSAGE));
 
         processModelPanel.onSearchProcessChange(e -> updateProcess());
-
-        if(process != null)
-        {
-            processModelPanel.getProcessSearch().setSelectedItem(process);
-        }
-
 
         add(processModelPanel);
     }
@@ -55,5 +51,14 @@ public class UpdateProcessPanel extends JPanel
             processModelPanel.getEmployeeSearch().setSelectedItem(selectedProcess.getEmployee());
         else
             processModelPanel.getEmployeeSearch().setSelectedItem(null);
+    }
+
+    @Override
+    public void update(Object object)
+    {
+        if(object instanceof Process process)
+        {
+            processModelPanel.getProcessSearch().setSelectedItem(process);
+        }
     }
 }
