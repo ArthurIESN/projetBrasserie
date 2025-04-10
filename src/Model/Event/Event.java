@@ -1,6 +1,7 @@
 package Model.Event;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Event {
     private Integer id;
@@ -35,6 +36,26 @@ public class Event {
 
     public float getImpact() {
         return impact;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Event event = (Event) obj;
+
+        return Objects.equals(id, event.id) &&
+                Objects.equals(label, event.label) &&
+                Objects.equals(startDate, event.startDate) &&
+                Objects.equals(endDate, event.endDate) &&
+                Objects.equals(impact, event.impact);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, startDate, endDate, impact);
     }
 
     @Override

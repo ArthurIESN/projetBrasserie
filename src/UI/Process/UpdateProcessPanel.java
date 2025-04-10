@@ -33,24 +33,24 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
         processModelPanel.getProcessIdField().updateText(String.valueOf(selectedProcess.getId()));
         processModelPanel.getProcessLabelField().updateText(selectedProcess.getLabel());
         processModelPanel.getProcessNumberField().updateText(String.valueOf(selectedProcess.getNumber()));
-        processModelPanel.getProcessStatusSearch().setSelectedItem(selectedProcess.getProcessStatus());
-        processModelPanel.getTypeSearch().setSelectedItem(selectedProcess.getType());
+        processModelPanel.getProcessStatusSearch().forceSetSelectedItem(selectedProcess.getProcessStatus());
+        processModelPanel.getTypeSearch().forceSetSelectedItem(selectedProcess.getType());
         processModelPanel.getDateField().setDate(selectedProcess.getCreationDate());
 
         if(selectedProcess.getCustomer() != null)
-            processModelPanel.getCustomerSearch().setSelectedItem(selectedProcess.getCustomer());
+            processModelPanel.getCustomerSearch().forceSetSelectedItem(selectedProcess.getCustomer());
         else
-            processModelPanel.getCustomerSearch().setSelectedItem(null);
+            processModelPanel.getCustomerSearch().forceSetSelectedItem(null);
 
         if(selectedProcess.getSupplier() != null)
-            processModelPanel.getSupplierSearch().setSelectedItem(selectedProcess.getSupplier());
+            processModelPanel.getSupplierSearch().forceSetSelectedItem(selectedProcess.getSupplier());
         else
-            processModelPanel.getSupplierSearch().setSelectedItem(null);
+            processModelPanel.getSupplierSearch().forceSetSelectedItem(null);
 
         if(selectedProcess.getEmployee() != null)
-            processModelPanel.getEmployeeSearch().setSelectedItem(selectedProcess.getEmployee());
+            processModelPanel.getEmployeeSearch().forceSetSelectedItem(selectedProcess.getEmployee());
         else
-            processModelPanel.getEmployeeSearch().setSelectedItem(null);
+            processModelPanel.getEmployeeSearch().forceSetSelectedItem(null);
     }
 
     @Override

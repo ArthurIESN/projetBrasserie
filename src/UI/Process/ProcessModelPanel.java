@@ -61,21 +61,13 @@ public class ProcessModelPanel extends JPanel
             if(showProcesses)
             {
                 processes = AppController.getAllProcesses();
+            }
 
-                customers = Utils.transformData(processes, Process::getCustomer);
-                suppliers = Utils.transformData(processes, Process::getSupplier);
-                processStatuses = Utils.transformData(processes, Process::getProcessStatus);
-                employees = Utils.transformData(processes, Process::getEmployee);
-                types = Utils.transformData(processes, Process::getType);
-            }
-            else
-            {
-                customers = AppController.getAllCustomers();
-                suppliers = AppController.getAllSuppliers();
-                processStatuses = AppController.getAllProcessStatus();
-                employees = AppController.getAllEmployees();
-                types = AppController.getAllTypes();
-            }
+            customers = AppController.getAllCustomers();
+            suppliers = AppController.getAllSuppliers();
+            processStatuses = AppController.getAllProcessStatus();
+            employees = AppController.getAllEmployees();
+            types = AppController.getAllTypes();
         } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException |
                  GetAllProcessStatusException | GetAllEmployeesException | GetAllProcessesException |
                  GetAllProcessTypesException e)

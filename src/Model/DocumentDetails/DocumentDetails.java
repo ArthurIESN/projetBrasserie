@@ -2,6 +2,8 @@ package Model.DocumentDetails;
 
 import Model.Document.Document;
 
+import java.util.Objects;
+
 public class DocumentDetails {
     private Integer id;
     private String label;
@@ -43,6 +45,27 @@ public class DocumentDetails {
 
     public Document getDocument() {
         return document;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        DocumentDetails that = (DocumentDetails) obj;
+
+        return Objects.equals(id, that.id) &&
+                Objects.equals(label, that.label) &&
+                Objects.equals(quantity, that.quantity) &&
+                Objects.equals(newQuantity, that.newQuantity) &&
+                Objects.equals(unitPrice, that.unitPrice) &&
+                Objects.equals(document, that.document);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document);
     }
 
     @Override

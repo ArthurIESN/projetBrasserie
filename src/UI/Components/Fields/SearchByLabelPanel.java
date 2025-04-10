@@ -141,10 +141,31 @@ public class SearchByLabelPanel<T> extends JPanel {
         if (item == null) {
             searchField.updateText("");
             updateList();
-        } else if (filteredData.contains(item)) {
+        } else if (filteredData.contains(item))
+        {
             searchField.updateText(toStringFunction.apply(item));
             updateList();
             resultList.setSelectedIndex(filteredData.indexOf(item));
+        }
+    }
+
+    public void forceSetSelectedItem(T item)
+    {
+        if (item == null) {
+            searchField.updateText("");
+            updateList();
+        } else if (data.contains(item))
+        {
+            searchField.updateText(toStringFunction.apply(item));
+            updateList();
+            resultList.setSelectedIndex(filteredData.indexOf(item));
+        }
+        else
+        {
+            searchField.updateText("");
+            updateList();
+            resultList.clearSelection();
+            System.out.println("ITEM NOT FOUND");
         }
     }
 }

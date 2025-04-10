@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Objects;
+
 public class CartLine
 {
     private final Integer id;
@@ -11,6 +13,25 @@ public class CartLine
         this.id = id;
         this.quantity = quantity;
         this.cart = cart;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        CartLine cartLine = (CartLine) obj;
+
+        return Objects.equals(id, cartLine.id) &&
+                Objects.equals(quantity, cartLine.quantity) &&
+                Objects.equals(cart, cartLine.cart);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, quantity, cart);
     }
 
     @Override

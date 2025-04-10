@@ -31,6 +31,25 @@ public class Packaging
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Packaging packaging = (Packaging) obj;
+
+        return Objects.equals(id, packaging.id) &&
+                Objects.equals(label, packaging.label) &&
+                Objects.equals(quantity, packaging.quantity);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, quantity);
+    }
+
+    @Override
     public String toString()
     {
         return "Packaging{ \n" +

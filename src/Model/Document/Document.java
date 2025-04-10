@@ -6,6 +6,7 @@ import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Document {
     private Integer id;
@@ -129,6 +130,40 @@ public class Document {
 
     public Process getProcess() {
         return process;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Document document = (Document) obj;
+
+        return Objects.equals(id, document.id) &&
+                Objects.equals(label, document.label) &&
+                Objects.equals(date, document.date) &&
+                Objects.equals(deadLine, document.deadLine) &&
+                Objects.equals(reduction, document.reduction) &&
+                Objects.equals(validity, document.validity) &&
+                Objects.equals(isDelivered, document.isDelivered) &&
+                Objects.equals(deliveryDate, document.deliveryDate) &&
+                Objects.equals(depositIsPaid, document.depositIsPaid) &&
+                Objects.equals(depositAmount, document.depositAmount) &&
+                Objects.equals(desiredDeliveryDate, document.desiredDeliveryDate) &&
+                Objects.equals(VatAmount, document.VatAmount) &&
+                Objects.equals(totalInclusiveOfTaxe, document.totalInclusiveOfTaxe) &&
+                Objects.equals(totalVat, document.totalVat) &&
+                Objects.equals(totalExclVat, document.totalExclVat) &&
+                Objects.equals(collectionAgency, document.collectionAgency) &&
+                Objects.equals(deliveryTruck, document.deliveryTruck) &&
+                Objects.equals(process, document.process);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
+                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                totalVat, totalExclVat, collectionAgency, deliveryTruck, process);
     }
 
     @Override

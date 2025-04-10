@@ -5,6 +5,7 @@ import Model.Process.Process;
 import Model.Document.Document;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Payment {
     private int id;
@@ -79,6 +80,28 @@ public class Payment {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Payment payment = (Payment) obj;
+
+        return Objects.equals(id, payment.id) &&
+                Objects.equals(amount, payment.amount) &&
+                Objects.equals(paymentDate, payment.paymentDate) &&
+                Objects.equals(paymentStatus, payment.paymentStatus) &&
+                Objects.equals(document, payment.document) &&
+                Objects.equals(process, payment.process) &&
+                Objects.equals(customer, payment.customer);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, amount, paymentDate, paymentStatus, document, process, customer);
     }
 }
 

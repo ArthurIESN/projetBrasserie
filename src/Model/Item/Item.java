@@ -103,6 +103,34 @@ public class Item
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Item item = (Item) obj;
+
+        return Objects.equals(id, item.id) &&
+                Objects.equals(label, item.label) &&
+                Objects.equals(price, item.price) &&
+                Objects.equals(restockQuantity, item.restockQuantity) &&
+                Objects.equals(currentQuantity, item.currentQuantity) &&
+                Objects.equals(emptyReturnableBottleQuantity, item.emptyReturnableBottleQuantity) &&
+                Objects.equals(emptyReturnableBottlePrice, item.emptyReturnableBottlePrice) &&
+                Objects.equals(forecastDate, item.forecastDate) &&
+                Objects.equals(forecastQuantity, item.forecastQuantity) &&
+                Objects.equals(minQuantity, item.minQuantity) &&
+                Objects.equals(packaging, item.packaging) &&
+                Objects.equals(vat, item.vat);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, label, price, restockQuantity, currentQuantity, emptyReturnableBottleQuantity, emptyReturnableBottlePrice, forecastDate, forecastQuantity, minQuantity, packaging, vat);
+    }
+
+    @Override
     public String toString()
     {
         return "Item{ \n" +

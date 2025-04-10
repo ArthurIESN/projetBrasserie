@@ -1,5 +1,7 @@
 package Model.ProcessType;
 
+import java.util.Objects;
+
 public class ProcessType {
     private Integer id;
     private String label;
@@ -15,6 +17,22 @@ public class ProcessType {
 
     public String getLabel() {
         return label;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        ProcessType that = (ProcessType) obj;
+
+        return Objects.equals(id, that.id) &&
+                Objects.equals(label, that.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, label);
     }
 
     @Override
