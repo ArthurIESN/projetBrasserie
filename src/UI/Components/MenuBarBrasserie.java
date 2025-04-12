@@ -35,7 +35,7 @@ public class MenuBarBrasserie {
 
         brasserieMenu.add(homeItem);
 
-        if(SystemProperties.getSystemType() == SystemProperties.SystemType.MAC)
+        if(SystemProperties.getSystemType() != SystemProperties.SystemType.MAC)
         {
             brasserieMenu.addSeparator();
 
