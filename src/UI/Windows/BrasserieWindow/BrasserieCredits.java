@@ -1,4 +1,4 @@
-package UI.BrasserieWindow;
+package UI.Windows.BrasserieWindow;
 
 import UI.Components.GridBagLayoutHelper;
 

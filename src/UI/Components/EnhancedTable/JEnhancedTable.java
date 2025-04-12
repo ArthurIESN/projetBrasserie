@@ -4,13 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Date;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.table.*;
 
+
 public class JEnhancedTable extends JTable
+
 {
+    private ComponentListener resizeListener;
     private static final Color backbroundRowColor = new Color(0, 0, 0, 0);
     private static final Color alternateBackgroundRowColor = new Color(70, 70, 70);
     private static final Color selectedRowColor = new Color(100, 100, 100);
@@ -29,26 +33,33 @@ public class JEnhancedTable extends JTable
 
         addAncestorListener(new AncestorListener() {
             @Override
-            public void ancestorAdded(AncestorEvent event)
-            {
+            public void ancestorAdded(AncestorEvent event) {
                 Window window = SwingUtilities.getWindowAncestor(JEnhancedTable.this);
                 if (window != null)
                 {
-                    window.addComponentListener(new ComponentAdapter()
+                    resizeListener = new ComponentAdapter()
                     {
                         @Override
                         public void componentResized(ComponentEvent e)
                         {
                             updateColumnSize();
                         }
-                    });
+                    };
+                    window.addComponentListener(resizeListener);
                 }
 
                 updateModel(model);
             }
 
             @Override
-            public void ancestorRemoved(AncestorEvent event) {}
+            public void ancestorRemoved(AncestorEvent event) {
+                Window window = SwingUtilities.getWindowAncestor(JEnhancedTable.this);
+                if (window != null && resizeListener != null)
+                {
+                    window.removeComponentListener(resizeListener);
+                    resizeListener = null;
+                }
+            }
             @Override
             public void ancestorMoved(AncestorEvent event) {}
         });
