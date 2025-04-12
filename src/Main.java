@@ -1,11 +1,11 @@
-import UI.BrasserieWindow.BrasserieWindow;
+import UI.Windows.BrasserieWindow.BrasserieWindow;
 import Environement.SystemProperties;
+import UI.Windows.WindowManager;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        SystemProperties.enableFlatDarkLaf();
-        BrasserieWindow brasserieWindow = new BrasserieWindow();
+        WindowManager.init();
     }
 }

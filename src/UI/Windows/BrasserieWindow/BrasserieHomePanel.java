@@ -1,4 +1,4 @@
-package UI.BrasserieWindow;
+package UI.Windows.BrasserieWindow;
 
 import javax.swing.*;
 import java.awt.*;

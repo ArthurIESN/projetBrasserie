@@ -1,13 +1,16 @@
-package UI.BrasserieWindow;
+package UI.Windows.BrasserieWindow;
 
 import javax.swing.*;
 import java.awt.*;
 
 import UI.Components.MenuBarBrasserie;
 import UI.Test.Test;
+import UI.Windows.WindowManager;
+import UI.Windows.WindowObserver;
 
-public class BrasserieWindow extends JFrame
+public class BrasserieWindow extends JFrame implements WindowObserver
 {
+    private final WindowManager windowManager;
     private MenuBarBrasserie menuBarBrasserie;
     private Container container;
     private JPanel contentPanel;
@@ -15,6 +18,9 @@ public class BrasserieWindow extends JFrame
     public BrasserieWindow()
     {
         super("Brasserie");
+
+        this.windowManager = WindowManager.getInstance();
+        windowManager.addObserver(this);
 
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -47,5 +53,14 @@ public class BrasserieWindow extends JFrame
     public static void main(String[] args)
     {
         new BrasserieWindow();
+    }
+
+    @Override
+    public void onSettingsChanged()
+    {
+        // reload this window
+        SwingUtilities.updateComponentTreeUI(this);
+        revalidate();
+        repaint();
     }
 }

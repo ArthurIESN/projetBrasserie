@@ -1,12 +1,14 @@
 package UI.Components;
 
-import UI.BrasserieWindow.BrasserieCredits;
-import UI.BrasserieWindow.BrasserieWindow;
-import UI.BrasserieWindow.BrasserieHomePanel;
+import Environement.SystemProperties;
+import UI.Windows.BrasserieWindow.BrasserieCredits;
+import UI.Windows.BrasserieWindow.BrasserieWindow;
+import UI.Windows.BrasserieWindow.BrasserieHomePanel;
 import UI.Process.ProcessPanel;
 import UI.Search.Document.SearchDocumentWithEventForm;
 import UI.Search.Item.SearchItemForm;
 import UI.Search.Payment.SearchPaymentForm;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
 
@@ -20,6 +22,9 @@ public class MenuBarBrasserie {
     public MenuBarBrasserie(BrasserieWindow brasserieWindow){
         menuBar = new JMenuBar();
 
+
+
+
         brasserieMenu = new JMenu("Brasserie");
 
         menuBar.add(brasserieMenu);
@@ -29,6 +34,20 @@ public class MenuBarBrasserie {
         JMenuItem quitItem = new JMenuItem("Quit");
 
         brasserieMenu.add(homeItem);
+
+        if(SystemProperties.getSystemType() == SystemProperties.SystemType.MAC)
+        {
+            brasserieMenu.addSeparator();
+
+            JMenuItem settingsItem = new JMenuItem("Settings");
+            settingsItem.addActionListener(e ->
+            {
+                WindowManager.showSettingsWindow();
+            });
+
+            brasserieMenu.add(settingsItem);
+        }
+
         brasserieMenu.add(creditsItem);
         brasserieMenu.add(quitItem);
 
