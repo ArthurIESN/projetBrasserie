@@ -34,7 +34,7 @@ public class ReadProcessPanel extends JPanel
         {
             processes = AppController.getAllProcesses();
         }
-        catch (DatabaseConnectionFailedException | GetAllProcessesException e)
+        catch (GetAllProcessesException e)
         {
             processes = new ArrayList<>();
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

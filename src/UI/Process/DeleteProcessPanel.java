@@ -36,7 +36,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
         {
             processes = AppController.getAllProcesses();
         }
-        catch (DatabaseConnectionFailedException | GetAllProcessesException e)
+        catch (GetAllProcessesException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -73,7 +73,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
                     processPanel.navbarClick(3);
 
                 }
-                catch (DatabaseConnectionFailedException | DeleteProcessException e1)
+                catch (DeleteProcessException e1)
                 {
                     JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }

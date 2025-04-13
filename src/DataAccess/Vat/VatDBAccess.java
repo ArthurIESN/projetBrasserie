@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class VatDBAccess implements VatDataAccess
 {
-    public Vat getVat(String code) throws DatabaseConnectionFailedException, UnkownVatCodeException
+    public Vat getVat(String code) throws UnkownVatCodeException
     {
         String sql = "SELECT * FROM vat WHERE code = ?";
 
@@ -33,10 +33,10 @@ public class VatDBAccess implements VatDataAccess
             {
                 throw new UnkownVatCodeException(code);
             }
-        } catch (SQLException e)
+        } catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println("Sql error: " + e.getMessage());
-            throw new DatabaseConnectionFailedException();
+            throw new UnkownVatCodeException(code);
         }
     }
 }

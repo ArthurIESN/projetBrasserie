@@ -21,7 +21,7 @@ public class SupplierManager
         supplierDataAccess = new SupplierDBAccess();
     }
 
-    public ArrayList<Supplier> getAllSuppliers() throws DatabaseConnectionFailedException, GetAllSuppliersException
+    public ArrayList<Supplier> getAllSuppliers() throws GetAllSuppliersException
     {
         return supplierDataAccess.getAllSuppliers();
     }

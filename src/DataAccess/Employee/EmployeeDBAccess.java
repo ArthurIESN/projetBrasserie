@@ -18,7 +18,7 @@ import Model.EmployeeStatus.MakeEmployeeStatus;
 
 public class EmployeeDBAccess implements EmployeeDataAccess
 {
-    public ArrayList<Employee> getAllEmployees() throws DatabaseConnectionFailedException, GetAllEmployeesException
+    public ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException
     {
         String query = "SELECT *, employee.id_employee_status as id_employee_status " +
                 "FROM employee " +
@@ -52,7 +52,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
             return employees;
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllEmployeesException();

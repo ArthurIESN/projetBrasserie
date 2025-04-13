@@ -17,7 +17,7 @@ import java.util.List;
 public class EventDBAccess implements EventDataAccess {
     public EventDBAccess(){}
 
-    public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws DatabaseConnectionFailedException, GetEventsWithItemException {
+    public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
         String query = "SELECT DISTINCT e.* " +
                 "FROM Event e " +
                 "JOIN event_document_details edd ON e.id = edd.id_event " +
@@ -49,7 +49,7 @@ public class EventDBAccess implements EventDataAccess {
             }
 
          return events;
-        }catch (SQLException e){
+        }catch (SQLException | DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
             throw new GetEventsWithItemException();
         }

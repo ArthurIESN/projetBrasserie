@@ -68,11 +68,11 @@ public class ProcessModelPanel extends JPanel
             processStatuses = AppController.getAllProcessStatus();
             employees = AppController.getAllEmployees();
             types = AppController.getAllTypes();
-        } catch (DatabaseConnectionFailedException | GetAllCustomersException | GetAllSuppliersException |
+        } catch (GetAllCustomersException | GetAllSuppliersException |
                  GetAllProcessStatusException | GetAllEmployeesException | GetAllProcessesException |
                  GetAllProcessTypesException e)
         {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to get customers, suppliers, process statuses, employees or processes. You are unable to create a process.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 

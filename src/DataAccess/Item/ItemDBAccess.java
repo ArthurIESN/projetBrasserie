@@ -2,6 +2,7 @@ package DataAccess.Item;
 
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Item.GetAllItemsException;
 import Model.Item.Item;
 
 import Model.Packaging.Packaging;
@@ -21,7 +22,7 @@ public class ItemDBAccess {
 
     public ItemDBAccess(){}
 
-    public List<Item> getAllItems() throws DatabaseConnectionFailedException{
+    public List<Item> getAllItems() throws GetAllItemsException {
         List<Item> items = new ArrayList<>();
 
         String query = "SELECT *,packaging.id AS id_packaging,packaging.label AS packaging_label, " +
@@ -90,9 +91,10 @@ public class ItemDBAccess {
                 items.add(item);
 
             }
-        }catch (SQLException e){
+        }catch (SQLException | DatabaseConnectionFailedException  e)
+        {
             System.err.println(e.getMessage());
-            throw new DatabaseConnectionFailedException("Database connection failed");
+            throw new GetAllItemsException();
         }
 
         return items;

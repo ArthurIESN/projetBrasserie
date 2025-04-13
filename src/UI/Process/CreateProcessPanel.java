@@ -77,7 +77,7 @@ public class CreateProcessPanel extends JPanel
         {
             AppController.createProcess(process);
             JOptionPane.showMessageDialog(this, "Process created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (DatabaseConnectionFailedException | CreateProcessException e)
+        } catch (CreateProcessException e)
         {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

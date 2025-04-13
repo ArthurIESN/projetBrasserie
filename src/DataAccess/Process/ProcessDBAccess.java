@@ -43,7 +43,7 @@ public class ProcessDBAccess implements ProcessDataAccess
     {
     }
 
-    public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
+    public void createProcess(Process process) throws CreateProcessException
     {
         String query = "INSERT INTO process (label, number, creation_date, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -109,7 +109,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
             statement.executeUpdate();
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new CreateProcessException();
@@ -118,7 +118,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     }
 
-    public void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws DatabaseConnectionFailedException, UpdateProcessException
+    public void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws UpdateProcessException
     {
         String query = "UPDATE process SET " +
                 "label = ?, " +
@@ -196,14 +196,14 @@ public class ProcessDBAccess implements ProcessDataAccess
                 throw new UpdateProcessException("Invalid process ID: " + id);
             }
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new UpdateProcessException();
         }
     }
 
-    public void deleteProcess(Integer id) throws DatabaseConnectionFailedException, DeleteProcessException
+    public void deleteProcess(Integer id) throws DeleteProcessException
     {
         String query = "DELETE FROM process WHERE id = ?";
 
@@ -218,20 +218,20 @@ public class ProcessDBAccess implements ProcessDataAccess
                 throw new DeleteProcessException("Invalid process ID: " + id);
             }
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new DeleteProcessException();
         }
     }
 
-    public Process getProcess(Integer id) throws DatabaseConnectionFailedException, GetProcessException
+    public Process getProcess(Integer id) throws GetProcessException
     {
         String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
                 "FROM process " +
                 "LEFT JOIN supplier          ON process.id_supplier = supplier.id " +
-                "JOIN process_type              ON process.id_process_type = process_type.id " +
-                "JOIN process_status    ON process.id_process_status = process_status.id " +
+                "JOIN process_type           ON process.id_process_type = process_type.id " +
+                "JOIN process_status         ON process.id_process_status = process_status.id " +
                 "LEFT JOIN employee          ON process.id_employee = employee.id " +
                 "LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
                 "LEFT JOIN customer          ON process.num_customer = customer.num_customer " +
@@ -255,14 +255,14 @@ public class ProcessDBAccess implements ProcessDataAccess
                 throw new GetProcessException("Process not found");
             }
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetProcessException();
         }
     }
 
-    public ArrayList<Process> getAllProcesses() throws DatabaseConnectionFailedException, GetAllProcessesException
+    public ArrayList<Process> getAllProcesses() throws GetAllProcessesException
     {
 
         String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
@@ -291,28 +291,28 @@ public class ProcessDBAccess implements ProcessDataAccess
 
             return processes;
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllProcessesException();
         }
     }
 
+
     private Process makeProcess(ResultSet resultSet) throws SQLException
     {
-        Supplier supplier;
-        ProcessType processType;
-        ProcessStatus processStatus;
-        Employee employee;
-        EmployeeStatus employeeStatus;
-        Customer customer;
-        CustomerStatus customerStatus;
+        ProcessType processType = MakeProcessType.getProcessType(
+                resultSet.getInt("id_type"),
+                resultSet.getString("process_type.label")
+        );
 
-        if(resultSet.getInt("id_supplier") == 0)
-        {
-            supplier = null;
-        }
-        else
+        ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(
+                resultSet.getInt("id_process_status"),
+                resultSet.getString("process_status.label")
+        );
+
+        Supplier supplier = null;
+        if(resultSet.getInt("id_supplier") != 0)
         {
             supplier = MakeSupplier.getSupplier(
                     resultSet.getInt("id_supplier"),
@@ -320,23 +320,10 @@ public class ProcessDBAccess implements ProcessDataAccess
             );
         }
 
-        processType = MakeProcessType.getProcessType(
-                resultSet.getInt("id_type"),
-                resultSet.getString("process_type.label")
-        );
-
-        processStatus = MakeProcessStatus.getProcessStatus(
-                resultSet.getInt("id_process_status"),
-                resultSet.getString("process_status.label")
-        );
-
-        if(resultSet.getInt("id_employee") == 0)
+        Employee employee = null;
+        if(resultSet.getInt("id_employee") != 0)
         {
-            employee = null;
-        }
-        else
-        {
-            employeeStatus = new EmployeeStatus(
+            EmployeeStatus employeeStatus = new EmployeeStatus(
                     resultSet.getInt("employee.id_employee_status"),
                     resultSet.getString("employee_status.label")
             );
@@ -350,18 +337,15 @@ public class ProcessDBAccess implements ProcessDataAccess
             );
         }
 
-        if(resultSet.getInt("id_customer") == 0)
+        Customer customer = null;
+        if(resultSet.getInt("id_customer") != 0)
         {
-            customer = null;
-        }
-        else
-        {
-            customerStatus = new CustomerStatus(
+            CustomerStatus customerStatus = new CustomerStatus(
                     resultSet.getInt("customer.id_customer_status"),
                     resultSet.getString("customer_status.label")
             );
 
-            customer = new Customer(
+            customer = MakeCustomer.getCustomer(
                     resultSet.getInt("id_customer"),
                     resultSet.getString("customer.last_name"),
                     resultSet.getString("customer.first_name"),

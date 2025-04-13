@@ -24,7 +24,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
     public SearchPaymentDBAccess() {
     }
 
-    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException {
         String query =  "SELECT payment.*, payment_status.label AS payment_status_label, " +
                 "document.id AS document_id, document.label AS document_label, document.date AS document_date, " +
                 "process.id AS process_id, process.label AS process_label, process.id_process_type AS process_type, " +
@@ -110,7 +110,7 @@ ArrayList<Payment> payments = new ArrayList<>();
 
             return payments;
 
-        } catch (SQLException e) {
+        } catch (SQLException | DatabaseConnectionFailedException e) {
             System.err.println("Sql error: " + e.getMessage());
             throw new SearchPaymentException();
         }

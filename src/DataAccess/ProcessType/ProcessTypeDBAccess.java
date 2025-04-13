@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 {
 
-    public ArrayList<ProcessType> getAllTypes() throws DatabaseConnectionFailedException, GetAllProcessTypesException
+    public ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException
     {
         String query = "SELECT * FROM process_type";
 
@@ -37,7 +37,7 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
             return types;
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllProcessTypesException();

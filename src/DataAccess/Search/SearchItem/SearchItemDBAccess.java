@@ -25,7 +25,7 @@ public class SearchItemDBAccess implements SearchItemDataAccess
     {
     }
 
-    public int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
+    public int[] getMinMaxItemQuantityAndPrice() throws GetMinMaxItemQuantityAndPriceException
     {
 
         String query = "SELECT " +
@@ -54,14 +54,14 @@ public class SearchItemDBAccess implements SearchItemDataAccess
 
             return minMaxItem;
 
-        } catch (SQLException e)
+        } catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println("Sql error: " + e.getMessage());
             throw new GetMinMaxItemQuantityAndPriceException();
         }
     }
 
-    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws DatabaseConnectionFailedException, SearchItemException
+    public ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice)  throws SearchItemException
     {
         String query = "SELECT *, packaging.label AS packaging_label " +
                 "FROM item " +
@@ -123,7 +123,7 @@ public class SearchItemDBAccess implements SearchItemDataAccess
 
             return items;
 
-        } catch (SQLException e)
+        } catch (SQLException | DatabaseConnectionFailedException  e)
         {
             System.err.println("Sql error: " + e.getMessage());
             throw new SearchItemException();

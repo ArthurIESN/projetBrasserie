@@ -17,7 +17,7 @@ public class ProcessTypeManager
         typeDataAccess = new ProcessTypeDBAccess();
     }
 
-    public ArrayList<ProcessType> getAllTypes() throws DatabaseConnectionFailedException, GetAllProcessTypesException
+    public ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException
     {
         return typeDataAccess.getAllTypes();
     }

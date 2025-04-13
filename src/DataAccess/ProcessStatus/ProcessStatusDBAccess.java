@@ -18,7 +18,7 @@ import Model.ProcessStatus.ProcessStatus;
 
 public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 {
-    public ArrayList<ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, GetAllProcessStatusException
+    public ArrayList<ProcessStatus> getAllProcessStatus() throws GetAllProcessStatusException
     {
         String query = "SELECT * FROM process_status";
 
@@ -43,7 +43,7 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
             return processStatuses;
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllProcessStatusException();

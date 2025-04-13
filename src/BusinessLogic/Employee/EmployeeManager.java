@@ -18,7 +18,7 @@ public class EmployeeManager
     {
         employeeDataAccess = new EmployeeDBAccess();
     }
-    public ArrayList<Employee> getAllEmployees() throws DatabaseConnectionFailedException, GetAllEmployeesException
+    public ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException
     {
         return employeeDataAccess.getAllEmployees();
     }

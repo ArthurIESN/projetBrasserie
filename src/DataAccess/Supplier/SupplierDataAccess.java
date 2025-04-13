@@ -9,7 +9,7 @@ import Model.Supplier.Supplier;
 
 public interface SupplierDataAccess
 {
-    ArrayList<Supplier> getAllSuppliers() throws DatabaseConnectionFailedException, GetAllSuppliersException;
+    ArrayList<Supplier> getAllSuppliers() throws GetAllSuppliersException;
     Supplier getSupplier(int id);
     void createSupplier(Supplier supplier);
     void deleteSupplier(int id);
