@@ -8,5 +8,5 @@ import java.util.ArrayList;
 
 public interface ProcessTypeDataAccess
 {
-    ArrayList<ProcessType> getAllTypes() throws DatabaseConnectionFailedException, GetAllProcessTypesException;
+    ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException;
 }

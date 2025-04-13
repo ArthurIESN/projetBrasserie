@@ -18,7 +18,7 @@ import Model.CustomerStatus.MakeCustomerStatus;
 
 public class CustomerDBAccess implements CustomerDataAccess
 {
-    public ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException
+    public ArrayList<Customer> getAllCustomers() throws GetAllCustomersException
     {
         String query = "SELECT *, customer.num_customer AS id, customer.id_customer_status as id_customer_status, customer_status.label AS customer_status_label " +
                 " FROM customer " +
@@ -53,7 +53,7 @@ public class CustomerDBAccess implements CustomerDataAccess
 
             return customers;
         }
-        catch (SQLException e)
+        catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllCustomersException();

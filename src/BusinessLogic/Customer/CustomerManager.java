@@ -17,7 +17,7 @@ public class CustomerManager
         customerDataAccess = new CustomerDBAccess();
     }
 
-    public ArrayList<Customer> getAllCustomers() throws DatabaseConnectionFailedException, GetAllCustomersException
+    public ArrayList<Customer> getAllCustomers() throws GetAllCustomersException
     {
         return customerDataAccess.getAllCustomers();
     }

@@ -4,6 +4,7 @@ import Controller.AppController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
+import Exceptions.Item.GetAllItemsException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Document.Document;
@@ -64,9 +65,11 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         GridBagLayoutHelper filterPanel = new GridBagLayoutHelper();
 
-        try{
+        try
+        {
             items = AppController.getAllItems();
-        }catch (DatabaseConnectionFailedException e){
+        }catch (GetAllItemsException e)
+        {
             System.out.println(e.getMessage());
         }
 

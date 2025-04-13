@@ -21,17 +21,17 @@ public class ProcessManager
         processDataAccess = new ProcessDBAccess();
     }
 
-    public ArrayList<Process> getAllProcessess() throws DatabaseConnectionFailedException, GetAllProcessesException
+    public ArrayList<Process> getAllProcessess() throws GetAllProcessesException
     {
         return processDataAccess.getAllProcesses();
     }
 
-    public void createProcess(Process process) throws DatabaseConnectionFailedException, CreateProcessException
+    public void createProcess(Process process) throws CreateProcessException
     {
         processDataAccess.createProcess(process);
     }
 
-    public void deleteProcess(Integer id) throws DatabaseConnectionFailedException, DeleteProcessException
+    public void deleteProcess(Integer id) throws DeleteProcessException
     {
         processDataAccess.deleteProcess(id);
     }

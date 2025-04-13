@@ -8,6 +8,6 @@ import java.util.ArrayList;
 
 public interface ProcessStatusDataAccess
 {
-    ArrayList<ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, GetAllProcessStatusException;
+    ArrayList<ProcessStatus> getAllProcessStatus() throws GetAllProcessStatusException;
 
 }

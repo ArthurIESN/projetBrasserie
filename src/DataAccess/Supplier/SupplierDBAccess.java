@@ -18,7 +18,7 @@ import Model.Supplier.Supplier;
 
 public class SupplierDBAccess implements SupplierDataAccess
 {
-    public ArrayList<Supplier> getAllSuppliers() throws DatabaseConnectionFailedException, GetAllSuppliersException
+    public ArrayList<Supplier> getAllSuppliers() throws GetAllSuppliersException
     {
         String query = "SELECT * FROM supplier";
 
@@ -43,7 +43,7 @@ public class SupplierDBAccess implements SupplierDataAccess
 
             return suppliers;
 
-        } catch (SQLException e)
+        } catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new GetAllSuppliersException();

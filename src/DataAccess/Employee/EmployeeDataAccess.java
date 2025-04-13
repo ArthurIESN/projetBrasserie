@@ -11,7 +11,7 @@ import Model.Employee.Employee;
 
 public interface EmployeeDataAccess
 {
-    ArrayList<Employee> getAllEmployees() throws DatabaseConnectionFailedException, GetAllEmployeesException;
+    ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException;
     Employee getEmployee(int id);
     void createEmployee(Employee employee);
     void deleteEmployee(int id);

@@ -18,7 +18,7 @@ public class ProcessStatusManager
         processStatusDataAccess = new ProcessStatusDBAccess();
     }
 
-    public ArrayList<ProcessStatus> getAllProcessStatus() throws DatabaseConnectionFailedException, GetAllProcessStatusException
+    public ArrayList<ProcessStatus> getAllProcessStatus() throws GetAllProcessStatusException
     {
         return processStatusDataAccess.getAllProcessStatus();
     }
