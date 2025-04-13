@@ -8,12 +8,10 @@ import BusinessLogic.Search.SearchDocumentWithEventManager;
 import BusinessLogic.Search.SearchPaymentManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
-import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
-import Exceptions.Search.GetQuantityItemWithSpecificEventException;
-import Exceptions.Search.SearchItemException;
-import Exceptions.Search.SearchPaymentException;
+import Exceptions.Search.*;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
+import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
 import Model.Payment.Payment;
@@ -54,4 +52,9 @@ public class SearchController {
     public static ArrayList<Float> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
         return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
     }
+
+    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, float quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
+        return searchDocumentWithEventManager.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
+    }
+
 }

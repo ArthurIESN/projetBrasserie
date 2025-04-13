@@ -4,15 +4,22 @@ import Controller.AppController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
+import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
+import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
+import UI.Components.EnhancedTable.JEnhancedTable;
+import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.Fields.SearchByLabelPanel;
 import UI.Components.StepByStepManager;
+import UI.Models.DocumentEnhancedTableModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +28,6 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JLabel title;
     private JPanel filterLabelPanel;
     private JLabel filterLabel;
-    private int currentIndexFilter;
     private StepByStepManager stepByStepManager;
     private List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
@@ -32,7 +38,9 @@ public class SearchDocumentWithEventForm extends JPanel {
     private SearchByLabelPanel<Event> eventSearch;
     private SearchByLabelPanel<Float> quantitySearch;
     private SearchByLabelPanel<Integer> yearSearch;
-    private JPanel panelSearchButton;
+    private TableModelMaker tableModelMaker;
+    private DocumentEnhancedTableModel documentTableModel;
+    private JEnhancedTableScrollPanel tableScrollPanel;
     private JButton searchButton;
 
     public SearchDocumentWithEventForm(){
@@ -45,7 +53,6 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         filterLabel = new JLabel(String.join("", filters));
 
-        panelSearchButton = new JPanel();
         searchButton = new JButton("Search");
         searchButton.setVisible(false);
 
@@ -108,7 +115,34 @@ public class SearchDocumentWithEventForm extends JPanel {
         stepByStepManager.onStepShown(4, this::functionCalledWhenStepButtonIsShown);
 
 
-        add(filterPanel, BorderLayout.CENTER);
+        tableModelMaker = new TableModelMaker();
+        documentTableModel = new DocumentEnhancedTableModel(new ArrayList<>());
+
+        tableModelMaker.addTableModel(documentTableModel);
+
+        tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker,this);
+        tableModelMaker.setTable(tableScrollPanel);
+
+        searchButton.addActionListener(e -> {
+            try{
+                SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
+                        eventSearch.getSelectedItem().getId(),quantitySearch.getSelectedItem(),
+                        yearSearch.getSelectedItem());
+                // @todo : gérer les erreurs
+            }catch (DatabaseConnectionFailedException | GetDocumentWithSpecificEventException err){
+                System.err.println(err.getMessage());
+            }
+        });
+
+
+        // Permet d'ajouter un slide entre les deux parties pour agrandir ou diminuer l'une ou l'autre.
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setTopComponent(filterPanel);
+        splitPane.setBottomComponent(tableScrollPanel);
+        splitPane.setResizeWeight(0.70);
+        splitPane.setDividerSize(5);
+
+        add(splitPane,BorderLayout.CENTER);
 
     }
 
@@ -126,6 +160,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         if(!events.isEmpty()){
             eventSearch.setData(events);
         }else {
+            JOptionPane.showMessageDialog(null, "No event was found for the selected product.","No event found",JOptionPane.INFORMATION_MESSAGE);
             stepByStepManager.stop();
         }
     }
@@ -144,6 +179,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             quantitySearch.setData(quantities);
 
         }else {
+            JOptionPane.showMessageDialog(null, "No quantities was found for the selected event.","No quantities found",JOptionPane.INFORMATION_MESSAGE);
             stepByStepManager.stop();
         }
     }
@@ -161,6 +197,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         if(!years.isEmpty()){
             yearSearch.setData(years);
         }else {
+            JOptionPane.showMessageDialog(null, "No years was found for the selected quantity.","No years found",JOptionPane.INFORMATION_MESSAGE);
             stepByStepManager.stop();
         }
     }
@@ -195,7 +232,6 @@ public class SearchDocumentWithEventForm extends JPanel {
             filters.remove(i);
             i--;
         }
-
         setFilterLabel();
     }
 }
