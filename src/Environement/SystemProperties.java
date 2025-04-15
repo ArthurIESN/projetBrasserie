@@ -1,5 +1,7 @@
 package Environement;
 
+import UI.Components.Fields.JDualSliderPanel;
+import UI.Theme.ThemeManager;
 import UI.Windows.SettingsWindow.SettingsWindow;
 import UI.Windows.WindowManager;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -36,6 +38,29 @@ public class SystemProperties
     {
         MAC,
         WINDOWS
+    }
+
+    public static Properties getThemeProperties()
+    {
+        Properties themeProperties = new Properties();
+
+        try {
+
+            if (getDarkThemeEnabled())
+            {
+                themeProperties.load(new FileInputStream(rootPath + "Properties/DarkTheme.properties"));
+            } else
+            {
+                themeProperties.load(new FileInputStream(rootPath + "Properties/LightTheme.properties"));
+            }
+
+        } catch (IOException e)
+        {
+            System.out.println("Error loading theme properties file: " + e.getMessage());
+            return null;
+        }
+
+        return themeProperties;
     }
 
     public static SystemType getSystemType()
@@ -126,6 +151,9 @@ public class SystemProperties
             System.out.println("Light theme enabled");
             enableLightTheme();
         }
+
+        // reload theme properties
+        ThemeManager.notifyObservers(getThemeProperties());
     }
 
     private static void applyMacosSettings()

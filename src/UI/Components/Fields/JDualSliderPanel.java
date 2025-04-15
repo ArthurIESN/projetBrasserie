@@ -1,9 +1,14 @@
 package UI.Components.Fields;
 
+import Environement.SystemProperties;
+import UI.Theme.ThemeManager;
+import UI.Theme.ThemeObserver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Properties;
 
 public class JDualSliderPanel extends JPanel
 {
@@ -13,9 +18,27 @@ public class JDualSliderPanel extends JPanel
     private final int padding = 60; // Left and right padding
     private final int min;
     private final int max;
-    private static final Color thumbColor = new Color(100, 149, 237);
-    private static final Color trackColor = Color.GRAY;
-    private static final Color textColor = Color.WHITE;
+    private static Color thumbColor;
+    private static Color trackColor;
+    private static Color textColor;
+
+    static
+    {
+        Properties themeProperties = SystemProperties.getThemeProperties();
+        loadTheme(themeProperties);
+
+        ThemeManager.addObserver(JDualSliderPanel::loadTheme);
+    }
+
+    public static void loadTheme(Properties themeProperties)
+    {
+        if(themeProperties != null)
+        {
+            thumbColor = Color.decode(themeProperties.getProperty("DualSlider.thumbColor"));
+            trackColor = Color.decode(themeProperties.getProperty("DualSlider.trackColor"));
+            textColor = Color.decode(themeProperties.getProperty("DualSlider.textColor"));
+        }
+    }
 
     public JDualSliderPanel(int minValue, int maxValue, int width, int height)
     {

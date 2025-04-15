@@ -1,17 +1,43 @@
 package UI.Components.Fields;
 
+import Environement.SystemProperties;
+
+import UI.Theme.ThemeManager;
+import UI.Theme.ThemeObserver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Properties;
 
 // Handle placeholder text in JTextField
-public class JEnhancedTextField extends JTextField
+public class JEnhancedTextField extends JTextField implements ThemeObserver
 {
     private String placeholder;
     private boolean showingPlaceholder;
-    private static final Color textColor = Color.WHITE;
-    private static final Color placeholderColor = Color.GRAY;
+    private static Color textColor;
+    private static Color placeholderColor;
+
+    static
+    {
+        Properties themeProperties = SystemProperties.getThemeProperties();
+        loadTheme(themeProperties);
+
+        // Register the observer for theme changes
+        ThemeManager.addObserver(JEnhancedTextField::loadTheme);
+    }
+
+    private static void loadTheme(Properties themeProperties)
+    {
+        if (themeProperties != null)
+        {
+            // Load colors from theme properties
+            System.out.println("Loading theme properties for JEnhancedTextField");
+            textColor = Color.decode(themeProperties.getProperty("EnhancedTextField.textColor"));
+            placeholderColor = Color.decode(themeProperties.getProperty("EnhancedTextField.placeholderColor"));
+        }
+    }
 
     public JEnhancedTextField()
     {
@@ -55,8 +81,16 @@ public class JEnhancedTextField extends JTextField
     public void updateText(String text)
     {
         setText(text);
-        setForeground(textColor);
-        showingPlaceholder = false;
+
+        if(!text.isEmpty())
+        {
+            setForeground(textColor);
+            showingPlaceholder = false;
+        }
+        else
+        {
+            setPlaceholderText();
+        }
     }
 
     public void setPlaceholder(String placeholder)
@@ -73,5 +107,11 @@ public class JEnhancedTextField extends JTextField
             setText(placeholder);
             setForeground(placeholderColor);
         }
+    }
+
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+        loadTheme(themeProperties);
     }
 }

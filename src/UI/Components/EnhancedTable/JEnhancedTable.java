@@ -87,9 +87,14 @@ public class JEnhancedTable extends JTable
     {
         TableColumnModel columnModel = getColumnModel();
         FontMetrics metrics = getFontMetrics(getFont());
+
         int tableWidth = getParent() != null ? getParent().getWidth() : getWidth();
         int totalColumnWidth = 0;
 
+        if(getParent() != null)
+        {
+            System.out.println("Parent width: " + getParent());
+        }
 
         System.out.println("Table width: " + tableWidth);
 

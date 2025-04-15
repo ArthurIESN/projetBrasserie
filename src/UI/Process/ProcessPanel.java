@@ -37,6 +37,11 @@ public class ProcessPanel extends JPanel
         navbarPanel.clickItem(index);
     }
 
+    public void navbarForceClick(int index)
+    {
+        navbarPanel.forceClickItem(index);
+    }
+
     public void addObserver(ProcessObserver observer) {
         observers.add(observer);
     }

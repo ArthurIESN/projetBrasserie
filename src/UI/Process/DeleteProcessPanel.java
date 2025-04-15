@@ -63,6 +63,12 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
             Process selectedProcess = processSearch.getSelectedItem();
             if (selectedProcess != null)
             {
+
+                JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // refresh the panel
+
+
                 try
                 {
                     AppController.deleteProcess(selectedProcess.getId());
@@ -70,7 +76,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
                     JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                     // refresh the panel
-                    processPanel.navbarClick(3);
+                    processPanel.navbarForceClick(3);
 
                 }
                 catch (DeleteProcessException e1)
