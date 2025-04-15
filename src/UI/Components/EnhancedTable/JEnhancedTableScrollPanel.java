@@ -14,7 +14,6 @@ public class JEnhancedTableScrollPanel extends JScrollPane
     public JEnhancedTableScrollPanel(TableModel model, JPanel target, int rows)
     {
         table = new JEnhancedTable(model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         this.rows = rows;
@@ -27,8 +26,6 @@ public class JEnhancedTableScrollPanel extends JScrollPane
         }
 
         setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-
-        updateModel(model);
 
         target.setLayout(new BoxLayout(target, BoxLayout.Y_AXIS));
         setViewportView(table);

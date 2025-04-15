@@ -48,7 +48,7 @@ public class JEnhancedTable extends JTable
                     window.addComponentListener(resizeListener);
                 }
 
-                updateModel(model);
+
             }
 
             @Override
@@ -64,8 +64,6 @@ public class JEnhancedTable extends JTable
             public void ancestorMoved(AncestorEvent event) {}
         });
 
-        SwingUtilities.invokeLater(this::updateColumnSize);
-
         setDefaultRenderer(Object.class, new AlternateColumnRenderer());
         setDefaultRenderer(Number.class, new AlternateColumnRenderer());
         setDefaultRenderer(Boolean.class, new AlternateColumnRenderer());
@@ -74,6 +72,20 @@ public class JEnhancedTable extends JTable
         // Use the default table header renderer
         // Avoid getting the default header style with over and background color
         getTableHeader().setUI(new javax.swing.plaf.basic.BasicTableHeaderUI());
+    }
+
+    // Update column size when this component is added to a container
+    // use invokeLater to ensure that the component is fully initialized and visible before updating the column size
+    // otherwise the table width will be 0 !!
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        SwingUtilities.invokeLater(() ->
+        {
+            if (isShowing()) {
+                updateColumnSize();
+            }
+        });
     }
 
     public void updateModel(TableModel model)
@@ -91,12 +103,10 @@ public class JEnhancedTable extends JTable
         int tableWidth = getParent() != null ? getParent().getWidth() : getWidth();
         int totalColumnWidth = 0;
 
-        if(getParent() != null)
+        if(tableWidth <= 0)
         {
-            System.out.println("Parent width: " + getParent());
+            tableWidth =  300;
         }
-
-        System.out.println("Table width: " + tableWidth);
 
         int[] columnWidths = new int[columnModel.getColumnCount()];
 
