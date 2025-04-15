@@ -78,7 +78,9 @@ public class ReadProcessPanel extends JPanel
         tableModelMaker.addTableModel(customerStatusTableModel);
 
         JEnhancedTableScrollPanel tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, this);
+        add(tableScrollPanel);
         tableModelMaker.setTable(tableScrollPanel);
+        tableScrollPanel.updateModel(tableModelMaker);
 
         ArrayList<Process> finalProcesses = processes;
 
@@ -92,6 +94,6 @@ public class ReadProcessPanel extends JPanel
             processPanel.notifyObservers(finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
         });
 
-        add(tableScrollPanel, BorderLayout.SOUTH);
+
     }
 }
