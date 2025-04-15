@@ -100,6 +100,8 @@ public class SearchItemForm extends JPanel
         tvaCodeField.addActionListener((ActionEvent e) -> searchButton.doClick());
     }
 
+
+
     private void searchItem(JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JEnhancedTableScrollPanel table)
     {
         // get data from fields

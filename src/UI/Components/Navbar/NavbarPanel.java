@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 public class NavbarPanel extends JPanel
 {
     private int currentIndex = 0;
+    private boolean forceClick = false;
 
     public NavbarPanel(ArrayList<String> items, Consumer<Integer> onItemClick)
     {
@@ -22,9 +23,10 @@ public class NavbarPanel extends JPanel
             JButton button = new JButton(item);
             button.addActionListener(e ->
             {
-                if (onItemClick != null && currentIndex != index)
+                if (onItemClick != null && (currentIndex != index || forceClick))
                 {
                     currentIndex = index;
+                    forceClick = false;
                     onItemClick.accept(index);
                 }
             });
@@ -44,5 +46,11 @@ public class NavbarPanel extends JPanel
 
             currentIndex = index;
         }
+    }
+
+    public void forceClickItem(int index)
+    {
+        forceClick = true;
+        clickItem(index);
     }
 }

@@ -14,6 +14,7 @@ public class JEnhancedTableScrollPanel extends JScrollPane
     public JEnhancedTableScrollPanel(TableModel model, JPanel target, int rows)
     {
         table = new JEnhancedTable(model);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         this.rows = rows;

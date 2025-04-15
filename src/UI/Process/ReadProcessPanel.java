@@ -92,6 +92,6 @@ public class ReadProcessPanel extends JPanel
             processPanel.notifyObservers(finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
         });
 
-        add(tableScrollPanel);
+        add(tableScrollPanel, BorderLayout.SOUTH);
     }
 }

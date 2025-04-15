@@ -5,6 +5,7 @@ import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Customer.Customer;
 import UI.Components.Fields.ComboBoxPanel;
+import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.SearchByLabelPanel;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.StepByStepManager;
@@ -101,6 +102,16 @@ public class Test extends JPanel
         stepByStepManager.onStepShown(2, this::functionCalledWhenStepThreeIsShown);
 
 
+        JNumberField test = new JNumberField(JNumberField.NumberType.INTEGER);
+        test.setAllowNegative(true);
+        test.setPlaceholder("INTEGER");
+
+        JNumberField test2 = new JNumberField(JNumberField.NumberType.FLOAT, 3);
+        test2.setAllowNegative(true);
+        test2.setPlaceholder("FLOAT");
+
+        gridBagLayoutHelper.addField(test);
+        gridBagLayoutHelper.addField(test2);
 
         add(gridBagLayoutHelper);
     }

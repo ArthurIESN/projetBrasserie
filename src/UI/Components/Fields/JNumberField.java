@@ -1,8 +1,14 @@
 package UI.Components.Fields;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class JNumberField extends JEnhancedTextField
 {
@@ -19,6 +25,8 @@ public class JNumberField extends JEnhancedTextField
     private final int decimalPlaces;
     private final int[] minMax = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean allowNegative = true;
+    private static final int MAX_INT_LENGTH = 11;
+    private static final int MAX_FLOAT_LENGTH = 30;
 
     /**
      * Constructor for JNumberField with specified number type and decimal places.
@@ -38,7 +46,7 @@ public class JNumberField extends JEnhancedTextField
             @Override
             public void focusLost(FocusEvent e)
             {
-                validateNumber();
+                validateNumber(getText());
             }
         });
     }
@@ -88,7 +96,7 @@ public class JNumberField extends JEnhancedTextField
      */
     public int getInt()
     {
-        validateNumber();
+        validateNumber(getText());
         String text = getText();
         if (text.isEmpty())
         {
@@ -103,7 +111,7 @@ public class JNumberField extends JEnhancedTextField
      */
     public float getFloat()
     {
-        validateNumber();
+        validateNumber(getText());
         String text = getText();
         if (text.isEmpty())
         {
@@ -117,7 +125,7 @@ public class JNumberField extends JEnhancedTextField
     protected void processKeyEvent(KeyEvent e)
     {
         if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ENTER) {
-            validateNumber();
+            validateNumber(getText());
             return;
         }
 
@@ -130,8 +138,15 @@ public class JNumberField extends JEnhancedTextField
         char c = e.getKeyChar();
         String text = getText();
 
-        switch (numberType) {
+        switch (numberType)
+        {
             case INTEGER:
+
+                if(text.length() >= MAX_INT_LENGTH)
+                {
+                    e.consume();
+                    return;
+                }
 
                 if(canWriteNegativeSign(c, text))
                 {
@@ -146,6 +161,13 @@ public class JNumberField extends JEnhancedTextField
                 break;
 
             case FLOAT:
+
+
+                if(text.length() >= MAX_FLOAT_LENGTH)
+                {
+                    e.consume();
+                    return;
+                }
 
                 if(canWriteNegativeSign(c, text))
                 {
@@ -187,69 +209,143 @@ public class JNumberField extends JEnhancedTextField
         super.processKeyEvent(e);
     }
 
-    /**
+    @Override
+    public void paste()
+    {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        try
+        {
+            String clipboardText = (String) clipboard.getData(DataFlavor.stringFlavor);
+            if (clipboardText == null) return;
+
+            clipboardText = getText() + clipboardText;
+
+            validateNumber(clipboardText);
+
+        }
+        catch (IOException | UnsupportedFlavorException e)
+        {
+            JOptionPane.showMessageDialog(this,
+                    "Error occurred while pasting text",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+        /**
      * Validate the number in the field based on the type (INTEGER or FLOAT).
      * It checks if the number is within the min and max range and if it has
      * the correct number of decimal places. Also check if the number can be negative.
      */
-    private void validateNumber()
+    private void validateNumber(String text)
     {
-        String text = getText();
         switch (numberType)
         {
             case INTEGER:
-                // check if the number is an integer
 
-                if (!text.isEmpty() && !text.matches("\\d+"))
-                {
-                    updateText(text.replaceAll("\\D", ""));
-                }
-
-                // check if the number is within the min and max range
-                if (!text.isEmpty())
-                {
-                    int number = Integer.parseInt(text);
-                    if (number < minMax[0])
-                    {
-                        updateText(String.valueOf(minMax[0]));
-                    }
-                    else if (number > minMax[1])
-                    {
-                        updateText(String.valueOf(minMax[1]));
-                    }
-                }
-
+                updateText(validateInteger(text));
                 break;
 
             case FLOAT:
-                // check if the number of decimal places is correct
-                int pointIndex = text.indexOf('.');
-                if (pointIndex != -1)
-                {
-                    int decimals = text.length() - pointIndex - 1;
-                    if (decimals > decimalPlaces)
-                    {
-                        updateText(text.substring(0, pointIndex + decimalPlaces + 1));
-                    }
-                }
 
-                // check if the number is within the min and max range
-                if (!text.isEmpty())
-                {
-                    float number = Float.parseFloat(text);
-                    if (number < minMax[0])
-                    {
-                        updateText(String.valueOf(minMax[0]));
-                    }
-                    else if (number > minMax[1])
-                    {
-                        updateText(String.valueOf(minMax[1]));
-                    }
-                }
-
+                updateText(validateFloat(text));
                 break;
         }
     }
+
+    private String validateInteger(String text)
+    {
+
+        // check if the number is too long
+        if (text.length() > MAX_INT_LENGTH)
+        {
+            text = text.substring(0, MAX_INT_LENGTH);
+        }
+
+        // check if the number is an integer
+        if (!text.isEmpty() && !(allowNegative ? text.matches("-?\\d+") : text.matches("\\d+"))) {
+            boolean hasMinus = allowNegative && text.startsWith("-");
+            text = text.replaceAll("\\D", "");
+            if (text.isEmpty()) text = "0";
+            if (hasMinus) text = "-" + text;
+        }
+
+
+        // check if the number is within the min and max range
+        if (!text.isEmpty())
+        {
+            int number;
+            try
+            {
+                number = Integer.parseInt(text);
+            }
+            catch (NumberFormatException e)
+            {
+                number = minMax[0];
+                text = String.valueOf(number);
+                System.out.println("Invalid number format: " + text + " " + e.getMessage());
+            }
+
+            if (number < minMax[0])
+            {
+                text = String.valueOf(minMax[0]);
+            }
+            else if (number > minMax[1])
+            {
+                text = String.valueOf(minMax[1]);
+            }
+        }
+
+        return text;
+    }
+
+    private String validateFloat(String text)
+    {
+        // check if the number is too long
+        if (text.length() > MAX_INT_LENGTH)
+        {
+            text = text.substring(0, MAX_INT_LENGTH);
+        }
+
+        // check if the number is a float
+        if (!text.isEmpty() && !(allowNegative ? text.matches("-?\\d+\\.\\d+") : text.matches("\\d+\\.\\d+"))) {
+            boolean hasMinus = allowNegative && text.startsWith("-");
+            text = text.replaceAll("[^\\d.]", "")
+                    .replaceAll("(\\d*\\.\\d*?)\\.+", "$1");
+            if (text.isEmpty() || text.equals(".")) text = "0";
+            if (hasMinus) text = "-" + text;
+        }
+
+
+        // check if the number is within the min and max range
+        if (!text.isEmpty())
+        {
+            float number = Float.parseFloat(text);
+            if (number < minMax[0])
+            {
+                text = String.valueOf(minMax[0]);
+            }
+            else if (number > minMax[1])
+            {
+                text = String.valueOf(minMax[1]);
+            }
+
+            // check if the number of decimal places is exceeded
+            int pointIndex = text.indexOf('.');
+            if (pointIndex != -1)
+            {
+                int decimals = text.length() - pointIndex - 1;
+                if (decimals > decimalPlaces)
+                {
+                    text = text.substring(0, pointIndex + decimalPlaces + 1);
+                }
+            }
+        }
+
+        return text;
+    }
+
+
 
     /**
      *  * Check if the field can accept a negative sign.
