@@ -15,6 +15,8 @@ import Model.Process.MakeProcess;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
 import Model.Document.Document;
+import Model.ProcessType.MakeProcessType;
+import Model.ProcessType.ProcessType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,18 +27,16 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
     }
 
     public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException {
-        String query =  "SELECT payment.*, payment_status.label AS payment_status_label, " +
-                "document.id AS document_id, document.label AS document_label, document.date AS document_date, " +
-                "process.id AS process_id, process.label AS process_label, process.id_process_type AS process_type, " +
-                "customer.num_customer, customer.last_name AS customer_name, customer.first_name AS customer_first_name, " +
-                "customer.credit_limit AS customer_credit_limit, customer.num_VAT AS customer_VAT " +
-                "FROM payment " +
-                "JOIN document ON payment.id_document = document.id " +
-                "JOIN process ON document.id_process = process.id " +
-                "JOIN customer ON process.num_customer = customer.num_customer " +
-                "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
-                "WHERE payment_status.label = ? " +
-                "AND payment.amount > ? " +
+        String query =  "SELECT payment.*, payment_status.label AS payment_status_label, \n" +
+                "document.id AS document_id, document.label AS document_label, document.date AS document_date,process.id AS process_id, process.label AS process_label, process_type.id AS id_process_type, customer.num_customer, customer.last_name AS customer_name, customer.first_name AS customer_first_name, customer.credit_limit AS customer_credit_limit, customer.num_VAT AS customer_VAT\n" +
+                "FROM payment\n" +
+                "JOIN document ON payment.id_document = document.id\n" +
+                "JOIN process ON document.id_process = process.id\n" +
+                "JOIN customer ON process.num_customer = customer.num_customer\n" +
+                "JOIN payment_status ON payment.id_payment_status = payment_status.id\n" +
+                "JOIN process_type ON process.id = process_type.id\n" +
+                "WHERE payment_status.label = ?" +
+                "AND payment.amount > ?" +
                 "AND YEAR(payment.payment_date) = ?;";
 
         try {
@@ -76,6 +76,10 @@ ArrayList<Payment> payments = new ArrayList<>();
                         null,
                         null);
 
+                ProcessType processType = MakeProcessType.getProcessType(
+                        resultSet.getInt("id_process_type"),
+                        null
+                );
 
                 Process process = MakeProcess.getProcess(
                         resultSet.getInt("process_id"),
@@ -83,7 +87,7 @@ ArrayList<Payment> payments = new ArrayList<>();
                         0,
                         null,
                         null,
-                        null,
+                        processType,
                         null,
                         null,
                         null);

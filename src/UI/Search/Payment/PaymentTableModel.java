@@ -32,40 +32,24 @@ public class PaymentTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int i, int iColumn) {
         Payment payment = payments.get(i);
-        switch (iColumn) {
-            case 0:
-                return payment.getId();
-            case 1:
-                return payment.getAmount();
-            case 2:
-                return payment.getPaymentDate();
-            case 3:
-                return payment.getPaymentStatus().getLabel();
-            case 4:
-                return payment.getDocument() != null ? payment.getDocument().getId() : null;
-            case 5:
-                return payment.getDocument() != null ? payment.getDocument().getLabel() : null;
-            case 6:
-                return payment.getDocument() != null ? payment.getDocument().getDate() : null;
-            case 7:
-                return payment.getProcess() != null ? payment.getProcess().getId() : null;
-            case 8:
-                return payment.getProcess() != null ? payment.getProcess().getLabel() : null;
-            case 9:
-                return payment.getProcess() != null && payment.getProcess().getType() != null ? payment.getProcess().getType().getId() : null;
-            case 10:
-                return payment.getCustomer() != null ? payment.getCustomer().getId() : null;
-            case 11:
-                return payment.getCustomer() != null ? payment.getCustomer().getLastName() : null;
-            case 12:
-                return payment.getCustomer() != null ? payment.getCustomer().getFirstName() : null;
-            case 13:
-                return payment.getCustomer() != null ? payment.getCustomer().getCreditLimit() : null;
-            case 14:
-                return payment.getCustomer() != null ? payment.getCustomer().getNumVAT() : null;
-            default:
-                return null;
-        }
+        return switch (iColumn) {
+            case 0 -> payment.getId();
+            case 1 -> payment.getAmount();
+            case 2 -> payment.getPaymentDate();
+            case 3 -> payment.getPaymentStatus().getLabel();
+            case 4 -> payment.getDocument() != null ? payment.getDocument().getId() : null;
+            case 5 -> payment.getDocument() != null ? payment.getDocument().getLabel() : null;
+            case 6 -> payment.getDocument() != null ? payment.getDocument().getDate() : null;
+            case 7 -> payment.getProcess() != null ? payment.getProcess().getId() : null;
+            case 8 -> payment.getProcess() != null ? payment.getProcess().getLabel() : null;
+            case 9 ->payment.getProcess() != null && payment.getProcess().getType() != null ? payment.getProcess().getType().getId() : null;
+            case 10, 11 -> payment.getCustomer() != null ? payment.getCustomer().getId() : null;
+            case 12 -> payment.getCustomer() != null ? payment.getCustomer().getLastName() : null;
+            case 13 -> payment.getCustomer() != null ? payment.getCustomer().getFirstName() : null;
+            case 14 -> payment.getCustomer() != null ? payment.getCustomer().getCreditLimit() : null;
+            case 15 -> payment.getCustomer() != null ? payment.getCustomer().getNumVAT() : null;
+            default -> null;
+        };
     }
 
     @Override

@@ -6,14 +6,35 @@ import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchPaymentException;
+import Model.PaymentStatus.PaymentStatus;
+import Model.ProcessType.ProcessType;
+import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Models.*;
+import Model.Document.Document;
+import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+import Model.Customer.Customer;
+import UI.Models.Document.DocumentEnhancedTableModel;
+import UI.Models.Document.SearchPaymentDocumentEnhancedTableModel;
+import Utils.Utils;
 
 public class SearchPaymentForm extends JPanel
 {
+    private JEnhancedTableScrollPanel tableScrollPanel;
+    private TableModelMaker tableModelMaker;
+    private PaymentEnhancedTableModel paymentTableModel;
+    private PaymentStatusEnhancedTableModel paymentStatusTableModel;
+    private SearchPaymentDocumentEnhancedTableModel documentTableModel;
+    private ProcessTypeEnhancedTableModel processTypesTableModel;
+    private ProcessEnhancedTableModel processTableModel;
+    private CustomerEnhancedTableModel customerTableModel;
+
+
     public SearchPaymentForm()
     {
         // add a title
@@ -46,13 +67,29 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Search", searchButton);
 
         // Empty table
-        JEnhancedTableScrollPanel table = new JEnhancedTableScrollPanel(new PaymentTableModel() ,this );
+        tableModelMaker = new TableModelMaker();
+        paymentTableModel = new PaymentEnhancedTableModel(new ArrayList<>());
+        paymentStatusTableModel = new PaymentStatusEnhancedTableModel(new ArrayList<>());
+        documentTableModel = new SearchPaymentDocumentEnhancedTableModel(new ArrayList<>());
+        processTypesTableModel = new ProcessTypeEnhancedTableModel(new ArrayList<>());
+        processTableModel = new ProcessEnhancedTableModel(new ArrayList<>());
+        customerTableModel = new CustomerEnhancedTableModel(new ArrayList<>());
 
-        add(new JScrollPane(table), BorderLayout.SOUTH);
+        tableModelMaker.addTableModel(paymentTableModel);
+        tableModelMaker.addTableModel(paymentStatusTableModel);
+        tableModelMaker.addTableModel(documentTableModel);
+        tableModelMaker.addTableModel(processTypesTableModel);
+        tableModelMaker.addTableModel(processTableModel);
+        tableModelMaker.addTableModel(customerTableModel);
+
+        tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, this);
+        tableModelMaker.setTable(tableScrollPanel);
+        add(tableScrollPanel, BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> {
-            searchPayments(validatedPaymentCheckBox, amountField, yearComboBox, table);
+            searchPayments(validatedPaymentCheckBox, amountField, yearComboBox, tableScrollPanel);
         });
+
     }
 
     private String[] getYears() {
@@ -84,8 +121,27 @@ public class SearchPaymentForm extends JPanel
         }
 
         try {
-            ArrayList<Payment> payments = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
-            table.updateModel(new PaymentTableModel(payments));
+            ArrayList<Payment> payment = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
+            ArrayList<PaymentStatus> paymentsStatus = Utils.transformData(payment, Payment::getPaymentStatus);
+            ArrayList<Document> document = Utils.transformData(payment, Payment::getDocument);
+            ArrayList<Process> process = Utils.transformData(payment, Payment::getProcess);
+            ArrayList<ProcessType> processTypes = Utils.transformData(process, Process::getType);
+            ArrayList<Customer> customer = Utils.transformData(payment, Payment::getCustomer);
+
+            paymentTableModel.setData(payment);
+            paymentStatusTableModel.setData(paymentsStatus);
+            documentTableModel.setData(document);
+            processTypesTableModel.setData(processTypes);
+            processTableModel.setData(process);
+            customerTableModel.setData(customer);
+
+            tableScrollPanel.updateModel(tableModelMaker);
+
+            if(payment.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "No payment found", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
