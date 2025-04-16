@@ -1,6 +1,7 @@
 package UI.Components;
 
 import Environement.SystemProperties;
+import UI.Document.DocumentPanel;
 import UI.Windows.BrasserieWindow.BrasserieCredits;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.BrasserieWindow.BrasserieHomePanel;
@@ -112,6 +113,10 @@ public class MenuBarBrasserie {
 
         crudItem[0].addActionListener(e -> {
             brasserieWindow.updateWindowContent(new ProcessPanel());
+        });
+
+        crudItem[1].addActionListener(e -> {
+            brasserieWindow.updateWindowContent(new DocumentPanel());
         });
 
     }
