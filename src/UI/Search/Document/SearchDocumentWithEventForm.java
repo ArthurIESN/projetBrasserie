@@ -125,9 +125,11 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         searchButton.addActionListener(e -> {
             try{
-                SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
+                ArrayList<Document> documents = SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
                         eventSearch.getSelectedItem().getId(),quantitySearch.getSelectedItem(),
                         yearSearch.getSelectedItem());
+                documentTableModel.setData(documents);
+                tableScrollPanel.updateModel(tableModelMaker);
                 // @todo : gérer les erreurs
             }catch (DatabaseConnectionFailedException | GetDocumentWithSpecificEventException err){
                 System.err.println(err.getMessage());

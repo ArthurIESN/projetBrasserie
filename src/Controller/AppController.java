@@ -1,6 +1,7 @@
 package Controller;
 
 import BusinessLogic.Customer.CustomerManager;
+import BusinessLogic.DocumentStatus.DocumentStatusManager;
 import BusinessLogic.Employee.EmployeeManager;
 import BusinessLogic.Item.ItemManager;
 import BusinessLogic.Process.ProcessManager;
@@ -16,6 +17,7 @@ import Exceptions.Supplier.GetAllSuppliersException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 
 import Model.Customer.Customer;
+import Model.DocumentStatus.DocumentStatus;
 import Model.Employee.Employee;
 import Model.Item.Item;
 import Model.ProcessStatus.ProcessStatus;
@@ -34,7 +36,7 @@ public class AppController {
     private static final ProcessStatusManager processStatusManager = new ProcessStatusManager();
     private static final ProcessTypeManager typeManager = new ProcessTypeManager();
     private static final ProcessManager processManager = new ProcessManager();
-
+    private static final DocumentStatusManager documentStatusManager = new DocumentStatusManager();
 
     public static List<Item> getAllItems() throws DatabaseConnectionFailedException
     {
@@ -85,5 +87,10 @@ public class AppController {
     public static void deleteProcess(Integer id) throws DatabaseConnectionFailedException, Exceptions.Process.DeleteProcessException
     {
         processManager.deleteProcess(id);
+    }
+
+    public static ArrayList<DocumentStatus> getAllDocumentStatus() throws DatabaseConnectionFailedException,
+            Exceptions.DocumentStatus.GetAllDocumentStatusException{
+        return documentStatusManager.getAllDocumentStatus();
     }
 }

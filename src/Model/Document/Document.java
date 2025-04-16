@@ -13,27 +13,27 @@ public class Document {
     private String label;
     private Date date;
     private Date deadLine;
-    private float reduction;
+    private Float reduction;
     private String validity;
     private Boolean isDelivered;
     private Date deliveryDate;
     private Boolean depositIsPaid;
-    private float depositAmount;
+    private Float depositAmount;
     private Date desiredDeliveryDate;
-    private float VatAmount;
-    private float totalInclusiveOfTaxe;
-    private float totalVat;
-    private float totalExclVat;
+    private Float VatAmount;
+    private Float totalInclusiveOfTaxe;
+    private Float totalVat;
+    private Float totalExclVat;
     private CollectionAgency collectionAgency;
     private DeliveryTruck deliveryTruck;
     private Process process;
     private DocumentStatus documentStatus;
 
     // Commande client
-    public Document(Integer id, String label, Date date, Date deadLine, float reduction, String validity,
-                    Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, float depositAmount,
-                    Date desiredDeliveryDate, float VatAmount, float totalInclusiveOfTaxe, float totalVat,
-                    float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
+    public Document(Integer id, String label, Date date, Date deadLine, Float reduction, String validity,
+                    Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, Float depositAmount,
+                    Date desiredDeliveryDate, Float VatAmount, Float totalInclusiveOfTaxe, Float totalVat,
+                    Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                     Process process,DocumentStatus documentStatus)
     {
         this.id = id;
@@ -76,7 +76,7 @@ public class Document {
         return deadLine;
     }
 
-    public float getReduction() {
+    public Float getReduction() {
         return reduction;
     }
 
@@ -96,7 +96,7 @@ public class Document {
         return depositIsPaid;
     }
 
-    public float getDepositAmount() {
+    public Float getDepositAmount() {
         return depositAmount;
     }
 
@@ -104,19 +104,19 @@ public class Document {
         return desiredDeliveryDate;
     }
 
-    public float getVatAmount() {
+    public Float getVatAmount() {
         return VatAmount;
     }
 
-    public float getTotalInclusiveOfTaxe() {
+    public Float getTotalInclusiveOfTaxe() {
         return totalInclusiveOfTaxe;
     }
 
-    public float getTotalVat() {
+    public Float getTotalVat() {
         return totalVat;
     }
 
-    public float getTotalExclVat() {
+    public Float getTotalExclVat() {
         return totalExclVat;
     }
 
