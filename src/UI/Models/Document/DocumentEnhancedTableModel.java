@@ -1,4 +1,4 @@
-package UI.Models;
+package UI.Models.Document;
 
 import Model.Document.Document;
 import UI.Components.EnhancedTable.AbstractEnhancedTableModel;

@@ -3,6 +3,7 @@ package BusinessLogic.Search;
 import DataAccess.Search.SearchPayment.SearchPaymentDataAccess;
 import DataAccess.Search.SearchPayment.SearchPaymentDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Search.GetAllPaymentYearsException;
 import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 
@@ -23,5 +24,9 @@ public class SearchPaymentManager {
         Payments = searchPaymentDataAccess.searchPayment(status, minAmount, year);
 
         return Payments;
+    }
+
+    public ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {
+        return searchPaymentDataAccess.getAllPaymentYears();
     }
 }

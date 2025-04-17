@@ -40,6 +40,10 @@ public class SearchController {
         return searchItemManager.getMinMaxItemQuantityAndPrice();
     }
 
+    public static ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {
+        return searchPaymentManager.getAllPaymentYears();
+    }
+
     // Search for payments based on criteria (validated, amount, year)
     public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
         return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager

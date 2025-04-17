@@ -2,20 +2,55 @@ package UI.Search.Payment;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Search.GetAllPaymentYearsException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchPaymentException;
+import Model.PaymentStatus.PaymentStatus;
+import Model.ProcessType.ProcessType;
+import UI.Components.EnhancedTable.TableModelMaker;
+import UI.Components.Fields.ComboBoxGen;
+import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
 import Model.Payment.Payment;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
+import UI.Models.*;
+import Model.Document.Document;
+import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+import Model.Customer.Customer;
+import UI.Models.Document.DocumentEnhancedTableModel;
+import UI.Models.Document.SearchPaymentDocumentEnhancedTableModel;
+import Utils.Utils;
 
 public class SearchPaymentForm extends JPanel
 {
+    private JEnhancedTableScrollPanel tableScrollPanel;
+    private TableModelMaker tableModelMaker;
+    private PaymentEnhancedTableModel paymentTableModel;
+    private PaymentStatusEnhancedTableModel paymentStatusTableModel;
+    private SearchPaymentDocumentEnhancedTableModel documentTableModel;
+    private ProcessTypeEnhancedTableModel processTypesTableModel;
+    private ProcessEnhancedTableModel processTableModel;
+    private CustomerEnhancedTableModel customerTableModel;
+
+
     public SearchPaymentForm()
     {
+        ArrayList<Integer> paymentYears;
+        try {
+            // Récupérer les années depuis la base de données
+            paymentYears = SearchController.getAllPaymentYears();
+        } catch (DatabaseConnectionFailedException | GetAllPaymentYearsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            paymentYears = new ArrayList<>(); // Liste vide en cas d'erreur
+        }
+
         // add a title
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Search Payments");
@@ -25,34 +60,50 @@ public class SearchPaymentForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // Payment Validated Checkbox
-        JCheckBox validatedPaymentCheckBox = new JCheckBox("Validated Payment");
-        gridSearchForm.addField("Payment Validated", validatedPaymentCheckBox);
+        JCheckBox validatedPaymentCheckBox = new JCheckBox();
+        gridSearchForm.addField("Payment validated", validatedPaymentCheckBox);
 
         // Minimum Amount Field
         JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
         amountField.setAllowNegative(false);
-        amountField.setPlaceholder("Minimum Amount");
+        amountField.setPlaceholder("Enter amount");
         amountField.setColumns(10);
-        gridSearchForm.addField("Minimum Amount", amountField);
+        gridSearchForm.addField("Minimum amount", amountField);
 
         // Year Selection ComboBox
-        JComboBox<String> yearComboBox = new JComboBox<>(getYears());
-        gridSearchForm.addField("Year", yearComboBox);
+        ComboBoxGen<Integer> yearComboBox = new ComboBoxGen<>(paymentYears);
+        gridSearchForm.addField("Payment year", yearComboBox);
 
         add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
-        JButton searchButton = new JButton("Search");
-        gridSearchForm.addField("Search", searchButton);
+        JButton searchButton = new JButton("Start search");
+        gridSearchForm.addField(searchButton);
 
         // Empty table
-        JEnhancedTableScrollPanel table = new JEnhancedTableScrollPanel(new PaymentTableModel() ,this );
+        tableModelMaker = new TableModelMaker();
+        paymentTableModel = new PaymentEnhancedTableModel(new ArrayList<>());
+        paymentStatusTableModel = new PaymentStatusEnhancedTableModel(new ArrayList<>());
+        documentTableModel = new SearchPaymentDocumentEnhancedTableModel(new ArrayList<>());
+        processTypesTableModel = new ProcessTypeEnhancedTableModel(new ArrayList<>());
+        processTableModel = new ProcessEnhancedTableModel(new ArrayList<>());
+        customerTableModel = new CustomerEnhancedTableModel(new ArrayList<>());
 
-        add(new JScrollPane(table), BorderLayout.SOUTH);
+        tableModelMaker.addTableModel(paymentTableModel);
+        tableModelMaker.addTableModel(paymentStatusTableModel);
+        tableModelMaker.addTableModel(documentTableModel);
+        tableModelMaker.addTableModel(processTypesTableModel);
+        tableModelMaker.addTableModel(processTableModel);
+        tableModelMaker.addTableModel(customerTableModel);
+
+        tableScrollPanel = new JEnhancedTableScrollPanel(tableModelMaker, this);
+        tableModelMaker.setTable(tableScrollPanel);
+        add(tableScrollPanel, BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> {
-            searchPayments(validatedPaymentCheckBox, amountField, yearComboBox, table);
+            searchPayments(validatedPaymentCheckBox, amountField, yearComboBox, tableScrollPanel);
         });
+
     }
 
     private String[] getYears() {
@@ -84,8 +135,27 @@ public class SearchPaymentForm extends JPanel
         }
 
         try {
-            ArrayList<Payment> payments = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
-            table.updateModel(new PaymentTableModel(payments));
+            ArrayList<Payment> payment = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
+            ArrayList<PaymentStatus> paymentsStatus = Utils.transformData(payment, Payment::getPaymentStatus);
+            ArrayList<Document> document = Utils.transformData(payment, Payment::getDocument);
+            ArrayList<Process> process = Utils.transformData(payment, Payment::getProcess);
+            ArrayList<ProcessType> processTypes = Utils.transformData(process, Process::getType);
+            ArrayList<Customer> customer = Utils.transformData(payment, Payment::getCustomer);
+
+            paymentTableModel.setData(payment);
+            paymentStatusTableModel.setData(paymentsStatus);
+            documentTableModel.setData(document);
+            processTypesTableModel.setData(processTypes);
+            processTableModel.setData(process);
+            customerTableModel.setData(customer);
+
+            tableScrollPanel.updateModel(tableModelMaker);
+
+            if(payment.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "No payment found", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

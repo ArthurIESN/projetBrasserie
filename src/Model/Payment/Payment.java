@@ -3,6 +3,7 @@ import Model.PaymentStatus.PaymentStatus;
 import Model.Customer.Customer;
 import Model.Process.Process;
 import Model.Document.Document;
+import Model.ProcessType.ProcessType;
 
 import java.util.Date;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class Payment {
 
     // Constructeur
 
-    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,Model.Process.Process process, Customer customer) {
+    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document, Model.Process.Process process, Customer customer) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
