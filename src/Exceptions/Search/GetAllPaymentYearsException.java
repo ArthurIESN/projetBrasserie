@@ -1,9 +1,9 @@
 package Exceptions.Search;
 
-public class GetMinMaxDatePaymentException extends Exception {
+public class GetAllPaymentYearsException extends Exception {
   private final String message;
 
-  public GetMinMaxDatePaymentException()
+  public GetAllPaymentYearsException()
   {
     this.message = "Error while getting the min and max payment date.";
   }

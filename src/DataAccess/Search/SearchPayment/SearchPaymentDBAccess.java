@@ -26,6 +26,26 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
     public SearchPaymentDBAccess() {
     }
 
+    public ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException {
+        String query = "SELECT DISTINCT YEAR(payment_date) AS year FROM payment ORDER BY year DESC";
+
+        ArrayList<Integer> years = new ArrayList<>();
+        try {
+            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                years.add(resultSet.getInt("year"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL error: " + e.getMessage());
+            throw new DatabaseConnectionFailedException("Failed to retrieve payment years.");
+        }
+
+        return years;
+    }
+
     public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException {
         String query =  "SELECT payment.*, payment_status.label AS payment_status_label, \n" +
                 "document.id AS document_id, document.label AS document_label, document.date AS document_date,process.id AS process_id, process.label AS process_label, process_type.id AS id_process_type, customer.num_customer, customer.last_name AS customer_name, customer.first_name AS customer_first_name, customer.credit_limit AS customer_credit_limit, customer.num_VAT AS customer_VAT\n" +

@@ -2,13 +2,18 @@ package UI.Search.Payment;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Search.GetAllPaymentYearsException;
+import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchPaymentException;
 import Model.PaymentStatus.PaymentStatus;
 import Model.ProcessType.ProcessType;
 import UI.Components.EnhancedTable.TableModelMaker;
+import UI.Components.Fields.ComboBoxGen;
+import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import Controller.SearchController;
@@ -37,6 +42,15 @@ public class SearchPaymentForm extends JPanel
 
     public SearchPaymentForm()
     {
+        ArrayList<Integer> paymentYears;
+        try {
+            // Récupérer les années depuis la base de données
+            paymentYears = SearchController.getAllPaymentYears();
+        } catch (DatabaseConnectionFailedException | GetAllPaymentYearsException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            paymentYears = new ArrayList<>(); // Liste vide en cas d'erreur
+        }
+
         // add a title
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Search Payments");
@@ -46,25 +60,25 @@ public class SearchPaymentForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // Payment Validated Checkbox
-        JCheckBox validatedPaymentCheckBox = new JCheckBox("Validated Payment");
-        gridSearchForm.addField("Payment Validated", validatedPaymentCheckBox);
+        JCheckBox validatedPaymentCheckBox = new JCheckBox();
+        gridSearchForm.addField("Payment validated", validatedPaymentCheckBox);
 
         // Minimum Amount Field
         JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
         amountField.setAllowNegative(false);
-        amountField.setPlaceholder("Minimum Amount");
+        amountField.setPlaceholder("Enter amount");
         amountField.setColumns(10);
-        gridSearchForm.addField("Minimum Amount", amountField);
+        gridSearchForm.addField("Minimum amount", amountField);
 
         // Year Selection ComboBox
-        JComboBox<String> yearComboBox = new JComboBox<>(getYears());
-        gridSearchForm.addField("Year", yearComboBox);
+        ComboBoxGen<Integer> yearComboBox = new ComboBoxGen<>(paymentYears);
+        gridSearchForm.addField("Payment year", yearComboBox);
 
         add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
-        JButton searchButton = new JButton("Search");
-        gridSearchForm.addField("Search", searchButton);
+        JButton searchButton = new JButton("Start search");
+        gridSearchForm.addField(searchButton);
 
         // Empty table
         tableModelMaker = new TableModelMaker();
