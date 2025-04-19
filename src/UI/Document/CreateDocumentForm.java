@@ -31,7 +31,7 @@ public class CreateDocumentForm extends JPanel {
 
         try{
             processTypes = AppController.getAllTypes();
-        }catch (DatabaseConnectionFailedException | GetAllProcessTypesException e){
+        }catch (GetAllProcessTypesException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 

@@ -39,7 +39,7 @@ public class SettingsWindow extends JFrame implements WindowObserver {
     }
 
     @Override
-    public void onSettingsChanged()
+    public void onThemeChanged()
     {
         // reload
         SwingUtilities.updateComponentTreeUI(this);
