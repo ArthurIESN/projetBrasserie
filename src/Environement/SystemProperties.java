@@ -134,6 +134,8 @@ public class SystemProperties
 
     public static void applySettings()
     {
+        System.out.println("Applying system properties...");
+
         if(getSystemType() == SystemType.MAC)
         {
             applyMacosSettings();
@@ -156,6 +158,8 @@ public class SystemProperties
 
     private static void applyMacosSettings()
     {
+        System.out.println("Applying macos settings...");
+
         setMacAppTheme("system");
         enableMacMenuBar();
         System.setProperty("apple.awt.application.name", "Brasserie Management System");
@@ -166,6 +170,7 @@ public class SystemProperties
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
             {
+                System.out.println("Adding macos settings button");
                 desktop.setPreferencesHandler(e -> WindowManager.showSettingsWindow());
             }
         }
@@ -175,10 +180,12 @@ public class SystemProperties
     {
         if(getSystemType() == SystemType.MAC)
         {
+            System.out.println("Applying macos dark theme");
             FlatMacDarkLaf.setup();
         }
         else
         {
+            System.out.println("Applying windows dark theme");
             FlatDarkLaf.setup();
         }
     }
@@ -187,10 +194,12 @@ public class SystemProperties
     {
         if(getSystemType() == SystemType.MAC)
         {
+            System.out.println("Applying macos light theme");
             FlatMacLightLaf.setup();
         }
         else
         {
+            System.out.println("Applying windows light theme");
             FlatLightLaf.setup();
         }
     }
