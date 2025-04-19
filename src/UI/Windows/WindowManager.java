@@ -1,9 +1,7 @@
 package UI.Windows;
 
-import Environement.SystemProperties;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.SettingsWindow.SettingsWindow;
-import UI.Windows.WindowObserver;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ public class WindowManager implements WindowSubject
     private final ArrayList<WindowObserver> observers = new ArrayList<>();
     private static WindowManager instance;
     private static SettingsWindow settingsWindow;
+    private static ArrayList<BrasserieWindow> windows = new ArrayList<>();
 
     public WindowManager()
     {
@@ -31,10 +30,9 @@ public class WindowManager implements WindowSubject
         }
     }
 
-    public static void init()
+    public static void addWindow()
     {
-        SystemProperties.applySettings();
-        BrasserieWindow brasserieWindow = new BrasserieWindow();
+        windows.add(new BrasserieWindow());
     }
 
 
