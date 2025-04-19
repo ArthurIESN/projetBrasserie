@@ -4,18 +4,20 @@ import java.util.HashMap;
 
 public class MakeVat
 {
-    private static final HashMap<String, Vat> vatMap = new HashMap<>();
+    private static final HashMap<Integer, Vat> vatMap = new HashMap<>();
 
     public static Vat getVat(String code, float rate)
     {
-        if(vatMap.containsKey(code))
+        Vat vat = new Vat(code, rate);
+        int vatHash = vat.hashCode();
+
+        if(vatMap.containsKey(vatHash))
         {
-            return vatMap.get(code);
+            return vatMap.get(vatHash);
         }
         else
         {
-            Vat vat = new Vat(code, rate);
-            vatMap.put(code, vat);
+            vatMap.put(vatHash, vat);
             return vat;
         }
     }

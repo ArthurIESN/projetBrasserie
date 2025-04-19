@@ -8,14 +8,16 @@ public class MakeCountry
 
     public static Country getCountry(Integer id, String name, float deliveryCost)
     {
-        if(countryMap.containsKey(id))
+        Country country = new Country(id, name, deliveryCost);
+        int countryHash = country.hashCode();
+
+        if(countryMap.containsKey(countryHash))
         {
-            return countryMap.get(id);
+            return countryMap.get(countryHash);
         }
         else
         {
-            Country country = new Country(id, name, deliveryCost);
-            countryMap.put(id, country);
+            countryMap.put(countryHash, country);
             return country;
         }
     }
