@@ -36,11 +36,12 @@ public class CreateProcessPanel extends JPanel
             return;
         }
 
+        /*
         if(processModelPanel.getProcessNumberField().getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the process number", "Error", JOptionPane.ERROR_MESSAGE);
             return;
-        }
+        }*/
 
         if(processModelPanel.getDateField().getDate() == null)
         {

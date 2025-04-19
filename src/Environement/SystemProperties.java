@@ -84,11 +84,10 @@ public class SystemProperties
     public static void setDarkThemeEnabled(boolean enabled)
     {
         properties.setProperty("USE_DARK_THEME", Boolean.toString(enabled));
-        System.out.println(Boolean.toString(enabled));
+
         try (OutputStream output = new FileOutputStream(configFilePath))
         {
             properties.store(output, null);
-            System.out.println(properties);
         } catch (IOException e)
         {
             System.out.println("Error saving properties file: " + e.getMessage());
@@ -140,20 +139,19 @@ public class SystemProperties
             applyMacosSettings();
         }
 
+
         String theme = properties.getProperty("USE_DARK_THEME");
         if(theme != null && theme.equals("true"))
         {
-            System.out.println("Dark theme enabled");
             enableDarkTheme();
         }
         else
         {
-            System.out.println("Light theme enabled");
             enableLightTheme();
         }
 
         // reload theme properties
-        ThemeManager.notifyObservers(getThemeProperties());
+        ThemeManager.getInstance().notifyObservers(getThemeProperties());
     }
 
     private static void applyMacosSettings()

@@ -19,28 +19,33 @@ public class JEnhancedTextField extends JTextField implements ThemeObserver
     private static Color textColor;
     private static Color placeholderColor;
 
-    static
-    {
-        Properties themeProperties = SystemProperties.getThemeProperties();
-        loadTheme(themeProperties);
 
-        // Register the observer for theme changes
-        ThemeManager.addObserver(JEnhancedTextField::loadTheme);
-    }
-
-    private static void loadTheme(Properties themeProperties)
+    public static void onThemeChangedStatic(Properties themeProperties)
     {
         if (themeProperties != null)
         {
-            // Load colors from theme properties
-            System.out.println("Loading theme properties for JEnhancedTextField");
             textColor = Color.decode(themeProperties.getProperty("EnhancedTextField.textColor"));
             placeholderColor = Color.decode(themeProperties.getProperty("EnhancedTextField.placeholderColor"));
         }
     }
 
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+        if(showingPlaceholder)
+        {
+            setForeground(placeholderColor);
+        }
+        else
+        {
+            setForeground(textColor);
+        }
+    }
+
     public JEnhancedTextField()
     {
+        ThemeManager.getInstance().addObserver(this);
+
         this.showingPlaceholder = true;
         setPreferredSize(new Dimension(300, 25));
 
@@ -107,11 +112,5 @@ public class JEnhancedTextField extends JTextField implements ThemeObserver
             setText(placeholder);
             setForeground(placeholderColor);
         }
-    }
-
-    @Override
-    public void onThemeChanged(Properties themeProperties)
-    {
-        loadTheme(themeProperties);
     }
 }

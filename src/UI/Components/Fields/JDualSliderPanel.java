@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
 
-public class JDualSliderPanel extends JPanel
+public class JDualSliderPanel extends JPanel implements ThemeObserver
 {
     private final int[] values = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean draggingThumb1 = false;
@@ -22,15 +22,14 @@ public class JDualSliderPanel extends JPanel
     private static Color trackColor;
     private static Color textColor;
 
-    static
-    {
-        Properties themeProperties = SystemProperties.getThemeProperties();
-        loadTheme(themeProperties);
 
-        ThemeManager.addObserver(JDualSliderPanel::loadTheme);
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+        // We have nothing to update here (maybe later)
     }
 
-    public static void loadTheme(Properties themeProperties)
+    public static void onThemeChangedStatic(Properties themeProperties)
     {
         if(themeProperties != null)
         {

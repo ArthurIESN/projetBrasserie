@@ -1,27 +1,34 @@
 package UI.Components.EnhancedTable;
 
+import UI.Theme.ThemeManager;
+import UI.Theme.ThemeObserver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Date;
+import java.util.Properties;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.table.*;
 
 
-public class JEnhancedTable extends JTable
+public class JEnhancedTable extends JTable implements ThemeObserver
 
 {
     private ComponentListener resizeListener;
-    private static final Color backbroundRowColor = new Color(0, 0, 0, 0);
-    private static final Color alternateBackgroundRowColor = new Color(70, 70, 70);
-    private static final Color selectedRowColor = new Color(100, 100, 100);
+    private static Color backbroundRowColor = new Color(0, 0, 0, 0);
+    private static Color alternateBackgroundRowColor = new Color(70, 70, 70);
+    private static Color selectedRowColor = new Color(100, 100, 100);
 
     public JEnhancedTable(TableModel model)
     {
         super(model);
+
+        ThemeManager.getInstance().addObserver(this);
+
         setModel(model);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -74,6 +81,21 @@ public class JEnhancedTable extends JTable
         getTableHeader().setUI(new javax.swing.plaf.basic.BasicTableHeaderUI());
     }
 
+    public static void onThemeChangedStatic(Properties themeProperties)
+    {
+        if (themeProperties != null)
+        {
+            alternateBackgroundRowColor = Color.decode(themeProperties.getProperty("EnhancedTable.alternateBackgroundRowColor"));
+            selectedRowColor = Color.decode(themeProperties.getProperty("EnhancedTable.selectedRowColor"));
+        }
+    }
+
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+
+    }
+
     // Update column size when this component is added to a container
     // use invokeLater to ensure that the component is fully initialized and visible before updating the column size
     // otherwise the table width will be 0 !!
@@ -102,11 +124,6 @@ public class JEnhancedTable extends JTable
 
         int tableWidth = getParent() != null ? getParent().getWidth() : getWidth();
         int totalColumnWidth = 0;
-
-        if(tableWidth <= 0)
-        {
-            tableWidth =  300;
-        }
 
         int[] columnWidths = new int[columnModel.getColumnCount()];
 
@@ -168,7 +185,5 @@ public class JEnhancedTable extends JTable
             }
             return cell;
         }
-
-        // Set no over on header
     }
 }

@@ -7,6 +7,7 @@ import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
+import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
