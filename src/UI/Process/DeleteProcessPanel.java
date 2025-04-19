@@ -1,7 +1,6 @@
 package UI.Process;
 
 import Controller.AppController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
@@ -14,7 +13,7 @@ import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
-import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.Fields.SearchListPanel;
 import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Models.*;
 import Utils.Utils;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 
 public class DeleteProcessPanel extends JPanel implements ProcessObserver
 {
-    private final SearchByLabelPanel<Process> processSearch;
+    private final SearchListPanel<Process> processSearch;
     public DeleteProcessPanel(ProcessPanel processPanel)
     {
         GridBagLayoutHelper gridDeleteProcess = new GridBagLayoutHelper();
@@ -43,7 +42,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
 
         processPanel.addObserver(this);
 
-        processSearch = new SearchByLabelPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
+        processSearch = new SearchListPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
         processSearch.setPreferredSize(new Dimension(500, processSearch.getPreferredSize().height));
         processSearch.getSearchField().setPlaceholder("Search for a process");
 

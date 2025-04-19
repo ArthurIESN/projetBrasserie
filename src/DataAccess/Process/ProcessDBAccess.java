@@ -71,7 +71,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
@@ -153,7 +153,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setString(1, label);
             statement.setInt(2, number);
@@ -209,7 +209,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setInt(1, id);
             int rowsAffected = statement.executeUpdate();
@@ -240,7 +240,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setInt(1, id);
@@ -277,7 +277,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();

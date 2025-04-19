@@ -6,19 +6,15 @@ import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Model.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
-import Model.DocumentDetails.DocumentDetails;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
-import Model.ProcessType.ProcessType;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
-import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,15 +25,15 @@ public class DocumentModelPanel extends JPanel {
     private JEnhancedTextField labelField;
     private JDateField dateField;
     private String typeDocument;
-    private SearchByLabelPanel<String> deliveryStatusSearch;
-    private SearchByLabelPanel<DocumentStatus> documentStatusSearch;
+    private SearchListPanel<String> deliveryStatusSearch;
+    private SearchListPanel<DocumentStatus> documentStatusSearch;
 
-    private ArrayList<SearchByLabelPanel> searchByLabelPanelsOrderFourn;
+    private ArrayList<SearchListPanel> searchListPanelsOrderFourn;
 
     public DocumentModelPanel(boolean isUpdate) {
         setLayout(new BorderLayout());
 
-        searchByLabelPanelsOrderFourn = new ArrayList<>(Arrays.asList());
+        searchListPanelsOrderFourn = new ArrayList<>(Arrays.asList());
 
 
         ArrayList<Document> documents = new ArrayList<>();
@@ -64,10 +60,10 @@ public class DocumentModelPanel extends JPanel {
         dateField = new JDateField();
         dateField.setDate(today);
 
-        deliveryStatusSearch = new SearchByLabelPanel<>(deliveryStatusOptions, status -> status);
+        deliveryStatusSearch = new SearchListPanel<>(deliveryStatusOptions, status -> status);
         deliveryStatusSearch.getSearchField().setPlaceholder("Select Delivery Status");
 
-        documentStatusSearch = new SearchByLabelPanel<>(documentStatuses, DocumentStatus::getLabel);
+        documentStatusSearch = new SearchListPanel<>(documentStatuses, DocumentStatus::getLabel);
         documentStatusSearch.getSearchField().setPlaceholder("Select Document Status");
 
 

@@ -14,11 +14,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnexion
 {
-    private static DatabaseConnexion databaseConnexionInstance;
     private static Connection connection;
 
-
-    private DatabaseConnexion() throws DatabaseConnectionFailedException
+    private static void connect() throws DatabaseConnectionFailedException
     {
         try
         {
@@ -49,17 +47,13 @@ public class DatabaseConnexion
         }
     }
 
-    public Connection getConnection()
+    public static Connection getInstance() throws DatabaseConnectionFailedException
     {
-        return connection;
-    }
-
-    public static DatabaseConnexion getInstance() throws DatabaseConnectionFailedException
-    {
-        if (databaseConnexionInstance == null)
+        if(connection == null)
         {
-            databaseConnexionInstance = new DatabaseConnexion();
+            connect();
         }
-        return databaseConnexionInstance;
+
+        return connection;
     }
 }

@@ -32,7 +32,7 @@ public class ItemDBAccess {
 
         try
         {
-            Connection dataBaseConnection = DatabaseConnexion.getInstance().getConnection();
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = dataBaseConnection.prepareStatement(query);
 

@@ -31,7 +31,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
 
         ArrayList<Integer> years = new ArrayList<>();
         try {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
@@ -60,7 +60,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                 "AND YEAR(payment.payment_date) = ?;";
 
         try {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
             statement.setString(1, status);

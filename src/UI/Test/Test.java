@@ -2,13 +2,12 @@ package UI.Test;
 
 import Controller.AppController;
 import Exceptions.Customer.GetAllCustomersException;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Customer.Customer;
 import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JNumberField;
-import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.StepByStepManager;
+import UI.Components.StepManager;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -16,10 +15,10 @@ import java.util.ArrayList;
 public class Test extends JPanel
 {
 
-    private SearchByLabelPanel<String> searchByLabelPanel;
-    private SearchByLabelPanel<String> searchByLabelPanel2;
-    private SearchByLabelPanel<String> searchByLabelPanel3;
-    private StepByStepManager stepByStepManager;
+    private SearchListPanel<String> searchListPanel;
+    private SearchListPanel<String> searchListPanel2;
+    private SearchListPanel<String> searchListPanel3;
+    private StepManager stepManager;
 
     public Test()
     {
@@ -32,20 +31,20 @@ public class Test extends JPanel
         data.add("Item 1");
         data.add("Item 2");
         data.add("Item 3");
-        searchByLabelPanel = new SearchByLabelPanel<>(data, String::toString);
+        searchListPanel = new SearchListPanel<>(data, String::toString);
 
 
         ArrayList<String> data2 = new ArrayList<>();
         data2.add("data 1");
         data2.add("data 2");
         data2.add("data 3");
-        searchByLabelPanel2 = new SearchByLabelPanel<>(data2, String::toString);
+        searchListPanel2 = new SearchListPanel<>(data2, String::toString);
 
         ArrayList<String> data3 = new ArrayList<>();
         data3.add("beta 1");
         data3.add("beta 2");
         data3.add("beta 3");
-        searchByLabelPanel3 = new SearchByLabelPanel<>(data3, String::toString);
+        searchListPanel3 = new SearchListPanel<>(data3, String::toString);
 
         try{
             ArrayList<Customer> customers = AppController.getAllCustomers();
@@ -68,38 +67,38 @@ public class Test extends JPanel
 
 
 
-        stepByStepManager = new StepByStepManager(gridBagLayoutHelper.getComponents());
+        stepManager = new StepManager(gridBagLayoutHelper.getComponents());
 
-        searchByLabelPanel.onSelectedItemChange(
+        searchListPanel.onSelectedItemChange(
                 selectedItem -> {
                     System.out.println("Search 1 clicked");
-                    stepByStepManager.completeStep(0);
+                    stepManager.completeStep(0);
 
                 }
         );
 
-        searchByLabelPanel2.onSelectedItemChange(
+        searchListPanel2.onSelectedItemChange(
                 selectedItem -> {
                     System.out.println("Search 2 clicked");
-                    stepByStepManager.completeStep(1);
+                    stepManager.completeStep(1);
 
                 }
         );
 
-        searchByLabelPanel3.onSelectedItemChange(
+        searchListPanel3.onSelectedItemChange(
                 selectedItem ->
                 {
                     System.out.println("Search 3 clicked");
-                    stepByStepManager.completeStep(2);
+                    stepManager.completeStep(2);
 
                 }
         );
 
-        stepByStepManager.onStepShown(0, this::functionCalledWhenStepOneIsShown);
+        stepManager.onStepShown(0, this::functionCalledWhenStepOneIsShown);
 
-        stepByStepManager.onStepShown(1, this::functionCalledWhenStepTwoIsShown);
+        stepManager.onStepShown(1, this::functionCalledWhenStepTwoIsShown);
 
-        stepByStepManager.onStepShown(2, this::functionCalledWhenStepThreeIsShown);
+        stepManager.onStepShown(2, this::functionCalledWhenStepThreeIsShown);
 
 
         JNumberField test = new JNumberField(JNumberField.NumberType.INTEGER);
@@ -119,13 +118,13 @@ public class Test extends JPanel
     private void functionCalledWhenStepOneIsShown()
     {
         System.out.println("Step 1 shown");
-        searchByLabelPanel.setSelectedItem(null);
+        searchListPanel.setSelectedItem(null);
     }
 
     private void functionCalledWhenStepTwoIsShown()
     {
         System.out.println("Step 2 shown");
-        searchByLabelPanel2.setSelectedItem(null);
+        searchListPanel2.setSelectedItem(null);
 
         int randomBoolean = (int) (Math.random() * 2);
         if (randomBoolean == 0)
@@ -135,7 +134,7 @@ public class Test extends JPanel
         else
         {
             System.out.println("STOPPED");
-            stepByStepManager.stop();
+            stepManager.stop();
         }
 
     }
@@ -144,6 +143,6 @@ public class Test extends JPanel
     private void functionCalledWhenStepThreeIsShown()
     {
         System.out.println("Step 3 shown");
-        searchByLabelPanel3.setSelectedItem(null);
+        searchListPanel3.setSelectedItem(null);
     }
 }

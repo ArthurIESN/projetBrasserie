@@ -24,7 +24,7 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();

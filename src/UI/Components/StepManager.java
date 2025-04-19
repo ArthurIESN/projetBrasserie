@@ -1,14 +1,12 @@
 package UI.Components;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 // this class will only be used to manage the step by step logic
 // Display will not be handled here
-public class StepByStepManager
+public class StepManager
 {
     private final Component[] components;
     private int currentStep = 0;
@@ -20,7 +18,7 @@ public class StepByStepManager
      *
      * @param components the components to manage and use by the step by step logic
      */
-    public StepByStepManager(Component[] components)
+    public StepManager(Component[] components)
     {
         this.components = components;
         reset();

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class SearchByLabelPanel<T> extends JPanel {
+public class SearchListPanel<T> extends JPanel {
     private final JEnhancedTextField searchField;
     private final JList<String> resultList;
     private final DefaultListModel<String> listModel;
@@ -19,7 +19,7 @@ public class SearchByLabelPanel<T> extends JPanel {
     private List<T> filteredData;
     private final Function<T, String> toStringFunction;
 
-    public SearchByLabelPanel(List<T> data, Function<T, String> toStringFunction) {
+    public SearchListPanel(List<T> data, Function<T, String> toStringFunction) {
         this.data = data;
         this.toStringFunction = toStringFunction;
         setLayout(new BorderLayout());
