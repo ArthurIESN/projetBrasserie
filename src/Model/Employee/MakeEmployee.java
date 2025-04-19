@@ -12,14 +12,16 @@ public class MakeEmployee
 
     public static Employee getEmployee(Integer id, String lastName, String firstName, Date birthDate, EmployeeStatus employeeStatus)
     {
-        if(employeeMap.containsKey(id))
+        Employee employee = new Employee(id, lastName, firstName, birthDate, employeeStatus);
+        int employeeHash = employee.hashCode();
+
+        if(employeeMap.containsKey(employeeHash))
         {
-            return employeeMap.get(id);
+            return employeeMap.get(employeeHash);
         }
         else
         {
-            Employee employee = new Employee(id, lastName, firstName, birthDate, employeeStatus);
-            employeeMap.put(id, employee);
+            employeeMap.put(employeeHash, employee);
             return employee;
         }
     }

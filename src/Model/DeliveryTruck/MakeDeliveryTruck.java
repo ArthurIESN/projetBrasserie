@@ -8,14 +8,16 @@ public class MakeDeliveryTruck
 
     public static DeliveryTruck getDeliveryTruck(Integer id, String plateNumber, float fuelQuantity, float mileage)
     {
-        if(deliveryTruckMap.containsKey(id))
+        DeliveryTruck deliveryTruck = new DeliveryTruck(id, plateNumber, fuelQuantity, mileage);
+        int deliveryTruckHash = deliveryTruck.hashCode();
+
+        if(deliveryTruckMap.containsKey(deliveryTruckHash))
         {
-            return deliveryTruckMap.get(id);
+            return deliveryTruckMap.get(deliveryTruckHash);
         }
         else
         {
-            DeliveryTruck deliveryTruck = new DeliveryTruck(id, plateNumber, fuelQuantity, mileage);
-            deliveryTruckMap.put(id, deliveryTruck);
+            deliveryTruckMap.put(deliveryTruckHash, deliveryTruck);
             return deliveryTruck;
         }
     }

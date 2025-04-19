@@ -8,14 +8,16 @@ public class MakeSupplier
 
     public static Supplier getSupplier(Integer id, String name)
     {
-        if(supplierMap.containsKey(id))
+        Supplier supplier = new Supplier(id, name);
+        int supplierHash = supplier.hashCode();
+
+        if(supplierMap.containsKey(supplierHash))
         {
-            return supplierMap.get(id);
+            return supplierMap.get(supplierHash);
         }
         else
         {
-            Supplier supplier = new Supplier(id, name);
-            supplierMap.put(id, supplier);
+            supplierMap.put(supplierHash, supplier);
             return supplier;
         }
     }

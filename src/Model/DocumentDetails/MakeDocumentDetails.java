@@ -7,12 +7,18 @@ import java.util.HashMap;
 public class MakeDocumentDetails {
     private static final HashMap<Integer,DocumentDetails> documentDetailsMap = new HashMap<>();
 
-    public static DocumentDetails getDocumentDetails(Integer id, String label, Float quantity, Float new_quantity, Float unit_price, Document document){
-        if(documentDetailsMap.containsKey(id)){
-            return documentDetailsMap.get(id);
-        }else{
-            DocumentDetails documentDetails = new DocumentDetails(id,label,quantity,new_quantity,unit_price,document);
-            documentDetailsMap.put(id,documentDetails);
+    public static DocumentDetails getDocumentDetails(Integer id, String label, Float quantity, Float newQuantity, Float unitPrice, Document document)
+    {
+        DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document);
+        int documentDetailsHash = documentDetails.hashCode();
+
+        if(documentDetailsMap.containsKey(documentDetailsHash))
+        {
+            return documentDetailsMap.get(documentDetailsHash);
+        }
+        else
+        {
+            documentDetailsMap.put(documentDetailsHash,documentDetails);
             return documentDetails;
         }
     }

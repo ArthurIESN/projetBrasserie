@@ -8,14 +8,16 @@ public class MakeEmployeeStatus
 
     public static EmployeeStatus getEmployeeStatus(Integer id, String label)
     {
-        if(employeeStatusMap.containsKey(id))
+        EmployeeStatus employeeStatus = new EmployeeStatus(id, label);
+        int employeeStatusHash = employeeStatus.hashCode();
+
+        if(employeeStatusMap.containsKey(employeeStatusHash))
         {
-            return employeeStatusMap.get(id);
+            return employeeStatusMap.get(employeeStatusHash);
         }
         else
         {
-            EmployeeStatus employeeStatus = new EmployeeStatus(id, label);
-            employeeStatusMap.put(id, employeeStatus);
+            employeeStatusMap.put(employeeStatusHash, employeeStatus);
             return employeeStatus;
         }
     }

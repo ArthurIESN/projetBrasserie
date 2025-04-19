@@ -8,14 +8,16 @@ public class MakeProcessType
 
     public static ProcessType getProcessType(Integer id, String label)
     {
-        if (makeType.containsKey(id))
+        ProcessType type = new ProcessType(id, label);
+        int typeHash = type.hashCode();
+
+        if (makeType.containsKey(typeHash))
         {
-            return makeType.get(id);
+            return makeType.get(typeHash);
         }
         else
         {
-            ProcessType type = new ProcessType(id, label);
-            makeType.put(id, type);
+            makeType.put(typeHash, type);
             return type;
         }
     }
