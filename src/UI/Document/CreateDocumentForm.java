@@ -1,12 +1,9 @@
 package UI.Document;
 
 import Controller.AppController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Process.GetAllProcessesException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
-import Model.Process.Process;
 import Model.ProcessType.ProcessType;
-import UI.Components.Fields.SearchByLabelPanel;
+import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
 
 import javax.swing.*;
@@ -16,7 +13,7 @@ import java.util.ArrayList;
 public class CreateDocumentForm extends JPanel {
     private GridBagLayoutHelper gridDocument;
     private ArrayList<ProcessType> processTypes;
-    private SearchByLabelPanel <ProcessType> processTypeSearch;
+    private SearchListPanel<ProcessType> processTypeSearch;
     private DocumentModelPanel documentModelPanel;
 
     public CreateDocumentForm(){
@@ -40,7 +37,7 @@ public class CreateDocumentForm extends JPanel {
 
 
         if(!processTypes.isEmpty()){
-            processTypeSearch = new SearchByLabelPanel<>(processTypes,ProcessType::getLabel);
+            processTypeSearch = new SearchListPanel<>(processTypes,ProcessType::getLabel);
             processTypeSearch.getSearchField().setPlaceholder("Select Process Type");
             gridDocument.addField(processTypeSearch);
         }

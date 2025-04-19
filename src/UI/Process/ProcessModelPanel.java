@@ -2,7 +2,6 @@ package UI.Process;
 
 import Controller.AppController;
 import Exceptions.Customer.GetAllCustomersException;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.Process.GetAllProcessesException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
@@ -20,8 +19,7 @@ import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
-import UI.Components.Fields.SearchByLabelPanel;
-import Utils.Utils;
+import UI.Components.Fields.SearchListPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,17 +32,17 @@ import java.util.GregorianCalendar;
 public class ProcessModelPanel extends JPanel
 {
     private JButton button;
-    private SearchByLabelPanel<Process> processSearch;
+    private SearchListPanel<Process> processSearch;
     private JEnhancedTextField IdField;
     private JEnhancedTextField processIdField;
     private JEnhancedTextField processLabelField;
     private JNumberField processNumberField;
     private JDateField dateField;
-    private SearchByLabelPanel<Customer> customerSearch;
-    private SearchByLabelPanel<Supplier> supplierSearch;
-    private SearchByLabelPanel<ProcessStatus> processStatusSearch;
-    private SearchByLabelPanel<Employee> employeeSearch;
-    private SearchByLabelPanel<ProcessType> typeSearch;
+    private SearchListPanel<Customer> customerSearch;
+    private SearchListPanel<Supplier> supplierSearch;
+    private SearchListPanel<ProcessStatus> processStatusSearch;
+    private SearchListPanel<Employee> employeeSearch;
+    private SearchListPanel<ProcessType> typeSearch;
     public ProcessModelPanel(Process process, boolean showId, boolean showProcesses)
     {
         ArrayList<Customer> customers = new ArrayList<>();
@@ -80,7 +78,7 @@ public class ProcessModelPanel extends JPanel
 
         if(showProcesses)
         {
-            processSearch = new SearchByLabelPanel<>(processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
+            processSearch = new SearchListPanel<>(processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
             processSearch.getSearchField().setPlaceholder("Search for a process");
 
             gridNewProcess.addField(processSearch);
@@ -109,19 +107,19 @@ public class ProcessModelPanel extends JPanel
         dateField.setMinDate(new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime());
 
 
-        customerSearch = new SearchByLabelPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
+        customerSearch = new SearchListPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
         customerSearch.getSearchField().setPlaceholder("Search for a customer");
 
-        supplierSearch = new SearchByLabelPanel<>(suppliers, supplier -> supplier != null ? supplier.getName() : "");
+        supplierSearch = new SearchListPanel<>(suppliers, supplier -> supplier != null ? supplier.getName() : "");
         supplierSearch.getSearchField().setPlaceholder("Search for a supplier");
 
-        processStatusSearch = new SearchByLabelPanel<>(processStatuses, ProcessStatus::getLabel);
+        processStatusSearch = new SearchListPanel<>(processStatuses, ProcessStatus::getLabel);
         processStatusSearch.getSearchField().setPlaceholder("Search for a process status");
 
-        employeeSearch = new SearchByLabelPanel<>(employees, employee -> employee != null ? employee.getFirstName() + " " + employee.getLastName() : "");
+        employeeSearch = new SearchListPanel<>(employees, employee -> employee != null ? employee.getFirstName() + " " + employee.getLastName() : "");
         employeeSearch.getSearchField().setPlaceholder("Search for an employee");
 
-        typeSearch = new SearchByLabelPanel<>(types, ProcessType::getLabel);
+        typeSearch = new SearchListPanel<>(types, ProcessType::getLabel);
         typeSearch.getSearchField().setPlaceholder("Search for a type");
 
         button = new JButton();
@@ -179,32 +177,32 @@ public class ProcessModelPanel extends JPanel
         return dateField;
     }
 
-    public SearchByLabelPanel<Customer> getCustomerSearch()
+    public SearchListPanel<Customer> getCustomerSearch()
     {
         return customerSearch;
     }
 
-    public SearchByLabelPanel<Supplier> getSupplierSearch()
+    public SearchListPanel<Supplier> getSupplierSearch()
     {
         return supplierSearch;
     }
 
-    public SearchByLabelPanel<ProcessStatus> getProcessStatusSearch()
+    public SearchListPanel<ProcessStatus> getProcessStatusSearch()
     {
         return processStatusSearch;
     }
 
-    public SearchByLabelPanel<Employee> getEmployeeSearch()
+    public SearchListPanel<Employee> getEmployeeSearch()
     {
         return employeeSearch;
     }
 
-    public SearchByLabelPanel<ProcessType> getTypeSearch()
+    public SearchListPanel<ProcessType> getTypeSearch()
     {
         return typeSearch;
     }
 
-    public SearchByLabelPanel<Process> getProcessSearch()
+    public SearchListPanel<Process> getProcessSearch()
     {
         return processSearch;
     }

@@ -26,7 +26,7 @@ public class EventDBAccess implements EventDataAccess {
                 "WHERE idd.id_item = ?";
 
         try{
-            Connection dataBaseConnection = DatabaseConnexion.getInstance().getConnection();
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement statement = dataBaseConnection.prepareStatement(query);
             statement.setInt(1,idItem);
             ResultSet resultSet = statement.executeQuery();

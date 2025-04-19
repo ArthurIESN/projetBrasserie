@@ -37,7 +37,7 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
 
         try
         {
-            Connection connection = DatabaseConnexion.getInstance().getConnection();
+            Connection connection = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1,idEvent);
@@ -62,7 +62,7 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
                 "WHERE edd.id_event = ?";
 
         try{
-            Connection dataBaseConnection = DatabaseConnexion.getInstance().getConnection();
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
             preparedStatement.setInt(1,idEvent);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -111,7 +111,7 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
                  "    YEAR(e.start_date) = ?;";
 
          try{
-             Connection dataBaseConnection = DatabaseConnexion.getInstance().getConnection();
+             Connection dataBaseConnection = DatabaseConnexion.getInstance();
              PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
              preparedStatement.setInt(1,idItem);
              preparedStatement.setInt(2,idEvent);

@@ -18,7 +18,7 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
         String query = "SELECT * FROM document_status";
 
         try{
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
