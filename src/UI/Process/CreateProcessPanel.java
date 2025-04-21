@@ -12,7 +12,7 @@ public class CreateProcessPanel extends JPanel
 {
     private final ProcessModelPanel processModelPanel;
 
-    public CreateProcessPanel()
+    public CreateProcessPanel(ProcessPanel processPanel)
     {
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Create a new process");

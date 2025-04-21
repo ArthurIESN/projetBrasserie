@@ -38,7 +38,6 @@ public class GridBagLayoutHelper extends JPanel
 
         fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 20, component.getPreferredSize().height ));
 
-
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;

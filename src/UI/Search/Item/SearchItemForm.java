@@ -5,9 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+import Controller.AppController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
+import Exceptions.Vat.GetAllVatsException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Packaging.Packaging;
@@ -19,8 +21,10 @@ import Model.Item.Item;
 import Controller.SearchController;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
 import UI.Components.EnhancedTable.TableModelMaker;
+import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JDualSliderPanel;
 import UI.Components.Fields.JEnhancedTextField;
+import UI.Components.Fields.SearchListPanel;
 import UI.Models.ItemEnhancedTableModel;
 import UI.Models.PackagingEnhancedTableModel;
 import UI.Models.VatEnhancedTableModel;
@@ -33,7 +37,10 @@ public class SearchItemForm extends JPanel
     private TableModelMaker tableModelMaker;
     private ItemEnhancedTableModel itemTableModel;
     private PackagingEnhancedTableModel packagingEnhancedTableModel;
-    private VatEnhancedTableModel vatEnhancedTableModel;
+
+    private JDualSliderPanel itemQuantity;
+    private JDualSliderPanel itemPrice;
+    private ComboBoxPanel<Vat> searchVat;
 
 
     public SearchItemForm()
@@ -49,6 +56,15 @@ public class SearchItemForm extends JPanel
             minMaxItem = new int[]{0, 100, 0, 100};
         }
 
+        ArrayList<Vat> vats = new ArrayList<>();
+        try
+        {
+            vats = AppController.getAllVats();
+        } catch (GetAllVatsException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         // add a title
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Search Items");
@@ -59,17 +75,17 @@ public class SearchItemForm extends JPanel
         GridBagLayoutHelper gridSearchForm = new GridBagLayoutHelper();
 
         // TVA Code field
-        JEnhancedTextField tvaCodeField = new JEnhancedTextField();
-        tvaCodeField.setPlaceholder("VAT Code");
-        gridSearchForm.addRightField(tvaCodeField);
+        searchVat = new ComboBoxPanel<>(vats, Vat::getCode);
+        gridSearchForm.addField("VAT Code", searchVat);
+
 
         // Item Stock Quantity Field
-        JDualSliderPanel nbItemInPackaging = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 500, 50);
-        gridSearchForm.addField("Item Stock Quantity", nbItemInPackaging);
+        itemQuantity = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 500, 50);
+        gridSearchForm.addField("Item Stock Quantity", itemQuantity);
 
         // Item Price Field
-        JDualSliderPanel priceRange = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 500, 50);
-        gridSearchForm.addField("Item Price", priceRange);
+        itemPrice = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 500, 50);
+        gridSearchForm.addField("Item Price", itemPrice);
 
         JButton searchButton = new JButton("Search");
         gridSearchForm.addField(searchButton);
@@ -91,35 +107,31 @@ public class SearchItemForm extends JPanel
         tableModelMaker.setTable(tableScrollPanel);
         add(tableScrollPanel, BorderLayout.SOUTH);
 
-        searchButton.addActionListener(e ->
-        {
-            searchItem(tvaCodeField, nbItemInPackaging, priceRange, tableScrollPanel);
-        });
-
-        // add event lister on enter key
-        tvaCodeField.addActionListener((ActionEvent e) -> searchButton.doClick());
+        searchButton.addActionListener(e -> searchItem());
     }
 
-
-
-    private void searchItem(JTextField tvaCodeField, JDualSliderPanel nbItemInPackaging, JDualSliderPanel priceRange, JEnhancedTableScrollPanel table)
+    private void searchItem()
     {
-        // get data from fields
-        String tvaCode = tvaCodeField.getText();
-        int minItem = nbItemInPackaging.getCurrentMin();
-        int maxItem = nbItemInPackaging.getCurrentMax();
-        int minPrice = priceRange.getCurrentMin();
-        int maxPrice = priceRange.getCurrentMax();
+        Vat selectedVat = searchVat.getSelectedItem();
+        if(selectedVat == null)
+        {
+            JOptionPane.showMessageDialog(null, "Please select a VAT code", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String tvaCode = selectedVat.getCode();
+        int minItem = itemQuantity.getCurrentMin();
+        int maxItem = itemQuantity.getCurrentMax();
+        int minPrice = itemPrice.getCurrentMin();
+        int maxPrice = itemPrice.getCurrentMax();
 
         try
         {
             ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
             ArrayList<Packaging> packagings = Utils.transformData(items, Item::getPackaging);
-            //ArrayList<Vat> vatCodes = Utils.transformData(items, Item::getVat);
 
             itemTableModel.setData(items);
             packagingEnhancedTableModel.setData(packagings);
-            //vatEnhancedTableModel.setData(vatCodes);
 
             tableScrollPanel.updateModel(tableModelMaker);
 

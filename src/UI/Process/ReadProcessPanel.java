@@ -88,8 +88,8 @@ public class ReadProcessPanel extends JPanel
         {
             switch (action.getActionCommand())
             {
-                case "Update" -> processPanel.navbarClick(2);
-                case "Delete" -> processPanel.navbarClick(3);
+                case "Update" -> processPanel.moveTo(2);
+                case "Delete" -> processPanel.moveTo(3);
             }
             processPanel.notifyObservers((Process)finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
         });

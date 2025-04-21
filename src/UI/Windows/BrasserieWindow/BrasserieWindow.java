@@ -24,7 +24,6 @@ public class BrasserieWindow extends JFrame implements WindowObserver
 
         setSize(1280, 720);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         container = getContentPane();
         container.setLayout(new BorderLayout());
@@ -33,6 +32,17 @@ public class BrasserieWindow extends JFrame implements WindowObserver
         setJMenuBar(menuBarBrasserie.getMenuBar());
 
         updateWindowContent(new Test());
+
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e)
+            {
+
+                WindowManager.removeWindow(BrasserieWindow.this);
+                dispose();
+            }
+        });
 
         setVisible(true);
     }

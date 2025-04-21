@@ -4,6 +4,7 @@ import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.SettingsWindow.SettingsWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class WindowManager implements WindowSubject
@@ -33,6 +34,59 @@ public class WindowManager implements WindowSubject
     public static void addWindow()
     {
         windows.add(new BrasserieWindow());
+    }
+
+    public static void removeWindow(BrasserieWindow window)
+    {
+        getInstance().removeObserver(window);
+        windows.remove(window);
+
+        if (windows.isEmpty())
+        {
+            System.exit(0);
+        }
+    }
+
+    public static boolean isPanelDisplayed(Class<? extends JPanel> panelClass) {
+        int count = 0;
+
+        while (count < windows.size() && !containsPanel(windows.get(count).getContentPane(), panelClass))
+        {
+            count++;
+        }
+
+        return count < windows.size();
+    }
+
+    private static boolean containsPanel(Component parent, Class<? extends JPanel> panelClass) {
+        if (panelClass.isInstance(parent))
+        {
+            return true;
+        }
+
+        if (parent instanceof Container)
+        {
+            for (Component child : ((Container) parent).getComponents())
+            {
+                if (containsPanel(child, panelClass))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void focusWindow(Class<? extends JPanel> panelClass) {
+        for (BrasserieWindow window : windows)
+        {
+            if (containsPanel(window.getContentPane(), panelClass))
+            {
+                window.toFront();
+                window.requestFocus();
+                return;
+            }
+        }
     }
 
 

@@ -2,11 +2,13 @@ package DataAccess.Vat;
 
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Vat.GetAllVatsException;
 import Exceptions.Vat.UnkownVatCodeException;
 
 import Model.Vat.Vat;
 import Model.Vat.MakeVat;
 
+import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,8 +37,32 @@ public class VatDBAccess implements VatDataAccess
             }
         } catch (SQLException | DatabaseConnectionFailedException e)
         {
-            System.err.println("Sql error: " + e.getMessage());
+            System.err.println("Vat Error: " + e.getMessage());
             throw new UnkownVatCodeException(code);
         }
+    }
+
+    public ArrayList<Vat> getAllVats() throws GetAllVatsException
+    {
+        String sql = "SELECT * FROM vat";
+        ArrayList<Vat> vats = new ArrayList<>();
+
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            PreparedStatement statement = databaseConnexion.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next())
+            {
+                vats.add(MakeVat.getVat(resultSet.getString("code"), resultSet.getFloat("rate")));
+            }
+        } catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println("Vat Error : " + e.getMessage());
+            throw new GetAllVatsException();
+        }
+
+        return vats;
     }
 }
