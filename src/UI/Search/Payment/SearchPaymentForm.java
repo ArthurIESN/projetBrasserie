@@ -62,7 +62,7 @@ public class SearchPaymentForm extends JPanel
         // Payment Validated Checkbox
         JCheckBox validatedPaymentCheckBox = new JCheckBox();
         gridSearchForm.addField("Payment validated", validatedPaymentCheckBox);
-/*/
+
         // Minimum Amount Field
         JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
         amountField.setAllowNegative(false);
@@ -77,6 +77,7 @@ public class SearchPaymentForm extends JPanel
             yearComboBox.setSelectedIndex(0); // Select the first year by default
         }
         gridSearchForm.addField("Select Year", yearComboBox);
+        add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
         JButton searchButton = new JButton("Start search");
@@ -151,6 +152,6 @@ public class SearchPaymentForm extends JPanel
 
         } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }/*/
+        }
     }
 }
