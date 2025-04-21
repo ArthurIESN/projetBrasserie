@@ -3,10 +3,8 @@ import Model.PaymentStatus.PaymentStatus;
 import Model.Customer.Customer;
 import Model.Process.Process;
 import Model.Document.Document;
-import Model.ProcessType.ProcessType;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Payment {
     private int id;
@@ -19,7 +17,7 @@ public class Payment {
 
     // Constructeur
 
-    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document, Model.Process.Process process, Customer customer) {
+    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,Model.Process.Process process, Customer customer) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
@@ -81,28 +79,6 @@ public class Payment {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Payment payment = (Payment) obj;
-
-        return Objects.equals(id, payment.id) &&
-                Objects.equals(amount, payment.amount) &&
-                Objects.equals(paymentDate, payment.paymentDate) &&
-                Objects.equals(paymentStatus, payment.paymentStatus) &&
-                Objects.equals(document, payment.document) &&
-                Objects.equals(process, payment.process) &&
-                Objects.equals(customer, payment.customer);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(id, amount, paymentDate, paymentStatus, document, process, customer);
     }
 }
 
