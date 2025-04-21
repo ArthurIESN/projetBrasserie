@@ -71,7 +71,7 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Minimum amount", amountField);
 
         // Year Selection ComboBox
-        ComboBoxGen<Integer> yearComboBox = new ComboBoxGen<>(paymentYears);
+        ComboBoxPanel<Integer> yearComboBox = new ComboBoxPanel<>(paymentYears, String::valueOf);
         gridSearchForm.addField("Payment year", yearComboBox);
 
         add(gridSearchForm, BorderLayout.CENTER);
@@ -115,13 +115,11 @@ public class SearchPaymentForm extends JPanel
         return years;
     }
 
-    private void searchPayments(JCheckBox validatedPaymentCheckBox, JNumberField amountField, JComboBox<String> yearComboBox, JEnhancedTableScrollPanel table)
+    private void searchPayments(JCheckBox validatedPaymentCheckBox, JNumberField amountField, ComboBoxPanel<Integer> yearComboBox, JEnhancedTableScrollPanel table)
     {
         boolean isValidated = validatedPaymentCheckBox.isSelected();
         Float minAmountValue =  amountField.getFloat();
         double minAmount = (minAmountValue != null) ? minAmountValue.doubleValue() : 0;
-        String selectedYear = (String) yearComboBox.getSelectedItem();
-
         String paymentStatus;
         if (isValidated){
             paymentStatus = "Validated";
@@ -130,8 +128,9 @@ public class SearchPaymentForm extends JPanel
         }
 
         java.sql.Date sqlDate = null;
-        if (selectedYear != null) {
-            sqlDate = java.sql.Date.valueOf(selectedYear + "-01-01"); // Convert YYYY to SQL Date
+        if (yearComboBox != null)
+        {
+            sqlDate = new java.sql.Date(2025);
         }
 
         try {
