@@ -2,14 +2,14 @@ package UI.Process;
 
 import UI.Components.Navbar.NavbarPanel;
 
+import Model.Process.Process;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Process.Process;
-
-public class ProcessPanel extends JPanel
+public class ProcessPanel extends JPanel implements ProcessSubject
 {
     private Container container;
     private final NavbarPanel navbarPanel;
@@ -42,19 +42,22 @@ public class ProcessPanel extends JPanel
         navbarPanel.forceClickItem(index);
     }
 
+    @Override
     public void addObserver(ProcessObserver observer) {
         observers.add(observer);
     }
 
+    @Override
     public void removeObserver(ProcessObserver observer) {
         observers.remove(observer);
     }
 
-    public void notifyObservers(Object data)
+    @Override
+    public void notifyObservers(Process process)
     {
         for (ProcessObserver observer : observers)
         {
-            observer.update(data);
+            observer.update(process);
         }
     }
 

@@ -56,7 +56,7 @@ public class BrasserieWindow extends JFrame implements WindowObserver
     }
 
     @Override
-    public void onSettingsChanged()
+    public void onThemeChanged()
     {
         // reload this window
         SwingUtilities.updateComponentTreeUI(this);

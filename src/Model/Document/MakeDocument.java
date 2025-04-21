@@ -16,14 +16,21 @@ public class MakeDocument {
                                        Boolean depositIsPaid, Float depositAmount, Date desiredDeliveryDate,
                                        Float vatAmount, Float totalInclusiveOfTaxe, Float totalVat,
                                        Float totalExclVat, CollectionAgency collectionAgency,
-                                       DocumentStatus documentStatus, DeliveryTruck deliveryTruck, Process process){
-        if(documentMap.containsKey(id)){
-            return documentMap.get(id);
-        }else{
-            Document document =  new Document(id, label, date,deadline,reduction,validity,
-                    isDelivered,deliveryDate,depositIsPaid,depositAmount,desiredDeliveryDate,vatAmount,
-                    totalInclusiveOfTaxe,totalVat,totalExclVat,collectionAgency,deliveryTruck,process,documentStatus);
-            documentMap.put(id,document);
+                                       DocumentStatus documentStatus, DeliveryTruck deliveryTruck, Process process)
+    {
+        Document document = new Document(id, label, date, deadline, reduction, validity,
+                isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate, vatAmount,
+                totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
+
+        int documentHash = document.hashCode();
+
+        if(documentMap.containsKey(documentHash))
+        {
+            return documentMap.get(documentHash);
+        }
+        else
+        {
+            documentMap.put(documentHash,document);
             return document;
         }
     }

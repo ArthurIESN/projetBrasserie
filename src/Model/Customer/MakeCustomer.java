@@ -10,14 +10,16 @@ public class MakeCustomer
 
     public static Customer getCustomer(Integer id, String lastName, String firstName, float creditLimit, String numVAT, CustomerStatus customerStatus)
     {
-        if(customerMap.containsKey(id))
+        Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
+        int customerHash = customer.hashCode();
+
+        if(customerMap.containsKey(customerHash))
         {
-            return customerMap.get(id);
+            return customerMap.get(customerHash);
         }
         else
         {
-            Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
-            customerMap.put(id, customer);
+            customerMap.put(customerHash, customer);
             return customer;
         }
     }

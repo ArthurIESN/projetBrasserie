@@ -1,10 +1,9 @@
-import UI.Windows.WindowManager;
+import BrasserieManagementSystem.BrasserieManagementSystem;
 
 public class Main
 {
-    //@todo: Catch DatabaseException in data access package. (FAUT PAS LES FAIRE REMONTE)
     public static void main(String[] args)
     {
-        WindowManager.init();
+        BrasserieManagementSystem.init();
     }
 }

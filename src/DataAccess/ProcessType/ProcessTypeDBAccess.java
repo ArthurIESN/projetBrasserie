@@ -21,7 +21,7 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
         try
         {
-            Connection connection = DatabaseConnexion.getInstance().getConnection();
+            Connection connection = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = connection.prepareStatement(query);
 

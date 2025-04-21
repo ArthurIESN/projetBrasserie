@@ -8,14 +8,16 @@ public class MakeProcessStatus
 
     public static ProcessStatus getProcessStatus(Integer id, String label)
     {
-        if(processStatusMap.containsKey(id))
+        ProcessStatus processStatus = new ProcessStatus(id, label);
+        int processStatusHash = processStatus.hashCode();
+
+        if(processStatusMap.containsKey(processStatusHash))
         {
-            return processStatusMap.get(id);
+            return processStatusMap.get(processStatusHash);
         }
         else
         {
-            ProcessStatus processStatus = new ProcessStatus(id, label);
-            processStatusMap.put(id, processStatus);
+            processStatusMap.put(processStatusHash, processStatus);
             return processStatus;
         }
     }

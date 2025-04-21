@@ -13,6 +13,7 @@ import Model.Employee.MakeEmployee;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MakeProcess
 {
@@ -26,14 +27,16 @@ public class MakeProcess
                                         Employee employee,
                                         Customer customer)
     {
-        if(processMap.containsKey(id))
+        Process process = new Process(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
+        int processHash = process.hashCode();
+
+        if(processMap.containsKey(processHash))
         {
-            return processMap.get(id);
+            return processMap.get(processHash);
         }
         else
         {
-            Process process = new Process(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
-            processMap.put(id, process);
+            processMap.put(processHash, process);
 
             return process;
         }

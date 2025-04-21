@@ -7,13 +7,14 @@ import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
+import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
 import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.Fields.SearchByLabelPanel;
-import UI.Components.StepByStepManager;
+import UI.Components.Fields.SearchListPanel;
+import UI.Components.StepManager;
 import UI.Models.Document.DocumentEnhancedTableModel;
 
 import javax.swing.*;
@@ -26,16 +27,16 @@ public class SearchDocumentWithEventForm extends JPanel {
     private JLabel title;
     private JPanel filterLabelPanel;
     private JLabel filterLabel;
-    private StepByStepManager stepByStepManager;
+    private StepManager stepManager;
     private List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     private List<Float> quantities = new ArrayList<>();
-    private SearchByLabelPanel<Item> itemSearch;
-    private SearchByLabelPanel<Event> eventSearch;
-    private SearchByLabelPanel<Float> quantitySearch;
-    private SearchByLabelPanel<Integer> yearSearch;
+    private SearchListPanel<Item> itemSearch;
+    private SearchListPanel<Event> eventSearch;
+    private SearchListPanel<Float> quantitySearch;
+    private SearchListPanel<Integer> yearSearch;
     private TableModelMaker tableModelMaker;
     private DocumentEnhancedTableModel documentTableModel;
     private JEnhancedTableScrollPanel tableScrollPanel;
@@ -70,10 +71,10 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        itemSearch = new SearchByLabelPanel<>(items, Item::getLabel);
-        eventSearch = new SearchByLabelPanel<>(new ArrayList<>(), Event::getLabel);
-        quantitySearch = new SearchByLabelPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
-        yearSearch = new SearchByLabelPanel<>(new ArrayList<>(), year -> Integer.toString(year));
+        itemSearch = new SearchListPanel<>(items, Item::getLabel);
+        eventSearch = new SearchListPanel<>(new ArrayList<>(), Event::getLabel);
+        quantitySearch = new SearchListPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
+        yearSearch = new SearchListPanel<>(new ArrayList<>(), year -> Integer.toString(year));
 
 
         Component[] stepsList = new Component[] {itemSearch,eventSearch,quantitySearch,yearSearch,searchButton};
@@ -89,30 +90,30 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterPanel.addField(searchButton);
 
 
-        stepByStepManager = new StepByStepManager(stepsList);
+        stepManager = new StepManager(stepsList);
 
         itemSearch.onSelectedItemChange(itemChanged ->
         {
-            stepByStepManager.completeStep(0);
+            stepManager.completeStep(0);
         });
 
         eventSearch.onSelectedItemChange(eventChanged -> {
-            stepByStepManager.completeStep(1);
+            stepManager.completeStep(1);
         });
 
         quantitySearch.onSelectedItemChange(quantityChanged -> {
-            stepByStepManager.completeStep(2);
+            stepManager.completeStep(2);
         });
 
         yearSearch.onSelectedItemChange(yearChanged -> {
-            stepByStepManager.completeStep(3);
+            stepManager.completeStep(3);
         });
 
 
-        stepByStepManager.onStepShown(1, this::functionCalledWhenStepEventIsShown);
-        stepByStepManager.onStepShown(2, this::functionCalledWhenStepQuantitiesIsShown);
-        stepByStepManager.onStepShown(3, this::functionCalledWhenStepYearsIsShown);
-        stepByStepManager.onStepShown(4, this::functionCalledWhenStepButtonIsShown);
+        stepManager.onStepShown(1, this::functionCalledWhenStepEventIsShown);
+        stepManager.onStepShown(2, this::functionCalledWhenStepQuantitiesIsShown);
+        stepManager.onStepShown(3, this::functionCalledWhenStepYearsIsShown);
+        stepManager.onStepShown(4, this::functionCalledWhenStepButtonIsShown);
 
 
         tableModelMaker = new TableModelMaker();
@@ -125,9 +126,11 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         searchButton.addActionListener(e -> {
             try{
-                SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
+                ArrayList<Document> documents = SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
                         eventSearch.getSelectedItem().getId(),quantitySearch.getSelectedItem(),
                         yearSearch.getSelectedItem());
+                documentTableModel.setData(documents);
+                tableScrollPanel.updateModel(tableModelMaker);
                 // @todo : gérer les erreurs
             }catch (DatabaseConnectionFailedException | GetDocumentWithSpecificEventException err){
                 System.err.println(err.getMessage());
@@ -161,7 +164,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             eventSearch.setData(events);
         }else {
             JOptionPane.showMessageDialog(null, "No event was found for the selected product.","No event found",JOptionPane.INFORMATION_MESSAGE);
-            stepByStepManager.stop();
+            stepManager.stop();
         }
     }
     private void functionCalledWhenStepQuantitiesIsShown(){
@@ -180,7 +183,7 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         }else {
             JOptionPane.showMessageDialog(null, "No quantities was found for the selected event.","No quantities found",JOptionPane.INFORMATION_MESSAGE);
-            stepByStepManager.stop();
+            stepManager.stop();
         }
     }
 
@@ -198,7 +201,7 @@ public class SearchDocumentWithEventForm extends JPanel {
             yearSearch.setData(years);
         }else {
             JOptionPane.showMessageDialog(null, "No years was found for the selected quantity.","No years found",JOptionPane.INFORMATION_MESSAGE);
-            stepByStepManager.stop();
+            stepManager.stop();
         }
     }
 
@@ -215,9 +218,9 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void filters(String label) {
         String formattedLabel = label + " / ";
 
-        if (stepByStepManager.getCurrentStep() < filters.size())
+        if (stepManager.getCurrentStep() < filters.size())
         {
-            filters.set(stepByStepManager.getCurrentStep(), formattedLabel);
+            filters.set(stepManager.getCurrentStep(), formattedLabel);
         } else {
             filters.add(formattedLabel);
         }
@@ -227,7 +230,7 @@ public class SearchDocumentWithEventForm extends JPanel {
 
     private void clearPanelFilter()
     {
-        for(int i = stepByStepManager.getCurrentStep() - 1;  i < filters.size(); i++)
+        for(int i = stepManager.getCurrentStep() - 1; i < filters.size(); i++)
         {
             filters.remove(i);
             i--;

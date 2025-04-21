@@ -120,6 +120,8 @@ public class SearchPaymentForm extends JPanel
         boolean isValidated = validatedPaymentCheckBox.isSelected();
         Float minAmountValue =  amountField.getFloat();
         double minAmount = (minAmountValue != null) ? minAmountValue.doubleValue() : 0;
+        Integer selectedYear = 2025;
+
         String paymentStatus;
         if (isValidated){
             paymentStatus = "Validated";
@@ -128,9 +130,8 @@ public class SearchPaymentForm extends JPanel
         }
 
         java.sql.Date sqlDate = null;
-        if (yearComboBox != null)
-        {
-            sqlDate = new java.sql.Date(2025);
+        if (selectedYear != null) {
+            sqlDate = java.sql.Date.valueOf(selectedYear + "-01-01"); // Convert YYYY to SQL Date
         }
 
         try {

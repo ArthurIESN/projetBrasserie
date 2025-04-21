@@ -46,6 +46,14 @@ public class Process {
         return number;
     }
 
+    public void setNumber(int number)
+    {
+        if(number < 0)
+        {
+            this.number = number;
+        }
+    }
+
     public Date getCreationDate() {
         return creationDate;
     }

@@ -8,14 +8,16 @@ public class MakePackaging
 
     public static Packaging getPackaging(Integer id, String label, Integer quantity)
     {
-        if(packagingMap.containsKey(id))
+        Packaging packaging = new Packaging(id, label, quantity);
+        int packagingHash = packaging.hashCode();
+
+        if(packagingMap.containsKey(packagingHash))
         {
-            return packagingMap.get(id);
+            return packagingMap.get(packagingHash);
         }
         else
         {
-            Packaging packaging = new Packaging(id, label, quantity);
-            packagingMap.put(id, packaging);
+            packagingMap.put(packagingHash, packaging);
             return packaging;
         }
     }

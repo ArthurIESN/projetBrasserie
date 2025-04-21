@@ -38,7 +38,7 @@ Set to 0
 
 
 
-- `SearchByLabelPanel` - Panel that contains a search bar and a list of items. The panel can be used to search for items in a list and display the results in a table. this component can handle any type.
+- `SearchListPanel` - Panel that contains a search bar and a list of items. The panel can be used to search for items in a list and display the results in a table. this component can handle any type.
 
 ![searchByLabel_readme.png](resources%2FreadmeImages%2FsearchByLabel_readme.png)
 

@@ -84,11 +84,10 @@ public class SystemProperties
     public static void setDarkThemeEnabled(boolean enabled)
     {
         properties.setProperty("USE_DARK_THEME", Boolean.toString(enabled));
-        System.out.println(Boolean.toString(enabled));
+
         try (OutputStream output = new FileOutputStream(configFilePath))
         {
             properties.store(output, null);
-            System.out.println(properties);
         } catch (IOException e)
         {
             System.out.println("Error saving properties file: " + e.getMessage());
@@ -135,29 +134,32 @@ public class SystemProperties
 
     public static void applySettings()
     {
+        System.out.println("Applying system properties...");
+
         if(getSystemType() == SystemType.MAC)
         {
             applyMacosSettings();
         }
 
+
         String theme = properties.getProperty("USE_DARK_THEME");
         if(theme != null && theme.equals("true"))
         {
-            System.out.println("Dark theme enabled");
             enableDarkTheme();
         }
         else
         {
-            System.out.println("Light theme enabled");
             enableLightTheme();
         }
 
         // reload theme properties
-        ThemeManager.notifyObservers(getThemeProperties());
+        ThemeManager.getInstance().notifyObservers(getThemeProperties());
     }
 
     private static void applyMacosSettings()
     {
+        System.out.println("Applying macos settings...");
+
         setMacAppTheme("system");
         enableMacMenuBar();
         System.setProperty("apple.awt.application.name", "Brasserie Management System");
@@ -168,6 +170,7 @@ public class SystemProperties
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
             {
+                System.out.println("Adding macos settings button");
                 desktop.setPreferencesHandler(e -> WindowManager.showSettingsWindow());
             }
         }
@@ -177,10 +180,12 @@ public class SystemProperties
     {
         if(getSystemType() == SystemType.MAC)
         {
+            System.out.println("Applying macos dark theme");
             FlatMacDarkLaf.setup();
         }
         else
         {
+            System.out.println("Applying windows dark theme");
             FlatDarkLaf.setup();
         }
     }
@@ -189,10 +194,12 @@ public class SystemProperties
     {
         if(getSystemType() == SystemType.MAC)
         {
+            System.out.println("Applying macos light theme");
             FlatMacLightLaf.setup();
         }
         else
         {
+            System.out.println("Applying windows light theme");
             FlatLightLaf.setup();
         }
     }

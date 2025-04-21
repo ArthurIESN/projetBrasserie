@@ -20,7 +20,7 @@ public class VatDBAccess implements VatDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance().getConnection();
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(sql);
             statement.setString(1, code);
             ResultSet resultSet = statement.executeQuery();

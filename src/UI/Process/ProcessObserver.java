@@ -1,6 +1,8 @@
 package UI.Process;
 
+import Model.Process.Process;
+
 public interface ProcessObserver
 {
-    void update(Object object);
+    void update(Process process);
 }
