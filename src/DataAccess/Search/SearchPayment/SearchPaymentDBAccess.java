@@ -18,6 +18,7 @@ import Model.Document.Document;
 import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
 
+import java.net.SocketTimeoutException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
 
             ResultSet resultSet = statement.executeQuery();
 
-ArrayList<Payment> payments = new ArrayList<>();
+            ArrayList<Payment> payments = new ArrayList<>();
             while (resultSet.next()) {
                 PaymentStatus paymentStatus = MakePaymentStatus.getPaymentStatus(
                         resultSet.getInt("id_payment_status"),
@@ -131,7 +132,6 @@ ArrayList<Payment> payments = new ArrayList<>();
                 );
                 payments.add(payment);
             }
-
             return payments;
 
         } catch (SQLException | DatabaseConnectionFailedException e) {

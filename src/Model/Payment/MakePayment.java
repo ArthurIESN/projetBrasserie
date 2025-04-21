@@ -1,5 +1,6 @@
 package Model.Payment;
 
+import Model.Document.Document;
 import Model.PaymentStatus.PaymentStatus;
 import Model.Process.Process;
 import Model.Customer.Customer;
