@@ -115,6 +115,7 @@ public class JEnhancedTable extends JTable implements ThemeObserver
         setModel(model);
         updateColumnSize();
         revalidate();
+        repaint();
     }
 
     public void updateColumnSize()

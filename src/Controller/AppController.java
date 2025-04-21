@@ -21,6 +21,7 @@ import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 
 
+import Exceptions.Vat.GetAllVatsException;
 import Model.Customer.Customer;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Employee.Employee;
@@ -29,6 +30,7 @@ import Model.ProcessStatus.ProcessStatus;
 import Model.Supplier.Supplier;
 import Model.ProcessType.ProcessType;
 import Model.Process.Process;
+import Model.Vat.Vat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class AppController {
     private static final ProcessTypeManager typeManager = new ProcessTypeManager();
     private static final ProcessManager processManager = new ProcessManager();
     private static final DocumentStatusManager documentStatusManager = new DocumentStatusManager();
+    private static final VatManager vatManager = new VatManager();
 
     public static List<Item> getAllItems() throws GetAllItemsException
     {
@@ -76,6 +79,12 @@ public class AppController {
     public static ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException
     {
         return typeManager.getAllTypes();
+    }
+
+    // VAT
+    public static ArrayList<Vat> getAllVats() throws GetAllVatsException
+    {
+        return vatManager.getAllVats();
     }
 
     // process

@@ -147,7 +147,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
     @Override
     public void update(Process process)
     {
-        processSearch.setSelectedItem(process);
+        processSearch.forceSetSelectedItem(process);
     }
 
 }
