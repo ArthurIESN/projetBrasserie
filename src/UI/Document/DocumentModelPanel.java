@@ -87,10 +87,11 @@ public class DocumentModelPanel extends JPanel {
         labelField.updateText(label + formattedDateTime);
     }
 
+// test
+
     public void update(){
         switch (this.typeDocument){
             case "Order":
-
                 break;
         }
     }
