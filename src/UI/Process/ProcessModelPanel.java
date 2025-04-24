@@ -1,6 +1,11 @@
 package UI.Process;
 
-import Controller.AppController;
+import Controller.Customer.CustomerController;
+import Controller.Employee.EmployeeController;
+import Controller.Process.ProcessController;
+import Controller.ProcessStatus.ProcessStatusController;
+import Controller.Supplier.SupplierController;
+import Controller.Type.TypeController;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.Process.GetAllProcessesException;
@@ -58,14 +63,14 @@ public class ProcessModelPanel extends JPanel
 
             if(showProcesses)
             {
-                processes = AppController.getAllProcesses();
+                processes = ProcessController.getAllProcesses();
             }
 
-            customers = AppController.getAllCustomers();
-            suppliers = AppController.getAllSuppliers();
-            processStatuses = AppController.getAllProcessStatus();
-            employees = AppController.getAllEmployees();
-            types = AppController.getAllTypes();
+            customers = CustomerController.getAllCustomers();
+            suppliers = SupplierController.getAllSuppliers();
+            processStatuses = ProcessStatusController.getAllProcessStatus();
+            employees = EmployeeController.getAllEmployees();
+            types = TypeController.getAllTypes();
         } catch (GetAllCustomersException | GetAllSuppliersException |
                  GetAllProcessStatusException | GetAllEmployeesException | GetAllProcessesException |
                  GetAllProcessTypesException e)

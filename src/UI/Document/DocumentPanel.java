@@ -30,6 +30,7 @@ public class DocumentPanel extends JPanel {
         add(container,BorderLayout.CENTER);
     }
 
+
     public void navBarClick(int index){
         navbarPanel.clickItem(index);
     }

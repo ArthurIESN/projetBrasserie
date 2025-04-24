@@ -1,12 +1,9 @@
 package UI.Process;
 
-import Controller.AppController;
-
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Controller.Process.ProcessController;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
 import Model.CustomerStatus.CustomerStatus;
@@ -32,7 +29,7 @@ public class ReadProcessPanel extends JPanel
 
         try
         {
-            processes = AppController.getAllProcesses();
+            processes = ProcessController.getAllProcesses();
         }
         catch (GetAllProcessesException e)
         {

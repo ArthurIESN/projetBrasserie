@@ -1,6 +1,6 @@
 package UI.Process;
 
-import Controller.AppController;
+import Controller.Process.ProcessController;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
@@ -33,7 +33,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
 
         try
         {
-            processes = AppController.getAllProcesses();
+            processes = ProcessController.getAllProcesses();
         }
         catch (GetAllProcessesException e)
         {
@@ -70,7 +70,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
 
                 try
                 {
-                    AppController.deleteProcess(selectedProcess.getId());
+                    ProcessController.deleteProcess(selectedProcess.getId());
 
                     JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
 

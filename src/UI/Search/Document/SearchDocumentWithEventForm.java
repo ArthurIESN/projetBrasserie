@@ -1,6 +1,6 @@
 package UI.Search.Document;
 
-import Controller.AppController;
+import Controller.Item.ItemController;
 import Controller.SearchController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
@@ -65,7 +65,7 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         try
         {
-            items = AppController.getAllItems();
+            items = ItemController.getAllItems();
         }catch (GetAllItemsException e)
         {
             System.out.println(e.getMessage());

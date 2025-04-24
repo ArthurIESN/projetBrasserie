@@ -3,12 +3,8 @@ package DataAccess.Process;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Process.DeleteProcessException;
-import Exceptions.Process.GetAllProcessesException;
-import Exceptions.Process.CreateProcessException;
+import Exceptions.Process.*;
 
-import Exceptions.Process.GetProcessException;
-import Exceptions.Process.UpdateProcessException;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
 import Model.CustomerStatus.CustomerStatus;
@@ -23,6 +19,7 @@ import Model.ProcessType.ProcessType;
 import Model.ProcessType.MakeProcessType;
 import Model.Supplier.Supplier;
 import Model.Supplier.MakeSupplier;
+import com.sun.source.tree.ArrayAccessTree;
 
 
 import java.sql.Connection;
@@ -30,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.sql.Types.INTEGER;
 
@@ -296,6 +294,20 @@ public class ProcessDBAccess implements ProcessDataAccess
             System.err.println(e.getMessage());
             throw new GetAllProcessesException();
         }
+    }
+
+    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType {
+        String query = "";
+
+        try{
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            PreparedStatement preparedStatement = databaseConnexion.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery(query);
+        }catch (SQLException | DatabaseConnectionFailedException e ){
+            System.err.println(e.getMessage());
+        }
+
+        return null;
     }
 
 
