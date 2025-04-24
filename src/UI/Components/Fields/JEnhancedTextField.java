@@ -12,7 +12,7 @@ import java.awt.event.FocusEvent;
 import java.util.Properties;
 
 // Handle placeholder text in JTextField
-public class JEnhancedTextField extends JTextField implements ThemeObserver
+public class JEnhancedTextField extends JFormattedTextField implements ThemeObserver
 {
     private String placeholder;
     private boolean showingPlaceholder;

@@ -82,7 +82,6 @@ public class ProcessPanel extends JPanel implements ProcessSubject
         JPanel panel;
         try
         {
-
             panel = panelClass
                     .getDeclaredConstructor(ProcessPanel.class)
                     .newInstance(this);
