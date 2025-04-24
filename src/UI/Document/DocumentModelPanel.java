@@ -1,6 +1,6 @@
 package UI.Document;
 
-import Controller.AppController;
+import Controller.DocumentStatus.DocumentStatusController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Model.CollectionAgency;
@@ -27,6 +27,7 @@ public class DocumentModelPanel extends JPanel {
     private String typeDocument;
     private SearchListPanel<String> deliveryStatusSearch;
     private SearchListPanel<DocumentStatus> documentStatusSearch;
+    private SearchListPanel<Process> processesSearch;
 
     private ArrayList<SearchListPanel> searchListPanelsOrderFourn;
 
@@ -43,8 +44,9 @@ public class DocumentModelPanel extends JPanel {
         ArrayList<Process> processes = new ArrayList<>();
         ArrayList<String> deliveryStatusOptions = new ArrayList<>(Arrays.asList("Yes", "No"));
 
+
         try{
-            documentStatuses = AppController.getAllDocumentStatus();
+            documentStatuses = DocumentStatusController.getAllDocumentStatus();
         }catch (DatabaseConnectionFailedException | GetAllDocumentStatusException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -66,12 +68,14 @@ public class DocumentModelPanel extends JPanel {
         documentStatusSearch = new SearchListPanel<>(documentStatuses, DocumentStatus::getLabel);
         documentStatusSearch.getSearchField().setPlaceholder("Select Document Status");
 
+        processesSearch = new SearchListPanel<>(processes, Process::getLabel);
+        processesSearch.setVisible(false);
 
         gridDocument.addField(labelField);
         gridDocument.addField(dateField);
         gridDocument.addField(deliveryStatusSearch);
         gridDocument.addField(documentStatusSearch);
-
+        gridDocument.addField(processesSearch);
         add(gridDocument, BorderLayout.CENTER);
     }
 
@@ -87,7 +91,9 @@ public class DocumentModelPanel extends JPanel {
         labelField.updateText(label + formattedDateTime);
     }
 
-// test
+    public void loadDataAndShowProcesses(){
+            //coucou
+    }
 
     public void update(){
         switch (this.typeDocument){

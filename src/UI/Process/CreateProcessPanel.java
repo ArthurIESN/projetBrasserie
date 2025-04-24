@@ -1,7 +1,6 @@
 package UI.Process;
 
-import Controller.AppController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Controller.Process.ProcessController;
 import Exceptions.Process.CreateProcessException;
 import Model.Process.Process;
 
@@ -76,7 +75,7 @@ public class CreateProcessPanel extends JPanel
 
         try
         {
-            AppController.createProcess(process);
+            ProcessController.createProcess(process);
             JOptionPane.showMessageDialog(this, "Process created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (CreateProcessException e)
         {

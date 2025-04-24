@@ -2,10 +2,9 @@ package UI.Search.Item;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import Controller.AppController;
+import Controller.VAT.VATController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
@@ -23,11 +22,8 @@ import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
 import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JDualSliderPanel;
-import UI.Components.Fields.JEnhancedTextField;
-import UI.Components.Fields.SearchListPanel;
 import UI.Models.ItemEnhancedTableModel;
 import UI.Models.PackagingEnhancedTableModel;
-import UI.Models.VatEnhancedTableModel;
 import Utils.Utils;
 
 
@@ -59,7 +55,7 @@ public class SearchItemForm extends JPanel
         ArrayList<Vat> vats = new ArrayList<>();
         try
         {
-            vats = AppController.getAllVats();
+            vats = VATController.getAllVats();
         } catch (GetAllVatsException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

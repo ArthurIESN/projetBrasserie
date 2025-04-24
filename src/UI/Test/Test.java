@@ -1,6 +1,6 @@
 package UI.Test;
 
-import Controller.AppController;
+import Controller.Customer.CustomerController;
 import Exceptions.Customer.GetAllCustomersException;
 import Model.Customer.Customer;
 import UI.Components.Fields.ComboBoxPanel;
@@ -47,7 +47,7 @@ public class Test extends JPanel
         searchListPanel3 = new SearchListPanel<>(data3, String::toString);
 
         try{
-            ArrayList<Customer> customers = AppController.getAllCustomers();
+            ArrayList<Customer> customers = CustomerController.getAllCustomers();
 
             ComboBoxPanel<Customer> comboBoxPanel = new ComboBoxPanel<>(customers, customer ->
                     customer.getFirstName() + " " + customer.getLastName()
