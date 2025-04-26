@@ -39,7 +39,7 @@ public class ProcessModelPanel extends JPanel
     private JButton button;
     private SearchListPanel<Process> processSearch;
     private JEnhancedTextField IdField;
-    private JEnhancedTextField processIdField;
+    private JNumberField processIdField;
     private JEnhancedTextField processLabelField;
     private JNumberField processNumberField;
     private JDateField dateField;
@@ -91,7 +91,7 @@ public class ProcessModelPanel extends JPanel
 
         if(showId)
         {
-            processIdField = new JEnhancedTextField();
+            processIdField = new JNumberField();
             processIdField.setPlaceholder("Process Id");
             processIdField.setEnabled(false);
 
@@ -142,6 +142,41 @@ public class ProcessModelPanel extends JPanel
         add(gridNewProcess, BorderLayout.CENTER);
     }
 
+    public boolean isProcessValid()
+    {
+        if(processLabelField.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please fill in the process label", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(processNumberField.getInt() <= 0)
+        {
+            JOptionPane.showMessageDialog(this, "Please fill in the process number. The process number must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(dateField.getDate() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please fill in the process date", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(processStatusSearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a process status", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if(typeSearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a process type", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
     public ProcessModelPanel(boolean showId, boolean showProcesses)
     {
         this(null, showId, showProcesses);
@@ -162,7 +197,7 @@ public class ProcessModelPanel extends JPanel
         button.setText(text);
     }
 
-    public JEnhancedTextField getProcessIdField()
+    public JNumberField getProcessIdField()
     {
         return processIdField;
     }

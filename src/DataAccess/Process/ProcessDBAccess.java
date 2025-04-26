@@ -19,20 +19,14 @@ import Model.ProcessType.ProcessType;
 import Model.ProcessType.MakeProcessType;
 import Model.Supplier.Supplier;
 import Model.Supplier.MakeSupplier;
-import com.sun.source.tree.ArrayAccessTree;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static java.sql.Types.INTEGER;
-
-
-
 
 
 public class ProcessDBAccess implements ProcessDataAccess
@@ -116,7 +110,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     }
 
-    public void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws UpdateProcessException
+    public void updateProcess(Process process) throws UpdateProcessException
     {
         String query = "UPDATE process SET " +
                 "label = ?, " +
@@ -128,70 +122,83 @@ public class ProcessDBAccess implements ProcessDataAccess
                 "num_customer = ? " +
                 "WHERE id = ?";
 
-        if(id == null)
+        if(process == null)
+        {
+            throw new UpdateProcessException("Process cannot be null");
+        }
+        else if(process.getId() == null)
         {
             throw new UpdateProcessException("ID cannot be null");
         }
-        else if(label.isEmpty()) //@todo : put a character limit (the same as the database) ?
+        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
         {
             throw new UpdateProcessException("Label cannot be empty");
         }
-        else if(number <= 0)
+        else if(process.getNumber() <= 0)
         {
             throw new UpdateProcessException("Number must be greater or equal to 0");
         }
-        else if(typeId == null)
+        else if(process.getType() == null)
         {
             throw new UpdateProcessException("Type cannot be null");
         }
-        else if(processStatusId == null)
+        else if(process.getType().getId() == null)
+        {
+            throw new UpdateProcessException("Type ID cannot be null");
+        }
+        else if(process.getProcessStatus() == null)
         {
             throw new UpdateProcessException("Process status cannot be null");
+        }
+        else if(process.getProcessStatus().getId() == null)
+        {
+            throw new UpdateProcessException("Process status ID cannot be null");
         }
 
         try
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
-            statement.setString(1, label);
-            statement.setInt(2, number);
+            statement.setString(1, process.getLabel());
+            statement.setInt(2, process.getNumber());
 
-            if(supplierId == null)
+            if(process.getSupplier() == null || process.getSupplier().getId() == null)
             {
                 statement.setNull(3, INTEGER);
             }
             else
             {
-                statement.setInt(3, supplierId);
+                statement.setInt(3, process.getSupplier().getId());
             }
 
-            statement.setInt(4, typeId);
-            statement.setInt(5, processStatusId);
+            statement.setInt(4, process.getType().getId());
+            statement.setInt(5, process.getProcessStatus().getId());
 
-            if(employeeId == null)
+            if(process.getEmployee() == null || process.getEmployee().getId() == null)
             {
                 statement.setNull(6, INTEGER);
             }
             else
             {
-                statement.setInt(6, employeeId);
+                statement.setInt(6, process.getEmployee().getId());
             }
 
-            if(customerId == null)
+            if(process.getCustomer() == null || process.getCustomer().getId() == null)
             {
                 statement.setNull(7, INTEGER);
             }
             else
             {
-                statement.setInt(7, customerId);
+                statement.setInt(7, process.getCustomer().getId());
             }
 
-            statement.setInt(8, id);
+            statement.setInt(8, process.getId());
+
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected == 0)
             {
-                throw new UpdateProcessException("Invalid process ID: " + id);
+                throw new UpdateProcessException("Invalid process ID: " + process.getId());
             }
         }
         catch (SQLException | DatabaseConnectionFailedException e)
@@ -225,7 +232,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public Process getProcess(Integer id) throws GetProcessException
     {
-        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
+        String query = "SELECT * " +
                 "FROM process " +
                 "LEFT JOIN supplier          ON process.id_supplier = supplier.id " +
                 "JOIN process_type           ON process.id_process_type = process_type.id " +
@@ -263,7 +270,7 @@ public class ProcessDBAccess implements ProcessDataAccess
     public ArrayList<Process> getAllProcesses() throws GetAllProcessesException
     {
 
-        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, process_status.id AS id_process_status, employee.id AS id_employee, customer.num_customer AS id_customer " +
+        String query = "SELECT * " +
                 "FROM process " +
                 "LEFT JOIN supplier          ON process.id_supplier = supplier.id " +
                 "JOIN process_type              ON process.id_process_type = process_type.id " +
@@ -314,7 +321,7 @@ public class ProcessDBAccess implements ProcessDataAccess
     private Process makeProcess(ResultSet resultSet) throws SQLException
     {
         ProcessType processType = MakeProcessType.getProcessType(
-                resultSet.getInt("id_type"),
+                resultSet.getInt("id_process_type"),
                 resultSet.getString("process_type.label")
         );
 
@@ -327,7 +334,7 @@ public class ProcessDBAccess implements ProcessDataAccess
         if(resultSet.getInt("id_supplier") != 0)
         {
             supplier = MakeSupplier.getSupplier(
-                    resultSet.getInt("id_supplier"),
+                    resultSet.getInt("supplier.id"),
                     resultSet.getString("supplier.name")
             );
         }
@@ -336,12 +343,12 @@ public class ProcessDBAccess implements ProcessDataAccess
         if(resultSet.getInt("id_employee") != 0)
         {
             EmployeeStatus employeeStatus = new EmployeeStatus(
-                    resultSet.getInt("employee.id_employee_status"),
+                    resultSet.getInt("employee_status.id"),
                     resultSet.getString("employee_status.label")
             );
 
             employee = MakeEmployee.getEmployee(
-                    resultSet.getInt("id_employee"),
+                    resultSet.getInt("employee.id"),
                     resultSet.getString("employee.last_name"),
                     resultSet.getString("employee.first_name"),
                     resultSet.getDate("employee.birth_date"),
@@ -350,15 +357,15 @@ public class ProcessDBAccess implements ProcessDataAccess
         }
 
         Customer customer = null;
-        if(resultSet.getInt("id_customer") != 0)
+        if(resultSet.getInt("num_customer") != 0)
         {
             CustomerStatus customerStatus = new CustomerStatus(
-                    resultSet.getInt("customer.id_customer_status"),
+                    resultSet.getInt("customer_status.id"),
                     resultSet.getString("customer_status.label")
             );
 
             customer = MakeCustomer.getCustomer(
-                    resultSet.getInt("id_customer"),
+                    resultSet.getInt("customer.num_customer"),
                     resultSet.getString("customer.last_name"),
                     resultSet.getString("customer.first_name"),
                     resultSet.getFloat("customer.credit_limit"),

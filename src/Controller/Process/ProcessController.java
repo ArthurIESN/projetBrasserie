@@ -4,6 +4,7 @@ import BusinessLogic.Process.ProcessManager;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
+import Exceptions.Process.UpdateProcessException;
 import Model.Process.Process;
 
 import java.util.ArrayList;
@@ -25,5 +26,10 @@ public class ProcessController {
     public static void deleteProcess(Integer id) throws DeleteProcessException
     {
         processManager.deleteProcess(id);
+    }
+
+    public static void updateProcess(Process process) throws UpdateProcessException
+    {
+        processManager.updateProcess(process);
     }
 }
