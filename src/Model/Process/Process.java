@@ -97,6 +97,12 @@ public class Process {
                 Objects.equals(customer, process.customer);
     }
 
+    public static int hashCode(Integer id, String label, int number, Date creationDate, Supplier supplier,
+                                 ProcessType type, ProcessStatus processStatus, Employee employee, Customer customer)
+    {
+        return Objects.hash(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, label, number, creationDate, supplier, type, processStatus, employee, customer);

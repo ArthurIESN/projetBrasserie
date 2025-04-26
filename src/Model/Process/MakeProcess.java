@@ -27,8 +27,7 @@ public class MakeProcess
                                         Employee employee,
                                         Customer customer)
     {
-        Process process = new Process(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
-        int processHash = process.hashCode();
+        int processHash = Process.hashCode(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
 
         if(processMap.containsKey(processHash))
         {
@@ -36,8 +35,8 @@ public class MakeProcess
         }
         else
         {
+            Process process = new Process(id, label, number, creationDate, supplier, type, processStatus, employee, customer);
             processMap.put(processHash, process);
-
             return process;
         }
     }

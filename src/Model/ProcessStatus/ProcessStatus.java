@@ -30,6 +30,10 @@ public class ProcessStatus {
                 Objects.equals(label, that.label);
     }
 
+    public static int hashCode(Integer id, String label) {
+        return Objects.hash(id, label);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, label);

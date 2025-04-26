@@ -63,6 +63,12 @@ public class Customer {
                 Objects.equals(customerStatus, customer.customerStatus);
     }
 
+    public static int hashCode(Integer id, String lastName, String firstName, float creditLimit,
+            String numVAT, CustomerStatus customerStatus)
+    {
+        return Objects.hash(id, lastName, firstName, creditLimit, numVAT, customerStatus);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, lastName, firstName, creditLimit, numVAT, customerStatus);

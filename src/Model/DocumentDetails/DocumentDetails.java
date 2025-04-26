@@ -62,6 +62,12 @@ public class DocumentDetails {
                 Objects.equals(document, that.document);
     }
 
+    public static int hashCode(Integer id, String label, float quantity, float newQuantity,
+                                float unitPrice, Document document)
+    {
+        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document);
+    }
+
     @Override
     public int hashCode()
     {

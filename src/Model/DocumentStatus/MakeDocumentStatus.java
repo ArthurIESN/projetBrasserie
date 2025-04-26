@@ -8,8 +8,7 @@ public class MakeDocumentStatus {
 
     public static DocumentStatus getDocumentStatus(Integer id, String label)
     {
-        DocumentStatus documentStatus = new DocumentStatus(id, label);
-        int documentStatusHash = documentStatus.hashCode();
+        int documentStatusHash = DocumentStatus.hashCode(id, label);
 
         if(documentStatusMap.containsKey(documentStatusHash))
         {
@@ -17,6 +16,7 @@ public class MakeDocumentStatus {
         }
         else
         {
+            DocumentStatus documentStatus = new DocumentStatus(id, label);
             documentStatusMap.put(documentStatusHash,documentStatus);
             return documentStatus;
         }

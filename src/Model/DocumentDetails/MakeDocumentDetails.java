@@ -9,8 +9,7 @@ public class MakeDocumentDetails {
 
     public static DocumentDetails getDocumentDetails(Integer id, String label, Float quantity, Float newQuantity, Float unitPrice, Document document)
     {
-        DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document);
-        int documentDetailsHash = documentDetails.hashCode();
+        int documentDetailsHash = DocumentDetails.hashCode(id, label, quantity, newQuantity, unitPrice, document);
 
         if(documentDetailsMap.containsKey(documentDetailsHash))
         {
@@ -18,6 +17,7 @@ public class MakeDocumentDetails {
         }
         else
         {
+            DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document);
             documentDetailsMap.put(documentDetailsHash,documentDetails);
             return documentDetails;
         }

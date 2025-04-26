@@ -159,6 +159,18 @@ public class Document {
                 Objects.equals(process, document.process);
     }
 
+    public static int hashCode(Integer id, String label, Date date, Date deadLine, Float reduction,
+                               String validity, Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid,
+                               Float depositAmount, Date desiredDeliveryDate, Float VatAmount,
+                               Float totalInclusiveOfTaxe, Float totalVat, Float totalExclVat,
+                               CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
+                               Process process, DocumentStatus documentStatus)
+    {
+        return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
+                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,

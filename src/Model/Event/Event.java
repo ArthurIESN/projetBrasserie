@@ -52,6 +52,10 @@ public class Event {
                 Objects.equals(impact, event.impact);
     }
 
+    public static int hashCode(Integer id, String label, Date startDate, Date endDate, float impact) {
+        return Objects.hash(id, label, startDate, endDate, impact);
+    }
+
     @Override
     public int hashCode()
     {

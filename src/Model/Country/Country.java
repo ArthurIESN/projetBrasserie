@@ -28,6 +28,10 @@ public class Country
                 Objects.equals(deliveryCost, country.deliveryCost);
     }
 
+    public static int hashCode(Integer id, String name, float deliveryCost)
+    {
+        return Objects.hash(id, name, deliveryCost);
+    }
     @Override
     public int hashCode()
     {
