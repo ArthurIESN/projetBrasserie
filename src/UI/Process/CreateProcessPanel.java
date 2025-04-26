@@ -31,7 +31,7 @@ public class CreateProcessPanel extends JPanel
     private void createProcess()
     {
 
-        if(!processModelPanel.isProcessValid()) return;
+        if(processModelPanel.isProcessInvalid()) return;
 
         // we won't check for customer, supplier and employee, as they are optional
         Process process = MakeProcess.getProcess(null,

@@ -7,7 +7,6 @@ import Model.Employee.Employee;
 import Model.Process.MakeProcess;
 import Model.Process.Process;
 import Model.ProcessStatus.ProcessStatus;
-import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
 import Model.Supplier.Supplier;
 
@@ -47,7 +46,7 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
             return;
         }
 
-        if(!processModelPanel.isProcessValid()) return;
+        if(processModelPanel.isProcessInvalid()) return;
 
         ProcessType processType = processModelPanel.getTypeSearch().getSelectedItem();
         ProcessStatus processStatus = processModelPanel.getProcessStatusSearch().getSelectedItem();

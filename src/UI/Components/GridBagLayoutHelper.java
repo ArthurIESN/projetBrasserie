@@ -4,9 +4,11 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class GridBagLayoutHelper extends JPanel
+public class GridBagLayoutHelper extends JScrollPane
 {
     private final GridBagConstraints gbc;
+    private final JPanel contentPanel;
+
 
     /**
      * Constructor for GridBagLayoutHelper.
@@ -14,11 +16,31 @@ public class GridBagLayoutHelper extends JPanel
      */
     public GridBagLayoutHelper()
     {
+        contentPanel = new JPanel(new GridBagLayout());
+        setViewportView(contentPanel);
+
+        setBorder(BorderFactory.createEmptyBorder());
+
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        setLayout(new GridBagLayout());
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    }
+
+    public void scrollToTop()
+    {
+        getVerticalScrollBar().setValue(0);
+    }
+
+    public void scrollToBottom()
+    {
+        SwingUtilities.invokeLater(() ->
+        {
+            JScrollBar vertical = getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
     }
 
     /**
@@ -41,7 +63,7 @@ public class GridBagLayoutHelper extends JPanel
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-        add(fieldPanel, gbc);
+        contentPanel.add(fieldPanel, gbc);
 
         gbc.gridwidth = 1;
     }
@@ -68,7 +90,7 @@ public class GridBagLayoutHelper extends JPanel
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-        add(component, gbc);
+        contentPanel.add(component, gbc);
         gbc.gridwidth = 1;
     }
 }
