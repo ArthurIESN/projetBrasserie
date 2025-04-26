@@ -10,6 +10,7 @@ import UI.Components.GridBagLayoutHelper;
 import UI.Components.StepManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Test extends JPanel
@@ -22,7 +23,10 @@ public class Test extends JPanel
 
     public Test()
     {
-
+        setLayout(new BorderLayout());
+        JLabel title = new JLabel("TEST");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        add(title, BorderLayout.NORTH);
         GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
 
         // YA DES BUGS POUR L'INSTANT
@@ -109,7 +113,7 @@ public class Test extends JPanel
         test2.setAllowNegative(true);
         test2.setPlaceholder("FLOAT");
 
-        gridBagLayoutHelper.addField(test);
+        gridBagLayoutHelper.addField("sa", test);
         gridBagLayoutHelper.addField(test2);
 
         add(gridBagLayoutHelper);

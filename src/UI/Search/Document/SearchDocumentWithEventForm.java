@@ -24,45 +24,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchDocumentWithEventForm extends JPanel {
-    private JLabel title;
-    private JPanel filterLabelPanel;
-    private JLabel filterLabel;
-    private StepManager stepManager;
-    private List<String> filters = new ArrayList<>();
+    private final JLabel filterLabel;
+    private final StepManager stepManager;
+    private final List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
     private List<Float> quantities = new ArrayList<>();
-    private SearchListPanel<Item> itemSearch;
-    private SearchListPanel<Event> eventSearch;
-    private SearchListPanel<Float> quantitySearch;
-    private SearchListPanel<Integer> yearSearch;
-    private TableModelMaker tableModelMaker;
-    private DocumentEnhancedTableModel documentTableModel;
-    private JEnhancedTableScrollPanel tableScrollPanel;
-    private JButton searchButton;
+    private final SearchListPanel<Item> itemSearch;
+    private final SearchListPanel<Event> eventSearch;
+    private final SearchListPanel<Float> quantitySearch;
+    private final SearchListPanel<Integer> yearSearch;
+    private final TableModelMaker tableModelMaker;
+    private final DocumentEnhancedTableModel documentTableModel;
+    private final JEnhancedTableScrollPanel tableScrollPanel;
+    private final GridBagLayoutHelper filterPanel;
 
     public SearchDocumentWithEventForm(){
 
         setLayout(new BorderLayout());
-        title = new JLabel("Search for a supplier order with specific filters");
+        JLabel title = new JLabel("Search for a supplier order with specific filters");
         title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0)); // top, left, bottom, right
 
-        filterLabel = new JLabel(String.join("", filters));
+        add(title, BorderLayout.NORTH);
 
-        searchButton = new JButton("Search");
-        searchButton.setVisible(false);
-
-        filterLabelPanel = new JPanel();
-        Border border = BorderFactory.createLineBorder(Color.WHITE, 1);
-        filterLabelPanel.setBorder(border);
-        filterLabelPanel.add(filterLabel);
+        filterLabel = new JLabel("");
+        setFilterLabel();
+        filterLabel.setPreferredSize(new Dimension(500, 30));
+        filterLabel.setForeground(new Color(11, 126, 0));
 
 
-        GridBagLayoutHelper filterPanel = new GridBagLayoutHelper();
+        JPanel filterLabelWrapperPanel = new JPanel();
+        filterLabelWrapperPanel.setLayout(new BorderLayout());
+        filterLabelWrapperPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        filterLabelWrapperPanel.add(filterLabel);
 
+        JPanel FilterLabelCenteredPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        FilterLabelCenteredPanel.add(filterLabelWrapperPanel);
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.setSize(new Dimension(500, 100));
+
+        List<Item> items = new ArrayList<>();
         try
         {
             items = ItemController.getAllItems();
@@ -71,17 +75,19 @@ public class SearchDocumentWithEventForm extends JPanel {
             System.out.println(e.getMessage());
         }
 
+        filterPanel = new GridBagLayoutHelper();
+
+        JButton searchButton = new JButton("Search");
+        searchButton.setVisible(false);
+
         itemSearch = new SearchListPanel<>(items, Item::getLabel);
+        itemSearch.getSearchField().setPlaceholder("Search for an item");
         eventSearch = new SearchListPanel<>(new ArrayList<>(), Event::getLabel);
+        eventSearch.getSearchField().setPlaceholder("Search for an event");
         quantitySearch = new SearchListPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
+        quantitySearch.getSearchField().setPlaceholder("Search for a quantity");
         yearSearch = new SearchListPanel<>(new ArrayList<>(), year -> Integer.toString(year));
-
-
-        Component[] stepsList = new Component[] {itemSearch,eventSearch,quantitySearch,yearSearch,searchButton};
-
-
-        filterPanel.addField(title);
-        filterPanel.addField(filterLabelPanel);
+        yearSearch.getSearchField().setPlaceholder("Search for a year");
 
         filterPanel.addField(itemSearch);
         filterPanel.addField(eventSearch);
@@ -89,32 +95,34 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterPanel.addField(yearSearch);
         filterPanel.addField(searchButton);
 
-
+        Component[] stepsList = new Component[] {itemSearch,eventSearch,quantitySearch,yearSearch, searchButton};
         stepManager = new StepManager(stepsList);
 
         itemSearch.onSelectedItemChange(itemChanged ->
         {
             stepManager.completeStep(0);
+            filterPanel.scrollToBottom();
         });
 
         eventSearch.onSelectedItemChange(eventChanged -> {
             stepManager.completeStep(1);
+            filterPanel.scrollToBottom();
         });
 
         quantitySearch.onSelectedItemChange(quantityChanged -> {
             stepManager.completeStep(2);
+            filterPanel.scrollToBottom();
         });
 
         yearSearch.onSelectedItemChange(yearChanged -> {
             stepManager.completeStep(3);
+            filterPanel.scrollToBottom();
         });
 
-
-        stepManager.onStepShown(1, this::functionCalledWhenStepEventIsShown);
-        stepManager.onStepShown(2, this::functionCalledWhenStepQuantitiesIsShown);
-        stepManager.onStepShown(3, this::functionCalledWhenStepYearsIsShown);
-        stepManager.onStepShown(4, this::functionCalledWhenStepButtonIsShown);
-
+        stepManager.onStepShown(1, this::onEventStepShown);
+        stepManager.onStepShown(2, this::onQuantityStepShown);
+        stepManager.onStepShown(3, this::onYearsStepShown);
+        stepManager.onStepShown(4, this::onButtonStepShown);
 
         tableModelMaker = new TableModelMaker();
         documentTableModel = new DocumentEnhancedTableModel(new ArrayList<>());
@@ -137,19 +145,19 @@ public class SearchDocumentWithEventForm extends JPanel {
             }
         });
 
+        contentPanel.add(FilterLabelCenteredPanel, BorderLayout.NORTH);
+        contentPanel.add(filterPanel, BorderLayout.CENTER);
 
-        // Permet d'ajouter un slide entre les deux parties pour agrandir ou diminuer l'une ou l'autre.
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setTopComponent(filterPanel);
+        splitPane.setTopComponent(contentPanel);
         splitPane.setBottomComponent(tableScrollPanel);
         splitPane.setResizeWeight(0.70);
         splitPane.setDividerSize(5);
 
         add(splitPane,BorderLayout.CENTER);
-
     }
 
-    private void functionCalledWhenStepEventIsShown(){
+    private void onEventStepShown(){
         try {
             int itemId = itemSearch.getSelectedItem().getId();
             events = SearchController.getEventsWithSpecificItem(itemId);
@@ -162,12 +170,13 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         if(!events.isEmpty()){
             eventSearch.setData(events);
+
         }else {
             JOptionPane.showMessageDialog(null, "No event was found for the selected product.","No event found",JOptionPane.INFORMATION_MESSAGE);
             stepManager.stop();
         }
     }
-    private void functionCalledWhenStepQuantitiesIsShown(){
+    private void onQuantityStepShown(){
         try {
             int idEventSelected = eventSearch.getSelectedItem().getId();
             quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected);
@@ -187,7 +196,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         }
     }
 
-    private void functionCalledWhenStepYearsIsShown(){
+    private void onYearsStepShown(){
         try{
             int idEventSelected = eventSearch.getSelectedItem().getId();
             years = SearchController.getDatesEvents(idEventSelected);
@@ -205,15 +214,20 @@ public class SearchDocumentWithEventForm extends JPanel {
         }
     }
 
-    private void functionCalledWhenStepButtonIsShown(){
+    private void onButtonStepShown(){
         clearPanelFilter();
         filters(yearSearch.getSelectedItem().toString());
     }
 
-    private void setFilterLabel(){
-        filterLabel.setText("<html><span style='font-family: Arial; font-size: 9px; font-weight: none; color: #136F63;'>"
-                + String.join(" ", filters) + "</span></html>");
+    private void setFilterLabel()
+    {
+        StringBuilder filterText = new StringBuilder();
+        for (String filter : filters) {
+            filterText.append(filter);
+        }
+        filterLabel.setText(filterText.toString());
     }
+
 
     private void filters(String label) {
         String formattedLabel = label + " / ";

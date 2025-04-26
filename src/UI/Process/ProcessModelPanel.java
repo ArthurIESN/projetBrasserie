@@ -79,6 +79,8 @@ public class ProcessModelPanel extends JPanel
         }
 
 
+        setLayout(new BorderLayout());
+
         GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper();
 
         if(showProcesses)
@@ -129,52 +131,52 @@ public class ProcessModelPanel extends JPanel
 
         button = new JButton();
 
-        gridNewProcess.addField(processLabelField);
-        gridNewProcess.addField(processNumberField);
-        gridNewProcess.addField(dateField);
-        gridNewProcess.addField(supplierSearch);
-        gridNewProcess.addField(processStatusSearch);
-        gridNewProcess.addField(typeSearch);
-        gridNewProcess.addField(employeeSearch);
-        gridNewProcess.addField(customerSearch);
+        gridNewProcess.addField("Process Label *", processLabelField);
+        gridNewProcess.addField("Process Number *", processNumberField);
+        gridNewProcess.addField("Process Creation Date *", dateField);
+        gridNewProcess.addField("Select a Process Status ", processStatusSearch);
+        gridNewProcess.addField("Select a Process Type", typeSearch);
+        gridNewProcess.addField("Select a Supplier ",supplierSearch);
+        gridNewProcess.addField("Select an Employee", employeeSearch);
+        gridNewProcess.addField("Select a Customer", customerSearch);
         gridNewProcess.addField(button);
 
         add(gridNewProcess, BorderLayout.CENTER);
     }
 
-    public boolean isProcessValid()
+    public boolean isProcessInvalid()
     {
         if(processLabelField.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the process label", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(processNumberField.getInt() <= 0)
         {
             JOptionPane.showMessageDialog(this, "Please fill in the process number. The process number must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(dateField.getDate() == null)
         {
             JOptionPane.showMessageDialog(this, "Please fill in the process date", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(processStatusSearch.getSelectedItem() == null)
         {
             JOptionPane.showMessageDialog(this, "Please select a process status", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(typeSearch.getSelectedItem() == null)
         {
             JOptionPane.showMessageDialog(this, "Please select a process type", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public ProcessModelPanel(boolean showId, boolean showProcesses)
