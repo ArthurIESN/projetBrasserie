@@ -5,6 +5,7 @@ import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -18,11 +19,9 @@ public class MakeDocument {
                                        Float totalExclVat, CollectionAgency collectionAgency,
                                        DocumentStatus documentStatus, DeliveryTruck deliveryTruck, Process process)
     {
-        Document document = new Document(id, label, date, deadline, reduction, validity,
+        int documentHash = Document.hashCode(id, label, date, deadline, reduction, validity,
                 isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate, vatAmount,
                 totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
-
-        int documentHash = document.hashCode();
 
         if(documentMap.containsKey(documentHash))
         {
@@ -30,6 +29,9 @@ public class MakeDocument {
         }
         else
         {
+            Document document = new Document(id, label, date, deadline, reduction, validity,
+                    isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate, vatAmount,
+                    totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
             documentMap.put(documentHash,document);
             return document;
         }

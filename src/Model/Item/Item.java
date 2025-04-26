@@ -124,6 +124,11 @@ public class Item
                 Objects.equals(vat, item.vat);
     }
 
+    public static int hashCode(Integer id, String label, float price, int restockQuantity, int currentQuantity, int emptyReturnableBottleQuantity, float emptyReturnableBottlePrice, Date forecastDate, int forecastQuantity, int minQuantity, Packaging packaging, Vat vat)
+    {
+        return Objects.hash(id, label, price, restockQuantity, currentQuantity, emptyReturnableBottleQuantity, emptyReturnableBottlePrice, forecastDate, forecastQuantity, minQuantity, packaging, vat);
+    }
+
     @Override
     public int hashCode()
     {

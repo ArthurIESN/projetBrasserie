@@ -45,6 +45,11 @@ public class DeliveryTruck {
                 Objects.equals(mileage, deliveryTruck.mileage);
     }
 
+    public static int hashCode(Integer id, String licensePlate, float fuelQuantity, float mileage)
+    {
+        return Objects.hash(id, licensePlate, fuelQuantity, mileage);
+    }
+
     @Override
     public int hashCode()
     {
