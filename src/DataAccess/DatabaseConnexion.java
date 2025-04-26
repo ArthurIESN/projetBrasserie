@@ -66,6 +66,20 @@ public class DatabaseConnexion
         }
     }
 
+    public static boolean testConnection()
+    {
+        try
+        {
+            connect();
+            return true;
+        }
+        catch (DatabaseConnectionFailedException e)
+        {
+            System.out.println("Connection failed : " + e.getMessage());
+            return false;
+        }
+    }
+
     public static Connection getInstance() throws DatabaseConnectionFailedException
     {
         if(connection == null)

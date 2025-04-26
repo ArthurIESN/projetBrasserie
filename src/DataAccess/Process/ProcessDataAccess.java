@@ -12,7 +12,7 @@ public interface ProcessDataAccess {
 
     void deleteProcess(Integer id) throws DeleteProcessException;
 
-    void updateProcess(Integer id, String label, Integer number, Integer supplierId, Integer typeId, Integer processStatusId, Integer employeeId, Integer customerId) throws UpdateProcessException;
+    void updateProcess(Process process) throws UpdateProcessException;
 
     Process getProcess(Integer id) throws GetProcessException;
 
