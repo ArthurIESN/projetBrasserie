@@ -53,6 +53,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         filterLabel.setPreferredSize(new Dimension(500, 30));
         filterLabel.setForeground(new Color(11, 126, 0));
 
+
         JPanel filterLabelWrapperPanel = new JPanel();
         filterLabelWrapperPanel.setLayout(new BorderLayout());
         filterLabelWrapperPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
