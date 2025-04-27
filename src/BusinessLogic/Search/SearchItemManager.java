@@ -55,9 +55,9 @@ public class SearchItemManager
         return Items;
     }
 
-    public int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
+    public int[] getMinMaxItemQuantityAndPrice(Vat vat) throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
     {
-        return searchItemDataAccess.getMinMaxItemQuantityAndPrice();
+        return searchItemDataAccess.getMinMaxItemQuantityAndPrice(vat);
     }
 
 }
