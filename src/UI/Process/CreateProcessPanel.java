@@ -19,7 +19,7 @@ public class CreateProcessPanel extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
-        processModelPanel = new ProcessModelPanel(false, false);
+        processModelPanel = new ProcessModelPanel(false);
         processModelPanel.setButtonText("Create Process");
 
         add(processModelPanel, BorderLayout.CENTER);

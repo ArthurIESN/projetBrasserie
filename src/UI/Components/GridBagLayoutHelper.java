@@ -29,6 +29,14 @@ public class GridBagLayoutHelper extends JScrollPane
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
+
+    // Override the getComponents method to return the components of the content panel instead of the scroll pane
+    @Override
+    public Component[] getComponents()
+    {
+        return contentPanel.getComponents();
+    }
+
     public void scrollToTop()
     {
         getVerticalScrollBar().setValue(0);
@@ -58,7 +66,7 @@ public class GridBagLayoutHelper extends JScrollPane
         fieldPanel.add(jLabel);
         fieldPanel.add(component);
 
-        fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 20, component.getPreferredSize().height ));
+        fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 200, component.getPreferredSize().height ));
 
         gbc.gridx = 0;
         gbc.gridy++;
