@@ -28,7 +28,7 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
 
         processPanel.addObserver(this);
 
-        processModelPanel = new ProcessModelPanel(true, true);
+        processModelPanel = new ProcessModelPanel(true);
         processModelPanel.setButtonText("Update Process");
 
         processModelPanel.onButtonClicked(e -> updateProcess());

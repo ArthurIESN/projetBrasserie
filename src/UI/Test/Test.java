@@ -113,8 +113,13 @@ public class Test extends JPanel
         test2.setAllowNegative(true);
         test2.setPlaceholder("FLOAT");
 
+        JButton test3 = new JButton("SWITCH CLEAR");
+
+        test3.addActionListener(e -> test.setCanClear(!test.canClear()));
+
         gridBagLayoutHelper.addField("sa", test);
         gridBagLayoutHelper.addField(test2);
+        gridBagLayoutHelper.addField(test3);
 
         add(gridBagLayoutHelper);
     }
