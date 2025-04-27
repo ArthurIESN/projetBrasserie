@@ -47,6 +47,14 @@ public class WindowManager implements WindowSubject
         }
     }
 
+    public static void setWindowsEnable(boolean enable)
+    {
+        for (BrasserieWindow window : windows)
+        {
+            window.setEnabled(enable);
+        }
+    }
+
     public static boolean isPanelDisplayed(Class<? extends JPanel> panelClass) {
         int count = 0;
 
