@@ -71,7 +71,7 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
             @Override
             public void mouseMoved(MouseEvent e)
             {
-                if (isOverClearIcon(e.getX(), e.getY()))
+                if (canClear && isOverClearIcon(e.getX(), e.getY()))
                 {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 } else

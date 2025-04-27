@@ -109,6 +109,6 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
     @Override
     public void update(Process process)
     {
-        processModelPanel.getProcessSearch().setSelectedItem(process);
+        processModelPanel.getProcessSearch().forceSetSelectedItem(process);
     }
 }
