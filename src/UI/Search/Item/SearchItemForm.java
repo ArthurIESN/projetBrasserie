@@ -41,17 +41,6 @@ public class SearchItemForm extends JPanel
 
     public SearchItemForm()
     {
-        int[] minMaxItem;
-        try
-        {
-            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice();
-        }
-        catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            minMaxItem = new int[]{0, 100, 0, 100};
-        }
-
         ArrayList<Vat> vats = new ArrayList<>();
         try
         {
@@ -74,13 +63,18 @@ public class SearchItemForm extends JPanel
         searchVat = new ComboBoxPanel<>(vats, Vat::getCode);
         gridSearchForm.addField("VAT Code", searchVat);
 
+        searchVat.onSelectedItemChange(vat ->
+        {
+            setQuantityAndPrice();
+        });
+
 
         // Item Stock Quantity Field
-        itemQuantity = new JDualSliderPanel(minMaxItem[0], minMaxItem[1], 500, 50);
+        itemQuantity = new JDualSliderPanel(0, 100, 500, 50);
         gridSearchForm.addField("Item Stock Quantity", itemQuantity);
 
         // Item Price Field
-        itemPrice = new JDualSliderPanel(minMaxItem[2], minMaxItem[3], 500, 50);
+        itemPrice = new JDualSliderPanel(0, 100, 500, 50);
         gridSearchForm.addField("Item Price", itemPrice);
 
         JButton searchButton = new JButton("Search");
@@ -104,6 +98,11 @@ public class SearchItemForm extends JPanel
         add(tableScrollPanel, BorderLayout.SOUTH);
 
         searchButton.addActionListener(e -> searchItem());
+
+        if(vats.size() > 1)
+        {
+            searchVat.setSelectedItem(vats.get(1));
+        }
     }
 
     private void searchItem()
@@ -144,5 +143,21 @@ public class SearchItemForm extends JPanel
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+
+    private void setQuantityAndPrice()
+    {
+        int[] minMaxItem;
+        try
+        {
+            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice(searchVat.getSelectedItem());
+
+            itemQuantity.setMinMax(minMaxItem[0], minMaxItem[1]);
+            itemPrice.setMinMax(minMaxItem[2], minMaxItem[3]);
+        }
+        catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

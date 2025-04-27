@@ -15,6 +15,7 @@ import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
 import Model.Payment.Payment;
+import Model.Vat.Vat;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -35,9 +36,9 @@ public class SearchController {
         return searchItemManager.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
     }
 
-    public static int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
+    public static int[] getMinMaxItemQuantityAndPrice(Vat vat) throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
     {
-        return searchItemManager.getMinMaxItemQuantityAndPrice();
+        return searchItemManager.getMinMaxItemQuantityAndPrice(vat);
     }
 
     public static ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {

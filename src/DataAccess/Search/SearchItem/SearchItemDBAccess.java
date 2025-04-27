@@ -5,6 +5,7 @@ import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.SearchItemException;
 import Model.Item.Item;
+import Model.Vat.Vat;
 import Model.Packaging.Packaging;
 
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
@@ -25,7 +26,7 @@ public class SearchItemDBAccess implements SearchItemDataAccess
     {
     }
 
-    public int[] getMinMaxItemQuantityAndPrice() throws GetMinMaxItemQuantityAndPriceException
+    public int[] getMinMaxItemQuantityAndPrice(Vat vat) throws GetMinMaxItemQuantityAndPriceException
     {
 
         String query = "SELECT " +
@@ -33,7 +34,8 @@ public class SearchItemDBAccess implements SearchItemDataAccess
                 "MAX(current_quantity)  AS max_item_quantity, " +
                 "MIN(price)             AS min_item_price, " +
                 "MAX(price)             AS max_item_price " +
-                "FROM item";
+                "FROM item " +
+                "WHERE code_vat = ?";
 
 
         try
@@ -41,6 +43,8 @@ public class SearchItemDBAccess implements SearchItemDataAccess
             Connection databaseConnexion = DatabaseConnexion.getInstance();
 
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setString(1, vat.getCode());
+
             ResultSet resultSet = statement.executeQuery();
 
             int[] minMaxItem = new int[4];
@@ -50,6 +54,10 @@ public class SearchItemDBAccess implements SearchItemDataAccess
                 minMaxItem[1] = (resultSet.getInt("max_item_quantity"));
                 minMaxItem[2] = (resultSet.getInt("min_item_price"));
                 minMaxItem[3] = (resultSet.getInt("max_item_price"));
+            }
+            else
+            {
+                throw new GetMinMaxItemQuantityAndPriceException("No items found for the given VAT code.");
             }
 
             return minMaxItem;
