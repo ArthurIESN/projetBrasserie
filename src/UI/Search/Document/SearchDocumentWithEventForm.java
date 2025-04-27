@@ -82,12 +82,19 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         itemSearch = new SearchListPanel<>(items, Item::getLabel);
         itemSearch.getSearchField().setPlaceholder("Search for an item");
+        itemSearch.getSearchField().setCanClear(false);
+
         eventSearch = new SearchListPanel<>(new ArrayList<>(), Event::getLabel);
         eventSearch.getSearchField().setPlaceholder("Search for an event");
+        eventSearch.getSearchField().setCanClear(false);
+
         quantitySearch = new SearchListPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
         quantitySearch.getSearchField().setPlaceholder("Search for a quantity");
+        quantitySearch.getSearchField().setCanClear(false);
+
         yearSearch = new SearchListPanel<>(new ArrayList<>(), year -> Integer.toString(year));
         yearSearch.getSearchField().setPlaceholder("Search for a year");
+        yearSearch.getSearchField().setCanClear(false);
 
         filterPanel.addField(itemSearch);
         filterPanel.addField(eventSearch);

@@ -8,6 +8,8 @@ import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.StepManager;
+import UI.Threads.LoadingThread;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -113,9 +115,23 @@ public class Test extends JPanel
         test2.setAllowNegative(true);
         test2.setPlaceholder("FLOAT");
 
-        JButton test3 = new JButton("SWITCH CLEAR");
+        JButton test3 = new JButton("THREAD");
 
-        test3.addActionListener(e -> test.setCanClear(!test.canClear()));
+        test3.addActionListener(e -> {
+            System.out.println("Thread started");
+            LoadingThread loadingThread = new LoadingThread("toN GROs Daron", "Calcule du salaire de Didier", 5000);
+
+            WindowManager.setWindowsEnable(false);
+            loadingThread.start();
+
+            loadingThread.onLoadingComplete(() ->
+            {
+                System.out.println("Thread completed");
+                WindowManager.setWindowsEnable(true);
+
+                JOptionPane.showMessageDialog(null, "Loading completed", "Info", JOptionPane.INFORMATION_MESSAGE);
+            });
+        });
 
         gridBagLayoutHelper.addField("sa", test);
         gridBagLayoutHelper.addField(test2);
