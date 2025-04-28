@@ -12,7 +12,6 @@ public class JEnhancedProgressBar extends JPanel
     public void setProgress(float progress)
     {
         this.progress = Math.max(0.0f, Math.min(1.0f, progress));
-        System.out.println("Progress: " + this.progress);
         repaint();
     }
 
@@ -25,31 +24,53 @@ public class JEnhancedProgressBar extends JPanel
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+        int arc = 10;
+        int width = getWidth();
+        int height = getHeight();
 
-        int progressWidth = (int) (getWidth() * progress);
-        GradientPaint gradient = new GradientPaint(0, 0, Color.GREEN, progressWidth, 0, new Color(0, 150, 0));
-        g2d.setPaint(gradient);
-        g2d.fillRoundRect(0, 0, progressWidth, getHeight(), 20, 20);
+        g2d.setColor(new Color(245, 245, 245));
+        g2d.fillRoundRect(0, 0, width, height, arc, arc);
 
-        g2d.setColor(Color.BLACK);
-        g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-
-        if (message != null)
-        {
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 14));
-            String progressText = message + " (" + (int) (progress * 100) + "%)";
-            int textWidth = g2d.getFontMetrics().stringWidth(progressText);
-            int textX = Math.max(0, (getWidth() - textWidth) / 2);
-            int textY = getHeight() / 2 + g2d.getFontMetrics().getAscent() / 2 - 2;
-            g2d.drawString(progressText, textX, textY);
+        int progressWidth = (int) (width * progress);
+        if (progressWidth > 0) {
+            g2d.setColor(new Color(0, 122, 255));
+            g2d.fillRoundRect(0, 0, progressWidth, height, arc, arc);
         }
+
+        g2d.setColor(new Color(200, 200, 200));
+        g2d.drawRoundRect(0, 0, width - 1, height - 1, arc, arc);
+
+        if (message != null) {
+            g2d.setFont(new Font("SansSerif", Font.PLAIN, 13));
+            String progressText = message + " (" + (int) (progress * 100) + "%)";
+            FontMetrics fm = g2d.getFontMetrics();
+            int textWidth = fm.stringWidth(progressText);
+            int textX = Math.max(0, (width - textWidth) / 2);
+            int textY = height / 2 + fm.getAscent() / 2 - 2;
+
+            // Sauvegarde du clip original
+            Shape oldClip = g2d.getClip();
+
+            // Partie couverte (progress) - Texte en blanc
+            g2d.setClip(0, 0, progressWidth, height);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(progressText, textX, textY);
+
+            // Partie non couverte - Texte en gris foncé
+            g2d.setClip(progressWidth, 0, width - progressWidth, height);
+            g2d.setColor(new Color(60, 60, 60));
+            g2d.drawString(progressText, textX, textY);
+
+            // Restaurer le clip
+            g2d.setClip(oldClip);
+        }
+
+        g2d.dispose();
     }
+
 
 }

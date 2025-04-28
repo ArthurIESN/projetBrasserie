@@ -129,7 +129,7 @@ public class Test extends JPanel
                 System.out.println("Thread completed");
                 WindowManager.setWindowsEnable(true);
 
-                JOptionPane.showMessageDialog(null, "Loading completed", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "99999 Euros", "Info", JOptionPane.INFORMATION_MESSAGE);
             });
         });
 
