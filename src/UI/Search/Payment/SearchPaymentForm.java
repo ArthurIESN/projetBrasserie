@@ -64,7 +64,7 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Payment validated", validatedPaymentCheckBox);
 
         // Minimum Amount Field
-        JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
+        JNumberField amountField = new JNumberField(Utils.NumberType.FLOAT, 2);
         amountField.setAllowNegative(false);
         amountField.setPlaceholder("Enter amount");
         amountField.setColumns(10);

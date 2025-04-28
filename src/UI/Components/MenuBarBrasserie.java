@@ -80,7 +80,7 @@ public class MenuBarBrasserie {
         menuBar.add(searchMenu);
 
         searchItems[0] = new JMenuItem("1 : Search Item");
-        searchItems[1] = new JMenuItem("Recherche2");
+        searchItems[1] = new JMenuItem("2 : Search Document");
         searchItems[2] = new JMenuItem("3 : Search Payment");
 
         for (JMenuItem menuItem : searchItems)
