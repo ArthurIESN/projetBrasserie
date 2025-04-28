@@ -67,36 +67,35 @@ public class ProcessDBAccess implements ProcessDataAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
-            statement.setDate(3, new java.sql.Date(process.getCreationDate().getTime()));
 
             if(process.getSupplier() == null)
             {
-                statement.setNull(4, INTEGER);
+                statement.setNull(3, INTEGER);
             }
             else
             {
-                statement.setInt(4, process.getSupplier().getId());
+                statement.setInt(3, process.getSupplier().getId());
             }
 
-            statement.setInt(5, process.getType().getId());
-            statement.setInt(6, process.getProcessStatus().getId());
+            statement.setInt(4, process.getType().getId());
+            statement.setInt(5, process.getProcessStatus().getId());
 
             if(process.getEmployee() == null)
+            {
+                statement.setNull(6, INTEGER);
+            }
+            else
+            {
+                statement.setInt(6, process.getEmployee().getId());
+            }
+
+            if(process.getCustomer() == null)
             {
                 statement.setNull(7, INTEGER);
             }
             else
             {
-                statement.setInt(7, process.getEmployee().getId());
-            }
-
-            if(process.getCustomer() == null)
-            {
-                statement.setNull(8, INTEGER);
-            }
-            else
-            {
-                statement.setInt(8, process.getCustomer().getId());
+                statement.setInt(7, process.getCustomer().getId());
             }
 
             statement.executeUpdate();
@@ -378,7 +377,6 @@ public class ProcessDBAccess implements ProcessDataAccess
                 resultSet.getInt("id"),
                 resultSet.getString("label"),
                 resultSet.getInt("number"),
-                resultSet.getDate("creation_date"),
                 supplier,
                 processType,
                 processStatus,

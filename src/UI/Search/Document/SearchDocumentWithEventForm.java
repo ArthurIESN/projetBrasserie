@@ -29,10 +29,10 @@ public class SearchDocumentWithEventForm extends JPanel {
     private final List<String> filters = new ArrayList<>();
     private List<Integer> years = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
-    private List<Float> quantities = new ArrayList<>();
+    private List<Integer> quantities = new ArrayList<>();
     private final SearchListPanel<Item> itemSearch;
     private final SearchListPanel<Event> eventSearch;
-    private final SearchListPanel<Float> quantitySearch;
+    private final SearchListPanel<Integer> quantitySearch;
     private final SearchListPanel<Integer> yearSearch;
     private final TableModelMaker tableModelMaker;
     private final DocumentEnhancedTableModel documentTableModel;
@@ -88,7 +88,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         eventSearch.getSearchField().setPlaceholder("Search for an event");
         eventSearch.getSearchField().setCanClear(false);
 
-        quantitySearch = new SearchListPanel<>(new ArrayList<>(), quantity -> Float.toString(quantity));
+        quantitySearch = new SearchListPanel<>(new ArrayList<>(), quantity -> Integer.toString(quantity));
         quantitySearch.getSearchField().setPlaceholder("Search for a quantity");
         quantitySearch.getSearchField().setCanClear(false);
 
@@ -144,11 +144,12 @@ public class SearchDocumentWithEventForm extends JPanel {
                 ArrayList<Document> documents = SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
                         eventSearch.getSelectedItem().getId(),quantitySearch.getSelectedItem(),
                         yearSearch.getSelectedItem());
+
                 documentTableModel.setData(documents);
                 tableScrollPanel.updateModel(tableModelMaker);
                 // @todo : gérer les erreurs
             }catch (DatabaseConnectionFailedException | GetDocumentWithSpecificEventException err){
-                System.err.println(err.getMessage());
+                JOptionPane.showMessageDialog(null, err.getMessage(), "",JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

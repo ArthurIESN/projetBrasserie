@@ -18,12 +18,12 @@ public class EventDBAccess implements EventDataAccess {
     public EventDBAccess(){}
 
     public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
-        String query = "SELECT DISTINCT e.* " +
-                "FROM Event e " +
-                "JOIN event_document_details edd ON e.id = edd.id_event " +
-                "JOIN Document_details dd ON edd.id_document_details = dd.id " +
-                "JOIN item_document_details idd ON dd.id = idd.id_document_details " +
-                "WHERE idd.id_item = ?";
+        String query = "SELECT DISTINCT event.* " +
+                "FROM event " +
+                "JOIN event_document_details ON event.id = event_document_details.id_event " +
+                "JOIN document_details ON event_document_details.id_document_details = document_details.id " +
+                "JOIN item ON document_details.id_item = item.id " +
+                "WHERE item.id = ?";
 
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();

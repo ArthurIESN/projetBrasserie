@@ -107,7 +107,6 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                         resultSet.getString("process_label"),
                         0,
                         null,
-                        null,
                         processType,
                         null,
                         null,

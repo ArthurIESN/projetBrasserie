@@ -37,7 +37,6 @@ public class CreateProcessPanel extends JPanel
         Process process = MakeProcess.getProcess(null,
                 processModelPanel.getProcessLabelField().getText(),
                 processModelPanel.getProcessNumberField().getInt(),
-                processModelPanel.getDateField().getDate(),
                 processModelPanel.getSupplierSearch().getSelectedItem(),
                 processModelPanel.getTypeSearch().getSelectedItem(),
                 processModelPanel.getProcessStatusSearch().getSelectedItem(),
