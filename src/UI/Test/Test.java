@@ -1,8 +1,13 @@
 package UI.Test;
 
+import Utils.Utils;
+
 import Controller.Customer.CustomerController;
+
 import Exceptions.Customer.GetAllCustomersException;
+
 import Model.Customer.Customer;
+
 import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.SearchListPanel;
@@ -107,11 +112,11 @@ public class Test extends JPanel
         stepManager.onStepShown(2, this::functionCalledWhenStepThreeIsShown);
 
 
-        JNumberField test = new JNumberField(JNumberField.NumberType.INTEGER);
+        JNumberField test = new JNumberField(Utils.NumberType.INTEGER);
         test.setAllowNegative(true);
         test.setPlaceholder("INTEGER");
 
-        JNumberField test2 = new JNumberField(JNumberField.NumberType.FLOAT, 3);
+        JNumberField test2 = new JNumberField(Utils.NumberType.FLOAT, 3);
         test2.setAllowNegative(true);
         test2.setPlaceholder("FLOAT");
 

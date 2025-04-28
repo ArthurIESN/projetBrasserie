@@ -5,6 +5,7 @@ import Environement.DatabaseProperties;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
+import Utils.Utils;
 
 import javax.swing.*;
 
@@ -28,7 +29,7 @@ public class SettingsDatabasePanel extends JPanel
         JEnhancedTextField databaseHost = new JEnhancedTextField();
         databaseHost.setPlaceholder("Database Host");
 
-        JNumberField databasePort = new JNumberField(JNumberField.NumberType.INTEGER);
+        JNumberField databasePort = new JNumberField(Utils.NumberType.INTEGER);
         databasePort.setPlaceholder("Database Port");
         databasePort.setAllowNegative(false);
 
