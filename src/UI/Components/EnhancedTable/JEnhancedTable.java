@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
 import java.util.Date;
 import java.util.Properties;
 import javax.swing.event.AncestorEvent;
@@ -79,6 +80,25 @@ public class JEnhancedTable extends JTable implements ThemeObserver
         // Use the default table header renderer
         // Avoid getting the default header style with over and background color
         getTableHeader().setUI(new javax.swing.plaf.basic.BasicTableHeaderUI());
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window != null && resizeListener != null)
+        {
+            window.removeComponentListener(resizeListener);
+            resizeListener = null;
+        }
     }
 
     public static void onThemeChangedStatic(Properties themeProperties)

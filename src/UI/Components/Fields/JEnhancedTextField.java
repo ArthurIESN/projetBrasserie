@@ -105,6 +105,19 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
                 setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             }
         });
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
     }
 
     @Override

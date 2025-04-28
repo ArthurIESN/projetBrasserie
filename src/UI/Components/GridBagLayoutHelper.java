@@ -1,13 +1,22 @@
 package UI.Components;
 
+import UI.Theme.ThemeManager;
+import UI.Theme.ThemeObserver;
+
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+import java.util.Properties;
 
 import javax.swing.*;
 
-public class GridBagLayoutHelper extends JScrollPane
+public class GridBagLayoutHelper extends JScrollPane implements ThemeObserver
 {
     private final GridBagConstraints gbc;
     private final JPanel contentPanel;
+    private static Color backgroundColor;
 
 
     /**
@@ -16,7 +25,10 @@ public class GridBagLayoutHelper extends JScrollPane
      */
     public GridBagLayoutHelper()
     {
+        ThemeManager.getInstance().addObserver(this);
+
         contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(backgroundColor);
         setViewportView(contentPanel);
 
         setBorder(BorderFactory.createEmptyBorder());
@@ -27,6 +39,27 @@ public class GridBagLayoutHelper extends JScrollPane
 
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
+    }
+
+    public static void onThemeChangedStatic(Properties themeProperties)
+    {
+        if (themeProperties != null)
+        {
+            backgroundColor = Color.decode(themeProperties.getProperty("GridBagLayoutHelper.backgroundColor") != null ? themeProperties.getProperty("GridBagLayoutHelper.backgroundColor") : "#FFFFFF");
+        }
     }
 
 
@@ -100,5 +133,12 @@ public class GridBagLayoutHelper extends JScrollPane
         gbc.gridwidth = 2;
         contentPanel.add(component, gbc);
         gbc.gridwidth = 1;
+    }
+
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+        // Set background color
+        contentPanel.setBackground(backgroundColor);
     }
 }

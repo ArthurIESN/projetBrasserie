@@ -6,6 +6,7 @@ import UI.Theme.ThemeObserver;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
@@ -90,6 +91,19 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
                 repaint();
             }
         });
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
     }
 
     public JDualSliderPanel(int minValue, int maxValue)
