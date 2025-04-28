@@ -44,7 +44,6 @@ public class ProcessModelPanel extends JPanel
     private JNumberField processIdField;
     private JEnhancedTextField processLabelField;
     private JNumberField processNumberField;
-    private JDateField dateField;
     private SearchListPanel<Customer> customerSearch;
     private SearchListPanel<Supplier> supplierSearch;
     private SearchListPanel<ProcessStatus> processStatusSearch;
@@ -117,13 +116,6 @@ public class ProcessModelPanel extends JPanel
         processNumberField = new JNumberField();
         processNumberField.setPlaceholder("Process Number");
 
-        dateField = new JDateField();
-        dateField.setPlaceholder("Creation Date");
-        dateField.setMaxDate(new Date());
-        // 2000 January 1st is the minimum date for the date field
-        dateField.setMinDate(new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime());
-
-
         customerSearch = new SearchListPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
         customerSearch.getSearchField().setPlaceholder("Search for a customer");
 
@@ -143,7 +135,6 @@ public class ProcessModelPanel extends JPanel
 
         gridProcess.addField("Process Label *", processLabelField);
         gridProcess.addField("Process Number *", processNumberField);
-        gridProcess.addField("Process Creation Date *", dateField);
         gridProcess.addField("Select a Process Status *", processStatusSearch);
         gridProcess.addField("Select a Process Type *", typeSearch);
         gridProcess.addField("Select a Supplier ",supplierSearch);
@@ -178,12 +169,6 @@ public class ProcessModelPanel extends JPanel
         if(processNumberField.getInt() <= 0)
         {
             JOptionPane.showMessageDialog(this, "Please fill in the process number. The process number must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
-            return true;
-        }
-
-        if(dateField.getDate() == null)
-        {
-            JOptionPane.showMessageDialog(this, "Please fill in the process date", "Error", JOptionPane.ERROR_MESSAGE);
             return true;
         }
 
@@ -230,11 +215,6 @@ public class ProcessModelPanel extends JPanel
     public JNumberField getProcessNumberField()
     {
         return processNumberField;
-    }
-
-    public JDateField getDateField()
-    {
-        return dateField;
     }
 
     public SearchListPanel<Customer> getCustomerSearch()

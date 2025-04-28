@@ -58,7 +58,6 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
         Process process = MakeProcess.getProcess(   processModelPanel.getProcessIdField().getInt(),
                                                     processModelPanel.getProcessLabelField().getText(),
                                                     processModelPanel.getProcessNumberField().getInt(),
-                                                    processModelPanel.getDateField().getDate(),
                                                     supplier,
                                                     processType,
                                                     processStatus,
@@ -88,7 +87,6 @@ public class UpdateProcessPanel extends JPanel implements ProcessObserver
         processModelPanel.getProcessNumberField().updateText(String.valueOf(selectedProcess.getNumber()));
         processModelPanel.getProcessStatusSearch().forceSetSelectedItem(selectedProcess.getProcessStatus());
         processModelPanel.getTypeSearch().forceSetSelectedItem(selectedProcess.getType());
-        processModelPanel.getDateField().setDate(selectedProcess.getCreationDate());
 
         if(selectedProcess.getCustomer() != null)
             processModelPanel.getCustomerSearch().forceSetSelectedItem(selectedProcess.getCustomer());

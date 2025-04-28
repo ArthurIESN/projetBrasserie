@@ -1,6 +1,7 @@
 package UI.Components;
 
 import Environement.SystemProperties;
+import UI.BusinessTasks.RestockItemPanel;
 import UI.Document.DocumentPanel;
 import UI.Windows.BrasserieWindow.BrasserieCredits;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
@@ -128,7 +129,7 @@ public class MenuBarBrasserie {
         JMenu jobTaskMenu = new JMenu("Job Task");
         menuBar.add(jobTaskMenu);
 
-        jobTaskItem[0] = new JMenuItem("Job Task 1");
+        jobTaskItem[0] = new JMenuItem("Restock Item");
         jobTaskItem[1] = new JMenuItem("Job Task 2");
 
         for (JMenuItem menuItem : jobTaskItem)
@@ -136,10 +137,9 @@ public class MenuBarBrasserie {
             jobTaskMenu.add(menuItem);
         }
 
-        jobTaskItem[0].addActionListener(e -> {
-            JPanel panel1 = new JPanel();
-            panel1.add(new JLabel("Job Task 1 selected"));
-            brasserieWindow.updateWindowContent(panel1);
+        jobTaskItem[0].addActionListener(e ->
+        {
+            brasserieWindow.updateWindowContent(new RestockItemPanel());
         });
 
         jobTaskItem[1].addActionListener(e -> {

@@ -19,11 +19,11 @@ public class SearchDocumentWithEventManager {
         return dates;
     }
 
-    public ArrayList<Float> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
         return searchDocumentWithEventDBAccess.getQuantityItemWithSpecificEvent(idEvent);
     }
 
-    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, float quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException{
+    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException{
         return searchDocumentWithEventDBAccess.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
     }
 

@@ -54,11 +54,11 @@ public class SearchController {
         return  searchEventManager.getEventsWithSpecificItem(idItem);
     }
 
-    public static ArrayList<Float> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
         return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
     }
 
-    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, float quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
+    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
         return searchDocumentWithEventManager.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
     }
 
