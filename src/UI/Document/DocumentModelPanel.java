@@ -9,7 +9,7 @@ import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.Vat.GetAllVatsException;
-import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
@@ -32,14 +32,30 @@ import java.util.List;
 import Utils.Utils;
 
 public class DocumentModelPanel extends JPanel {
+
+    // Panel pour les champs de nombre
     private JPanel numberFieldPanel;
+
+    // Champ pour le label du document
     private JEnhancedTextField labelField;
+
+    // Champ de date
     private JDateField dateField;
+
+    // Type de document
     private String typeDocument;
+
+    // SearchListPanel pour les statuts de livraison
     private SearchListPanel<String> deliveryStatusSearch;
+
+    // SearchListPanel pour les statuts de document
     private SearchListPanel<DocumentStatus> documentStatusSearch;
 
+    // SearchListPanel pour les processus
     private SearchListPanel<Process> processesSearch;
+
+    // SearchListPanel pour les VAT
+    private SearchListPanel<Vat> vatSearch;
 
    // ArrayList de tous les processus
     private ArrayList<Process> processes;
@@ -52,6 +68,9 @@ public class DocumentModelPanel extends JPanel {
 
     // HashMap pour les champs de nombre
     private HashMap<Integer, JNumberField> numberFieldHashMap;
+
+    // HashMap pour les SearchList des taux de TVA
+    private HashMap<Integer, SearchListPanel<Vat>> searchListVatsHashMap;
 
     // HashMap pour les types de process
     private HashMap<Integer,ArrayList<Integer>> modelsDocuments;
@@ -193,7 +212,7 @@ public class DocumentModelPanel extends JPanel {
         System.out.println(selectedIds);
         for(Integer id : selectedIds){
             if(!numberFieldHashMap.containsKey(id)){
-                JNumberField numberField = new JNumberField(JNumberField.NumberType.FLOAT,2);
+                JNumberField numberField = new JNumberField(Utils.NumberType.FLOAT,2);
                 numberField.setPlaceholder("Enter quantity");
                 numberFieldHashMap.put(id, numberField);
                 System.out.println(numberFieldHashMap);

@@ -29,9 +29,10 @@ public class ProcessController {
         processManager.deleteProcess(id);
     }
 
-    public static ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
-    {
+    public static ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType {
         return processManager.getProcessWithSpecificType(id);
+
+    }
       
     public static void updateProcess(Process process) throws UpdateProcessException
     {
