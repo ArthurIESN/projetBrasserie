@@ -1,4 +1,4 @@
-package Controller.Type;
+package Controller.ProcessType;
 
 import BusinessLogic.ProcessType.ProcessTypeManager;
 import Exceptions.ProcessType.GetAllProcessTypesException;
