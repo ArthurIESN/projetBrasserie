@@ -1,6 +1,7 @@
 package DataAccess.Event;
 
 import BusinessLogic.Event.EventManager;
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
@@ -33,19 +34,9 @@ public class EventDBAccess implements EventDataAccess {
 
             ArrayList<Event> events = new ArrayList<>();
 
-            while (resultSet.next()){
-                Event event = MakeEvent.getEvent(
-                  resultSet.getInt("id"),
-                  resultSet.getString("label"),
-                  resultSet.getDate("start_date"),
-                  resultSet.getDate("end_date"),
-                  resultSet.getFloat("impact")
-                );
-
-
-
-                events.add(event);
-
+            while (resultSet.next())
+            {
+                events.add(makeEvent(resultSet));
             }
 
          return events;
@@ -53,5 +44,18 @@ public class EventDBAccess implements EventDataAccess {
             System.out.println(e.getMessage());
             throw new GetEventsWithItemException();
         }
+    }
+
+    public static Event makeEvent(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "event.id")) return null;
+
+        return MakeEvent.getEvent(
+                resultSet.getInt("event.id"),
+                resultSet.getString("event.label"),
+                resultSet.getDate("event.start_date"),
+                resultSet.getDate("event.end_date"),
+                resultSet.getFloat("event.impact")
+        );
     }
 }

@@ -4,7 +4,9 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
+
 import DataAccess.DatabaseConnexion;
+import DataAccess.DataAccesUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,8 +33,7 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
             while (resultSet.next())
             {
-                ProcessType type = MakeProcessType.getProcessType(resultSet.getInt("id"), resultSet.getString("label"));
-                types.add(type);
+                types.add(makeProcessType(resultSet));
             }
 
             return types;
@@ -42,5 +43,15 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
             System.err.println(e.getMessage());
             throw new GetAllProcessTypesException();
         }
+    }
+
+    public static ProcessType makeProcessType(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "process_type.id")) return null;
+
+        return MakeProcessType.getProcessType(
+                resultSet.getInt("process_type.id"),
+                resultSet.getString("process_type.label")
+        );
     }
 }

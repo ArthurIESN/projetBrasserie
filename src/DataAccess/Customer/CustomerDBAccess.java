@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
+import DataAccess.CustomerStatus.CustomerStatusDBAccess;
 
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -20,7 +22,7 @@ public class CustomerDBAccess implements CustomerDataAccess
 {
     public ArrayList<Customer> getAllCustomers() throws GetAllCustomersException
     {
-        String query = "SELECT *, customer.num_customer AS id, customer.id_customer_status as id_customer_status, customer_status.label AS customer_status_label " +
+        String query = "SELECT * " +
                 " FROM customer " +
                 "JOIN customer_status ON customer.id_customer_status = customer_status.id";
 
@@ -35,20 +37,7 @@ public class CustomerDBAccess implements CustomerDataAccess
 
             while (resultSet.next())
             {
-                CustomerStatus customerStatus = MakeCustomerStatus.getCustomerStatus(
-                        resultSet.getInt("id_customer_status"),
-                        resultSet.getString("customer_status_label")
-                );
-                Customer customer = MakeCustomer.getCustomer(
-                        resultSet.getInt("num_customer"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("first_name"),
-                        resultSet.getFloat("credit_limit"),
-                        resultSet.getString("num_vat"),
-                        customerStatus
-                );
-
-                customers.add(customer);
+                customers.add(makeCustomer(resultSet));
             }
 
             return customers;
@@ -76,19 +65,17 @@ public class CustomerDBAccess implements CustomerDataAccess
 
     }
 
-    private Customer crateCustomerClass(ResultSet resultSet) throws SQLException
+    public static Customer makeCustomer(ResultSet resultSet) throws SQLException
     {
-        CustomerStatus customerStatus = new CustomerStatus(
-                resultSet.getInt("id_customer_status"),
-                resultSet.getString("customer_status_label"));
+        if(!DataAccesUtils.hasColumn(resultSet, "customer.num_customer")) return null;
 
-        return new Customer(
-                resultSet.getInt("id"),
-                resultSet.getString("last_name"),
-                resultSet.getString("first_name"),
-                resultSet.getFloat("credit_limit"),
-                resultSet.getString("num_vat"),
-                customerStatus
+        return MakeCustomer.getCustomer(
+                resultSet.getInt("customer.num_customer"),
+                resultSet.getString("customer.last_name"),
+                resultSet.getString("customer.first_name"),
+                resultSet.getFloat("customer.credit_limit"),
+                resultSet.getString("customer.num_vat"),
+                CustomerStatusDBAccess.makeCustomerStatus(resultSet)
         );
     }
 }

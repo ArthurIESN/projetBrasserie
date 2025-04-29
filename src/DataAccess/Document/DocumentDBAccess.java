@@ -1,8 +1,27 @@
 package DataAccess.Document;
 
-import Model.Document.Document;
-import Model.Item.Item;
+import DataAccess.CollectionAgency.CollectionAgencyDBAccess;
+import DataAccess.DatabaseConnexion;
+import DataAccess.DataAccesUtils;
 
+import DataAccess.DeliveryTruck.DeliveryTruckDBAccess;
+import DataAccess.DocumentStatus.DocumentStatusDBAccess;
+import DataAccess.Process.ProcessDBAccess;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Model.CollectionAgency.CollectionAgency;
+import Model.CollectionAgency.MakeCollectionAgency;
+import Model.DeliveryTruck.DeliveryTruck;
+import Model.DeliveryTruck.MakeDeliveryTruck;
+import Model.Document.Document;
+import Model.Document.MakeDocument;
+import Model.DocumentStatus.MakeDocumentStatus;
+import Model.Item.Item;
+import Model.DocumentStatus.DocumentStatus;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DocumentDBAccess implements DocumentDataAccess
@@ -11,14 +30,70 @@ public class DocumentDBAccess implements DocumentDataAccess
     {
         // Document -> Document_details(id_document) -> item_document_details -> item
 
-        String query = "SELECT * FROM document " +
-                "WHERE document.id_document IN (" +
-                "    SELECT dd.id_document " +
-                "    FROM Document_details dd " +
-                "    JOIN item_document_details idd ON dd.id_document_details = idd.id_document_details " +
-                "    WHERE idd.id_item = ?" +
-                ") AND d.status = 'current'";
+        String query = "SELECT * " +
+                "FROM document " +
+                "WHERE " +
+                "  (SELECT label FROM document_status WHERE id = document.id_document_status) IN ('WAITING', 'VALIDATING') " +
+                "  AND (SELECT label " +
+                "       FROM process_type " +
+                "       WHERE id = (SELECT id_process_type " +
+                "                   FROM process " +
+                "                   WHERE id = document.id_process) " +
+                "      ) = 'Order' " +
+                "  AND document.id IN ( " +
+                "    SELECT id_document " +
+                "    FROM document_details " +
+                "    where id_item = ? " +
+                ");";
 
-    return  null;
+        try
+        {
+            Connection connection = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, item.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<Document> documents = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                documents.add(makeDocument(resultSet));
+            }
+
+            return documents;
+
+        } catch (DatabaseConnectionFailedException | SQLException e)
+        {
+            //@TODO: handle exception
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Document makeDocument(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "document.id")) return null;
+
+        return MakeDocument.getDocument(
+                resultSet.getInt("document.id"),
+                resultSet.getString("document.label"),
+                resultSet.getDate("document.date"),
+                resultSet.getDate("document.deadline"),
+                resultSet.getFloat("document.reduction"),
+                resultSet.getString("document.validity"),
+                resultSet.getBoolean("document.is_delivered"),
+                resultSet.getDate("document.delivery_date"),
+                resultSet.getBoolean("document.deposit_is_paid"),
+                resultSet.getFloat("document.deposit_amount"),
+                resultSet.getDate("document.desired_delivery_date"),
+                resultSet.getFloat("document.vat_amount"),
+                resultSet.getFloat("document.total_inclusive_of_taxe"),
+                resultSet.getFloat("document.total_vat"),
+                resultSet.getFloat("document.total_excl_vat"),
+                CollectionAgencyDBAccess.makeCollectionAgency(resultSet),
+                DocumentStatusDBAccess.makeDocumentStatus(resultSet),
+                DeliveryTruckDBAccess.makeDeliveryTruck(resultSet),
+                ProcessDBAccess.makeProcess(resultSet)
+        );
     }
 }
