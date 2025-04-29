@@ -24,6 +24,8 @@ public class ItemDBAccess implements ItemDataAccess
 {
     public ItemDBAccess(){}
 
+    public ArrayList<Item> getAllItems() throws GetAllItemsException {
+
     public ArrayList<Item> getAllItems() throws GetAllItemsException
     {
         ArrayList<Item> items = new ArrayList<>();
