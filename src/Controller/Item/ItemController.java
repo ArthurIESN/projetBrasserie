@@ -29,4 +29,20 @@ public class ItemController {
     {
         return itemManager.getMinMaxItemQuantityAndPrice(vat);
     }
+
+    public static void createItem(Item item) {
+        itemManager.createItem(item);
+    }
+
+    public static void updateItem(Item item) {
+        itemManager.updateItem(item);
+    }
+
+    public static void deleteItem(int id) {
+        itemManager.deleteItem(id);
+    }
+
+    public static Item getItem(int id) {
+        return itemManager.getItem(id);
+    }
 }

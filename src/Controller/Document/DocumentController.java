@@ -16,5 +16,28 @@ public class DocumentController
         return documentManager.getAllCurrentCommandsForAnItem(item);
     }
 
+    public static void createDocument(Document document)
+    {
+        documentManager.createDocument(document);
+    }
 
+    public static void updateDocument(Document document)
+    {
+        documentManager.updateDocument(document);
+    }
+
+    public static void deleteDocument(Integer id)
+    {
+        documentManager.deleteDocument(id);
+    }
+
+    public static Document getDocument(Integer id)
+    {
+        return documentManager.getDocument(id);
+    }
+
+    public static ArrayList<Document> getAllDocuments()
+    {
+        return documentManager.getAllDocuments();
+    }
 }

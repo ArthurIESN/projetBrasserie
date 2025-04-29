@@ -45,4 +45,24 @@ public class ItemManager
     {
         return itemDBAccess.getMinMaxItemQuantityAndPrice(vat);
     }
+
+    public void createItem(Item item)
+    {
+        itemDBAccess.createItem(item);
+    }
+
+    public void updateItem(Item item)
+    {
+        itemDBAccess.updateItem(item);
+    }
+
+    public void deleteItem(int id)
+    {
+        itemDBAccess.deleteItem(id);
+    }
+
+    public Item getItem(int id)
+    {
+        return itemDBAccess.getItem(id);
+    }
 }

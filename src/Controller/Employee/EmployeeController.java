@@ -13,4 +13,24 @@ public class EmployeeController {
     {
         return employeeManager.getAllEmployees();
     }
+
+    public static void createEmployee(Employee employee)
+    {
+        employeeManager.createEmployee(employee);
+    }
+
+    public static void deleteEmployee(int id)
+    {
+        employeeManager.deleteEmployee(id);
+    }
+
+    public static void updateEmployee(Employee employee)
+    {
+        employeeManager.updateEmployee(employee);
+    }
+
+    public static Employee getEmployee(int id)
+    {
+        return employeeManager.getEmployee(id);
+    }
 }

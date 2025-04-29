@@ -11,15 +11,40 @@ import java.util.ArrayList;
 
 public class ProcessStatusManager
 {
-    private final ProcessStatusDataAccess processStatusDataAccess;
+    private final ProcessStatusDataAccess processStatusDataAccess = new ProcessStatusDBAccess();
 
     public ProcessStatusManager()
     {
-        processStatusDataAccess = new ProcessStatusDBAccess();
+
     }
 
     public ArrayList<ProcessStatus> getAllProcessStatus() throws GetAllProcessStatusException
     {
         return processStatusDataAccess.getAllProcessStatus();
+    }
+
+    public void createProcessStatus(ProcessStatus processStatus)
+    {
+        processStatusDataAccess.createProcessStatus(processStatus);
+    }
+
+    public void updateProcessStatus(ProcessStatus processStatus)
+    {
+        processStatusDataAccess.updateProcessStatus(processStatus);
+    }
+
+    public void deleteProcessStatus(int id)
+    {
+        processStatusDataAccess.deleteProcessStatus(id);
+    }
+
+    public ProcessStatus getProcessStatus(int id)
+    {
+        return processStatusDataAccess.getProcessStatus(id);
+    }
+
+    public ArrayList<ProcessStatus> getProcessStatusWithSpecificType(int id)
+    {
+        return processStatusDataAccess.getProcessStatusWithSpecificType(id);
     }
 }

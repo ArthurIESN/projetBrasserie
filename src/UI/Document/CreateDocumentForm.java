@@ -1,6 +1,6 @@
 package UI.Document;
 
-import Controller.Type.TypeController;
+import Controller.ProcessType.ProcessTypeController;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.ProcessType.ProcessType;
 import UI.Components.Fields.SearchListPanel;
@@ -27,7 +27,7 @@ public class CreateDocumentForm extends JPanel {
         processTypes = new ArrayList<>();
 
         try{
-            processTypes = TypeController.getAllTypes();
+            processTypes = ProcessTypeController.getAllTypes();
         }catch (GetAllProcessTypesException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

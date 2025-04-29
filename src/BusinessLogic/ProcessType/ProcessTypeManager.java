@@ -21,4 +21,24 @@ public class ProcessTypeManager
     {
         return typeDataAccess.getAllTypes();
     }
+
+    public void createProcessType(ProcessType processType)
+    {
+        typeDataAccess.createProcessType(processType);
+    }
+
+    public void updateProcessType(ProcessType processType)
+    {
+        typeDataAccess.updateProcessType(processType);
+    }
+
+    public void deleteProcessType(int id)
+    {
+        typeDataAccess.deleteProcessType(id);
+    }
+
+    public ProcessType getProcessType(int id)
+    {
+        return typeDataAccess.getProcessType(id);
+    }
 }
