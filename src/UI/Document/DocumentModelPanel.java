@@ -3,7 +3,7 @@ package UI.Document;
 import Controller.DocumentStatus.DocumentStatusController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
-import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
 import Model.DocumentStatus.DocumentStatus;

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import Controller.Item.ItemController;
 import Controller.VAT.VATController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
@@ -122,7 +123,7 @@ public class SearchItemForm extends JPanel
 
         try
         {
-            ArrayList<Item> items = SearchController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
+            ArrayList<Item> items = ItemController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
             ArrayList<Packaging> packagings = Utils.transformData(items, Item::getPackaging);
 
             itemTableModel.setData(items);
@@ -150,7 +151,7 @@ public class SearchItemForm extends JPanel
         int[] minMaxItem;
         try
         {
-            minMaxItem = SearchController.getMinMaxItemQuantityAndPrice(searchVat.getSelectedItem());
+            minMaxItem = ItemController.getMinMaxItemQuantityAndPrice(searchVat.getSelectedItem());
 
             itemQuantity.setMinMax(minMaxItem[0], minMaxItem[1]);
             itemPrice.setMinMax(minMaxItem[2], minMaxItem[3]);

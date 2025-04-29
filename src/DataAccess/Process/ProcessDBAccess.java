@@ -1,24 +1,19 @@
 package DataAccess.Process;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
+
+import DataAccess.Employee.EmployeeDBAccess;
+import DataAccess.ProcessStatus.ProcessStatusDBAccess;
+import DataAccess.ProcessType.ProcessTypeDBAccess;
+import DataAccess.Supplier.SupplierDBAccess;
+import DataAccess.Customer.CustomerDBAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Process.*;
 
-import Model.Customer.Customer;
-import Model.Customer.MakeCustomer;
-import Model.CustomerStatus.CustomerStatus;
-import Model.Employee.Employee;
-import Model.Employee.MakeEmployee;
-import Model.EmployeeStatus.EmployeeStatus;
 import Model.Process.MakeProcess;
 import Model.Process.Process;
-import Model.ProcessStatus.ProcessStatus;
-import Model.ProcessStatus.MakeProcessStatus;
-import Model.ProcessType.ProcessType;
-import Model.ProcessType.MakeProcessType;
-import Model.Supplier.Supplier;
-import Model.Supplier.MakeSupplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -317,71 +312,19 @@ public class ProcessDBAccess implements ProcessDataAccess
     }
 
 
-    private Process makeProcess(ResultSet resultSet) throws SQLException
+    public static Process makeProcess(ResultSet resultSet) throws SQLException
     {
-        ProcessType processType = MakeProcessType.getProcessType(
-                resultSet.getInt("id_process_type"),
-                resultSet.getString("process_type.label")
-        );
-
-        ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(
-                resultSet.getInt("id_process_status"),
-                resultSet.getString("process_status.label")
-        );
-
-        Supplier supplier = null;
-        if(resultSet.getInt("id_supplier") != 0)
-        {
-            supplier = MakeSupplier.getSupplier(
-                    resultSet.getInt("supplier.id"),
-                    resultSet.getString("supplier.name")
-            );
-        }
-
-        Employee employee = null;
-        if(resultSet.getInt("id_employee") != 0)
-        {
-            EmployeeStatus employeeStatus = new EmployeeStatus(
-                    resultSet.getInt("employee_status.id"),
-                    resultSet.getString("employee_status.label")
-            );
-
-            employee = MakeEmployee.getEmployee(
-                    resultSet.getInt("employee.id"),
-                    resultSet.getString("employee.last_name"),
-                    resultSet.getString("employee.first_name"),
-                    resultSet.getDate("employee.birth_date"),
-                    employeeStatus
-            );
-        }
-
-        Customer customer = null;
-        if(resultSet.getInt("num_customer") != 0)
-        {
-            CustomerStatus customerStatus = new CustomerStatus(
-                    resultSet.getInt("customer_status.id"),
-                    resultSet.getString("customer_status.label")
-            );
-
-            customer = MakeCustomer.getCustomer(
-                    resultSet.getInt("customer.num_customer"),
-                    resultSet.getString("customer.last_name"),
-                    resultSet.getString("customer.first_name"),
-                    resultSet.getFloat("customer.credit_limit"),
-                    resultSet.getString("customer.num_vat"),
-                    customerStatus
-            );
-        }
+        if(!DataAccesUtils.hasColumn(resultSet, "process.id")) return null;
 
         return MakeProcess.getProcess(
-                resultSet.getInt("id"),
-                resultSet.getString("label"),
-                resultSet.getInt("number"),
-                supplier,
-                processType,
-                processStatus,
-                employee,
-                customer
+                resultSet.getInt("process.id"),
+                resultSet.getString("process.label"),
+                resultSet.getInt("process.number"),
+                SupplierDBAccess.makeSupplier(resultSet),
+                ProcessTypeDBAccess.makeProcessType(resultSet),
+                ProcessStatusDBAccess.makeProcessStatus(resultSet),
+                EmployeeDBAccess.makeEmployee(resultSet),
+                CustomerDBAccess.makeCustomer(resultSet)
         );
     }
 }

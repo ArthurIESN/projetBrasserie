@@ -1,5 +1,6 @@
 package BusinessLogic.Document;
 
+import DataAccess.Document.DocumentDBAccess;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class DocumentManager
 {
-    private DocumentDataAccess documentDataAccess;
+    private final DocumentDataAccess documentDataAccess = new DocumentDBAccess();
 
     public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item)
     {

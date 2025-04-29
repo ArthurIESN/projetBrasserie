@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
+import DataAccess.EmployeeStatus.EmployeeStatusDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 
@@ -35,19 +37,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
             while (resultSet.next())
             {
-                EmployeeStatus employeeStatus = MakeEmployeeStatus.getEmployeeStatus(
-                        resultSet.getInt("id_employee_status"),
-                        resultSet.getString("label")
-                );
-                Employee employee = MakeEmployee.getEmployee(
-                        resultSet.getInt("id"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("first_name"),
-                        resultSet.getDate("birth_date"),
-                        employeeStatus
-                );
-
-                employees.add(employee);
+                employees.add(makeEmployee(resultSet));
             }
 
             return employees;
@@ -76,18 +66,16 @@ public class EmployeeDBAccess implements EmployeeDataAccess
     }
 
 
-    private Employee createEmployeeClass(ResultSet resultSet) throws SQLException
+    public static Employee makeEmployee(ResultSet resultSet) throws SQLException
     {
-        EmployeeStatus employeeStatus = new EmployeeStatus(
-                resultSet.getInt("id_employee_status"),
-                resultSet.getString("label"));
+        if(!DataAccesUtils.hasColumn(resultSet, "employee.id")) return null;
 
-        return new Employee(
-                resultSet.getInt("id"),
-                resultSet.getString("last_name"),
-                resultSet.getString("first_name"),
-                resultSet.getDate("birth_date"),
-                employeeStatus
+        return MakeEmployee.getEmployee(
+                resultSet.getInt("employee.id"),
+                resultSet.getString("employee.last_name"),
+                resultSet.getString("employee.first_name"),
+                resultSet.getDate("employee.birth_date"),
+                EmployeeStatusDBAccess.makeEmployeeStatus(resultSet)
         );
     }
 }

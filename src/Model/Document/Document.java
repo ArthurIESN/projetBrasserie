@@ -1,6 +1,6 @@
 package Model.Document;
 
-import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;

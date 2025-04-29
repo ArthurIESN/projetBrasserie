@@ -1,6 +1,8 @@
 package DataAccess.Vat;
 
 import DataAccess.DatabaseConnexion;
+import DataAccess.DataAccesUtils;
+
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Vat.GetAllVatsException;
 import Exceptions.Vat.UnkownVatCodeException;
@@ -29,7 +31,7 @@ public class VatDBAccess implements VatDataAccess
 
             if (resultSet.next())
             {
-                return MakeVat.getVat(resultSet.getString("code"), resultSet.getFloat("rate"));
+                return makeVat(resultSet);
             }
             else
             {
@@ -55,7 +57,7 @@ public class VatDBAccess implements VatDataAccess
 
             while (resultSet.next())
             {
-                vats.add(MakeVat.getVat(resultSet.getString("code"), resultSet.getFloat("rate")));
+                vats.add(makeVat(resultSet));
             }
         } catch (SQLException | DatabaseConnectionFailedException e)
         {
@@ -64,5 +66,15 @@ public class VatDBAccess implements VatDataAccess
         }
 
         return vats;
+    }
+
+    public static Vat makeVat(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "vat.code")) return null;
+
+        return MakeVat.getVat(
+                resultSet.getString("vat.code"),
+                resultSet.getFloat("vat.rate")
+        );
     }
 }

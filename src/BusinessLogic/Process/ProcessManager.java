@@ -9,7 +9,6 @@ import Model.Process.Process;
 
 import DataAccess.Process.ProcessDBAccess;
 import DataAccess.Process.ProcessDataAccess;
-import DataAccess.Search.SearchItem.SearchItemDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.ProcessType.ProcessType;

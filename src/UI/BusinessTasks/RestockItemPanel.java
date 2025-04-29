@@ -1,6 +1,8 @@
 package UI.BusinessTasks;
 
+import Controller.Document.DocumentController;
 import Controller.Item.ItemController;
+import Model.Document.Document;
 import Model.Item.Item;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.SearchListPanel;
@@ -45,11 +47,19 @@ public class RestockItemPanel extends JPanel
         {
             RestockItem restockItem = calculateRestockQuantityAndDate();
 
-            // display informations
+            if (restockItem == null)
+            {
+                JOptionPane.showMessageDialog(this, "Please select an item and a date", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+
+
         });
 
         layoutHelper.addField("Select an item", itemSearch);
         layoutHelper.addField("Restock date", dateField);
+        layoutHelper.addField(restockButton);
 
         add(layoutHelper);
     }
@@ -57,7 +67,15 @@ public class RestockItemPanel extends JPanel
     private RestockItem calculateRestockQuantityAndDate()
     {
         if(itemSearch.getSelectedItem() == null) return null;
-        if(dateField.getDate() == null) return null;
+        //if(dateField.getDate() == null) return null;
+
+        ArrayList<Document> documents = DocumentController.getAllCurrentCommandsForAnItem(itemSearch.getSelectedItem());
+
+         // log all documents
+        for (Document document : documents)
+        {
+            System.out.println(document);
+        }
 
         return null;
     }

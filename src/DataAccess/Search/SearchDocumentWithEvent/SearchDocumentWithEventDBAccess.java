@@ -1,6 +1,7 @@
 package DataAccess.Search.SearchDocumentWithEvent;
 
 import DataAccess.DatabaseConnexion;
+import DataAccess.Document.DocumentDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
@@ -107,77 +108,9 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Document> documents = new ArrayList<>();
 
-
             while (resultSet.next())
             {
-
-                DocumentStatus documentStatus = MakeDocumentStatus.getDocumentStatus(
-                        resultSet.getInt("document_status.id"),
-                        resultSet.getString("document_status.label")
-                );
-
-                Supplier supplier = MakeSupplier.getSupplier(
-                        resultSet.getInt("supplier.id"),
-                        resultSet.getString("supplier.name")
-                );
-
-                ProcessType processType = MakeProcessType.getProcessType(
-                        resultSet.getInt("process_type.id"),
-                        resultSet.getString("process_type.label")
-                );
-
-                ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(
-                        resultSet.getInt("process_status.id"),
-                        resultSet.getString("process_status.label")
-                );
-
-                EmployeeStatus employeeStatus = MakeEmployeeStatus.getEmployeeStatus(
-                        resultSet.getInt("employee_status.id"),
-                        resultSet.getString("employee_status.label")
-                );
-
-                Employee employee = MakeEmployee.getEmployee(
-                        resultSet.getInt("employee.id"),
-                        resultSet.getString("employee.last_name"),
-                        resultSet.getString("employee.first_name"),
-                        resultSet.getDate("employee.birth_date"),
-                        employeeStatus
-                );
-
-                Process process = MakeProcess.getProcess(
-                        resultSet.getInt("process.id"),
-                        resultSet.getString("process.label"),
-                        resultSet.getInt("process.number"),
-                        supplier,
-                        processType,
-                        processStatus,
-                        employee,
-                        null
-                );
-
-                Document document = MakeDocument.getDocument(
-                        resultSet.getInt("document.id"),
-                        resultSet.getString("document.label"),
-                        resultSet.getDate("document.date"),
-                        null,
-                        null,
-                        null,
-                        resultSet.getBoolean("document.is_delivered"),
-                        resultSet.getDate("document.delivery_date"),
-                        null,
-                        null,
-                        resultSet.getDate("document.desired_delivery_date"),
-                        resultSet.getFloat("document.VAT_amount"),
-                        resultSet.getFloat("document.total_inclusive_of_taxe"),
-                        resultSet.getFloat("document.total_VAT"),
-                        resultSet.getFloat("document.total_excl_VAT"),
-                        null,
-                        documentStatus,
-                        null,
-                        process
-                );
-
-                documents.add(document);
+                documents.add(DocumentDBAccess.makeDocument(resultSet));
             }
 
             return documents;

@@ -1,4 +1,4 @@
-package Model;
+package Model.CollectionAgency;
 
 import java.util.Objects;
 
@@ -28,6 +28,10 @@ public class CollectionAgency {
 
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name);
+    }
+
+    public static int hashCode(Integer id, String name){
+        return Objects.hash(id, name);
     }
 
     @Override
