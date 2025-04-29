@@ -22,8 +22,8 @@ public class ItemDBAccess {
 
     public ItemDBAccess(){}
 
-    public List<Item> getAllItems() throws GetAllItemsException {
-        List<Item> items = new ArrayList<>();
+    public ArrayList<Item> getAllItems() throws GetAllItemsException {
+        ArrayList<Item> items = new ArrayList<>();
 
         String query = "SELECT *,packaging.id AS id_packaging,packaging.label AS packaging_label, " +
                 "packaging.quantity AS packaging_quantity,vat.code AS vat_code,vat.rate AS vat_rate " +

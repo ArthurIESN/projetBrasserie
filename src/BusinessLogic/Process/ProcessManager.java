@@ -3,6 +3,7 @@ package BusinessLogic.Process;
 import Controller.AppController;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.DeleteProcessException;
+import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.Process.Process;
 
@@ -37,5 +38,10 @@ public class ProcessManager
     public void deleteProcess(Integer id) throws DeleteProcessException
     {
         processDataAccess.deleteProcess(id);
+    }
+
+    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
+    {
+        return processDataAccess.getProcessWithSpecificType(id);
     }
 }
