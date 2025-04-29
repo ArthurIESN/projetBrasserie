@@ -44,7 +44,7 @@ public class CreateDocumentForm extends JPanel {
 
         processTypeSearch.onSelectedItemChange(processTypeChange -> {
             documentModelPanel.setTypeDocument(processTypeSearch.getSelectedItem().getLabel());
-
+            documentModelPanel.loadDataAndShowProcesses(processTypeSearch.getSelectedItem().getId());
         });
 
 

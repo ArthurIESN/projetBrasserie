@@ -2,6 +2,11 @@ package Controller.Process;
 
 import BusinessLogic.Process.ProcessManager;
 import Exceptions.Process.*;
+import Exceptions.Process.CreateProcessException;
+import Exceptions.Process.DeleteProcessException;
+import Exceptions.Process.GetAllProcessesException;
+import Exceptions.Process.GetProcessWithSpecificType;
+import Exceptions.Process.UpdateProcessException;
 import Model.Process.Process;
 
 import java.util.ArrayList;
@@ -29,6 +34,11 @@ public class ProcessController {
         processManager.deleteProcess(id);
     }
 
+    public static ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType {
+        return processManager.getProcessWithSpecificType(id);
+
+    }
+      
     public static void updateProcess(Process process) throws UpdateProcessException
     {
         processManager.updateProcess(process);
