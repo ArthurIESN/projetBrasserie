@@ -130,7 +130,7 @@ public class DocumentModelPanel extends JPanel {
 
         try{
             documentStatuses = DocumentStatusController.getAllDocumentStatus();
-        }catch (DatabaseConnectionFailedException | GetAllDocumentStatusException e){
+        }catch (GetAllDocumentStatusException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 

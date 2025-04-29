@@ -55,8 +55,5 @@ public class ProcessManager
 
     }
 
-    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
-    {
-        return processDataAccess.getProcessWithSpecificType(id);
-    }
+
 }

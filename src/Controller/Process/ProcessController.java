@@ -44,8 +44,5 @@ public class ProcessController {
         processManager.updateProcess(process);
     }
 
-    public static ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
-    {
-        return processManager.getProcessWithSpecificType(id);
-    }
+
 }
