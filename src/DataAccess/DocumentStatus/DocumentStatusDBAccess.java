@@ -1,5 +1,6 @@
 package DataAccess.DocumentStatus;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
@@ -24,13 +25,9 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             ArrayList<DocumentStatus> documentStatuses = new ArrayList<>();
 
-            while (resultSet.next()){
-                DocumentStatus documentStatus = MakeDocumentStatus.getDocumentStatus(
-                        resultSet.getInt("id"),
-                        resultSet.getString("label")
-                );
-
-                documentStatuses.add(documentStatus);
+            while (resultSet.next())
+            {
+                documentStatuses.add(makeDocumentStatus(resultSet));
             }
 
             return documentStatuses;
@@ -39,5 +36,15 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
             System.err.println(e.getMessage());
             throw new GetAllDocumentStatusException();
         }
+    }
+
+    public static DocumentStatus makeDocumentStatus(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "document_status.id")) return null;
+
+        return MakeDocumentStatus.getDocumentStatus(
+                resultSet.getInt("document_status.id"),
+                resultSet.getString("document_status.label")
+        );
     }
 }

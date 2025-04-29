@@ -1,12 +1,23 @@
 package UI.Components;
 
+import UI.Theme.ThemeManager;
+import UI.Theme.ThemeObserver;
+
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+import java.util.Properties;
 
 import javax.swing.*;
 
-public class GridBagLayoutHelper extends JPanel
+public class GridBagLayoutHelper extends JScrollPane implements ThemeObserver
 {
     private final GridBagConstraints gbc;
+    private final JPanel contentPanel;
+    private static Color backgroundColor;
+
 
     /**
      * Constructor for GridBagLayoutHelper.
@@ -14,11 +25,63 @@ public class GridBagLayoutHelper extends JPanel
      */
     public GridBagLayoutHelper()
     {
+        ThemeManager.getInstance().addObserver(this);
+
+        contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(backgroundColor);
+        setViewportView(contentPanel);
+
+        setBorder(BorderFactory.createEmptyBorder());
+
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        setLayout(new GridBagLayout());
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
+    }
+
+    public static void onThemeChangedStatic(Properties themeProperties)
+    {
+        if (themeProperties != null)
+        {
+            backgroundColor = Color.decode(themeProperties.getProperty("GridBagLayoutHelper.backgroundColor") != null ? themeProperties.getProperty("GridBagLayoutHelper.backgroundColor") : "#FFFFFF");
+        }
+    }
+
+
+    // Override the getComponents method to return the components of the content panel instead of the scroll pane
+    @Override
+    public Component[] getComponents()
+    {
+        return contentPanel.getComponents();
+    }
+
+    public void scrollToTop()
+    {
+        getVerticalScrollBar().setValue(0);
+    }
+
+    public void scrollToBottom()
+    {
+        SwingUtilities.invokeLater(() ->
+        {
+            JScrollBar vertical = getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
     }
 
     /**
@@ -36,12 +99,12 @@ public class GridBagLayoutHelper extends JPanel
         fieldPanel.add(jLabel);
         fieldPanel.add(component);
 
-        fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 20, component.getPreferredSize().height ));
+        fieldPanel.setPreferredSize(new Dimension(jLabel.getPreferredSize().width + component.getPreferredSize().width + 200, component.getPreferredSize().height ));
 
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-        add(fieldPanel, gbc);
+        contentPanel.add(fieldPanel, gbc);
 
         gbc.gridwidth = 1;
     }
@@ -68,7 +131,14 @@ public class GridBagLayoutHelper extends JPanel
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
-        add(component, gbc);
+        contentPanel.add(component, gbc);
         gbc.gridwidth = 1;
+    }
+
+    @Override
+    public void onThemeChanged(Properties themeProperties)
+    {
+        // Set background color
+        contentPanel.setBackground(backgroundColor);
     }
 }

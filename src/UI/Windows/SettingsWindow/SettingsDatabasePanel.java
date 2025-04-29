@@ -1,9 +1,11 @@
 package UI.Windows.SettingsWindow;
 
+import DataAccess.DatabaseConnexion;
 import Environement.DatabaseProperties;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
+import Utils.Utils;
 
 import javax.swing.*;
 
@@ -27,7 +29,7 @@ public class SettingsDatabasePanel extends JPanel
         JEnhancedTextField databaseHost = new JEnhancedTextField();
         databaseHost.setPlaceholder("Database Host");
 
-        JNumberField databasePort = new JNumberField(JNumberField.NumberType.INTEGER);
+        JNumberField databasePort = new JNumberField(Utils.NumberType.INTEGER);
         databasePort.setPlaceholder("Database Port");
         databasePort.setAllowNegative(false);
 
@@ -63,9 +65,10 @@ public class SettingsDatabasePanel extends JPanel
         JButton testConnectionButton = new JButton("Test Connection");
         testConnectionButton.addActionListener(e ->
         {
+            saveButton.doClick();
+
             // test connection
-            //boolean success = DatabaseProperties.testConnection();
-            boolean success = true;
+            boolean success = DatabaseConnexion.testConnection();
             if (success)
             {
                 JOptionPane.showMessageDialog(this, "Connection successful", "Success", JOptionPane.INFORMATION_MESSAGE);

@@ -1,6 +1,7 @@
 package DataAccess.Event;
 
 import BusinessLogic.Event.EventManager;
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
@@ -18,12 +19,12 @@ public class EventDBAccess implements EventDataAccess {
     public EventDBAccess(){}
 
     public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
-        String query = "SELECT DISTINCT e.* " +
-                "FROM Event e " +
-                "JOIN event_document_details edd ON e.id = edd.id_event " +
-                "JOIN Document_details dd ON edd.id_document_details = dd.id " +
-                "JOIN item_document_details idd ON dd.id = idd.id_document_details " +
-                "WHERE idd.id_item = ?";
+        String query = "SELECT DISTINCT event.* " +
+                "FROM event " +
+                "JOIN event_document_details ON event.id = event_document_details.id_event " +
+                "JOIN document_details ON event_document_details.id_document_details = document_details.id " +
+                "JOIN item ON document_details.id_item = item.id " +
+                "WHERE item.id = ?";
 
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
@@ -33,19 +34,9 @@ public class EventDBAccess implements EventDataAccess {
 
             ArrayList<Event> events = new ArrayList<>();
 
-            while (resultSet.next()){
-                Event event = MakeEvent.getEvent(
-                  resultSet.getInt("id"),
-                  resultSet.getString("label"),
-                  resultSet.getDate("start_date"),
-                  resultSet.getDate("end_date"),
-                  resultSet.getFloat("impact")
-                );
-
-
-
-                events.add(event);
-
+            while (resultSet.next())
+            {
+                events.add(makeEvent(resultSet));
             }
 
          return events;
@@ -53,5 +44,18 @@ public class EventDBAccess implements EventDataAccess {
             System.out.println(e.getMessage());
             throw new GetEventsWithItemException();
         }
+    }
+
+    public static Event makeEvent(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "event.id")) return null;
+
+        return MakeEvent.getEvent(
+                resultSet.getInt("event.id"),
+                resultSet.getString("event.label"),
+                resultSet.getDate("event.start_date"),
+                resultSet.getDate("event.end_date"),
+                resultSet.getFloat("event.impact")
+        );
     }
 }

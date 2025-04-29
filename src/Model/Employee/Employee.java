@@ -56,6 +56,12 @@ public class Employee {
                 Objects.equals(employeeStatus, employee.employeeStatus);
     }
 
+    public static int hashCode(Integer id, String lastName, String firstName, Date birthDate,
+                                EmployeeStatus employeeStatus)
+    {
+        return Objects.hash(id, lastName, firstName, birthDate, employeeStatus);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, lastName, firstName, birthDate, employeeStatus);

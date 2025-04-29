@@ -1,15 +1,23 @@
 package UI.Test;
 
+import Utils.Utils;
+
 import Controller.Customer.CustomerController;
+
 import Exceptions.Customer.GetAllCustomersException;
+
 import Model.Customer.Customer;
+
 import UI.Components.Fields.ComboBoxPanel;
 import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
 import UI.Components.StepManager;
+import UI.Threads.LoadingThread;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Test extends JPanel
@@ -22,7 +30,10 @@ public class Test extends JPanel
 
     public Test()
     {
-
+        setLayout(new BorderLayout());
+        JLabel title = new JLabel("TEST");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        add(title, BorderLayout.NORTH);
         GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
 
         // YA DES BUGS POUR L'INSTANT
@@ -101,16 +112,35 @@ public class Test extends JPanel
         stepManager.onStepShown(2, this::functionCalledWhenStepThreeIsShown);
 
 
-        JNumberField test = new JNumberField(JNumberField.NumberType.INTEGER);
+        JNumberField test = new JNumberField(Utils.NumberType.INTEGER);
         test.setAllowNegative(true);
         test.setPlaceholder("INTEGER");
 
-        JNumberField test2 = new JNumberField(JNumberField.NumberType.FLOAT, 3);
+        JNumberField test2 = new JNumberField(Utils.NumberType.FLOAT, 3);
         test2.setAllowNegative(true);
         test2.setPlaceholder("FLOAT");
 
-        gridBagLayoutHelper.addField(test);
+        JButton test3 = new JButton("THREAD");
+
+        test3.addActionListener(e -> {
+            System.out.println("Thread started");
+            LoadingThread loadingThread = new LoadingThread("toN GROs Daron", "Calcule du salaire de Didier", 5000);
+
+            WindowManager.setWindowsEnable(false);
+            loadingThread.start();
+
+            loadingThread.onLoadingComplete(() ->
+            {
+                System.out.println("Thread completed");
+                WindowManager.setWindowsEnable(true);
+
+                JOptionPane.showMessageDialog(null, "99999 Euros", "Info", JOptionPane.INFORMATION_MESSAGE);
+            });
+        });
+
+        gridBagLayoutHelper.addField("sa", test);
         gridBagLayoutHelper.addField(test2);
+        gridBagLayoutHelper.addField(test3);
 
         add(gridBagLayoutHelper);
     }

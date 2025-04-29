@@ -43,6 +43,11 @@ public class Packaging
                 Objects.equals(quantity, packaging.quantity);
     }
 
+    public static int hashCode(int id, String label, int quantity)
+    {
+        return Objects.hash(id, label, quantity);
+    }
+
     @Override
     public int hashCode()
     {

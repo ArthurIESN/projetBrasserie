@@ -10,6 +10,7 @@ import Exceptions.Item.GetAllItemsException;
 import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.Vat.GetAllVatsException;
 import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
 import Model.DocumentStatus.DocumentStatus;

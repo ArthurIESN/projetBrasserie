@@ -66,12 +66,43 @@ public class DatabaseConnexion
         }
     }
 
+    public static boolean testConnection()
+    {
+        try
+        {
+            connect();
+            return true;
+        }
+        catch (DatabaseConnectionFailedException e)
+        {
+            System.out.println("Connection failed : " + e.getMessage());
+            return false;
+        }
+    }
+
     public static Connection getInstance() throws DatabaseConnectionFailedException
     {
         if(connection == null)
         {
             connect();
         }
+
+        // If we are using online database, connection can be invalid after few minutes of inactivity
+        // So we need to check if the connection is still valid
+        try
+        {
+            if(!connection.isValid(5))
+            {
+                System.out.println("Connection closed, reconnecting...");
+                connect();
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println("Connection error : " + e.getMessage());
+            throw new DatabaseConnectionFailedException("An error occurred while connecting to the database");
+        }
+
 
         return connection;
     }

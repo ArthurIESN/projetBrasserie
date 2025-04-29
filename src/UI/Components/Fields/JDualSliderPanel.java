@@ -6,18 +6,20 @@ import UI.Theme.ThemeObserver;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
 
 public class JDualSliderPanel extends JPanel implements ThemeObserver
 {
+    private static final int THUMB_RADIUS = 6;
     private final int[] values = {Integer.MIN_VALUE, Integer.MAX_VALUE};
     private boolean draggingThumb1 = false;
     private boolean draggingThumb2 = false;
     private final int padding = 60; // Left and right padding
-    private final int min;
-    private final int max;
+    private int min;
+    private int max;
     private static Color thumbColor;
     private static Color trackColor;
     private static Color textColor;
@@ -56,7 +58,7 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
                 int thumb1X = xPositionForValue(getCurrentMin());
                 int thumb2X = xPositionForValue(getCurrentMax());
 
-                if (Math.abs(mouseX - thumb1X) < Math.abs(mouseX - thumb2X)) {
+                if (Math.abs(mouseX - thumb1X + THUMB_RADIUS) < Math.abs(mouseX - thumb2X)) {
                     draggingThumb1 = true;
                 } else {
                     draggingThumb2 = true;
@@ -89,6 +91,19 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
                 repaint();
             }
         });
+
+        addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) != 0) {
+                if (!isDisplayable()) {
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private void dispose()
+    {
+        ThemeManager.getInstance().removeObserver(this);
     }
 
     public JDualSliderPanel(int minValue, int maxValue)
@@ -155,16 +170,23 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
     {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        // add padding if values are equals
+        int visualOffset = 0;
+        if (getCurrentMin() == getCurrentMax()) {
+            visualOffset = isLeftThumb ? -6 : 6;
+        }
+
         g2d.setColor(thumbColor);
-        g2d.fillOval(x - 6, getHeight() / 2 - 6, 12, 12);
+        g2d.fillOval(x - 6 + visualOffset, getHeight() / 2 - 6, 12, 12);
         g2d.setColor(textColor);
-        g2d.drawOval(x - 6, getHeight() / 2 - 6, 12, 12);
+        g2d.drawOval(x - 6 + visualOffset, getHeight() / 2 - 6, 12, 12);
 
         g2d.setFont(new Font("Arial", Font.PLAIN, 12));
         FontMetrics fm = g2d.getFontMetrics();
         int textWidth = fm.stringWidth(String.valueOf(value));
         int textHeight = fm.getHeight();
-        int adjustedX = Math.min(Math.max(x - textWidth / 2, 0), getWidth() - textWidth);
+        int adjustedX = Math.min(Math.max(x - textWidth / 2 + visualOffset, 0), getWidth() - textWidth);
         int textY = isLeftThumb ? getHeight() / 2 - 10 : getHeight() / 2 + textHeight + 4;
         g2d.drawString(String.valueOf(value), adjustedX, textY);
     }
@@ -188,7 +210,7 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
 
     public void setCurrentMin(int min)
     {
-        if(min < getCurrentMax() && min >= this.min)
+        if(min <= getCurrentMax() && min >= this.min)
         {
             values[0] = min;
         }
@@ -207,7 +229,7 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
 
     public void setCurrentMax(int max)
     {
-        if(max > getCurrentMin() && max <= this.max)
+        if(max >= getCurrentMin() && max <= this.max)
         {
             values[1] = max;
         }
@@ -227,6 +249,33 @@ public class JDualSliderPanel extends JPanel implements ThemeObserver
     public int getMaxValue()
     {
         return max;
+    }
+
+    public void setMinValue(int min)
+    {
+        this.min = min;
+        values[0] = min;
+
+        repaint();
+    }
+
+    public void setMaxValue(int max)
+    {
+        this.max = max;
+        values[1] = max;
+
+        repaint();
+    }
+
+    public void setMinMax(int min, int max)
+    {
+        this.min = min;
+        this.max = max;
+
+        repaint();
+
+        values[0] = min;
+        values[1] = max;
     }
 }
 

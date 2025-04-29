@@ -1,6 +1,6 @@
 package Model.Document;
 
-import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
@@ -157,6 +157,18 @@ public class Document {
                 Objects.equals(collectionAgency, document.collectionAgency) &&
                 Objects.equals(deliveryTruck, document.deliveryTruck) &&
                 Objects.equals(process, document.process);
+    }
+
+    public static int hashCode(Integer id, String label, Date date, Date deadLine, Float reduction,
+                               String validity, Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid,
+                               Float depositAmount, Date desiredDeliveryDate, Float VatAmount,
+                               Float totalInclusiveOfTaxe, Float totalVat, Float totalExclVat,
+                               CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
+                               Process process, DocumentStatus documentStatus)
+    {
+        return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
+                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
     }
 
     @Override

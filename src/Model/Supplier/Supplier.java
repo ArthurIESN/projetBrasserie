@@ -30,6 +30,10 @@ public class Supplier {
                 Objects.equals(name, supplier.name);
     }
 
+    public static int hashCode(Integer id, String name) {
+        return Objects.hash(id, name);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name);

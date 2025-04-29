@@ -4,12 +4,12 @@ import Controller.AppController;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetProcessWithSpecificType;
+import Exceptions.Process.UpdateProcessException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.Process.Process;
 
 import DataAccess.Process.ProcessDBAccess;
 import DataAccess.Process.ProcessDataAccess;
-import DataAccess.Search.SearchItem.SearchItemDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.ProcessType.ProcessType;
@@ -43,5 +43,10 @@ public class ProcessManager
     public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
     {
         return processDataAccess.getProcessWithSpecificType(id);
+
+    public void updateProcess(Process process) throws UpdateProcessException
+    {
+        processDataAccess.updateProcess(process);
+
     }
 }

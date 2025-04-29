@@ -8,8 +8,7 @@ public class MakeCustomerStatus
 
     public static CustomerStatus getCustomerStatus(Integer id, String label)
     {
-        CustomerStatus customerStatus = new CustomerStatus(id, label);
-        int customerStatusHash = customerStatus.hashCode();
+        int customerStatusHash = CustomerStatus.hashCode(id, label);
 
         if(customerStatusMap.containsKey(customerStatusHash))
         {
@@ -17,6 +16,7 @@ public class MakeCustomerStatus
         }
         else
         {
+            CustomerStatus customerStatus = new CustomerStatus(id, label);
             customerStatusMap.put(customerStatusHash, customerStatus);
             return customerStatus;
         }

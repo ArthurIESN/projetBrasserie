@@ -10,8 +10,8 @@ public class MakeEvent {
 
     public static Event getEvent(Integer id, String label, Date startDate, Date endDate, float impact)
     {
-        Event event = new Event(id, label, startDate, endDate, impact);
-        int eventHash = event.hashCode();
+
+        int eventHash = Event.hashCode(id, label, startDate, endDate, impact);
 
         if(eventMap.containsKey(eventHash))
         {
@@ -19,6 +19,7 @@ public class MakeEvent {
         }
         else
         {
+            Event event = new Event(id, label, startDate, endDate, impact);
             eventMap.put(eventHash,event);
             return event;
         }

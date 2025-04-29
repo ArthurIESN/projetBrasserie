@@ -80,6 +80,10 @@ public class Payment {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    public static int hashCode(int id, double amount, Date paymentDate, PaymentStatus paymentStatus, Document document, Model.Process.Process process, Customer customer) {
+        return java.util.Objects.hash(id, amount, paymentDate, paymentStatus, document, process, customer);
+    }
 }
 
 

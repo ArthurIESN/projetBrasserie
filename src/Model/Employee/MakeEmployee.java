@@ -12,8 +12,7 @@ public class MakeEmployee
 
     public static Employee getEmployee(Integer id, String lastName, String firstName, Date birthDate, EmployeeStatus employeeStatus)
     {
-        Employee employee = new Employee(id, lastName, firstName, birthDate, employeeStatus);
-        int employeeHash = employee.hashCode();
+        int employeeHash = Employee.hashCode(id, lastName, firstName, birthDate, employeeStatus);
 
         if(employeeMap.containsKey(employeeHash))
         {
@@ -21,6 +20,7 @@ public class MakeEmployee
         }
         else
         {
+            Employee employee = new Employee(id, lastName, firstName, birthDate, employeeStatus);
             employeeMap.put(employeeHash, employee);
             return employee;
         }

@@ -25,6 +25,7 @@ import UI.Components.GridBagLayoutHelper;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.SearchListPanel;
+import UI.Components.StepManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,19 +37,19 @@ import java.util.GregorianCalendar;
 
 public class ProcessModelPanel extends JPanel
 {
+    private GridBagLayoutHelper gridProcess;
     private JButton button;
     private SearchListPanel<Process> processSearch;
     private JEnhancedTextField IdField;
-    private JEnhancedTextField processIdField;
+    private JNumberField processIdField;
     private JEnhancedTextField processLabelField;
     private JNumberField processNumberField;
-    private JDateField dateField;
     private SearchListPanel<Customer> customerSearch;
     private SearchListPanel<Supplier> supplierSearch;
     private SearchListPanel<ProcessStatus> processStatusSearch;
     private SearchListPanel<Employee> employeeSearch;
     private SearchListPanel<ProcessType> typeSearch;
-    public ProcessModelPanel(Process process, boolean showId, boolean showProcesses)
+    public ProcessModelPanel(boolean updateProcess)
     {
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Supplier> suppliers = new ArrayList<>();
@@ -61,7 +62,7 @@ public class ProcessModelPanel extends JPanel
         {
 
 
-            if(showProcesses)
+            if(updateProcess)
             {
                 processes = ProcessController.getAllProcesses();
             }
@@ -79,23 +80,34 @@ public class ProcessModelPanel extends JPanel
         }
 
 
-        GridBagLayoutHelper gridNewProcess = new GridBagLayoutHelper();
+        setLayout(new BorderLayout());
 
-        if(showProcesses)
+
+        gridProcess = new GridBagLayoutHelper();
+
+        if(updateProcess)
         {
             processSearch = new SearchListPanel<>(processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
             processSearch.getSearchField().setPlaceholder("Search for a process");
 
-            gridNewProcess.addField(processSearch);
-        }
+            processSearch.onSelectedItemChange(e ->
+            {
+                int i = 1;
+                while(i < gridProcess.getComponents().length)
+                {
+                    gridProcess.getComponents()[i].setVisible(true);
+                    i++;
+                }
+            });
 
-        if(showId)
-        {
-            processIdField = new JEnhancedTextField();
+            processIdField = new JNumberField();
             processIdField.setPlaceholder("Process Id");
+            processIdField.setCanClear(false);
             processIdField.setEnabled(false);
 
-            gridNewProcess.addField(processIdField);
+            gridProcess.addField("Search for a Process", processSearch);
+            gridProcess.addField("Process ID", processIdField);
+
         }
 
         processLabelField = new JEnhancedTextField();
@@ -103,14 +115,6 @@ public class ProcessModelPanel extends JPanel
 
         processNumberField = new JNumberField();
         processNumberField.setPlaceholder("Process Number");
-        processNumberField.setAllowNegative(false);
-
-        dateField = new JDateField();
-        dateField.setPlaceholder("Creation Date");
-        dateField.setMaxDate(new Date());
-        // 2000 January 1st is the minimum date for the date field
-        dateField.setMinDate(new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime());
-
 
         customerSearch = new SearchListPanel<>(customers, customer -> customer != null ? customer.getFirstName() + " " + customer.getLastName() : "");
         customerSearch.getSearchField().setPlaceholder("Search for a customer");
@@ -129,22 +133,58 @@ public class ProcessModelPanel extends JPanel
 
         button = new JButton();
 
-        gridNewProcess.addField(processLabelField);
-        gridNewProcess.addField(processNumberField);
-        gridNewProcess.addField(dateField);
-        gridNewProcess.addField(supplierSearch);
-        gridNewProcess.addField(processStatusSearch);
-        gridNewProcess.addField(typeSearch);
-        gridNewProcess.addField(employeeSearch);
-        gridNewProcess.addField(customerSearch);
-        gridNewProcess.addField(button);
+        gridProcess.addField("Process Label *", processLabelField);
+        gridProcess.addField("Process Number *", processNumberField);
+        gridProcess.addField("Select a Process Status *", processStatusSearch);
+        gridProcess.addField("Select a Process Type *", typeSearch);
+        gridProcess.addField("Select a Supplier ",supplierSearch);
+        gridProcess.addField("Select an Employee", employeeSearch);
+        gridProcess.addField("Select a Customer", customerSearch);
+        gridProcess.addField(button);
 
-        add(gridNewProcess, BorderLayout.CENTER);
+
+        if(updateProcess)
+        {
+            int i = 1; // We dont want to hide the first component
+            while(i < gridProcess.getComponents().length)
+            {
+                gridProcess.getComponents()[i].setVisible(false);
+                i++;
+            }
+        }
+
+
+
+        add(gridProcess, BorderLayout.CENTER);
     }
 
-    public ProcessModelPanel(boolean showId, boolean showProcesses)
+    public boolean isProcessInvalid()
     {
-        this(null, showId, showProcesses);
+        if(processLabelField.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Please fill in the process label", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if(processNumberField.getInt() <= 0)
+        {
+            JOptionPane.showMessageDialog(this, "Please fill in the process number. The process number must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if(processStatusSearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a process status", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if(typeSearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a process type", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        return false;
     }
 
     public void onButtonClicked(ActionListener actionListener)
@@ -162,7 +202,7 @@ public class ProcessModelPanel extends JPanel
         button.setText(text);
     }
 
-    public JEnhancedTextField getProcessIdField()
+    public JNumberField getProcessIdField()
     {
         return processIdField;
     }
@@ -175,11 +215,6 @@ public class ProcessModelPanel extends JPanel
     public JNumberField getProcessNumberField()
     {
         return processNumberField;
-    }
-
-    public JDateField getDateField()
-    {
-        return dateField;
     }
 
     public SearchListPanel<Customer> getCustomerSearch()

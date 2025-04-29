@@ -7,8 +7,7 @@ public class MakePaymentStatus {
 
     public static PaymentStatus getPaymentStatus(Integer id, String label)
     {
-        PaymentStatus paymentStatus = new PaymentStatus(id, label);
-        int paymentStatusHash = paymentStatus.hashCode();
+        int paymentStatusHash = PaymentStatus.hashCode(id, label);
 
         if(paymentStatusMap.containsKey(paymentStatusHash))
         {
@@ -16,6 +15,7 @@ public class MakePaymentStatus {
         }
         else
         {
+            PaymentStatus paymentStatus = new PaymentStatus(id, label);
             paymentStatusMap.put(paymentStatusHash, paymentStatus);
             return paymentStatus;
         }
