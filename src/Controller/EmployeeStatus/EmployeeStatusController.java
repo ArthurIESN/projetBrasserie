@@ -5,7 +5,7 @@ import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.ArrayList;
 
-public class EmplyeeStatusController
+public class EmployeeStatusController
 {
     private static final EmployeeStatusManager employeeStatusManager = new EmployeeStatusManager();
 

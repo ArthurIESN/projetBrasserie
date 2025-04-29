@@ -68,6 +68,31 @@ public class VatDBAccess implements VatDataAccess
         return vats;
     }
 
+    @Override
+    public void createVat(Vat vat) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteVat(String code) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateVat(Vat vat) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateVatCode(Vat vat) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateVatPercentage(Vat vat) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
     public static Vat makeVat(ResultSet resultSet) throws SQLException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "vat.code")) return null;

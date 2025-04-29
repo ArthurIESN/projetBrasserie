@@ -45,6 +45,26 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
         }
     }
 
+    @Override
+    public void createProcessType(ProcessType processType) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateProcessType(ProcessType processType) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteProcessType(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ProcessType getProcessType(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
     public static ProcessType makeProcessType(ResultSet resultSet) throws SQLException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "process_type.id")) return null;

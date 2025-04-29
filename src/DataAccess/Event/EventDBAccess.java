@@ -15,10 +15,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDBAccess implements EventDataAccess {
+public class EventDBAccess implements EventDataAccess
+{
     public EventDBAccess(){}
 
-    public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
+    public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException
+    {
         String query = "SELECT DISTINCT event.* " +
                 "FROM event " +
                 "JOIN event_document_details ON event.id = event_document_details.id_event " +
@@ -44,6 +46,31 @@ public class EventDBAccess implements EventDataAccess {
             System.out.println(e.getMessage());
             throw new GetEventsWithItemException();
         }
+    }
+
+    @Override
+    public void createEvent(Event event) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateEvent(Event event) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteEvent(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public Event getEvent(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<Event> getAllEvents() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static Event makeEvent(ResultSet resultSet) throws SQLException

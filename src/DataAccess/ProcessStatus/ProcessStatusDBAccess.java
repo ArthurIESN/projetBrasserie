@@ -46,6 +46,31 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
         }
     }
 
+    @Override
+    public void createProcessStatus(ProcessStatus processStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateProcessStatus(ProcessStatus processStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteProcessStatus(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ProcessStatus getProcessStatus(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<ProcessStatus> getProcessStatusWithSpecificType(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
     public static ProcessStatus makeProcessStatus(ResultSet resultSet) throws SQLException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "process_status.id")) return null;

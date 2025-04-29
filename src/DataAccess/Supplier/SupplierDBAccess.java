@@ -47,20 +47,20 @@ public class SupplierDBAccess implements SupplierDataAccess
     }
 
     public Supplier getSupplier(int id) {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 
     public void createSupplier(Supplier supplier) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void deleteSupplier(int id) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void updateSupplier(Supplier supplier) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static Supplier makeSupplier(ResultSet resultSet) throws SQLException

@@ -1,10 +1,17 @@
 package DataAccess.DocumentStatus;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
 
 import java.util.ArrayList;
 
 public interface DocumentStatusDataAccess {
-    public ArrayList<DocumentStatus> getAllDocumentStatus() throws DatabaseConnectionFailedException;
+    ArrayList<DocumentStatus> getAllDocumentStatus() throws GetAllDocumentStatusException;
+
+    void createDocumentStatus(DocumentStatus documentStatus);
+    void updateDocumentStatus(DocumentStatus documentStatus);
+    void deleteDocumentStatus(Integer id);
+    DocumentStatus getDocumentStatus(Integer id);
+    ArrayList<DocumentStatus> getAllDocumentStatusByDocumentId(Integer documentId);
 }

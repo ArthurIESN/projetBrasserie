@@ -7,10 +7,37 @@ import Model.DocumentDetails.MakeDocumentDetails;
 import DataAccess.DataAccesUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class DocumentDetailsDBAccess {
-    private DocumentDetailsDBAccess()
+public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
+{
+    public DocumentDetailsDBAccess()
     {
+    }
+
+    @Override
+    public void createDocumentDetails(DocumentDetails documentDetails) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateDocumentDetails(DocumentDetails documentDetails) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteDocumentDetails(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public DocumentDetails getDocumentDetails(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<DocumentDetails> getAllDocumentDetails() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static DocumentDetails makeDocumentDetails(ResultSet resultSet) throws SQLException

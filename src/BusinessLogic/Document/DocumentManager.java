@@ -17,4 +17,29 @@ public class DocumentManager
     {
         return documentDataAccess.getAllCurrentCommandsForAnItem(item);
     }
+
+    public void createDocument(Document document)
+    {
+        documentDataAccess.createDocument(document);
+    }
+
+    public void updateDocument(Document document)
+    {
+        documentDataAccess.updateDocument(document);
+    }
+
+    public void deleteDocument(Integer id)
+    {
+        documentDataAccess.deleteDocument(id);
+    }
+
+    public Document getDocument(Integer id)
+    {
+        return documentDataAccess.getDocument(id);
+    }
+
+    public ArrayList<Document> getAllDocuments()
+    {
+        return documentDataAccess.getAllDocuments();
+    }
 }

@@ -15,7 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
-    public ArrayList<DocumentStatus> getAllDocumentStatus() throws DatabaseConnectionFailedException, GetAllDocumentStatusException {
+    public ArrayList<DocumentStatus> getAllDocumentStatus() throws GetAllDocumentStatusException
+    {
         String query = "SELECT * FROM document_status";
 
         try{
@@ -32,10 +33,35 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             return documentStatuses;
 
-        }catch (SQLException e){
+        }catch (SQLException | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());
             throw new GetAllDocumentStatusException();
         }
+    }
+
+    @Override
+    public void createDocumentStatus(DocumentStatus documentStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateDocumentStatus(DocumentStatus documentStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteDocumentStatus(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public DocumentStatus getDocumentStatus(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<DocumentStatus> getAllDocumentStatusByDocumentId(Integer documentId) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static DocumentStatus makeDocumentStatus(ResultSet resultSet) throws SQLException

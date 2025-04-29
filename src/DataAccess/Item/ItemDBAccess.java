@@ -138,6 +138,26 @@ public class ItemDBAccess implements ItemDataAccess
 
     }
 
+    @Override
+    public void createItem(Item item) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateItem(Item item) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteItem(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public Item getItem(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
     public static Item makeItem(ResultSet resultSet) throws SQLException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "item.id")) return null;

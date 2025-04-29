@@ -5,7 +5,7 @@ import Controller.Employee.EmployeeController;
 import Controller.Process.ProcessController;
 import Controller.ProcessStatus.ProcessStatusController;
 import Controller.Supplier.SupplierController;
-import Controller.Type.TypeController;
+import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Exceptions.Process.GetAllProcessesException;
@@ -22,18 +22,13 @@ import Model.Supplier.Supplier;
 
 import UI.Components.Fields.JNumberField;
 import UI.Components.GridBagLayoutHelper;
-import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.SearchListPanel;
-import UI.Components.StepManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class ProcessModelPanel extends JPanel
 {
@@ -71,7 +66,7 @@ public class ProcessModelPanel extends JPanel
             suppliers = SupplierController.getAllSuppliers();
             processStatuses = ProcessStatusController.getAllProcessStatus();
             employees = EmployeeController.getAllEmployees();
-            types = TypeController.getAllTypes();
+            types = ProcessTypeController.getAllTypes();
         } catch (GetAllCustomersException | GetAllSuppliersException |
                  GetAllProcessStatusException | GetAllEmployeesException | GetAllProcessesException |
                  GetAllProcessTypesException e)

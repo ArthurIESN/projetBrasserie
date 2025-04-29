@@ -8,15 +8,11 @@ import DataAccess.DeliveryTruck.DeliveryTruckDBAccess;
 import DataAccess.DocumentStatus.DocumentStatusDBAccess;
 import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Model.CollectionAgency.CollectionAgency;
-import Model.CollectionAgency.MakeCollectionAgency;
-import Model.DeliveryTruck.DeliveryTruck;
-import Model.DeliveryTruck.MakeDeliveryTruck;
+
 import Model.Document.Document;
 import Model.Document.MakeDocument;
-import Model.DocumentStatus.MakeDocumentStatus;
 import Model.Item.Item;
-import Model.DocumentStatus.DocumentStatus;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,6 +64,31 @@ public class DocumentDBAccess implements DocumentDataAccess
             //@TODO: handle exception
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void createDocument(Document document) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateDocument(Document document) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteDocument(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public Document getDocument(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<Document> getAllDocuments() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static Document makeDocument(ResultSet resultSet) throws SQLException

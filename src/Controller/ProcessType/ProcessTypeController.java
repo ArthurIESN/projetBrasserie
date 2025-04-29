@@ -6,12 +6,32 @@ import Model.ProcessType.ProcessType;
 
 import java.util.ArrayList;
 
-public class TypeController {
-    private static final ProcessTypeManager typeManager = new ProcessTypeManager();
-
-    // Type
+public class ProcessTypeController 
+{
+    private static final ProcessTypeManager processTypeManager = new ProcessTypeManager();
+    
     public static ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException
     {
-        return typeManager.getAllTypes();
+        return processTypeManager.getAllTypes();
+    }
+    
+    public static ProcessType getProcessType(int id)
+    {
+        return processTypeManager.getProcessType(id);
+    }
+    
+    public static void createProcessType(ProcessType processType)
+    {
+        processTypeManager.createProcessType(processType);
+    }
+    
+    public static void updateProcessType(ProcessType processType)
+    {
+        processTypeManager.updateProcessType(processType);
+    }
+    
+    public static void deleteProcessType(int id)
+    {
+        processTypeManager.deleteProcessType(id);
     }
 }
