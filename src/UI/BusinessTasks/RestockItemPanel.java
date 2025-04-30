@@ -2,14 +2,9 @@ package UI.BusinessTasks;
 
 import Controller.BusinessTasks.RestockItemController;
 import Controller.Date.DateController;
-import Controller.Event.EventController;
 import Controller.Item.ItemController;
-
 import Exceptions.Access.UnauthorizedAccessException;
-import Exceptions.Event.GetEventsBeforeDateException;
-
 import Exceptions.Tasks.RestockItem.RestockQuantityAndDateException;
-import Model.Event.Event;
 import Model.Item.Item;
 import UI.Components.Fields.JDateField;
 import UI.Components.Fields.SearchListPanel;
@@ -17,112 +12,123 @@ import UI.Components.GridBagLayoutHelper;
 import UI.Threads.LoadingThread;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RestockItemPanel extends JPanel
-{
+public class RestockItemPanel extends JPanel {
+
     private final SearchListPanel<Item> itemSearch;
     private final JDateField dateField;
+    private final JPanel restockItemsContainer;
 
-    public RestockItemPanel()
-    {
-        ArrayList<Item> items = new ArrayList<>();
+    public RestockItemPanel() {
+        setLayout(new BorderLayout());
 
-        try
-        {
-            items = ItemController.getAllItems();
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        GridBagLayoutHelper layoutHelper = new GridBagLayoutHelper();
-
-        itemSearch = new SearchListPanel<>(items, Item::getLabel);
+        itemSearch = new SearchListPanel<>(loadItems(), Item::getLabel);
         itemSearch.getSearchField().setPlaceholder("Search for an item");
 
         dateField = new JDateField();
         dateField.setPlaceholder("Enter restock date");
-        dateField.setMinDate(new java.util.Date());
+        dateField.setMinDate(new Date());
 
         JButton restockButton = new JButton("Restock");
+        restockButton.addActionListener(e -> onRestock());
 
-        restockButton.addActionListener(e ->
-        {
-            int randomWait = (int) (Math.random() * 10000);
-            LoadingThread loadingThread = new LoadingThread("Restock Item", "Calculating restock quantities...", randomWait);
-
-            loadingThread.start();
-
-            ArrayList<Item.RestockItem> restockItem;
-            try
-            {
-                restockItem = calculateRestockQuantityAndDate();
-            }
-            catch (RestockQuantityAndDateException | UnauthorizedAccessException ex)
-            {
-                loadingThread.stopLoading();
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (restockItem == null)
-            {
-                System.out.println("Restock item is null");
-                loadingThread.stopLoading();
-                return;
-            }
-
-
-            loadingThread.onLoadingComplete(() ->
-            {
-                for (Item.RestockItem item : restockItem)
-                {
-                    createRestockItemUIComponent(item);
-                }
-
-                revalidate();
-                repaint();
-            });
-
-
-        });
-
+        GridBagLayoutHelper layoutHelper = new GridBagLayoutHelper();
         layoutHelper.addField("Select an item", itemSearch);
         layoutHelper.addField("Restock date", dateField);
         layoutHelper.addField(restockButton);
 
-        add(layoutHelper);
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+        inputPanel.add(layoutHelper, BorderLayout.NORTH);
+
+        restockItemsContainer = new JPanel();
+        restockItemsContainer.setLayout(new BoxLayout(restockItemsContainer, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(restockItemsContainer);
+
+        add(inputPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
-    private ArrayList<Item.RestockItem> calculateRestockQuantityAndDate() throws RestockQuantityAndDateException, UnauthorizedAccessException
+    private ArrayList<Item> loadItems() {
+        try {
+            return ItemController.getAllItems();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Failed to load items: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
+        }
+    }
+
+    private void onRestock()
     {
-        if(itemSearch.getSelectedItem() == null) return null;
-        if(dateField.getDate() == null) return null;
-
-        return RestockItemController.calculateRestockQuantityAndDate(itemSearch.getSelectedItem(), dateField.getDate());
-    }
-
-    private void createRestockItemUIComponent(Item.RestockItem restockItem) {
-        JPanel restockItemPanel = new JPanel();
-        restockItemPanel.setLayout(new BoxLayout(restockItemPanel, BoxLayout.Y_AXIS));
-
-        JLabel itemLabel = new JLabel("Quantity: " + restockItem.getQuantity());
-        JLabel dateLabel = new JLabel("Date: " + DateController.getDateString(restockItem.getDate()));
-
-        restockItemPanel.add(itemLabel);
-        restockItemPanel.add(dateLabel);
-
-        if(restockItem.getEvent() != null)
+        if (itemSearch.getSelectedItem() == null || dateField.getDate() == null)
         {
-            JLabel eventLabel = new JLabel("Event: " + restockItem.getEvent().getLabel());
-            restockItemPanel.add(eventLabel);
+            JOptionPane.showMessageDialog(this, "Please select an item and enter a date.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        add(restockItemPanel);
+        int randomWait = (int) (Math.random() * 10000);
+        LoadingThread loadingThread = new LoadingThread("Restock Item", "Calculating restock quantities...", randomWait);
+
+        loadingThread.start();
+
+        ArrayList<Item.RestockItem> restockItem;
+        try
+        {
+            restockItem = RestockItemController.calculateRestockQuantityAndDate(itemSearch.getSelectedItem(), dateField.getDate());
+        }
+        catch (RestockQuantityAndDateException | UnauthorizedAccessException ex)
+        {
+            loadingThread.stopLoading();
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (restockItem == null)
+        {
+            System.out.println("Restock item is null");
+            loadingThread.stopLoading();
+            return;
+        }
+
+        loadingThread.onLoadingComplete(() -> displayRestockItems(restockItem));
+    }
+
+    private void displayRestockItems(ArrayList<Item.RestockItem> restockItems) {
+        restockItemsContainer.removeAll();
+
+        if (restockItems == null || restockItems.isEmpty()) {
+            JLabel emptyLabel = new JLabel("No restock data available.");
+            emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            restockItemsContainer.add(emptyLabel);
+        } else {
+            String[] columnNames = {"Quantity", "Date", "Event"};
+            Object[][] data = new Object[restockItems.size()][3];
+
+            for (int i = 0; i < restockItems.size(); i++) {
+                Item.RestockItem item = restockItems.get(i);
+                data[i][0] = item.getQuantity();
+                data[i][1] = DateController.getDateString(item.getDate());
+                data[i][2] = (item.getEvent() != null) ? item.getEvent().getLabel() : "N/A";
+            }
+
+            JTable table = new JTable(data, columnNames);
+            table.setRowHeight(30); // Hauteur fixe de 30px
+            table.getTableHeader().setReorderingAllowed(false); // On empêche de bouger les colonnes
+            table.setBackground(new Color(40, 40, 40)); // Fond foncé
+            table.setForeground(Color.WHITE); // Texte blanc
+            table.getTableHeader().setBackground(new Color(48, 61, 78)); // Header bleu foncé
+            table.getTableHeader().setForeground(Color.WHITE); // Texte header blanc
+            table.setGridColor(Color.GRAY); // Couleur de la grille
+
+            JScrollPane scrollPane = new JScrollPane(table);
+            restockItemsContainer.setLayout(new BorderLayout());
+            restockItemsContainer.add(scrollPane, BorderLayout.CENTER);
+        }
+
+        restockItemsContainer.revalidate();
+        restockItemsContainer.repaint();
     }
 }
