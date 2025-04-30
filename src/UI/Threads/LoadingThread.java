@@ -1,6 +1,7 @@
 package UI.Threads;
 
 import UI.Components.JEnhancedProgressBar;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +51,7 @@ public class LoadingThread extends Thread
     @Override
     public void run()
     {
+        WindowManager.setWindowsEnable(false);
         createThreadWindow();
 
         float targetProgress = 1.0f;
@@ -79,6 +81,7 @@ public class LoadingThread extends Thread
         SwingUtilities.invokeLater(() ->
         {
             frame.dispose();
+            WindowManager.setWindowsEnable(true);
             if(onCompleteAction != null && !isStopped)
             {
                 onCompleteAction.run();

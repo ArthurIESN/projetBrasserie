@@ -86,7 +86,7 @@ public class ItemRestockManager
             totalPredictedQuantity += predictedQuantity;
 
 
-            restockItems.add(new Item.RestockItem(predictedQuantity, event.getStartDate(), event));
+            restockItems.add(new Item.RestockItem(totalPredictedQuantity, event.getStartDate(), event));
         }
 
         return restockItems;
