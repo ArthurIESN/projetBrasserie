@@ -2,12 +2,11 @@ package BusinessLogic.Employee;
 
 import java.util.ArrayList;
 
+import BusinessLogic.Utils.HashUtils;
 import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Employee.EmployeeDataAccess;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.GetAllEmployeesException;
 import Model.Employee.Employee;
-
 
 
 public class EmployeeManager
@@ -18,6 +17,12 @@ public class EmployeeManager
     {
 
     }
+
+    public Employee connect(Integer id, String password)
+    {
+        return employeeDataAccess.connect(id, password);
+    }
+
     public ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException
     {
         return employeeDataAccess.getAllEmployees();

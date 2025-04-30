@@ -2,6 +2,8 @@ package UI.Windows;
 
 import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.SettingsWindow.SettingsWindow;
+import UI.Login.LoginPanel;
+import UI.Windows.BrasserieWindow.BrasserieHomePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +30,25 @@ public class WindowManager implements WindowSubject
         else
         {
             settingsWindow.setVisible(true);
+        }
+    }
+
+    public static void onDisconnect()
+    {
+        for (BrasserieWindow window : windows)
+        {
+            window.updateWindowContent(new LoginPanel(window));
+        }
+    }
+
+    public static void onConnect()
+    {
+        for (BrasserieWindow window : windows)
+        {
+            if(isPanelDisplayed(LoginPanel.class))
+            {
+                window.updateWindowContent(new BrasserieHomePanel());
+            }
         }
     }
 

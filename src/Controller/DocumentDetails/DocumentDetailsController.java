@@ -1,6 +1,7 @@
 package Controller.DocumentDetails;
 
 import BusinessLogic.DocumentDetails.DocumentDetailsManager;
+import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
 import java.util.ArrayList;
@@ -32,6 +33,11 @@ public class DocumentDetailsController
     public static ArrayList<DocumentDetails> getAllDocumentDetails()
     {
         return documentDetailsManager.getAllDocumentDetails();
+    }
+
+    public static ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents)
+    {
+        return documentDetailsManager.getDocumentsDetailsFromDocuments(documents);
     }
 
 }

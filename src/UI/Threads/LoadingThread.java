@@ -12,6 +12,7 @@ public class LoadingThread extends Thread
     private final JEnhancedProgressBar progressBar;
     private JFrame frame;
     private Runnable onCompleteAction;
+    private boolean isStopped = false;
 
     public LoadingThread(String title, String message, int duration)
     {
@@ -20,8 +21,6 @@ public class LoadingThread extends Thread
         progressBar = new JEnhancedProgressBar();
         progressBar.setMessage(message);
         progressBar.setPreferredSize(new Dimension(300, 30));
-
-        createThreadWindow();
     }
 
     public void onLoadingComplete(Runnable action)
@@ -51,11 +50,13 @@ public class LoadingThread extends Thread
     @Override
     public void run()
     {
+        createThreadWindow();
+
         float targetProgress = 1.0f;
         long lastTime = System.nanoTime();
         float progress = 0.0f;
 
-        while (progress < targetProgress)
+        while (progress < targetProgress && !isStopped)
         {
             long currentTime = System.nanoTime();
             float deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
@@ -78,11 +79,16 @@ public class LoadingThread extends Thread
         SwingUtilities.invokeLater(() ->
         {
             frame.dispose();
-            if(onCompleteAction != null)
+            if(onCompleteAction != null && !isStopped)
             {
                 onCompleteAction.run();
             }
         });
+    }
+
+    public void stopLoading()
+    {
+        isStopped = true;
     }
 
 

@@ -1,5 +1,6 @@
 package UI.Test;
 
+import BusinessLogic.Utils.HashUtils;
 import Utils.Utils;
 
 import Controller.Customer.CustomerController;
@@ -60,8 +61,7 @@ public class Test extends JPanel
         try{
             ArrayList<Customer> customers = CustomerController.getAllCustomers();
 
-            ComboBoxPanel<Customer> comboBoxPanel = new ComboBoxPanel<>(customers, customer ->
-                    customer.getFirstName() + " " + customer.getLastName()
+            ComboBoxPanel<Customer> comboBoxPanel = new ComboBoxPanel<>(customers, Customer::getFirstName
             );
 
             comboBoxPanel.onSelectedItemChange(
@@ -73,10 +73,6 @@ public class Test extends JPanel
         } catch (GetAllCustomersException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-
-
-
 
         stepManager = new StepManager(gridBagLayoutHelper.getComponents());
 

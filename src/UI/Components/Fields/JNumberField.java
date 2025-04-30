@@ -10,7 +10,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-import BusinessLogic.NumberLogic;
+import Controller.Number.NumberController;
 import Utils.Utils.NumberType;
 
 
@@ -136,7 +136,7 @@ public class JNumberField extends JEnhancedTextField
         {
             case INTEGER:
 
-                if(text.length() >= NumberLogic.getMaxIntLength())
+                if(text.length() >= NumberController.getMaxIntLength())
                 {
                     e.consume();
                     return;
@@ -157,7 +157,7 @@ public class JNumberField extends JEnhancedTextField
             case FLOAT:
 
 
-                if(text.length() >=  NumberLogic.getMaxFloatLength())
+                if(text.length() >=  NumberController.getMaxFloatLength())
                 {
                     e.consume();
                     return;
@@ -237,12 +237,12 @@ public class JNumberField extends JEnhancedTextField
         {
             case INTEGER:
 
-                updateText(NumberLogic.validateInteger(text, allowNegative, minMax));
+                updateText(NumberController.validateInteger(text, allowNegative, minMax));
                 break;
 
             case FLOAT:
 
-                updateText(NumberLogic.validateFloat(text, allowNegative, decimalPlaces, minMax));
+                updateText(NumberController.validateFloat(text, allowNegative, decimalPlaces, minMax));
                 break;
         }
     }

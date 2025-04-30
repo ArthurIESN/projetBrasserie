@@ -3,6 +3,7 @@ package UI.Components;
 import Environement.SystemProperties;
 import UI.BusinessTasks.RestockItemPanel;
 import UI.Document.DocumentPanel;
+import UI.Login.LoginPanel;
 import UI.Windows.BrasserieWindow.BrasserieCredits;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.BrasserieWindow.BrasserieHomePanel;
@@ -11,6 +12,7 @@ import UI.Search.Document.SearchDocumentWithEventForm;
 import UI.Search.Item.SearchItemForm;
 import UI.Search.Payment.SearchPaymentForm;
 import UI.Windows.WindowManager;
+import Controller.AppController;
 
 import javax.swing.*;
 
@@ -32,6 +34,7 @@ public class MenuBarBrasserie {
         JMenuItem homeItem = new JMenuItem("Home");
         JMenuItem addWindowItem = new JMenuItem("Add Window");
         JMenuItem creditsItem = new JMenuItem("Credits");
+        JMenuItem disconnectItem = new JMenuItem("Disconnect");
         JMenuItem quitItem = new JMenuItem("Quit");
 
         brasserieMenu.add(homeItem);
@@ -49,8 +52,14 @@ public class MenuBarBrasserie {
             brasserieMenu.add(settingsItem);
         }
 
+        disconnectItem.addActionListener(e ->
+        {
+            AppController.disconnect();
+        });
+
         brasserieMenu.add(addWindowItem);
         brasserieMenu.add(creditsItem);
+        brasserieMenu.add(disconnectItem);
         brasserieMenu.add(quitItem);
 
         homeItem.addActionListener(e ->

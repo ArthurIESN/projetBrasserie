@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class MakeDocumentDetails {
     private static final HashMap<Integer,DocumentDetails> documentDetailsMap = new HashMap<>();
 
-    public static DocumentDetails getDocumentDetails(Integer id, String label, Float quantity, Float newQuantity, Float unitPrice, Document document)
+    public static DocumentDetails getDocumentDetails(Integer id, String label, Integer quantity, Integer newQuantity, Float unitPrice, Document document)
     {
         int documentDetailsHash = DocumentDetails.hashCode(id, label, quantity, newQuantity, unitPrice, document);
 

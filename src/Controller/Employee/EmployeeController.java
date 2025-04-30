@@ -6,7 +6,8 @@ import Model.Employee.Employee;
 
 import java.util.ArrayList;
 
-public class EmployeeController {
+public class EmployeeController
+{
     private static final EmployeeManager employeeManager = new EmployeeManager();
 
     public static ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException
@@ -33,4 +34,5 @@ public class EmployeeController {
     {
         return employeeManager.getEmployee(id);
     }
+
 }

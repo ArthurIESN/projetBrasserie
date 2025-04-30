@@ -40,7 +40,7 @@ public class BrasserieCredits extends JPanel
 
         add(gridBagLayoutHelper);
 
-        ImageIcon gifIcon = new ImageIcon(getClass().getResource("/resources/images/dorianHome.gif"));
+        ImageIcon gifIcon = new ImageIcon(getClass().getResource("main/resources/images/dorianHome.gif"));
         JLabel gifLabel = new JLabel(gifIcon, JLabel.CENTER);
         gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(gifLabel);

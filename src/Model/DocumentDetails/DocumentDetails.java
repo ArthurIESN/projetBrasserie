@@ -7,12 +7,12 @@ import java.util.Objects;
 public class DocumentDetails {
     private Integer id;
     private String label;
-    private float quantity;
-    private float newQuantity;
+    private Integer quantity;
+    private Integer newQuantity;
     private float unitPrice;
     private Document document;
 
-    public DocumentDetails(Integer id, String label, float quantity, float newQuantity,
+    public DocumentDetails(Integer id, String label, int quantity, Integer newQuantity,
                            float unitPrice, Document document)
     {
         this.id = id;
@@ -31,11 +31,11 @@ public class DocumentDetails {
         return label;
     }
 
-    public float getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public float getNewQuantity() {
+    public Integer getNewQuantity() {
         return newQuantity;
     }
 

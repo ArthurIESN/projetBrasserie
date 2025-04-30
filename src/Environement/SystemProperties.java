@@ -1,15 +1,12 @@
 package Environement;
 
-import UI.Components.Fields.JDualSliderPanel;
 import UI.Theme.ThemeManager;
-import UI.Windows.SettingsWindow.SettingsWindow;
 import UI.Windows.WindowManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Objects;
@@ -20,7 +17,7 @@ public class SystemProperties
 {
 
     private static final String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
-    private static final String configFilePath = rootPath + "Properties/Settings.properties";
+    private static final String configFilePath = rootPath + "main/resources/Properties/Settings.properties";
     private static final Properties properties = new Properties();
 
     static
@@ -48,10 +45,10 @@ public class SystemProperties
 
             if (getDarkThemeEnabled())
             {
-                themeProperties.load(new FileInputStream(rootPath + "Properties/DarkTheme.properties"));
+                themeProperties.load(new FileInputStream(rootPath + "main/resources/Properties/DarkTheme.properties"));
             } else
             {
-                themeProperties.load(new FileInputStream(rootPath + "Properties/LightTheme.properties"));
+                themeProperties.load(new FileInputStream(rootPath + "main/resources/Properties/LightTheme.properties"));
             }
 
         } catch (IOException e)

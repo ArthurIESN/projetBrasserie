@@ -2,6 +2,7 @@ package BusinessLogic.DocumentDetails;
 
 import DataAccess.DocumentDetails.DocumentDetailsDBAccess;
 import DataAccess.DocumentDetails.DocumentDetailsDataAccess;
+import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
 import java.util.ArrayList;
@@ -28,5 +29,9 @@ public class DocumentDetailsManager
 
     public ArrayList<DocumentDetails> getAllDocumentDetails() {
         return documentDetailsDataAccess.getAllDocumentDetails();
+    }
+
+    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) {
+        return documentDetailsDataAccess.getDocumentsDetailsFromDocuments(documents);
     }
 }

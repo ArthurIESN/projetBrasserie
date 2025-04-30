@@ -1,12 +1,15 @@
 package Controller.Process;
 
 import BusinessLogic.Process.ProcessManager;
+import Controller.AppController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Process.*;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.Process.UpdateProcessException;
+import Model.EmployeeStatus.EmployeeStatus;
 import Model.Process.Process;
 
 import java.util.ArrayList;
@@ -29,8 +32,12 @@ public class ProcessController {
         processManager.createProcess(process);
     }
 
-    public static void deleteProcess(Integer id) throws DeleteProcessException
+    public static void deleteProcess(Integer id) throws DeleteProcessException, UnauthorizedAccessException
     {
+        if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
+        {
+            throw new UnauthorizedAccessException("You don't have the right to delete this process");
+        }
         processManager.deleteProcess(id);
     }
 

@@ -1,4 +1,4 @@
-package BusinessLogic.VAT;
+package BusinessLogic.Vat;
 
 import DataAccess.Vat.VatDBAccess;
 import DataAccess.Vat.VatDataAccess;

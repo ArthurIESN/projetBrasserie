@@ -10,7 +10,7 @@ import java.io.IOException;
 public class DatabaseProperties
 {
     private static final String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
-    private static final String configFilePath = rootPath + "Properties/Database.properties";
+    private static final String configFilePath = rootPath + "main/resources/Properties/Database.properties";
     private static final Properties properties = new Properties();
 
     static

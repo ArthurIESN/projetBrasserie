@@ -10,15 +10,17 @@ public class Employee {
     private String lastName;
     private String firstName;
     private Date birthDate;
+    private String password;
     private EmployeeStatus employeeStatus;
 
-    public Employee (Integer id, String lastName, String firstName, Date birthDate,
+    public Employee (Integer id, String lastName, String firstName, Date birthDate, String password,
                      EmployeeStatus employeeStatus)
     {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
+        this.password = password;
         this.employeeStatus = employeeStatus;
     }
 
@@ -36,6 +38,10 @@ public class Employee {
 
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public EmployeeStatus getEmployeeStatus() {

@@ -1,10 +1,16 @@
 package DataAccess.DocumentDetails;
 
+import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
 import Model.DocumentDetails.MakeDocumentDetails;
 import DataAccess.DataAccesUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,6 +46,46 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    @Override
+    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents)
+    {
+        ArrayList<Integer> documentIds = Utils.Utils.transformData(documents, Document::getId);
+        String placeholders = String.join(",", documentIds.stream().map(id -> "?").toArray(String[]::new));
+
+        String query = "SELECT DISTINCT * " +
+                "FROM document_details " +
+                "WHERE id_document IN (" + placeholders + ")";
+
+        try (Connection connection = DatabaseConnexion.getInstance();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            for (int i = 0; i < documentIds.size(); i++)
+            {
+                preparedStatement.setInt(i + 1, documentIds.get(i));
+            }
+
+            // log the query
+            System.out.println("Executing query: " + preparedStatement.toString());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<DocumentDetails> documentDetails = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                documentDetails.add(makeDocumentDetails(resultSet));
+            }
+
+            return documentDetails;
+
+        } catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            //@TODO: handle exception
+            System.out.println("Error while getting documents details from documents: " + e.getMessage());
+        }
+
+        return null;
+    }
+
     public static DocumentDetails makeDocumentDetails(ResultSet resultSet) throws SQLException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "document_details.id")) return null;
@@ -47,8 +93,8 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
         return MakeDocumentDetails.getDocumentDetails(
                 resultSet.getInt("document_details.id"),
                 resultSet.getString("document_details.label"),
-                resultSet.getFloat("document_details.quantity"),
-                resultSet.getFloat("document_details.new_quantity"),
+                resultSet.getInt("document_details.quantity"),
+                resultSet.getInt("document_details.new_quantity"),
                 resultSet.getFloat("document_details.unit_price"),
                 DocumentDBAccess.makeDocument(resultSet)
         );
