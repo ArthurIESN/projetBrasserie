@@ -4,6 +4,7 @@ import BusinessLogic.Event.EventManager;
 import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
 import Model.Event.MakeEvent;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventDBAccess implements EventDataAccess
@@ -45,6 +47,36 @@ public class EventDBAccess implements EventDataAccess
         }catch (SQLException | DatabaseConnectionFailedException e){
             System.out.println(e.getMessage());
             throw new GetEventsWithItemException();
+        }
+    }
+
+    @Override
+    public ArrayList<Event> getEventsBeforeDate(Date date) throws GetEventsBeforeDateException
+    {
+        String query = "SELECT * " +
+                "FROM event " +
+                "WHERE start_date <= ? " +
+                "AND start_date > ? " +
+                "ORDER BY start_date";
+
+        try{
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            statement.setDate(1, new java.sql.Date(date.getTime()));
+            statement.setDate(2, new java.sql.Date(new Date().getTime()));
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<Event> events = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                events.add(makeEvent(resultSet));
+            }
+
+            return events;
+        }catch (SQLException | DatabaseConnectionFailedException e){
+            System.out.println(e.getMessage());
+            throw new GetEventsBeforeDateException("Error while getting events before date");
         }
     }
 

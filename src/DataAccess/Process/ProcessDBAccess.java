@@ -32,8 +32,8 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public void createProcess(Process process) throws CreateProcessException
     {
-        String query = "INSERT INTO process (label, number, creation_date, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO process (label, number, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         if(process == null)
         {

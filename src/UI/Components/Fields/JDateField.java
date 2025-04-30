@@ -1,6 +1,7 @@
 package UI.Components.Fields;
 
 import BusinessLogic.DateLogic;
+import Controller.Date.DateController;
 
 import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
@@ -15,7 +16,6 @@ public class JDateField extends JEnhancedTextField
 {
 
     private final Date[] minMaxDates = {new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)};
-    private boolean isValidating = false;
 
     public JDateField()
     {
@@ -91,19 +91,19 @@ public class JDateField extends JEnhancedTextField
 
     private void validateDate()
     {
-        updateText(DateLogic.validateDate(getText(), minMaxDates));
+        updateText(DateController.validateDate(getText(), minMaxDates));
     }
 
     public Date getDate()
     {
-        return DateLogic.getDate(getText(), minMaxDates);
+        return DateController.getDate(getText(), minMaxDates);
     }
 
     public void setDate(Date date)
     {
         if (date != null)
         {
-            updateText(DateLogic.getDateFormat().format(date));
+            updateText(DateController.getDateFormat().format(date));
         }
         else
         {
@@ -144,7 +144,7 @@ public class JDateField extends JEnhancedTextField
     public boolean isDateValid()
     {
         String text = getText();
-        return DateLogic.isDateValid(text, minMaxDates);
+        return DateController.isDateValid(text, minMaxDates);
     }
 
 }

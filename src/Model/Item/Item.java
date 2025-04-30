@@ -1,5 +1,6 @@
 package Model.Item;
 
+import Model.Event.Event;
 import Model.Packaging.Packaging;
 import Model.Vat.Vat;
 
@@ -154,5 +155,22 @@ public class Item
                 '}';
     }
 
+    public record RestockItem(int quantity, Date date, Event event)
+    {
+        public int getQuantity()
+        {
+            return quantity;
+        }
+
+        public Date getDate()
+        {
+            return date;
+        }
+
+        public Event getEvent()
+        {
+            return event;
+        }
+    }
 
 }

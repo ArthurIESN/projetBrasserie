@@ -1,10 +1,12 @@
 package Controller.Event;
 
 import BusinessLogic.Event.EventManager;
+import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EventController
 {
@@ -13,6 +15,11 @@ public class EventController
     public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException
     {
         return eventManager.getEventsWithSpecificItem(idItem);
+    }
+
+    public static ArrayList<Event> getEventsBeforeDate(Date date) throws GetEventsBeforeDateException
+    {
+        return eventManager.getEventsBeforeDate(date);
     }
 
     public static void createEvent(Event event)
@@ -38,5 +45,10 @@ public class EventController
     public static ArrayList<Event> getAllEvents()
     {
         return eventManager.getAllEvents();
+    }
+
+    public static float getRealEventImpact(float impact)
+    {
+        return eventManager.getRealEventImpact(impact);
     }
 }

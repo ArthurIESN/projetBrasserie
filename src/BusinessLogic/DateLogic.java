@@ -2,6 +2,9 @@ package BusinessLogic;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,17 +13,17 @@ public class DateLogic
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
-    public static String getDateFormatString()
+    public String getDateFormatString()
     {
         return DATE_FORMAT;
     }
 
-    public static SimpleDateFormat getDateFormat()
+    public SimpleDateFormat getDateFormat()
     {
         return dateFormat;
     }
 
-    public static String getClosestValidDate(String text, Date[] minMaxDates)
+    public String getClosestValidDate(String text, Date[] minMaxDates)
     {
         Calendar calendar = Calendar.getInstance();
         try
@@ -52,7 +55,7 @@ public class DateLogic
         return dateFormat.format(calendar.getTime());
     }
 
-    public static boolean isDateValid(String text, Date[] minMaxDates)
+    public boolean isDateValid(String text, Date[] minMaxDates)
     {
         if (text == null || !text.matches("\\d{2}/\\d{2}/\\d{4}"))
         {
@@ -72,7 +75,7 @@ public class DateLogic
         }
     }
 
-    public static Date getDate(String text, Date[] minMaxDates)
+    public Date getDate(String text, Date[] minMaxDates)
     {
         if (isDateValid(text, minMaxDates))
         {
@@ -89,12 +92,25 @@ public class DateLogic
         return null;
     }
 
-    public static String validateDate(String text, Date[] minMaxDates)
+    public String validateDate(String text, Date[] minMaxDates)
     {
         if(text.isEmpty()) return "";
         if(isDateValid(text, minMaxDates)) return text;
 
         return getClosestValidDate(text, minMaxDates);
 
+    }
+
+    public int getMonthsBetweenDates(Date startDate, Date endDate)
+    {
+        LocalDate startDateLocal = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDateLocal = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return (int) ChronoUnit.MONTHS.between(endDateLocal, startDateLocal);
+    }
+
+    public String getDateString(Date date)
+    {
+        return dateFormat.format(date);
     }
 }

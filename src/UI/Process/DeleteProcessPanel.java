@@ -1,6 +1,7 @@
 package UI.Process;
 
 import Controller.Process.ProcessController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
@@ -72,7 +73,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
                     processPanel.navbarForceClick(3);
 
                 }
-                catch (DeleteProcessException e1)
+                catch (DeleteProcessException | UnauthorizedAccessException e1)
                 {
                     JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }

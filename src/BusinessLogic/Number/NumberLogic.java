@@ -1,21 +1,21 @@
-package BusinessLogic;
+package BusinessLogic.Number;
 
 public class NumberLogic
 {
     private static final int MAX_INT_LENGTH = 11;
     private static final int MAX_FLOAT_LENGTH = 30;
 
-    public static int getMaxIntLength()
+    public int getMaxIntLength()
     {
         return MAX_INT_LENGTH;
     }
 
-    public static int getMaxFloatLength()
+    public int getMaxFloatLength()
     {
         return MAX_FLOAT_LENGTH;
     }
 
-    public static String validateFloat(String text, boolean allowNegative, int decimalPlaces, int[] minMax)
+    public String validateFloat(String text, boolean allowNegative, int decimalPlaces, int[] minMax)
     {
         // check if the number is too long
         if (text.length() > MAX_INT_LENGTH)
@@ -61,7 +61,7 @@ public class NumberLogic
         return text;
     }
 
-    public static String validateInteger(String text, boolean allowNegative, int[] minMax)
+    public String validateInteger(String text, boolean allowNegative, int[] minMax)
     {
 
         // check if the number is too long

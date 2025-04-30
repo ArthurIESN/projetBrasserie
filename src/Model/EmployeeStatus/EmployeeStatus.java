@@ -2,7 +2,31 @@ package Model.EmployeeStatus;
 
 import java.util.Objects;
 
-public class EmployeeStatus {
+public class EmployeeStatus
+{
+
+    public enum Status
+    {
+        Suspended (0),
+        On_leave (1),
+        Retired(2),
+        Active(4),
+        Manager(8);
+
+        private final int value;
+
+        Status(int value)
+        {
+            this.value = value;
+        }
+
+        public int getValue()
+        {
+            return value;
+        }
+
+    }
+
     private Integer id;
     private String label;
 

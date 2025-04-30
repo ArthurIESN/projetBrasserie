@@ -16,4 +16,5 @@ public interface EmployeeDataAccess
     void createEmployee(Employee employee);
     void deleteEmployee(int id);
     void updateEmployee(Employee employee);
+    Employee connect(Integer id, String password);
 }
