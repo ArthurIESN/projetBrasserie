@@ -1,6 +1,7 @@
 package UI.Test;
 
 import BusinessLogic.Utils.HashUtils;
+import Controller.Date.DateController;
 import Utils.Utils;
 
 import Controller.Customer.CustomerController;
@@ -20,6 +21,7 @@ import UI.Windows.WindowManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Test extends JPanel
 {
@@ -36,6 +38,10 @@ public class Test extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
         GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
+
+        Date date = new Date();
+
+        System.out.println(DateController.getDateString(date));
 
         // YA DES BUGS POUR L'INSTANT
 

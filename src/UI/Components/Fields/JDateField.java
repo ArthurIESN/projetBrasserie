@@ -9,8 +9,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.time.ZoneId;
+
 
 public class JDateField extends JEnhancedTextField
 {
@@ -98,7 +101,6 @@ public class JDateField extends JEnhancedTextField
     {
         return DateController.getDate(getText(), minMaxDates);
     }
-
     public void setDate(Date date)
     {
         if (date != null)

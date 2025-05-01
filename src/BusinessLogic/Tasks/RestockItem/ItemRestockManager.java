@@ -34,7 +34,7 @@ public class ItemRestockManager
         catch (GetEventsBeforeDateException e)
         {
             System.out.println("Error getting events before date: " + e.getMessage());
-            throw new RestockQuantityAndDateException("Error getting events before a specific date: ");
+            throw new RestockQuantityAndDateException("Error getting events before a specific date");
         }
 
         Date currentDate = new Date();

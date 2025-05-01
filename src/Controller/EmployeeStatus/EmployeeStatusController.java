@@ -1,6 +1,7 @@
 package Controller.EmployeeStatus;
 
 import BusinessLogic.EmployeeStatus.EmployeeStatusManager;
+import Exceptions.EmployeeStatus.GetAllEmployeeStatusesException;
 import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class EmployeeStatusController
         return employeeStatusManager.getEmployeeStatus(id);
     }
 
-    public static ArrayList<EmployeeStatus> getAllEmployeeStatuses()
+    public static ArrayList<EmployeeStatus> getAllEmployeeStatuses() throws GetAllEmployeeStatusesException
     {
         return employeeStatusManager.getAllEmployeeStatuses();
     }

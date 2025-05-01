@@ -48,4 +48,10 @@ public class DateController
     {
         return dateLogic.getDateString(date);
     }
+
+    public static String getShowDateString(Date date)
+    {
+        return dateLogic.getShowDateString(date);
+    }
+
 }

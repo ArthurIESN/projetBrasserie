@@ -87,11 +87,9 @@ public class ProcessModelPanel extends JPanel
 
             processSearch.onSelectedItemChange(e ->
             {
-                int i = 1;
-                while(i < gridProcess.getComponents().length)
+                for(int i = 1; i < gridProcess.getComponents().length; i++)
                 {
                     gridProcess.getComponents()[i].setVisible(true);
-                    i++;
                 }
             });
 
@@ -140,11 +138,9 @@ public class ProcessModelPanel extends JPanel
 
         if(updateProcess)
         {
-            int i = 1; // We dont want to hide the first component
-            while(i < gridProcess.getComponents().length)
+            for(int i = 1; i < gridProcess.getComponents().length; i++)
             {
                 gridProcess.getComponents()[i].setVisible(false);
-                i++;
             }
         }
 
