@@ -48,4 +48,10 @@ public class DataAccesUtils
         }
     }
 
+    public static boolean isASQLForeignKeyConstraintFails(int errorCode)
+    {
+            return errorCode == 1451;
+    }
+
+
 }

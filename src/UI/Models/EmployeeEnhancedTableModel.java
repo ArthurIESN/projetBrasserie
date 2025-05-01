@@ -3,6 +3,7 @@ package UI.Models;
 import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import Model.Employee.Employee;
+import Controller.Date.DateController;
 
 import java.util.ArrayList;
 
@@ -31,11 +32,11 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
 
         return switch (columnIndex)
         {
-            case 0 -> ((Model.Employee.Employee) employee).getId();
-            case 1 -> ((Model.Employee.Employee) employee).getLastName();
-            case 2 -> ((Model.Employee.Employee) employee).getFirstName();
-            case 3 -> ((Model.Employee.Employee) employee).getBirthDate();
-            case 4 -> getHidePassword(((Model.Employee.Employee) employee).getPassword());
+            case 0 -> employee.getId();
+            case 1 -> employee.getLastName();
+            case 2 -> employee.getFirstName();
+            case 3 -> DateController.getShowDateString(employee.getBirthDate());
+            case 4 -> getHidePassword(employee.getPassword());
             default -> null;
         };
     }
@@ -45,7 +46,6 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
     {
         return switch (columnIndex) {
             case 0 -> Integer.class;
-            case 3 -> java.util.Date.class;
             default -> String.class;
         };
     }

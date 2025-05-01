@@ -1,8 +1,14 @@
 package Controller.Employee;
 
 import BusinessLogic.Employee.EmployeeManager;
+import Controller.AppController;
+import Exceptions.Access.UnauthorizedAccessException;
+import Exceptions.Employee.CreateEmployeeException;
+import Exceptions.Employee.DeleteEmployeeException;
 import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Employee.UpdateEmployeeException;
 import Model.Employee.Employee;
+import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.ArrayList;
 
@@ -15,19 +21,34 @@ public class EmployeeController
         return employeeManager.getAllEmployees();
     }
 
-    public static void createEmployee(Employee employee)
+    public static void createEmployee(Employee employee) throws CreateEmployeeException, UnauthorizedAccessException
     {
+        if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
+        {
+            throw new UnauthorizedAccessException("You don't have permission to update this employee");
+        }
+
         employeeManager.createEmployee(employee);
     }
 
-    public static void deleteEmployee(int id)
+    public static void deleteEmployee(int id) throws DeleteEmployeeException,  UnauthorizedAccessException
     {
+        if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
+        {
+            throw new UnauthorizedAccessException("You don't have permission to update this employee");
+        }
+
         employeeManager.deleteEmployee(id);
     }
 
-    public static void updateEmployee(Employee employee)
+    public static void updateEmployee(Employee employee, String password) throws UpdateEmployeeException, UnauthorizedAccessException
     {
-        employeeManager.updateEmployee(employee);
+        if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
+        {
+            throw new UnauthorizedAccessException("You don't have permission to update this employee");
+        }
+
+        employeeManager.updateEmployee(employee, password);
     }
 
     public static Employee getEmployee(int id)

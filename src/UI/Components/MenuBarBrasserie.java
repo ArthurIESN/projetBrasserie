@@ -3,6 +3,7 @@ package UI.Components;
 import Environement.SystemProperties;
 import UI.BusinessTasks.RestockItemPanel;
 import UI.Document.DocumentPanel;
+import UI.Employee.EmployeePanel;
 import UI.Login.LoginPanel;
 import UI.Windows.BrasserieWindow.BrasserieCredits;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
@@ -21,7 +22,7 @@ public class MenuBarBrasserie {
     private JMenu brasserieMenu;
     private JMenu searchMenu;
     private final JMenuItem[] searchItems = new JMenuItem[3];
-    private final JMenuItem[] crudItem = new JMenuItem[2];
+    private final JMenuItem[] crudItem = new JMenuItem[3];
     private final JMenuItem[] jobTaskItem = new JMenuItem[2];
 
     public MenuBarBrasserie(BrasserieWindow brasserieWindow){
@@ -120,19 +121,18 @@ public class MenuBarBrasserie {
 
         crudItem[0] = new JMenuItem("Process");
         crudItem[1] = new JMenuItem("Document");
+        crudItem[2] = new JMenuItem("Employee");
 
         for (JMenuItem menuItem : crudItem)
         {
             crudMenu.add(menuItem);
         }
 
-        crudItem[0].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new ProcessPanel());
-        });
+        crudItem[0].addActionListener(e -> brasserieWindow.updateWindowContent(new ProcessPanel()));
 
-        crudItem[1].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new DocumentPanel());
-        });
+        crudItem[1].addActionListener(e -> brasserieWindow.updateWindowContent(new DocumentPanel()));
+
+        crudItem[2].addActionListener(e -> brasserieWindow.updateWindowContent(new EmployeePanel()));
 
         // Job Task
         JMenu jobTaskMenu = new JMenu("Job Task");

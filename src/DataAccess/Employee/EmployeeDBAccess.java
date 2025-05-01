@@ -11,8 +11,11 @@ import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.EmployeeStatus.EmployeeStatusDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Employee.CreateEmployeeException;
+import Exceptions.Employee.DeleteEmployeeException;
 import Exceptions.Employee.GetAllEmployeesException;
 
+import Exceptions.Employee.UpdateEmployeeException;
 import Model.CustomerStatus.MakeCustomerStatus;
 import Model.Employee.Employee;
 import Model.Employee.MakeEmployee;
@@ -84,16 +87,99 @@ public class EmployeeDBAccess implements EmployeeDataAccess
         }
     }
 
-    public void createEmployee(Employee employee) {
+    public void createEmployee(Employee employee) throws CreateEmployeeException
+    {
+        String query = "INSERT INTO employee (last_name, first_name, birth_date, password, id_employee_status) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setString(1, employee.getLastName());
+            statement.setString(2, employee.getFirstName());
+            statement.setDate(3, new java.sql.Date(employee.getBirthDate().getTime()));
+            statement.setString(4, employee.getPassword());
+            statement.setInt(5, employee.getEmployeeStatus().getId());
+
+            statement.executeUpdate();
+        }
+        catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new CreateEmployeeException("Error while creating employee");
+        }
+    }
+
+    public void deleteEmployee(int id) throws DeleteEmployeeException
+    {
+        String query = "DELETE FROM employee " +
+                "WHERE id = ?";
+
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setInt(1, id);
+
+            int rowCount = statement.executeUpdate();
+
+            if (rowCount == 0)
+            {
+                throw new DeleteEmployeeException("No employee found with id: " + id);
+            }
+        }
+        catch (SQLException  e)
+        {
+            System.err.println(e.getMessage());
+
+            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            {
+                throw new DeleteEmployeeException("Cannot delete employee. This employee is linked to an other entity");
+            }
+
+            throw new DeleteEmployeeException("Error while deleting employee");
+        }
+        catch (DatabaseConnectionFailedException e)
+        {
+            System.out.println(e.getMessage());
+            throw new DeleteEmployeeException("Error while deleting employee");
+        }
+
 
     }
 
-    public void deleteEmployee(int id) {
+    public void updateEmployee(Employee employee) throws UpdateEmployeeException
+    {
+        String query = "UPDATE employee " +
+                "SET last_name = ?, first_name = ?, birth_date = ?, id_employee_status = ? " +
+                "WHERE id = ?";
 
-    }
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
 
-    public void updateEmployee(Employee employee) {
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setString(1, employee.getLastName());
+            statement.setString(2, employee.getFirstName());
+            statement.setDate(3, new java.sql.Date(employee.getBirthDate().getTime()));
+            statement.setInt(4, employee.getEmployeeStatus().getId());
+            statement.setInt(5, employee.getId());
 
+            int rowCount = statement.executeUpdate();
+
+            if (rowCount == 0)
+            {
+                throw new UpdateEmployeeException("No employee found with id: " + employee.getId());
+            }
+        }
+        catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new UpdateEmployeeException("Error while updating employee");
+        }
     }
 
     //@todo : handle exception

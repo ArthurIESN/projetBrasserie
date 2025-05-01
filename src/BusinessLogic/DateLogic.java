@@ -11,7 +11,9 @@ import java.util.Date;
 public class DateLogic
 {
     private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String DATE_SHOW_FORMAT = "yyyy-MM-dd";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+    private static final SimpleDateFormat dateShowFormat = new SimpleDateFormat(DATE_SHOW_FORMAT);
 
     public String getDateFormatString()
     {
@@ -112,5 +114,10 @@ public class DateLogic
     public String getDateString(Date date)
     {
         return dateFormat.format(date);
+    }
+
+    public String getShowDateString(Date date)
+    {
+        return dateShowFormat.format(date);
     }
 }

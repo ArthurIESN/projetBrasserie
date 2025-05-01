@@ -2,6 +2,7 @@ package BusinessLogic.EmployeeStatus;
 
 import DataAccess.EmployeeStatus.EmployeeStatusDBAccess;
 import DataAccess.EmployeeStatus.EmployeeStatusDataAccess;
+import Exceptions.EmployeeStatus.GetAllEmployeeStatusesException;
 import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class EmployeeStatusManager
         return employeeStatusDataAccess.getEmployeeStatus(id);
     }
 
-    public ArrayList<EmployeeStatus> getAllEmployeeStatuses() {
+    public ArrayList<EmployeeStatus> getAllEmployeeStatuses() throws GetAllEmployeeStatusesException
+    {
         return employeeStatusDataAccess.getAllEmployeeStatuses();
     }
 }

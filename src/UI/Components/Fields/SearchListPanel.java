@@ -32,6 +32,7 @@ public class SearchListPanel<T> extends JPanel {
         // Create list model and result list
         listModel = new DefaultListModel<>();
         resultList = new JList<>(listModel);
+        resultList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 
         resultList.setCellRenderer(new CustomListCellRenderer());
