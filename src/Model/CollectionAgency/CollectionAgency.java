@@ -7,8 +7,20 @@ public class CollectionAgency {
     private String name;
 
     public CollectionAgency(Integer id,String name){
-        this.id = id;
+        setId(id);
         this.name = name;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     public Integer getId(){

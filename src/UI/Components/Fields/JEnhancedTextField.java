@@ -115,6 +115,18 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
         });
     }
 
+    public void onFocusLost(ActionListener actionListener)
+    {
+        this.addFocusListener(new FocusAdapter()
+        {
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                actionListener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+            }
+        });
+    }
+
     private void dispose()
     {
         ThemeManager.getInstance().removeObserver(this);

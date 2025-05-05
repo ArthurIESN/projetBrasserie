@@ -1,6 +1,7 @@
 package Environement;
 
 import UI.Theme.ThemeManager;
+import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.WindowManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -9,6 +10,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -76,6 +78,89 @@ public class SystemProperties
     {
         String darkThemeEnabled = properties.getProperty("USE_DARK_THEME");
         return darkThemeEnabled != null && darkThemeEnabled.equals("true");
+    }
+
+    public static boolean getRestoreWindowsAtStartup()
+    {
+        String restoreWindowsAtStartup = properties.getProperty("RESTORE_WINDOWS_AT_STARTUP");
+        return restoreWindowsAtStartup != null && restoreWindowsAtStartup.equals("true");
+    }
+
+    public static void saveWindows(ArrayList<BrasserieWindow> windows)
+    {
+        // delete all windows properties
+        for(int i = 0; i < properties.size(); i++)
+        {
+            String windowName = "brasserieWindow-" + i;
+            properties.remove(windowName);
+            properties.remove(windowName + ".width");
+            properties.remove(windowName + ".height");
+            properties.remove(windowName + ".x");
+            properties.remove(windowName + ".y");
+        }
+
+        for(int i = 0; i < windows.size(); i++)
+        {
+            BrasserieWindow window = windows.get(i);
+            String windowName = "brasserieWindow-" + i;
+            properties.setProperty(windowName, "true");
+            properties.setProperty(windowName + ".width", Integer.toString(window.getWidth()));
+            properties.setProperty(windowName + ".height", Integer.toString(window.getHeight()));
+            properties.setProperty(windowName + ".x", Integer.toString(window.getX()));
+            properties.setProperty(windowName + ".y", Integer.toString(window.getY()));
+
+        }
+
+        // save properties to file
+        try (OutputStream output = new FileOutputStream(configFilePath))
+        {
+            System.out.println("Saving properties file...");
+            properties.store(output, null);
+        } catch (IOException e)
+        {
+            System.out.println("Error saving properties file: " + e.getMessage());
+        }
+    }
+
+    // make as iterator
+    public static  ArrayList<BrasserieWindow> getWindows()
+    {
+        ArrayList<BrasserieWindow> windows = new ArrayList<>();
+
+        int windowCount = 0;
+        for(int i = 0; i < properties.size(); i++)
+        {
+            String windowName = "brasserieWindow-" + windowCount;
+            if(properties.getProperty(windowName) != null)
+            {
+                int width = Integer.parseInt(properties.getProperty(windowName + ".width"));
+                int height = Integer.parseInt(properties.getProperty(windowName + ".height"));
+                int x = Integer.parseInt(properties.getProperty(windowName + ".x"));
+                int y = Integer.parseInt(properties.getProperty(windowName + ".y"));
+
+                BrasserieWindow window = new BrasserieWindow();
+                window.setSize(width, height);
+                window.setLocation(x, y);
+                windows.add(window);
+
+                windowCount++;
+            }
+        }
+
+        return windows;
+    }
+
+    public static void setRestoreWindowsAtStartup(boolean enabled)
+    {
+        properties.setProperty("RESTORE_WINDOWS_AT_STARTUP", Boolean.toString(enabled));
+
+        try (OutputStream output = new FileOutputStream(configFilePath))
+        {
+            properties.store(output, null);
+        } catch (IOException e)
+        {
+            System.out.println("Error saving properties file: " + e.getMessage());
+        }
     }
 
     public static void setDarkThemeEnabled(boolean enabled)

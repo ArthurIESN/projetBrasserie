@@ -13,6 +13,7 @@ public class SettingsDefaultPanel extends JPanel
 
         JCheckBox macMenuBarCheckBox = new JCheckBox("Enable macOS Menu Bar");
         JCheckBox darkThemeCheckBox = new JCheckBox("Enable Dark Theme");
+        JCheckBox restoreWindowsAtStartupCheckBox = new JCheckBox("Restore Windows At Startup");
 
 
         JButton saveButton = new JButton("Save");
@@ -21,22 +22,26 @@ public class SettingsDefaultPanel extends JPanel
         saveButton.addActionListener(e ->
         {
             SystemProperties.setDarkThemeEnabled(darkThemeCheckBox.isSelected());
+            SystemProperties.setRestoreWindowsAtStartup(restoreWindowsAtStartupCheckBox.isSelected());
             SystemProperties.setMacMenuBarEnabled(macMenuBarCheckBox.isSelected());
 
             saveButton.setEnabled(false);
 
             SystemProperties.applySettings();
             settingsWindow.notifyThemeChanged();
-
         });
 
         darkThemeCheckBox.setSelected(SystemProperties.getDarkThemeEnabled());
-
         darkThemeCheckBox.addActionListener(e -> saveButton.setEnabled(true));
 
-        layoutHelper.addField(darkThemeCheckBox);
+        restoreWindowsAtStartupCheckBox.setSelected(SystemProperties.getRestoreWindowsAtStartup());
+        restoreWindowsAtStartupCheckBox.addActionListener(e -> saveButton.setEnabled(true));
 
-        if (SystemProperties.getSystemType() == SystemProperties.SystemType.MAC) {
+        layoutHelper.addField(darkThemeCheckBox);
+        layoutHelper.addField(restoreWindowsAtStartupCheckBox);
+
+        if (SystemProperties.getSystemType() == SystemProperties.SystemType.MAC)
+        {
             macMenuBarCheckBox.setSelected(SystemProperties.getMacMenuBarEnabled());
             macMenuBarCheckBox.addActionListener(e -> saveButton.setEnabled(true));
             layoutHelper.addField(macMenuBarCheckBox);
