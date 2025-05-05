@@ -35,6 +35,10 @@ public class Customer {
         return firstName;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public float getCreditLimit() {
         return creditLimit;
     }
