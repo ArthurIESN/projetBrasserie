@@ -9,15 +9,13 @@ import DataAccess.DocumentStatus.DocumentStatusDBAccess;
 import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
+import Exceptions.Document.CreateDocumentException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
 import Model.Item.Item;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class DocumentDBAccess implements DocumentDataAccess
@@ -67,8 +65,54 @@ public class DocumentDBAccess implements DocumentDataAccess
     }
 
     @Override
-    public void createDocument(Document document) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void createDocument(Document document) throws CreateDocumentException {
+        String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, vat_amount, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        if(document == null){
+            throw new CreateDocumentException("Document is null");
+        }
+        else if (document.getLabel().isEmpty()) {
+            throw new CreateDocumentException("Label is empty");
+        }
+        else if(document.getDate() == null){
+            throw new CreateDocumentException("Date is null");
+        }
+        else if(document.getDocumentStatus() == null){
+            throw new CreateDocumentException("Document status is null");
+        }
+        else if(document.getProcess() == null){
+            throw new CreateDocumentException("Process is null");
+        }
+
+        try{
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            statement.setString(1, document.getLabel());
+            statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
+            statement.setDate(3, document.getDeliveryTruck() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null);
+            statement.setFloat(4, document.getReduction());
+            statement.setString(5, document.getValidity());
+            statement.setBoolean(6, document.getIsDelivered());
+            statement.setDate(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null);
+            statement.setBoolean(8, document.getDepositIsPaid());
+            statement.setFloat(9, document.getDepositAmount());
+            statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
+            statement.setFloat(11, document.getVatAmount());
+            statement.setFloat(12, document.getTotalInclusiveOfTaxe());
+            statement.setFloat(13, document.getTotalVat());
+            statement.setFloat(14, document.getTotalExclVat());
+            statement.setInt(15, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null);
+            statement.setInt(16,document.getDocumentStatus().getId());
+            statement.setInt(17,document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null);
+            statement.setInt(18, document.getProcess().getId());
+
+            statement.executeUpdate();
+
+        }catch (SQLException | DatabaseConnectionFailedException e){
+            System.err.println(e.getMessage());
+            throw new CreateDocumentException();
+        }
     }
 
     @Override

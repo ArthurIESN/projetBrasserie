@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class MakeDocument {
+
     private static final HashMap<Integer, Document> documentMap = new HashMap<>();
 
     public static Document getDocument(Integer id, String label, Date date, Date deadline, Float reduction,
