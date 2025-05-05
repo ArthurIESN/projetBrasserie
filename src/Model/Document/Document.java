@@ -36,7 +36,7 @@ public class Document {
                     Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                     Process process,DocumentStatus documentStatus)
     {
-        this.id = id;
+        setId(id);
         this.label = label;
         this.date = date;
         this.deadLine = deadLine;
@@ -57,7 +57,17 @@ public class Document {
         this.documentStatus = documentStatus;
     }
 
-    // Commande fournisseur
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
+    }
 
 
     public Integer getId() {

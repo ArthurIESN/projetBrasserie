@@ -7,8 +7,20 @@ public class CustomerStatus {
     private String label;
 
     public CustomerStatus(Integer id, String label) {
-        this.id = id;
+        setId(id);
         this.label = label;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     public Integer getId() {

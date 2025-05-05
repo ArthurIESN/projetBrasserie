@@ -17,6 +17,7 @@ public class MultipleSelectionList<T> extends JPanel {
     private ArrayList<T> data;
     private Function<T, String> toStringFunction;
     private Consumer<ArrayList<T>> onSelectionChange;
+    private int currentIndex = -1;
 
 
     public MultipleSelectionList(ArrayList<T> items, Function<T,String> toStringFunction) {
@@ -27,7 +28,8 @@ public class MultipleSelectionList<T> extends JPanel {
 
         ArrayList<String> displayItems = new ArrayList<>();
 
-        for (T item : data){
+        for (T item : data)
+        {
             displayItems.add(toStringFunction.apply(item));
         }
 
@@ -35,10 +37,56 @@ public class MultipleSelectionList<T> extends JPanel {
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         list.setCellRenderer(new CustomListCellRenderer<>());
 
-        list.addListSelectionListener(new ListSelectionListener() {
+        list.addListSelectionListener(new ListSelectionListener()
+        {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if(!e.getValueIsAdjusting() && onSelectionChange != null){
+                    onSelectionChange.accept(getSelectedItems());
+                }
+            }
+        });
+
+        list = new JList<>(displayItems.toArray(new String[0]));
+        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        list.setDragEnabled(false);
+
+        list.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e)
+            {
+                currentIndex = list.locationToIndex(e.getPoint());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e)
+            {
+                currentIndex = -1;
+            }
+        });
+        list.setSelectionModel(new DefaultListSelectionModel() {
+            @Override
+            public void setSelectionInterval(int index0, int index1)
+            {
+
+                if(currentIndex == -1) {
+                    currentIndex = index0;
+                }
+
+                if(index0 != currentIndex) return;
+                if(index0 != index1) return;
+
+                if (isSelectedIndex(index0))
+                {
+                    super.removeSelectionInterval(index0, index1);
+                } else
+                {
+                    super.addSelectionInterval(index0, index1);
+                }
+
+                if (onSelectionChange != null)
+                {
                     onSelectionChange.accept(getSelectedItems());
                 }
             }

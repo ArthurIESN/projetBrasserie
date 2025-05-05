@@ -1,5 +1,6 @@
 package UI.Windows;
 
+import Environement.SystemProperties;
 import UI.Windows.BrasserieWindow.BrasserieWindow;
 import UI.Windows.SettingsWindow.SettingsWindow;
 import UI.Login.LoginPanel;
@@ -57,8 +58,15 @@ public class WindowManager implements WindowSubject
         windows.add(new BrasserieWindow());
     }
 
+    public static void saveWindows()
+    {
+        SystemProperties.saveWindows(windows);
+    }
+
     public static void removeWindow(BrasserieWindow window)
     {
+        saveWindows();
+
         getInstance().removeObserver(window);
         windows.remove(window);
 
@@ -118,6 +126,18 @@ public class WindowManager implements WindowSubject
         }
     }
 
+    public static void loadWindows()
+    {
+        if(SystemProperties.getRestoreWindowsAtStartup())
+        {
+            windows = SystemProperties.getWindows();
+        }
+
+        if(windows.isEmpty())
+        {
+            addWindow();
+        }
+    }
 
     public static WindowManager getInstance()
     {

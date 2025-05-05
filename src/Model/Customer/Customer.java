@@ -15,12 +15,24 @@ public class Customer {
     public Customer(Integer id, String lastName, String firstName, float creditLimit, String numVAT,
                     CustomerStatus customerStatus)
     {
-        this.id = id;
+        setId(id);
         this.lastName = lastName;
         this.firstName = firstName;
         this.creditLimit = creditLimit;
         this.numVAT = numVAT;
         this.customerStatus = customerStatus;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     public Integer getId() {

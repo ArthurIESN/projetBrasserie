@@ -10,6 +10,6 @@ public class BrasserieManagementSystem
     {
         SystemProperties.applySettings();
         AppController.autoConnect();
-        WindowManager.addWindow();
+        WindowManager.loadWindows();
     }
 }

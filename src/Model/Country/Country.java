@@ -4,15 +4,27 @@ import java.util.Objects;
 
 public class Country
 {
-    private final Integer id;
+    private Integer id;
     private final String name;
     private final float deliveryCost;
 
     public Country(Integer id, String name, float deliveryCost)
     {
-        this.id = id;
+        setId(id);
         this.name = name;
         this.deliveryCost = deliveryCost;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     @Override

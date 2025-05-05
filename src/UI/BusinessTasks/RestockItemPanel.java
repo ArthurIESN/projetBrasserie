@@ -115,13 +115,14 @@ public class RestockItemPanel extends JPanel {
             }
 
             JTable table = new JTable(data, columnNames);
-            table.setRowHeight(30); // Hauteur fixe de 30px
-            table.getTableHeader().setReorderingAllowed(false); // On empêche de bouger les colonnes
-            table.setBackground(new Color(40, 40, 40)); // Fond foncé
-            table.setForeground(Color.WHITE); // Texte blanc
-            table.getTableHeader().setBackground(new Color(48, 61, 78)); // Header bleu foncé
-            table.getTableHeader().setForeground(Color.WHITE); // Texte header blanc
-            table.setGridColor(Color.GRAY); // Couleur de la grille
+            table.setRowHeight(30);
+            table.getTableHeader().setReorderingAllowed(false);
+            table.setBackground(new Color(40, 40, 40));
+            table.setForeground(Color.WHITE);
+            table.getTableHeader().setBackground(new Color(48, 61, 78));
+            table.getTableHeader().setForeground(Color.WHITE);
+            table.setGridColor(Color.GRAY);
+            table.setDefaultEditor(Object.class, null);
 
             JScrollPane scrollPane = new JScrollPane(table);
             restockItemsContainer.setLayout(new BorderLayout());

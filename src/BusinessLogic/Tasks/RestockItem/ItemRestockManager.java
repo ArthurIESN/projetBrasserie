@@ -54,13 +54,19 @@ public class ItemRestockManager
 
     public float monthsImpact(int months)
     {
-        return 0.8f / months;
+        if(months <= 0)
+        {
+            return 0.5f;
+        }
+        return 1 - (0.8f / months);
     }
 
     private Item.RestockItem calculateRestockItem(Item item, Date date, Date currentDate)
     {
         int restockQty = item.getRestockQuantity();
-        int futureStock = (restockQty + item.getForecastQuantity()) * (int)(monthsImpact(DateController.getMonthsBetweenDates(currentDate, date)) + 1);
+        System.out.println("Restock quantity: " + restockQty);
+        int futureStock = (int)((restockQty + item.getForecastQuantity()) / (monthsImpact(DateController.getMonthsBetweenDates(currentDate, date)) + 1));
+        System.out.println("Future stock: " + futureStock);
         int predictedQuantity = restockQty - futureStock > 0 ? restockQty : 0;
 
         return new Item.RestockItem(predictedQuantity, date, null);
@@ -74,17 +80,13 @@ public class ItemRestockManager
         for(Event event : events)
         {
             float impact = EventController.getRealEventImpact(event.getImpact());
-
             int monthsBetween = DateController.getMonthsBetweenDates(currentDate, event.getStartDate());
-            int monthsToProcess = monthsBetween - currentMonth;
+            int monthsToProcess = monthsBetween - currentMonth + 1;
             currentMonth = monthsBetween;
-
             int futureStock = (int)((item.getCurrentQuantity() + item.getForecastQuantity() + totalPredictedQuantity) * monthsImpact(monthsToProcess));
             int additionalNeed = (int)Math.ceil(futureStock * impact);
             int predictedQuantity = additionalNeed > 0 ? Math.max(item.getRestockQuantity(), additionalNeed) : 0;
-
             totalPredictedQuantity += predictedQuantity;
-
 
             restockItems.add(new Item.RestockItem(totalPredictedQuantity, event.getStartDate(), event));
         }
