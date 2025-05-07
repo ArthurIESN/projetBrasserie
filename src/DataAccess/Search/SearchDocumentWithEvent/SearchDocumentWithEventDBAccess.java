@@ -57,7 +57,7 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
 
     }
 
-    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
         String query = "SELECT  new_quantity  FROM document_details dd " +
                 "JOIN event_document_details edd ON edd.id_document_details = dd.id " +
                 "WHERE edd.id_event = ?";
@@ -72,13 +72,13 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
                 quantities.add(resultSet.getInt("new_quantity"));
             }
             return quantities;
-        }catch (SQLException  e){
+        }catch (SQLException  | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());
             throw new GetQuantityItemWithSpecificEventException();
         }
     }
 
-    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
+    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException {
         String query = "SELECT * " +
                 "FROM document " +
                 "INNER JOIN document_details ON document.id = document_details.id_document " +
@@ -114,7 +114,7 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
             }
 
             return documents;
-        } catch (SQLException e) {
+        } catch (SQLException | DatabaseConnectionFailedException e) {
             System.err.println(e.getMessage());
             throw new GetDocumentWithSpecificEventException();
         }

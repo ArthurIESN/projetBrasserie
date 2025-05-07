@@ -148,7 +148,7 @@ public class SearchDocumentWithEventForm extends JPanel {
                 documentTableModel.setData(documents);
                 tableScrollPanel.updateModel(tableModelMaker);
                 // @todo : gérer les erreurs
-            }catch (DatabaseConnectionFailedException | GetDocumentWithSpecificEventException err){
+            }catch (GetDocumentWithSpecificEventException err){
                 JOptionPane.showMessageDialog(null, err.getMessage(), "",JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -169,7 +169,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         try {
             int itemId = itemSearch.getSelectedItem().getId();
             events = SearchController.getEventsWithSpecificItem(itemId);
-        }catch (DatabaseConnectionFailedException | GetEventsWithItemException e){
+        }catch (GetEventsWithItemException e){
             System.out.println(e.getMessage());
         }
 
@@ -188,7 +188,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         try {
             int idEventSelected = eventSearch.getSelectedItem().getId();
             quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected);
-        }catch (DatabaseConnectionFailedException | GetQuantityItemWithSpecificEventException e){
+        }catch (GetQuantityItemWithSpecificEventException e){
             System.out.println(e.getMessage());
         }
 

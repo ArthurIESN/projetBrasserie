@@ -33,24 +33,24 @@ public class SearchController {
         return searchDocumentWithEventManager.getDatesEvents(idEvent);
     }
 
-    public static ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {
+    public static ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
         return searchPaymentManager.getAllPaymentYears();
     }
 
     // Search for payments based on criteria (validated, amount, year)
-    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws SearchPaymentException {
         return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager
     }
 
-    public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws DatabaseConnectionFailedException, GetEventsWithItemException {
+    public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
         return  searchEventManager.getEventsWithSpecificItem(idItem);
     }
 
-    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
         return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
     }
 
-    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
+    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException {
         return searchDocumentWithEventManager.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
     }
 

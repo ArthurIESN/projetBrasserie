@@ -2,10 +2,12 @@ package UI.BusinessTasks;
 
 import Controller.Customer.CustomerController;
 import Controller.Item.ItemController;
+import Controller.Locality.LocalityController;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.Item.GetAllItemsException;
 import Model.Customer.Customer;
 import Model.Item.Item;
+import Model.Locality.Locality;
 import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.MultipleSelectionList;
 import UI.Components.Fields.SearchListPanel;
@@ -25,14 +27,25 @@ public class CustomerOrderPanel extends JPanel
     private JPanel numberFieldPanel;
     private RoundedPanel VatPanel;
     private SearchListPanel<Customer> customerSearch;
+    private SearchListPanel<Locality> customerLocalitySearch;
     private MultipleSelectionList<Item> itemList;
     private GridBagLayoutHelper gridCommand;
-    private int[] vatValues = {0, 0, 0, 0};
-    private ArrayList<JLabel> vatLabels = new ArrayList<>();
+    private final int[] vatValues = {0, 0, 0, 0};
+    private final ArrayList<JLabel> vatLabels = new ArrayList<>();
 
     private HashMap<Item, JPanel> numberFieldHashMap;
 
     public CustomerOrderPanel()
+    {
+        setLayout(new BorderLayout());
+
+        createVatPanel();
+        createRightPanel();
+
+        add(scrollPane, BorderLayout.SOUTH);
+    }
+
+    private void createRightPanel()
     {
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Item> items = new ArrayList<>();
@@ -47,8 +60,52 @@ public class CustomerOrderPanel extends JPanel
             JOptionPane.showMessageDialog(this, "Failed to load data " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        setLayout(new BorderLayout());
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
+        numberFieldHashMap = new HashMap<>();
+
+        scrollPane = new JScrollPane();
+        scrollPane.setLayout(new ScrollPaneLayout());
+        scrollPane.setPreferredSize(new Dimension(0, 200));
+        scrollPane.setMaximumSize(new Dimension(Short.MAX_VALUE, 200));
+
+
+        numberFieldPanel = new JPanel();
+        numberFieldPanel.setLayout(new BoxLayout(numberFieldPanel, BoxLayout.Y_AXIS));
+
+        scrollPane.setViewportView(numberFieldPanel);
+
+        customerSearch = new SearchListPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getId());
+        customerSearch.getSearchField().setPlaceholder("Search for a customer");
+        customerSearch.onSelectedItemChange(selectedCustomer -> updateCustomerLocalities());
+
+        customerLocalitySearch = new SearchListPanel<>(new ArrayList<>(), locality -> locality.getAddress() + " " + locality.getPostalCode() + " " + locality.getNumber() + " " + locality.getCountry().getLabel());
+
+        itemList = new MultipleSelectionList<>(items, Item::getLabel);
+        itemList.setOnSelectionChange(selectedItems ->
+        {
+            updateFieldsQuantity(itemList.getSelectedItems());
+            calculateTaxes();
+        });
+
+
+        JButton commandButton = new JButton("Execute Command");
+        commandButton.addActionListener(e -> executeOrder());
+
+        gridCommand = new GridBagLayoutHelper();
+        gridCommand.addField("Select a customer", customerSearch);
+        gridCommand.addField("Select a locality", customerLocalitySearch);
+        gridCommand.addField("Select items", itemList);
+        gridCommand.addField(commandButton);
+
+        rightPanel.add(gridCommand);
+
+        add(rightPanel, BorderLayout.CENTER);
+    }
+
+    private void createVatPanel()
+    {
         VatPanel = new RoundedPanel(0, 20, 0, 20, 2);
         VatPanel.setPreferredSize(new Dimension(250, 600));
         VatPanel.setLayout(new BoxLayout(VatPanel, BoxLayout.Y_AXIS));
@@ -82,20 +139,10 @@ public class CustomerOrderPanel extends JPanel
             vatPanel.setBackground(new Color(73, 73, 73));
 
             JLabel label = new JLabel(vatHeaders[i]);
-            label.setForeground(Color.WHITE);
-            label.setFont(new Font("Arial", Font.PLAIN, 14));
-            label.setOpaque(true);
-            label.setBackground(colors[i]);
-            label.setAlignmentX(Component.LEFT_ALIGNMENT);
-            label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            createVatLabel(colors, i, label);
 
             JLabel valueLabel = new JLabel(vatValues[i] + " €");
-            valueLabel.setForeground(Color.WHITE);
-            valueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            valueLabel.setOpaque(true);
-            valueLabel.setBackground(colors[i]);
-            valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            valueLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            createVatLabel(colors, i, valueLabel);
 
             vatLabels.add(valueLabel);
 
@@ -108,48 +155,36 @@ public class CustomerOrderPanel extends JPanel
 
 
         add(vatContainer, BorderLayout.WEST);
+    }
 
+    private void createVatLabel(Color[] colors, int i, JLabel valueLabel)
+    {
+        valueLabel.setForeground(Color.WHITE);
+        valueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        valueLabel.setOpaque(true);
+        valueLabel.setBackground(colors[i]);
+        valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        valueLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    }
 
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+    private void updateCustomerLocalities()
+    {
+        ArrayList<Locality> localities;
 
-
-        numberFieldHashMap = new HashMap<>();
-
-        scrollPane = new JScrollPane();
-        scrollPane.setLayout(new ScrollPaneLayout());
-        scrollPane.setPreferredSize(new Dimension(0, 200));
-        scrollPane.setMaximumSize(new Dimension(Short.MAX_VALUE, 200));
-
-
-        numberFieldPanel = new JPanel();
-        numberFieldPanel.setLayout(new BoxLayout(numberFieldPanel, BoxLayout.Y_AXIS));
-
-        scrollPane.setViewportView(numberFieldPanel);
-
-        customerSearch = new SearchListPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getId());
-        customerSearch.getSearchField().setPlaceholder("Search for a customer");
-
-        itemList = new MultipleSelectionList<>(items, Item::getLabel);
-        itemList.setOnSelectionChange(selectedItems ->
+        try
         {
-            updateFieldsQuantity(itemList.getSelectedItems());
-            calculateTaxes();
-        });
+            localities = LocalityController.getCustomerLocalities(customerSearch.getSelectedItem().getId());
+            customerLocalitySearch.setData(localities);
 
-
-        JButton commandButton = new JButton("Execute Command");
-        commandButton.addActionListener(e -> executeOrder());
-
-        gridCommand = new GridBagLayoutHelper();
-        gridCommand.addField("Select a customer", customerSearch);
-        gridCommand.addField("Select items", itemList);
-        gridCommand.addField(commandButton);
-
-        rightPanel.add(gridCommand);
-
-        add(rightPanel, BorderLayout.CENTER);
-        add(scrollPane, BorderLayout.SOUTH);
+            if(localities.isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "No localities found for this customer. No order will be available.", "No Localities", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Failed to load localities: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void updateFieldsQuantity(ArrayList<Item> items)
@@ -237,6 +272,12 @@ public class CustomerOrderPanel extends JPanel
         if(customerSearch.getSelectedItem() == null)
         {
             JOptionPane.showMessageDialog(this, "Please select a customer.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if(customerLocalitySearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a locality.", "Missing Information", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 

@@ -5,14 +5,24 @@ import java.util.Objects;
 public class Country
 {
     private Integer id;
-    private final String name;
+    private final String label;
     private final float deliveryCost;
 
     public Country(Integer id, String name, float deliveryCost)
     {
         setId(id);
-        this.name = name;
+        this.label = name;
         this.deliveryCost = deliveryCost;
+    }
+
+    public Integer getId()
+    {
+        return id;
+    }
+
+    public String getLabel()
+    {
+        return label;
     }
 
     private void setId(Integer id)
@@ -36,7 +46,7 @@ public class Country
         Country country = (Country) obj;
 
         return Objects.equals(id, country.id) &&
-                Objects.equals(name, country.name) &&
+                Objects.equals(label, country.label) &&
                 Objects.equals(deliveryCost, country.deliveryCost);
     }
 
@@ -47,7 +57,7 @@ public class Country
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, name, deliveryCost);
+        return Objects.hash(id, label, deliveryCost);
     }
 
     @Override
@@ -55,7 +65,7 @@ public class Country
     {
         return "Country{" +
                 "id=" + id + "\n" +
-                ", name='" + name + '\n' +
+                ", name='" + label + '\n' +
                 ", deliveryCost=" + deliveryCost + '\n' +
                 '}';
     }

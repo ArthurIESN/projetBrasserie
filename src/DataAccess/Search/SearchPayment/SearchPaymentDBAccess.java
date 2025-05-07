@@ -1,8 +1,14 @@
 package DataAccess.Search.SearchPayment;
 
+import DataAccess.Customer.CustomerDBAccess;
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 
+import DataAccess.Document.DocumentDBAccess;
+import DataAccess.Payment.PaymentDBAccess;
+import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Search.GetAllPaymentYearsException;
 import Exceptions.Search.SearchPaymentException;
 
 import Model.Document.MakeDocument;
@@ -27,7 +33,8 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
     public SearchPaymentDBAccess() {
     }
 
-    public ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException {
+    public ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException
+    {
         String query = "SELECT DISTINCT YEAR(payment_date) AS year FROM payment ORDER BY year DESC";
 
         ArrayList<Integer> years = new ArrayList<>();
@@ -39,28 +46,29 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
             while (resultSet.next()) {
                 years.add(resultSet.getInt("year"));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DatabaseConnectionFailedException e) {
             System.err.println("SQL error: " + e.getMessage());
-            throw new DatabaseConnectionFailedException("Failed to retrieve payment years.");
+            throw new GetAllPaymentYearsException();
         }
 
         return years;
     }
 
-    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException {
-        String query =  "SELECT payment.*, payment_status.label AS payment_status_label, \n" +
-                "document.id AS document_id, document.label AS document_label, document.date AS document_date,process.id AS process_id, process.label AS process_label, process_type.id AS id_process_type, customer.num_customer, customer.last_name AS customer_name, customer.first_name AS customer_first_name, customer.credit_limit AS customer_credit_limit, customer.num_VAT AS customer_VAT\n" +
-                "FROM payment\n" +
-                "JOIN document ON payment.id_document = document.id\n" +
-                "JOIN process ON document.id_process = process.id\n" +
-                "JOIN customer ON process.num_customer = customer.num_customer\n" +
-                "JOIN payment_status ON payment.id_payment_status = payment_status.id\n" +
-                "JOIN process_type ON process.id = process_type.id\n" +
+    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException
+    {
+        String query =  "SELECT * " +
+                "FROM payment " +
+                "JOIN document ON payment.id_document = document.id " +
+                "JOIN process ON document.id_process = process.id " +
+                "JOIN customer ON process.num_customer = customer.num_customer " +
+                "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
+                "JOIN process_type ON process.id = process_type.id " +
                 "WHERE payment_status.label = ?" +
                 "AND payment.amount > ?" +
                 "AND YEAR(payment.payment_date) = ?;";
 
-        try {
+        try
+        {
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
@@ -71,65 +79,9 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
             ResultSet resultSet = statement.executeQuery();
 
             ArrayList<Payment> payments = new ArrayList<>();
-            while (resultSet.next()) {
-                PaymentStatus paymentStatus = MakePaymentStatus.getPaymentStatus(
-                        resultSet.getInt("id_payment_status"),
-                        resultSet.getString("payment_status_label"));
-
-                Document document = MakeDocument.getDocument(
-                        resultSet.getInt("document_id"),
-                        resultSet.getString("document_label"),
-                        resultSet.getDate("document_date"),
-                        null,
-                        0.0f,
-                        null,
-                        null,
-                        null,
-                        null,
-                        0.0f,
-                        null,
-                        0.0f,
-                        0.0f,
-                        0.0f,
-                        0.0f,
-                        null,
-                        null,
-                        null,
-                        null);
-
-                ProcessType processType = MakeProcessType.getProcessType(
-                        resultSet.getInt("id_process_type"),
-                        null
-                );
-
-                Process process = MakeProcess.getProcess(
-                        resultSet.getInt("process_id"),
-                        resultSet.getString("process_label"),
-                        0,
-                        null,
-                        processType,
-                        null,
-                        null,
-                        null);
-
-                Customer customer = MakeCustomer.getCustomer(
-                        resultSet.getInt("num_customer"),
-                        resultSet.getString("customer_name"),
-                        resultSet.getString("customer_first_name"),
-                        resultSet.getInt("customer_credit_limit"),
-                        resultSet.getString("customer_VAT"),
-                        null);
-
-                Payment payment = MakePayment.getPayment(
-                        resultSet.getInt("id"),
-                        resultSet.getDouble("amount"),
-                        resultSet.getDate("payment_date"),
-                        paymentStatus,
-                        document,
-                        process,
-                        customer
-                );
-                payments.add(payment);
+            while (resultSet.next())
+            {
+                payments.add(PaymentDBAccess.makePayment(resultSet));
             }
             return payments;
 
@@ -138,4 +90,6 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
             throw new SearchPaymentException();
         }
     }
+
+
 }
