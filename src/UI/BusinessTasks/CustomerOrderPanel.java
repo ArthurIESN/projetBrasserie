@@ -1,5 +1,6 @@
 package UI.BusinessTasks;
 
+import Controller.BusinessTasks.CustomerOrderController;
 import Controller.Customer.CustomerController;
 import Controller.Item.ItemController;
 import Controller.Locality.LocalityController;
@@ -8,6 +9,7 @@ import Exceptions.Item.GetAllItemsException;
 import Model.Customer.Customer;
 import Model.Item.Item;
 import Model.Locality.Locality;
+import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.MultipleSelectionList;
 import UI.Components.Fields.SearchListPanel;
@@ -20,6 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Date;
 
 public class CustomerOrderPanel extends JPanel
 {
@@ -29,8 +32,10 @@ public class CustomerOrderPanel extends JPanel
     private SearchListPanel<Customer> customerSearch;
     private SearchListPanel<Locality> customerLocalitySearch;
     private MultipleSelectionList<Item> itemList;
+    private JNumberField depositField;
+    private JDateField desiredDeliveryDateField;
     private GridBagLayoutHelper gridCommand;
-    private final int[] vatValues = {0, 0, 0, 0};
+    private float[] vatValues = {0, 0, 0, 0};
     private final ArrayList<JLabel> vatLabels = new ArrayList<>();
 
     private HashMap<Item, JPanel> numberFieldHashMap;
@@ -81,6 +86,10 @@ public class CustomerOrderPanel extends JPanel
         customerSearch.onSelectedItemChange(selectedCustomer -> updateCustomerLocalities());
 
         customerLocalitySearch = new SearchListPanel<>(new ArrayList<>(), locality -> locality.getAddress() + " " + locality.getPostalCode() + " " + locality.getNumber() + " " + locality.getCountry().getLabel());
+        customerLocalitySearch.onSelectedItemChange(selectedLocality ->
+        {
+            calculateTaxes();
+        });
 
         itemList = new MultipleSelectionList<>(items, Item::getLabel);
         itemList.setOnSelectionChange(selectedItems ->
@@ -88,6 +97,15 @@ public class CustomerOrderPanel extends JPanel
             updateFieldsQuantity(itemList.getSelectedItems());
             calculateTaxes();
         });
+
+        depositField = new JNumberField(Utils.NumberType.FLOAT, 2);
+        depositField.setPlaceholder("Enter deposit amount");
+        depositField.setAllowNegative(false);
+        depositField.setMinMax(0, 0);
+
+        desiredDeliveryDateField = new JDateField();
+        desiredDeliveryDateField.setPlaceholder("Enter desired delivery date");
+        desiredDeliveryDateField.setMinDate(new Date());
 
 
         JButton commandButton = new JButton("Execute Command");
@@ -97,6 +115,8 @@ public class CustomerOrderPanel extends JPanel
         gridCommand.addField("Select a customer", customerSearch);
         gridCommand.addField("Select a locality", customerLocalitySearch);
         gridCommand.addField("Select items", itemList);
+        gridCommand.addField("Deposit", depositField);
+        gridCommand.addField("Desired delivery date", desiredDeliveryDateField);
         gridCommand.addField(commandButton);
 
         rightPanel.add(gridCommand);
@@ -129,8 +149,8 @@ public class CustomerOrderPanel extends JPanel
         gbc.fill = GridBagConstraints.NONE;
         vatContainer.add(VatPanel, gbc);
 
-        String[] vatHeaders= {"TVA:", "TVAC: ", "TOTAL: ", "ETC: "};
-        Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90)};
+        String[] vatHeaders= {"VAT:", "!!VAT INCLUDED:", "DELIVERY COST:", "TOTAL: " };
+        Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90), new Color(110, 110, 110)};
 
         for (int i = 0; i < vatHeaders.length; i++)
         {
@@ -193,7 +213,7 @@ public class CustomerOrderPanel extends JPanel
         for(Item item : items){
             if(!numberFieldHashMap.containsKey(item))
             {
-                JLabel label = new JLabel(item.getLabel());
+                JLabel label = new JLabel(item.getLabel() + " - " + item.getPrice() + " €" + " - " + item.getVat().getRate() + "%");
 
                 JNumberField numberField = new JNumberField(Utils.NumberType.INTEGER);
                 numberField.setPlaceholder("Enter quantity");
@@ -234,25 +254,25 @@ public class CustomerOrderPanel extends JPanel
 
     }
 
-    // this needs to be in the business package
     private void calculateTaxes()
     {
-        float totalItemsPrice = 0;
-        float totalVat = 0;
-        float totalTtc = 0;
-
+        HashMap<Item, Integer> items = new HashMap<>();
         for (Item item : numberFieldHashMap.keySet())
         {
             JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
             if (field != null)
             {
-                float quantity = field.getFloat();
-                float price = item.getPrice();
-                totalItemsPrice += quantity * price;
+                items.put(item, field.getInt());
             }
         }
+        vatValues = CustomerOrderController.calculateTaxes(items, customerLocalitySearch.getSelectedItem());
 
-        vatLabels.getFirst().setText(totalItemsPrice * 0.2f + " €");
+        vatLabels.get(0).setText(String.format("%.2f €", vatValues[0]));
+        vatLabels.get(1).setText(String.format("%.2f €", vatValues[1]));
+        vatLabels.get(2).setText(String.format("%.2f €",    vatValues[2]));
+        vatLabels.get(3).setText(String.format("%.2f €", vatValues[3]));
+
+        depositField.setMinMax(0, (int)Math.ceil(vatValues[3]));
     }
 
     private void executeOrder()
@@ -262,9 +282,18 @@ public class CustomerOrderPanel extends JPanel
         if (option != JOptionPane.YES_OPTION) return;
         if(!isOrderValid()) return;
 
+        HashMap<Item, Integer> items = new HashMap<>();
+        for (Item item : numberFieldHashMap.keySet())
+        {
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
+            if (field != null)
+            {
+                items.put(item, field.getInt());
+            }
+        }
 
 
-        ArrayList<Item> selectedItems = itemList.getSelectedItems();
+        CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
     }
 
     private boolean isOrderValid()
@@ -284,6 +313,12 @@ public class CustomerOrderPanel extends JPanel
         if(itemList.getSelectedItems().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please select at least one item.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if(desiredDeliveryDateField.getDate() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a desired delivery date.", "Missing Information", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 

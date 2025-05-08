@@ -1,0 +1,121 @@
+package Controller.BusinessTasks;
+
+import BusinessLogic.Tasks.RestockItem.CustomerOrderManager;
+
+import Controller.AppController;
+import Controller.Document.DocumentController;
+import Controller.DocumentDetails.DocumentDetailsController;
+import Controller.DocumentStatus.DocumentStatusController;
+import Controller.Process.ProcessController;
+import Controller.ProcessStatus.ProcessStatusController;
+import Controller.ProcessType.ProcessTypeController;
+import Exceptions.DocumentStatus.GetDocumentStatusException;
+import Exceptions.Process.CreateProcessException;
+import Exceptions.ProcessStatus.GetProcessStatusException;
+import Exceptions.ProcessType.GetProcessTypeException;
+import Model.Customer.Customer;
+import Model.Document.Document;
+import Model.DocumentDetails.DocumentDetails;
+import Model.DocumentStatus.DocumentStatus;
+import Model.Employee.Employee;
+import Model.EmployeeStatus.EmployeeStatus;
+import Model.Item.Item;
+import Model.Locality.Locality;
+import Model.Process.Process;
+import Model.ProcessStatus.ProcessStatus;
+import Model.ProcessType.ProcessType;
+import Utils.Utils;
+
+import javax.print.Doc;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+public class CustomerOrderController
+{
+    private static final CustomerOrderManager customerOrderManager = new CustomerOrderManager();
+
+    public static float getCustomerDepositMinimumAmount(Customer customer, float totalPrice)
+    {
+        return customerOrderManager.customerDepositMinimumAmount(customer, totalPrice);
+    }
+
+    public static float[] calculateTaxes(HashMap<Item, Integer> items, Locality locality)
+    {
+        return customerOrderManager.calculateTaxes(items, locality);
+    }
+
+    public static void executeOrder(HashMap<Item, Integer> items, Customer customer, float[] values, float deposit, Date desiredDeliveryDate)
+    {
+        if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
+        {
+            System.out.println("Access Denied: You do not have permission to execute this order.");
+            return;
+        } // @todo throw exception
+
+        if(deposit < customerOrderManager.customerDepositMinimumAmount(customer, deposit))
+        {
+            System.out.println("Deposit amount is less than the minimum required.");
+            return;
+        } // @todo throw exception
+
+        ProcessType processType = null;
+        ProcessStatus processStatus = null;
+        DocumentStatus documentStatus = null;
+        Employee employee = AppController.getCurrentConnectedEmployee();
+
+
+        Date currentDate = new Date();
+        LocalDate localDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate deliveryLocalDate = localDate.plusDays(7);
+        Date deliveryDate = Date.from(deliveryLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        try
+           {
+               processType = ProcessTypeController.getProcessType(5);
+               processStatus = ProcessStatusController.getProcessStatus(1);
+                documentStatus = DocumentStatusController.getDocumentStatus(1);
+           } catch (GetProcessTypeException | GetProcessStatusException | GetDocumentStatusException e)
+           {
+               //@todo throw exception
+           }
+
+
+        Process process = new Process(null, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
+        Document document = new Document(null, "AUTO_CUSTOMER_ORDER_DOCUMENT",
+                currentDate, null, 0.f, "",
+                false, deliveryDate, deposit > 0,
+                deposit, desiredDeliveryDate, 0.f, values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+
+        ArrayList<DocumentDetails> itemDocumentDetails = new ArrayList<>();
+
+        for (HashMap.Entry<Item, Integer> entry : items.entrySet())
+        {
+            Item item = entry.getKey();
+            int quantity = entry.getValue();
+
+            DocumentDetails documentDetails = new DocumentDetails(null, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
+            itemDocumentDetails.add(documentDetails);
+        }
+
+        try
+        {
+            process.setId(ProcessController.createProcess(process));
+            document.setId(DocumentController.createDocument(document));
+
+            for (DocumentDetails documentDetails : itemDocumentDetails)
+            {
+                DocumentDetailsController.createDocumentDetails(documentDetails);
+            }
+        }
+        catch (CreateProcessException e)
+        {
+            //@todo throw exception
+        }
+
+
+
+    }
+}

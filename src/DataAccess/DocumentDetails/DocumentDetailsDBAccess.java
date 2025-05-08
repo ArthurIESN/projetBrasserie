@@ -2,6 +2,7 @@ package DataAccess.DocumentDetails;
 
 import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
+import DataAccess.Item.ItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
@@ -22,8 +23,39 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
     }
 
     @Override
-    public void createDocumentDetails(DocumentDetails documentDetails) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void createDocumentDetails(DocumentDetails documentDetails)
+    {
+        String query = "INSERT INTO document_details (label, quantity, new_quantity, unit_price, id_document, id_item) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try
+        {
+            Connection connection = DatabaseConnexion.getInstance();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, documentDetails.getLabel());
+            preparedStatement.setInt(2, documentDetails.getQuantity());
+
+            if(documentDetails.getNewQuantity() == null)
+            {
+                preparedStatement.setNull(3, java.sql.Types.INTEGER);
+            }
+            else
+            {
+                preparedStatement.setInt(3, documentDetails.getNewQuantity());
+            }
+
+            preparedStatement.setFloat(4, documentDetails.getUnitPrice());
+            preparedStatement.setInt(5, documentDetails.getDocument().getId());
+            preparedStatement.setInt(6, documentDetails.getItem().getId());
+
+            preparedStatement.executeUpdate();
+
+
+        } catch (SQLException | DatabaseConnectionFailedException e) {
+            //@todo : throw exception
+            System.out.println("Error while creating document details: " + e.getMessage());
+        }
     }
 
     @Override
@@ -96,7 +128,8 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
                 resultSet.getInt("document_details.quantity"),
                 resultSet.getInt("document_details.new_quantity"),
                 resultSet.getFloat("document_details.unit_price"),
-                DocumentDBAccess.makeDocument(resultSet)
+                DocumentDBAccess.makeDocument(resultSet),
+                ItemDBAccess.makeItem(resultSet)
         );
     }
 }

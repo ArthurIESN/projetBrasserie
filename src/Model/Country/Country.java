@@ -25,6 +25,11 @@ public class Country
         return label;
     }
 
+    public float getDeliveryCost()
+    {
+        return deliveryCost;
+    }
+
     private void setId(Integer id)
     {
         if(id == null || id <= 0)

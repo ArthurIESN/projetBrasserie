@@ -113,6 +113,18 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
                 }
             }
         });
+
+        this.addKeyListener(new KeyAdapter()
+        {
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    getParent().requestFocusInWindow();
+                }
+            }
+        });
     }
 
     public void onFocusLost(ActionListener actionListener)

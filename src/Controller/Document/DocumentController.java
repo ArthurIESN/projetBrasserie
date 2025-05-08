@@ -16,9 +16,9 @@ public class DocumentController
         return documentManager.getAllCurrentCommandsForAnItem(item);
     }
 
-    public static void createDocument(Document document)
+    public static int createDocument(Document document)
     {
-        documentManager.createDocument(document);
+        return documentManager.createDocument(document);
     }
 
     public static void updateDocument(Document document)

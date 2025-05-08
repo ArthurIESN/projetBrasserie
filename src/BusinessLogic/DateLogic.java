@@ -69,7 +69,7 @@ public class DateLogic
         {
             Date date = dateFormat.parse(text);
 
-            return !date.before(minMaxDates[0]) && !date.after(minMaxDates[1]);
+            return (date.equals(minMaxDates[0]) || date.equals(minMaxDates[1]) || (!date.before(minMaxDates[0]) && !date.after(minMaxDates[1])));
         }
         catch (ParseException e)
         {

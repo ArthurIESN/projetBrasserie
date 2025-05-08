@@ -4,16 +4,17 @@ import Controller.Date.DateController;
 import Controller.Event.EventController;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Tasks.RestockItem.RestockQuantityAndDateException;
+import Model.Customer.Customer;
 import Model.Event.Event;
 import Model.Item.Item;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class ItemRestockManager
 {
-
     public ItemRestockManager()
     {
         // Constructor
