@@ -10,8 +10,7 @@ public class MakeCustomer
 
     public static Customer getCustomer(Integer id, String lastName, String firstName, float creditLimit, String numVAT, CustomerStatus customerStatus)
     {
-        Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
-        int customerHash = customer.hashCode();
+        int customerHash = Customer.hashCode(id, lastName, firstName, creditLimit, numVAT, customerStatus);
 
         if(customerMap.containsKey(customerHash))
         {
@@ -19,6 +18,7 @@ public class MakeCustomer
         }
         else
         {
+            Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
             customerMap.put(customerHash, customer);
             return customer;
         }

@@ -1,6 +1,6 @@
 package Model.Document;
 
-import Model.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
@@ -36,7 +36,7 @@ public class Document {
                     Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                     Process process,DocumentStatus documentStatus)
     {
-        this.id = id;
+        setId(id);
         this.label = label;
         this.date = date;
         this.deadLine = deadLine;
@@ -57,7 +57,17 @@ public class Document {
         this.documentStatus = documentStatus;
     }
 
-    // Commande fournisseur
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
+    }
 
 
     public Integer getId() {
@@ -132,6 +142,8 @@ public class Document {
         return process;
     }
 
+    public DocumentStatus getDocumentStatus(){return documentStatus;}
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -157,6 +169,18 @@ public class Document {
                 Objects.equals(collectionAgency, document.collectionAgency) &&
                 Objects.equals(deliveryTruck, document.deliveryTruck) &&
                 Objects.equals(process, document.process);
+    }
+
+    public static int hashCode(Integer id, String label, Date date, Date deadLine, Float reduction,
+                               String validity, Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid,
+                               Float depositAmount, Date desiredDeliveryDate, Float VatAmount,
+                               Float totalInclusiveOfTaxe, Float totalVat, Float totalExclVat,
+                               CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
+                               Process process, DocumentStatus documentStatus)
+    {
+        return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
+                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
     }
 
     @Override

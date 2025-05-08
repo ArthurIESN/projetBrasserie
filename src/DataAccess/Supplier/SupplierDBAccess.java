@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -33,12 +34,7 @@ public class SupplierDBAccess implements SupplierDataAccess
 
             while (resultSet.next())
             {
-                Supplier supplier = MakeSupplier.getSupplier(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name")
-                );
-
-                suppliers.add(supplier);
+                suppliers.add(makeSupplier(resultSet));
             }
 
             return suppliers;
@@ -51,20 +47,30 @@ public class SupplierDBAccess implements SupplierDataAccess
     }
 
     public Supplier getSupplier(int id) {
-        return null;
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 
     public void createSupplier(Supplier supplier) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void deleteSupplier(int id) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void updateSupplier(Supplier supplier) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
+    public static Supplier makeSupplier(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "supplier.id")) return null;
+
+        return MakeSupplier.getSupplier(
+                resultSet.getInt("supplier.id"),
+                resultSet.getString("supplier.name")
+        );
     }
 }
 

@@ -2,7 +2,6 @@ package Controller;
 
 
 import BusinessLogic.Event.EventManager;
-import BusinessLogic.Search.SearchItemManager;
 import BusinessLogic.Search.SearchDocumentWithEventManager;
 
 import BusinessLogic.Search.SearchPaymentManager;
@@ -15,14 +14,17 @@ import Model.Document.Document;
 import Model.Event.Event;
 import Model.Item.Item;
 import Model.Payment.Payment;
+import Model.Vat.Vat;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchController {
+
+    //@todo : refactor this in specific controllers
+
     private static final SearchDocumentWithEventManager searchDocumentWithEventManager = new SearchDocumentWithEventManager();
-    private static final SearchItemManager searchItemManager = new SearchItemManager();
     private static final SearchPaymentManager searchPaymentManager = new SearchPaymentManager();
     private static final EventManager searchEventManager = new EventManager();
 
@@ -31,33 +33,24 @@ public class SearchController {
         return searchDocumentWithEventManager.getDatesEvents(idEvent);
     }
 
-    public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
-        return searchItemManager.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
-    }
-
-    public static int[] getMinMaxItemQuantityAndPrice() throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
-    {
-        return searchItemManager.getMinMaxItemQuantityAndPrice();
-    }
-
-    public static ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {
+    public static ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
         return searchPaymentManager.getAllPaymentYears();
     }
 
     // Search for payments based on criteria (validated, amount, year)
-    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws SearchPaymentException {
         return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager
     }
 
-    public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws DatabaseConnectionFailedException, GetEventsWithItemException {
+    public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
         return  searchEventManager.getEventsWithSpecificItem(idItem);
     }
 
-    public static ArrayList<Float> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException {
+    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
         return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
     }
 
-    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, float quantity, int year) throws DatabaseConnectionFailedException, GetDocumentWithSpecificEventException {
+    public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException {
         return searchDocumentWithEventManager.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
     }
 

@@ -4,6 +4,7 @@ import Environement.SystemProperties;
 import UI.Components.EnhancedTable.JEnhancedTable;
 import UI.Components.Fields.JDualSliderPanel;
 import UI.Components.Fields.JEnhancedTextField;
+import UI.Components.GridBagLayoutHelper;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -26,6 +27,7 @@ public class ThemeManager implements ThemeSubject
         add(JDualSliderPanel::onThemeChangedStatic);
         add(JEnhancedTextField::onThemeChangedStatic);
         add(JEnhancedTable::onThemeChangedStatic);
+        add(GridBagLayoutHelper::onThemeChangedStatic);
     }
 
     private static void add(ThemeObserver observer)

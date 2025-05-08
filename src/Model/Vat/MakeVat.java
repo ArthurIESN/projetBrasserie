@@ -8,8 +8,7 @@ public class MakeVat
 
     public static Vat getVat(String code, float rate)
     {
-        Vat vat = new Vat(code, rate);
-        int vatHash = vat.hashCode();
+        int vatHash = Vat.hashCode(code, rate);
 
         if(vatMap.containsKey(vatHash))
         {
@@ -17,6 +16,7 @@ public class MakeVat
         }
         else
         {
+            Vat vat = new Vat(code, rate);
             vatMap.put(vatHash, vat);
             return vat;
         }

@@ -15,14 +15,15 @@ public class MakePayment {
 
     public static Payment getPayment(Integer id, double amount, Date paymentDate, PaymentStatus paymentStatus, Document document, Process process, Customer customer)
     {
-        Payment payment = new Payment(id, amount, paymentDate, paymentStatus, document, process, customer);
-        int paymentHash = payment.hashCode();
+        int paymentHash = Payment.hashCode(id, amount, paymentDate, paymentStatus, document, process, customer);
+
         if(paymentMap.containsKey(paymentHash))
         {
             return paymentMap.get(paymentHash);
         }
         else
         {
+            Payment payment = new Payment(id, amount, paymentDate, paymentStatus, document, process, customer);
             paymentMap.put(paymentHash, payment);
             return payment;
         }

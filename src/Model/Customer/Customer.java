@@ -15,12 +15,24 @@ public class Customer {
     public Customer(Integer id, String lastName, String firstName, float creditLimit, String numVAT,
                     CustomerStatus customerStatus)
     {
-        this.id = id;
+        setId(id);
         this.lastName = lastName;
         this.firstName = firstName;
         this.creditLimit = creditLimit;
         this.numVAT = numVAT;
         this.customerStatus = customerStatus;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     public Integer getId() {
@@ -33,6 +45,10 @@ public class Customer {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public float getCreditLimit() {
@@ -61,6 +77,12 @@ public class Customer {
                 Objects.equals(creditLimit, customer.creditLimit) &&
                 Objects.equals(numVAT, customer.numVAT) &&
                 Objects.equals(customerStatus, customer.customerStatus);
+    }
+
+    public static int hashCode(Integer id, String lastName, String firstName, float creditLimit,
+            String numVAT, CustomerStatus customerStatus)
+    {
+        return Objects.hash(id, lastName, firstName, creditLimit, numVAT, customerStatus);
     }
 
     @Override

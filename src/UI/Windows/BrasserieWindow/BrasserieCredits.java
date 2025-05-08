@@ -4,7 +4,9 @@ import UI.Components.GridBagLayoutHelper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BrasserieCredits extends JPanel
 {
@@ -15,34 +17,55 @@ public class BrasserieCredits extends JPanel
         add("Martin Gregory");
     }};
 
-    public BrasserieCredits() {
+    private JScrollPane scrollPane;
+    private JPanel creditsPanel;
+
+    public BrasserieCredits()
+    {
+        scrollPane = new JScrollPane();
+        scrollPane.setBorder(null);
+        creditsPanel = new JPanel();
+
+        creditsPanel.setLayout(new BoxLayout(creditsPanel, BoxLayout.Y_AXIS));
+        scrollPane.setViewportView(creditsPanel);
+
+        GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel title = new JLabel("Brasserie Credits");
         title.setFont(title.getFont().deriveFont(30.0f));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(title);
+        gridBagLayoutHelper.addField(title);
 
-        add(Box.createRigidArea(new Dimension(0, 10)));
+        creditsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JLabel subtitle = new JLabel("This software was made by");
         subtitle.setFont(subtitle.getFont().deriveFont(20.0f));
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(subtitle);
+        gridBagLayoutHelper.addField(subtitle);
 
-        GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
+        creditsPanel.add(gridBagLayoutHelper);
 
-        for (String author : authors) {
+        for (String author : authors)
+        {
             JLabel authorLabel = new JLabel(author);
             authorLabel.setFont(authorLabel.getFont().deriveFont(18.0f));
-            gridBagLayoutHelper.addField(authorLabel);
+            authorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            creditsPanel.add(authorLabel);
         }
 
-        add(gridBagLayoutHelper);
 
-        ImageIcon gifIcon = new ImageIcon(getClass().getResource("/resources/images/dorianHome.gif"));
+
+        // /Users/arthur/projet_java/projetBrasserie/src/main/resources/
+        URL gifUrl = getClass().getClassLoader().getResource("Images/dorianHome.gif");
+        if (gifUrl == null) {
+            throw new IllegalArgumentException("Image not found: Images/dorianHome.gif");
+        }
+        ImageIcon gifIcon = new ImageIcon(gifUrl);
         JLabel gifLabel = new JLabel(gifIcon, JLabel.CENTER);
         gifLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(gifLabel);
+        creditsPanel.add(gifLabel);
+
+        add(scrollPane);
     }
 }

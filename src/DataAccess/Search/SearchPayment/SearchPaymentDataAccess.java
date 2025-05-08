@@ -10,6 +10,6 @@ import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 
 public interface SearchPaymentDataAccess {
-    ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException;
-    ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException;
+    ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws  SearchPaymentException;
+    ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException;
 }

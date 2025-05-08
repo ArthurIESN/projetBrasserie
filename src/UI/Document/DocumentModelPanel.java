@@ -1,57 +1,342 @@
 package UI.Document;
 
-import Controller.AppController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import BusinessLogic.DeliveryTruck.DeliveryTruckManager;
+import Controller.Customer.CustomerController;
+import Controller.DeliveryTruck.DeliveryTruckController;
+import Controller.DocumentStatus.DocumentStatusController;
+import Controller.Item.ItemController;
+import Controller.Process.ProcessController;
+import Controller.Supplier.SupplierController;
+import Controller.VAT.VATController;
+import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
-import Model.CollectionAgency;
+import Exceptions.Item.GetAllItemsException;
+import Exceptions.Process.GetProcessWithSpecificType;
+import Exceptions.Supplier.GetAllSuppliersException;
+import Exceptions.Vat.GetAllVatsException;
+import Model.CollectionAgency.CollectionAgency;
+import Model.CollectionAgency.CollectionAgency;
+import Model.Customer.Customer;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
 import Model.DocumentStatus.DocumentStatus;
+import Model.Item.Item;
 import Model.Process.Process;
-import UI.Components.Fields.JDateField;
-import UI.Components.Fields.JEnhancedTextField;
-import UI.Components.Fields.SearchListPanel;
+import Model.Supplier.Supplier;
+import Model.Vat.Vat;
+import UI.Components.Fields.*;
 import UI.Components.GridBagLayoutHelper;
+import static java.util.Arrays.asList;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
+import Utils.Utils;
 
 public class DocumentModelPanel extends JPanel {
-    private JEnhancedTextField labelField;
-    private JDateField dateField;
-    private String typeDocument;
-    private SearchListPanel<String> deliveryStatusSearch;
-    private SearchListPanel<DocumentStatus> documentStatusSearch;
+    private JPanel numberFieldPanel;
+    private JPanel westPanel;
+    private JPanel searchListsVatPanel;
+    private JPanel depositPanel;
+    private JPanel totalIncludingTaxPanel;
+    private JPanel totalExcludingTaxPanel;
+    private JPanel totalVatAmountPanel;
+    private JPanel totalDepositAmountPanel;
+    private JPanel totalPanel;
 
+    private GridBagLayoutHelper gridDocument;
+
+    private JEnhancedTextField labelField;
+    private JDateField deliveryDateField;
+    private JDateField desiredDeliveryDate;
+    private String typeDocument;
+    private JDateField dateField;
+    private JButton calculateVatButton;
+    private JNumberField reductionField;
+    private JNumberField depositAmountField;
+    private JButton create;
+
+    private JLabel totalExclVatLabel;
+    private JLabel totalInclVatLabel;
+    private JLabel totalVatLabel;
+    private JLabel depositAmountLabel;
+
+    private float totalExcludingTax;
+    private float totalIncludingTax;
+    private float totalVatAmount;
+    private float reduction;
+    private float depositAmount;
+
+    private ArrayList<Process> processes;
     private ArrayList<SearchListPanel> searchListPanelsOrderFourn;
+    private ArrayList<JComponent> allComponents;
+    private ArrayList<Item> items;
+    private ArrayList<DocumentStatus> documentStatuses;
+    private ArrayList<String> deliveryStatusOptions;
+    private ArrayList<Vat> vats;
+    private ArrayList<Customer> customers;
+    private ArrayList<Supplier> suppliers;
+    private ArrayList<DeliveryTruck> deliveryTrucks;
+
+    private SearchListPanel<DocumentStatus> documentStatusSearch;
+    private SearchListPanel<Process> processesSearch;
+    private SearchListPanel<Customer> customerSearch;
+    private SearchListPanel<DeliveryTruck> deliveryTruckSearch;
+    private SearchListPanel<Supplier> supplierSearch;
+    MultipleSelectionList<Item> multipleSelectionListItems;
+
+    private ComboBoxPanel<Vat> comboBoxVat;
+    private ComboBoxPanel<String> comboBoxValidity;
+
+    private JCheckBox checkBoxDepositIsPaid;
+    private JCheckBox checkBoxIsDelivered;
+
+    private HashMap<Integer, JNumberField> numberFieldHashMap;
+    private HashMap<Integer, ArrayList<Integer>> modelsDocuments;
+    private HashMap<Integer, ArrayList<JLabel>> vatItemHashMap;
+    private HashMap<Integer, ArrayList<JPanel>> panelsVatFieldsHashMap;
+
 
     public DocumentModelPanel(boolean isUpdate) {
         setLayout(new BorderLayout());
 
+        Date today = new Date();
+
+        modelsDocuments = new HashMap<>();
+        vatItemHashMap = new HashMap<>();
+        panelsVatFieldsHashMap = new HashMap<>();
+
+        westPanel = new JPanel(new BorderLayout());
+        westPanel.setVisible(false);
+
+        numberFieldPanel = new JPanel();
+        numberFieldPanel.setVisible(false);
+        numberFieldPanel.setLayout(new BoxLayout(numberFieldPanel, BoxLayout.Y_AXIS));
+        numberFieldPanel.setBorder(BorderFactory.createTitledBorder("Number Field"));
+
+        gridDocument = new GridBagLayoutHelper();
+
+        searchListsVatPanel = new JPanel();
+        searchListsVatPanel.setLayout(new BoxLayout(searchListsVatPanel, BoxLayout.Y_AXIS));
+        searchListsVatPanel.setBorder(BorderFactory.createTitledBorder("VAT Panel"));
+
+        depositPanel = new JPanel();
+        depositPanel.setLayout(new BoxLayout(depositPanel, BoxLayout.Y_AXIS));
+        depositPanel.setBorder(BorderFactory.createTitledBorder("Deposit Panel"));
+        depositPanel.setVisible(false);
+
+        calculateVatButton = new JButton("Calculate");
+        calculateVatButton.addActionListener(e -> {
+            updateCalculVat();
+        });
+
+        deliveryDateField = new JDateField();
+        deliveryDateField.setPlaceholder("Delivery Date");
+        deliveryDateField.setVisible(false);
+
+        desiredDeliveryDate = new JDateField();
+        desiredDeliveryDate.setPlaceholder("Desired Delivery Date");
+        desiredDeliveryDate.setVisible(false);
+
+        reductionField = new JNumberField(Utils.NumberType.FLOAT, 2);
+        reductionField.setMinMax(0, 100);
+        reductionField.setPlaceholder("Enter reduction for all items");
+        reductionField.setVisible(false);
+
+        reductionField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                reduction = reductionField.getFloat();
+            }
+        });
+
+        ArrayList<String> optionsValidity = new ArrayList<>(asList("Valid", "Invalid"));
+        comboBoxValidity = new ComboBoxPanel<String>(optionsValidity, String::toString);
+        comboBoxValidity.setVisible(false);
+
+        checkBoxDepositIsPaid = new JCheckBox("Deposit is paid ?");
+
+        checkBoxDepositIsPaid.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showFieldDepositAmount(e.getStateChange() == ItemEvent.SELECTED);
+            }
+        });
+
+
+        depositAmountField = new JNumberField(Utils.NumberType.FLOAT, 2);
+        depositAmountField.setPlaceholder("Enter deposit amount");
+        depositAmountField.setVisible(false);
+
+        depositAmountField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                depositAmount = depositAmountField.getFloat();
+            }
+        });
+
+        depositPanel.add(checkBoxDepositIsPaid);
+        depositPanel.add(depositAmountField);
+
+        numberFieldHashMap = new HashMap<>();
+
         searchListPanelsOrderFourn = new ArrayList<>(Arrays.asList());
+        items = new ArrayList<>();
+        documentStatuses = new ArrayList<>();
+        deliveryStatusOptions = new ArrayList<>(Arrays.asList("Yes", "No"));
+        processes = new ArrayList<>();
+        vats = new ArrayList<>();
+        allComponents = new ArrayList<>();
+        customers = new ArrayList<>();
+        suppliers = new ArrayList<>();
+        deliveryTrucks = new ArrayList<>();
 
-
-        ArrayList<Document> documents = new ArrayList<>();
-        ArrayList<CollectionAgency> collectionAgencies = new ArrayList<>();
-        ArrayList<DocumentStatus> documentStatuses = new ArrayList<>();
-        ArrayList<DeliveryTruck> deliveryTrucks = new ArrayList<>();
-        ArrayList<Process> processes = new ArrayList<>();
-        ArrayList<String> deliveryStatusOptions = new ArrayList<>(Arrays.asList("Yes", "No"));
-
-        try{
-            documentStatuses = AppController.getAllDocumentStatus();
-        }catch (DatabaseConnectionFailedException | GetAllDocumentStatusException e){
+        try {
+            customers = CustomerController.getAllCustomers();
+        } catch (GetAllCustomersException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        Date today = new Date();
+        customerSearch = new SearchListPanel<>(customers, Customer::getFullName);
+        customerSearch.setVisible(false);
+        customerSearch.getSearchField().setPlaceholder("Select Customer");
 
-        GridBagLayoutHelper gridDocument = new GridBagLayoutHelper();
+        // @todo : ajouter une exception pour getAllDeliveryTrucks
+        try {
+            deliveryTrucks = DeliveryTruckController.getAllDeliveryTrucks();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        deliveryTruckSearch = new SearchListPanel<>(deliveryTrucks, DeliveryTruck::getLicensePlate);
+        deliveryTruckSearch.setVisible(false);
+        deliveryTruckSearch.getSearchField().setPlaceholder("Select Delivery Truck");
+
+        try {
+            suppliers = SupplierController.getAllSuppliers();
+        } catch (GetAllSuppliersException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        supplierSearch = new SearchListPanel<>(suppliers, Supplier::getName);
+        supplierSearch.setVisible(false);
+        supplierSearch.getSearchField().setPlaceholder("Select Supplier");
+
+        try {
+            vats = VATController.getAllVats();
+        } catch (GetAllVatsException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        comboBoxVat = new ComboBoxPanel<>(vats, Vat::getCode);
+
+        JLabel titleTotalExcludingTax = new JLabel("Total Excluding Tax: ");
+        JLabel titleTotalIncludingTax = new JLabel("Total Including Tax: ");
+        JLabel titleTotalVat = new JLabel("Total VAT: ");
+        JLabel titleDepositAmount = new JLabel("Deposit Amount: ");
+
+        totalPanel = new JPanel();
+        totalPanel.setLayout(new BoxLayout(totalPanel, BoxLayout.Y_AXIS));
+        totalPanel.setBorder(BorderFactory.createTitledBorder("Total Panel"));
+
+        totalExcludingTaxPanel = new JPanel();
+        totalExcludingTaxPanel.setLayout(new BoxLayout(totalExcludingTaxPanel, BoxLayout.X_AXIS));
+
+        totalIncludingTaxPanel = new JPanel();
+        totalIncludingTaxPanel.setLayout(new BoxLayout(totalIncludingTaxPanel, BoxLayout.X_AXIS));
+
+        totalVatAmountPanel = new JPanel();
+        totalVatAmountPanel.setLayout(new BoxLayout(totalVatAmountPanel, BoxLayout.X_AXIS));
+
+        totalDepositAmountPanel = new JPanel();
+        totalDepositAmountPanel.setLayout(new BoxLayout(totalDepositAmountPanel, BoxLayout.X_AXIS));
+
+        depositAmountLabel = new JLabel();
+        depositAmountLabel.setFont(new Font(depositAmountLabel.getFont().getName(), Font.BOLD, 16));
+
+        totalExclVatLabel = new JLabel();
+        totalExclVatLabel.setFont(new Font(totalExclVatLabel.getFont().getName(), Font.BOLD, 16));
+
+        totalInclVatLabel = new JLabel();
+        totalInclVatLabel.setFont(new Font(totalInclVatLabel.getFont().getName(), Font.BOLD, 16));
+
+        totalVatLabel = new JLabel();
+        totalVatLabel.setFont(new Font(totalVatLabel.getFont().getName(), Font.BOLD, 16));
+
+        totalExcludingTaxPanel.add(titleTotalExcludingTax);
+        totalExcludingTaxPanel.add(totalExclVatLabel);
+
+        totalIncludingTaxPanel.add(titleTotalIncludingTax);
+        totalIncludingTaxPanel.add(totalInclVatLabel);
+
+        totalVatAmountPanel.add(titleTotalVat);
+        totalVatAmountPanel.add(totalVatLabel);
+
+        totalDepositAmountPanel.add(titleDepositAmount);
+        totalDepositAmountPanel.add(depositAmountLabel);
+
+        totalPanel.add(totalExcludingTaxPanel);
+        totalPanel.add(totalIncludingTaxPanel);
+        totalPanel.add(totalVatAmountPanel);
+        totalPanel.add(totalDepositAmountPanel);
+
+        try {
+            items = ItemController.getAllItems();
+        } catch (GetAllItemsException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        try {
+            documentStatuses = DocumentStatusController.getAllDocumentStatus();
+        } catch (GetAllDocumentStatusException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        multipleSelectionListItems = new MultipleSelectionList<>(items, Item::getLabel);
+
+        multipleSelectionListItems.setVisible(false);
+
+        multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
+            ArrayList<Integer> selectedIds = Utils.transformData(selectedItems, Item::getId);
+            updateFieldsQuantity(selectedIds);
+        });
+
+        // 0
+        allComponents.add(deliveryDateField);
+        // 1
+        allComponents.add(desiredDeliveryDate);
+        // 2
+        allComponents.add(multipleSelectionListItems);
+        // 3
+        allComponents.add(numberFieldPanel);
+        //4
+        allComponents.add(westPanel);
+        //5
+        allComponents.add(reductionField);
+        //6
+        allComponents.add(comboBoxValidity);
+        // 7
+        allComponents.add(depositPanel);
+        // 8 customer Search
+        allComponents.add(customerSearch);
+        //9
+        allComponents.add(deliveryTruckSearch);
+        // 10
+        allComponents.add(supplierSearch);
+
+
+        // Model pour la commande fournisseur (1)
+        modelsDocuments.put(0, new ArrayList<>(asList(0, 1, 2, 3, 4, 10)));
+        // Model pour la commande client (2)
+        modelsDocuments.put(1, new ArrayList<>(asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)));
 
         labelField = new JEnhancedTextField();
         labelField.setPlaceholder("Label document");
@@ -60,24 +345,222 @@ public class DocumentModelPanel extends JPanel {
         dateField = new JDateField();
         dateField.setDate(today);
 
-        deliveryStatusSearch = new SearchListPanel<>(deliveryStatusOptions, status -> status);
-        deliveryStatusSearch.getSearchField().setPlaceholder("Select Delivery Status");
+
+
+        checkBoxIsDelivered = new JCheckBox("Is Delivered ?");
 
         documentStatusSearch = new SearchListPanel<>(documentStatuses, DocumentStatus::getLabel);
         documentStatusSearch.getSearchField().setPlaceholder("Select Document Status");
 
+        processesSearch = new SearchListPanel<>(processes, Process::getLabel);
+        processesSearch.getSearchField().setPlaceholder("Select Process");
+        processesSearch.setVisible(false);
+
+        comboBoxVat.onSelectedItemChange(vatChange -> {
+            updateCalculVat();
+        });
+
+        create = new JButton("Create");
+        create.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Mettre la fonction de vérification ici
+                // Si ok la fonction du Controller
+
+
+            }
+        });
 
         gridDocument.addField(labelField);
         gridDocument.addField(dateField);
-        gridDocument.addField(deliveryStatusSearch);
+        gridDocument.addField(checkBoxIsDelivered);
         gridDocument.addField(documentStatusSearch);
+        gridDocument.addField(processesSearch);
+        for (JComponent component : allComponents) {
+            gridDocument.addField(component);
+        }
+        gridDocument.addField(multipleSelectionListItems);
+        gridDocument.addField(numberFieldPanel);
+        gridDocument.addField(calculateVatButton);
+
+        searchListsVatPanel.add(comboBoxVat);
+        searchListsVatPanel.add(totalPanel);
+
+        westPanel.add(searchListsVatPanel, BorderLayout.NORTH);
+
 
         add(gridDocument, BorderLayout.CENTER);
+        add(westPanel, BorderLayout.WEST);
+
+
     }
 
     public void setTypeDocument(String typeDocument) {
         this.typeDocument = typeDocument;
         setLabelField(typeDocument);
+    }
+
+    private void showFieldDepositAmount(boolean show) {
+        if (show) {
+            depositAmountField.setVisible(true);
+        } else {
+            depositAmountField.setVisible(false);
+        }
+
+        depositPanel.revalidate();
+        depositPanel.repaint();
+    }
+
+    //@todo : mettre dans la couche buisness logique
+    private void calculTotalVat() {
+        totalExcludingTax = 0;
+        totalIncludingTax = 0;
+        totalVatAmount = 0;
+
+        for (Map.Entry<Integer, ArrayList<JLabel>> entry : vatItemHashMap.entrySet()) {
+            ArrayList<JLabel> labelList = entry.getValue();
+
+            for (int i = 0; i < labelList.size(); i++) {
+                float value = Float.parseFloat(labelList.get(i).getText().replace(",", "."));
+                if (i == 0) {
+                    totalExcludingTax += value;
+                } else if (i == 1) {
+                    totalIncludingTax += value;
+                } else if (i == 2) {
+                    totalVatAmount += value;
+                }
+            }
+        }
+
+        if (reduction > 0) {
+            float reductionAmount = (totalExcludingTax * reduction) / 100;
+            totalExcludingTax -= reductionAmount;
+
+            totalVatAmount = totalExcludingTax * (comboBoxVat.getSelectedItem().getRate() / 100);
+
+            totalIncludingTax = totalExcludingTax + totalVatAmount;
+        }
+
+        if (depositAmount > 0) {
+            totalIncludingTax -= depositAmount;
+
+            if (totalIncludingTax < 0) {
+                totalIncludingTax = 0;
+            }
+        }
+
+    }
+
+    //@todo : mettre dans la couche buisness logique
+    private Float[] calculVat(Float unitPrice, Float quantity, Float vatRate) {
+        Float[] result = new Float[3];
+
+        Float totalExcludingTax = unitPrice * quantity;
+        Float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
+        Float vatAmount = totalIncludingTax - totalExcludingTax;
+
+        result[0] = totalExcludingTax;
+        result[1] = totalIncludingTax;
+        result[2] = vatAmount;
+
+        return result;
+    }
+
+    private void updateCalculVat() {
+
+        ArrayList<JLabel> tvaFields;
+        ArrayList<JPanel> panelsVatFields;
+
+        Iterator<Integer> iterator = vatItemHashMap.keySet().iterator();
+        while (iterator.hasNext()) {
+            Integer id = iterator.next();
+            if (!multipleSelectionListItems.getSelectedItems().stream().anyMatch(item -> item.getId().equals(id))) {
+                ArrayList<JPanel> panelsToRemove = panelsVatFieldsHashMap.get(id);
+                for (JPanel panelVat : panelsToRemove) {
+                    searchListsVatPanel.remove(panelVat);
+                }
+                iterator.remove();
+            }
+        }
+
+        for (Item item : multipleSelectionListItems.getSelectedItems()) {
+            Float quantity = numberFieldHashMap.get(item.getId()).getFloat();
+
+            if (quantity > 0) {
+                Float unitPrice = item.getPrice();
+                Float vatRate = comboBoxVat.getSelectedItem().getRate();
+                Float[] values = calculVat(unitPrice, quantity, vatRate);
+
+                if (vatItemHashMap.containsKey(item.getId())) {
+                    tvaFields = vatItemHashMap.get(item.getId());
+                    tvaFields.get(0).setText(String.format("%.2f", values[0]));
+                    tvaFields.get(1).setText(String.format("%.2f", values[1]));
+                    tvaFields.get(2).setText(String.format("%.2f", values[2]));
+                } else {
+                    tvaFields = new ArrayList<>();
+                    panelsVatFields = new ArrayList<>();
+
+                    JPanel totalExcludingTaxPanel = new JPanel();
+                    totalExcludingTaxPanel.setLayout(new BoxLayout(totalExcludingTaxPanel, BoxLayout.X_AXIS));
+                    JLabel totalExcludingTaxLabel = new JLabel("excl. VAT for " + item.getLabel() + ":  ");
+                    JLabel totalExcludingTax = new JLabel();
+                    totalExcludingTax.setFont(new Font(totalExcludingTax.getFont().getName(), Font.BOLD, 16));
+                    totalExcludingTax.setPreferredSize(new Dimension(200, 30));
+                    totalExcludingTaxPanel.add(totalExcludingTaxLabel);
+                    totalExcludingTaxPanel.add(totalExcludingTax);
+
+                    JPanel totalInclusiveOfTaxPanel = new JPanel();
+                    totalInclusiveOfTaxPanel.setLayout(new BoxLayout(totalInclusiveOfTaxPanel, BoxLayout.X_AXIS));
+                    JLabel totalInclusiveOfTaxLabel = new JLabel("incl. VAT for " + item.getLabel() + ":  ");
+                    JLabel totalInclusiveOfTax = new JLabel();
+                    totalInclusiveOfTax.setFont(new Font(totalInclusiveOfTax.getFont().getName(), Font.BOLD, 16));
+                    totalInclusiveOfTax.setPreferredSize(new Dimension(200, 30));
+                    totalInclusiveOfTaxPanel.add(totalInclusiveOfTaxLabel);
+                    totalInclusiveOfTaxPanel.add(totalInclusiveOfTax);
+
+                    JPanel vatAmountPanel = new JPanel();
+                    vatAmountPanel.setLayout(new BoxLayout(vatAmountPanel, BoxLayout.X_AXIS));
+                    JLabel vatAmountLabel = new JLabel("VAT amount for " + item.getLabel() + ":  ");
+                    JLabel vatAmount = new JLabel();
+                    vatAmount.setFont(new Font(vatAmount.getFont().getName(), Font.BOLD, 16));
+                    vatAmount.setPreferredSize(new Dimension(200, 30));
+
+                    vatAmountPanel.add(vatAmountLabel);
+                    vatAmountPanel.add(vatAmount);
+
+                    panelsVatFields.add(totalExcludingTaxPanel);
+                    panelsVatFields.add(totalInclusiveOfTaxPanel);
+                    panelsVatFields.add(vatAmountPanel);
+
+
+                    totalExcludingTax.setText(String.format("%.2f", values[0]));
+                    totalInclusiveOfTax.setText(String.format("%.2f", values[1]));
+                    vatAmount.setText(String.format("%.2f", values[2]));
+
+                    tvaFields.add(totalExcludingTax);
+                    tvaFields.add(totalInclusiveOfTax);
+                    tvaFields.add(vatAmount);
+
+
+                    vatItemHashMap.put(item.getId(), tvaFields);
+                    panelsVatFieldsHashMap.put(item.getId(), panelsVatFields);
+
+                    for (JPanel vatPanel : panelsVatFields) {
+                        searchListsVatPanel.add(vatPanel);
+                    }
+                }
+            }
+        }
+
+        calculTotalVat();
+
+        totalExclVatLabel.setText(String.format("%.2f", totalExcludingTax) + " €");
+        totalInclVatLabel.setText(String.format("%.2f", totalIncludingTax) + " €");
+        totalVatLabel.setText(String.format("%.2f", totalVatAmount) + " €");
+        depositAmountLabel.setText(String.format("%.2f", depositAmount) + " €");
+
+        searchListsVatPanel.revalidate();
+        searchListsVatPanel.repaint();
     }
 
     private void setLabelField(String label) {
@@ -87,11 +570,220 @@ public class DocumentModelPanel extends JPanel {
         labelField.updateText(label + formattedDateTime);
     }
 
-    public void update(){
-        switch (this.typeDocument){
-            case "Order":
+    public void loadDataAndShowProcesses(Integer id) {
+        try {
+            processes = ProcessController.getProcessWithSpecificType(id);
+            if (!processes.isEmpty()) {
+                processesSearch.setData(processes);
+                processesSearch.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "No processes found for the selected type.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (GetProcessWithSpecificType e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
+    private void setAllCompnentsVisibleFalse() {
+        allComponents.stream().forEach(x -> x.setVisible(false));
+        gridDocument.revalidate();
+        gridDocument.repaint();
+    }
+
+    public void update() {
+        setAllCompnentsVisibleFalse();
+        reduction = 0;
+        ArrayList<Integer> indexes = new ArrayList<>();
+        switch (this.typeDocument) {
+            case "Order":
+                indexes = modelsDocuments.get(1);
+                for (Integer index : indexes) {
+                    allComponents.get(index).setVisible(true);
+                }
+                break;
+            case "order_fourn":
+                indexes = modelsDocuments.get(0);
+                for (Integer index : indexes) {
+                    allComponents.get(index).setVisible(true);
+                }
                 break;
         }
+
+    }
+
+    private void updateFieldsQuantity(List<Integer> selectedIds) {
+
+        System.out.println(selectedIds);
+        for (Integer id : selectedIds) {
+            if (!numberFieldHashMap.containsKey(id)) {
+                JNumberField numberField = new JNumberField(Utils.NumberType.FLOAT, 2);
+                numberField.setAllowNegative(false);
+                numberField.setPlaceholder("Enter quantity");
+                numberFieldHashMap.put(id, numberField);
+                System.out.println(numberFieldHashMap);
+                numberFieldPanel.add(numberField);
+            }
+        }
+
+        List<Integer> idsToRemove = new ArrayList<>();
+
+        for (Integer id : numberFieldHashMap.keySet()) {
+            if (!selectedIds.contains(id)) {
+                JNumberField fieldToRemove = numberFieldHashMap.get(id);
+                numberFieldPanel.remove(fieldToRemove);
+                idsToRemove.add(id);
+
+            }
+        }
+
+        for (Integer id : idsToRemove) {
+            numberFieldHashMap.remove(id);
+        }
+
+        numberFieldPanel.revalidate();
+        numberFieldPanel.repaint();
+
+    }
+
+    public boolean isDocumentInvalid() {
+
+        if (typeDocument == "order") {
+            if (desiredDeliveryDate.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in the desired delivery date", "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+
+            if (comboBoxValidity.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a validity", "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+
+            if (customerSearch.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a customer", "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+        }
+
+        if (typeDocument == "order_fourn") {
+            if (supplierSearch.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a supplier", "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+        }
+
+
+        if (dateField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in the date", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if (labelField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in the label", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+
+
+        if (documentStatusSearch.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a document status", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if (processesSearch.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a process", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        if (multipleSelectionListItems.getSelectedItems().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select at least one item", "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+
+        for (Item item : multipleSelectionListItems.getSelectedItems()) {
+            int id = item.getId();
+            if (!numberFieldHashMap.containsKey(id)) {
+                JOptionPane.showMessageDialog(this, "Please fill in the quantity for item " + item.getLabel(), "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+
+    public JDateField getDateField() {
+        return dateField;
+    }
+
+    public JDateField getDeliveryDateField() {
+        return deliveryDateField;
+    }
+
+    public JDateField getDesiredDeliveryDate() {
+        return desiredDeliveryDate;
+    }
+
+    public JEnhancedTextField getLabelField() {
+        return labelField;
+    }
+
+    public boolean getIsDelivered() {
+        return checkBoxIsDelivered.isSelected();
+    }
+
+    public SearchListPanel getDocumentStatusSearch() {
+        return documentStatusSearch;
+    }
+
+    public SearchListPanel getProcessesSearch() {
+        return processesSearch;
+    }
+
+    public SearchListPanel getSupplierSearch() {
+        return supplierSearch;
+    }
+
+    public MultipleSelectionList getMultipleSelectionListItems() {
+        return multipleSelectionListItems;
+    }
+
+    public HashMap<Integer, JNumberField> getNumberFieldHashMap() {
+        return numberFieldHashMap;
+    }
+
+    public ComboBoxPanel getComboBoxValidity() {
+        return comboBoxValidity;
+    }
+
+    public SearchListPanel getCustomerSearch() {
+        return customerSearch;
+    }
+
+    public float getReduction(){
+        return reduction;
+    }
+
+    public JCheckBox getCheckBoxDepositIsPaid() {
+        return checkBoxDepositIsPaid;
+    }
+
+    public float getDepositAmount() {
+        return depositAmount;
+    }
+
+    public ComboBoxPanel getComboBoxVat() {
+        return comboBoxVat;
+    }
+
+    public float getTotalIncludingTax(){
+        return totalIncludingTax;
+    }
+
+    public float getTotalExcludingTax(){
+        return totalExcludingTax;
+    }
+
+    public float getTotalVatAmount(){
+        return totalVatAmount;
     }
 }

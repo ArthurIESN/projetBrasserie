@@ -30,6 +30,10 @@ public class Vat {
                 Objects.equals(rate, vat.rate);
     }
 
+    public static int hashCode(String code, float rate) {
+        return Objects.hash(code, rate);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(code, rate);

@@ -9,4 +9,9 @@ import java.util.ArrayList;
 public interface ProcessTypeDataAccess
 {
     ArrayList<ProcessType> getAllTypes() throws GetAllProcessTypesException;
+
+    void createProcessType(ProcessType processType);
+    void updateProcessType(ProcessType processType);
+    void deleteProcessType(int id);
+    ProcessType getProcessType(int id);
 }

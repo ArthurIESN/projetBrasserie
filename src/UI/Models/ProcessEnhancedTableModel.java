@@ -9,7 +9,7 @@ public class ProcessEnhancedTableModel extends AbstractEnhancedTableModel<Proces
 {
     public ProcessEnhancedTableModel(ArrayList<Process> data)
     {
-        super("Process", new String[]{"ID", "Label", "Number", "Creation Date"}, data);
+        super("Process", new String[]{"ID", "Label", "Number"}, data);
     }
 
     public ProcessEnhancedTableModel()
@@ -31,7 +31,6 @@ public class ProcessEnhancedTableModel extends AbstractEnhancedTableModel<Proces
             case 0 -> process.getId();
             case 1 -> process.getLabel();
             case 2 -> process.getNumber();
-            case 3 -> process.getCreationDate();
             default -> null;
         };
     }

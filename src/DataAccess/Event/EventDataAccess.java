@@ -1,12 +1,22 @@
 package DataAccess.Event;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public interface EventDataAccess {
-    ArrayList<Event> getEventsWithSpecificItem(int idItem) throws DatabaseConnectionFailedException, GetEventsWithItemException;
+    ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException;
+
+    ArrayList<Event> getEventsBeforeDate(Date date) throws GetEventsBeforeDateException;
+
+    void createEvent(Event event);
+    void updateEvent(Event event);
+    void deleteEvent(int id);
+    Event getEvent(int id);
+    ArrayList<Event> getAllEvents();
 
 }
