@@ -63,18 +63,17 @@ public class SearchPaymentDBAccess implements SearchPaymentDataAccess {
                 "JOIN customer ON process.num_customer = customer.num_customer " +
                 "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
                 "JOIN process_type ON process.id = process_type.id " +
-                "WHERE payment_status.label = ?" +
-                "AND payment.amount > ?" +
-                "AND YEAR(payment.payment_date) = ?;";
+                "WHERE payment.amount >= ? " +
+                "AND YEAR(payment.payment_date) = ? " +
+                "AND payment_status.label " + (status.equals("Validated") ? "=" : "!=") + " 'Validated';";
 
         try
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
-            statement.setString(1, status);
-            statement.setDouble(2, minAmount);
-            statement.setInt(3, year.toLocalDate().getYear());
+            statement.setDouble(1, minAmount);
+            statement.setInt(2, year.toLocalDate().getYear());
 
             ResultSet resultSet = statement.executeQuery();
 

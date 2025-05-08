@@ -46,7 +46,6 @@ public class SearchPaymentForm extends JPanel
         try {
             // Récupérer les années depuis la base de données
             paymentYears = SearchController.getAllPaymentYears();
-            paymentYears.add(2024);
         } catch (GetAllPaymentYearsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             paymentYears = new ArrayList<>(); // Liste vide en cas d'erreur
@@ -121,7 +120,7 @@ public class SearchPaymentForm extends JPanel
         if (isValidated){
             paymentStatus = "Validated";
         } else {
-            paymentStatus = "Refused";
+            paymentStatus = "Not validated";
         }
 
         java.sql.Date sqlDate = null;
