@@ -10,15 +10,17 @@ public class Employee {
     private String lastName;
     private String firstName;
     private Date birthDate;
+    private String password;
     private EmployeeStatus employeeStatus;
 
-    public Employee (Integer id, String lastName, String firstName, Date birthDate,
+    public Employee (Integer id, String lastName, String firstName, Date birthDate, String password,
                      EmployeeStatus employeeStatus)
     {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
+        this.password = password;
         this.employeeStatus = employeeStatus;
     }
 
@@ -38,6 +40,15 @@ public class Employee {
         return birthDate;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
     public EmployeeStatus getEmployeeStatus() {
         return employeeStatus;
     }
@@ -54,6 +65,12 @@ public class Employee {
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(birthDate, employee.birthDate) &&
                 Objects.equals(employeeStatus, employee.employeeStatus);
+    }
+
+    public static int hashCode(Integer id, String lastName, String firstName, Date birthDate,
+                                EmployeeStatus employeeStatus)
+    {
+        return Objects.hash(id, lastName, firstName, birthDate, employeeStatus);
     }
 
     @Override

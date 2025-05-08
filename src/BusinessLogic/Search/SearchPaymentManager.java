@@ -18,7 +18,7 @@ public class SearchPaymentManager {
         searchPaymentDataAccess = new SearchPaymentDBAccess();
     }
 
-    public ArrayList<Payment> searchPayments(String status, double minAmount, Date year) throws DatabaseConnectionFailedException, SearchPaymentException {
+    public ArrayList<Payment> searchPayments(String status, double minAmount, Date year) throws SearchPaymentException {
         ArrayList<Payment> Payments;
 
         Payments = searchPaymentDataAccess.searchPayment(status, minAmount, year);
@@ -26,7 +26,7 @@ public class SearchPaymentManager {
         return Payments;
     }
 
-    public ArrayList<Integer> getAllPaymentYears() throws DatabaseConnectionFailedException, GetAllPaymentYearsException {
+    public ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
         return searchPaymentDataAccess.getAllPaymentYears();
     }
 }

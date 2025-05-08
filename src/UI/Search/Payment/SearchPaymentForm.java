@@ -46,7 +46,8 @@ public class SearchPaymentForm extends JPanel
         try {
             // Récupérer les années depuis la base de données
             paymentYears = SearchController.getAllPaymentYears();
-        } catch (DatabaseConnectionFailedException | GetAllPaymentYearsException e) {
+            paymentYears.add(2024);
+        } catch (GetAllPaymentYearsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             paymentYears = new ArrayList<>(); // Liste vide en cas d'erreur
         }
@@ -64,7 +65,7 @@ public class SearchPaymentForm extends JPanel
         gridSearchForm.addField("Payment validated", validatedPaymentCheckBox);
 
         // Minimum Amount Field
-        JNumberField amountField = new JNumberField(JNumberField.NumberType.FLOAT, 2);
+        JNumberField amountField = new JNumberField(Utils.NumberType.FLOAT, 2);
         amountField.setAllowNegative(false);
         amountField.setPlaceholder("Enter amount");
         amountField.setColumns(10);
@@ -150,7 +151,7 @@ public class SearchPaymentForm extends JPanel
                 JOptionPane.showMessageDialog(null, "No payment found", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
 
-        } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
+        } catch (SearchPaymentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -1,12 +1,9 @@
 package UI.Process;
 
-import Controller.AppController;
-
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Controller.Process.ProcessController;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
 import Model.CustomerStatus.CustomerStatus;
@@ -32,7 +29,7 @@ public class ReadProcessPanel extends JPanel
 
         try
         {
-            processes = AppController.getAllProcesses();
+            processes = ProcessController.getAllProcesses();
         }
         catch (GetAllProcessesException e)
         {
@@ -88,10 +85,10 @@ public class ReadProcessPanel extends JPanel
         {
             switch (action.getActionCommand())
             {
-                case "Update" -> processPanel.navbarClick(2);
-                case "Delete" -> processPanel.navbarClick(3);
+                case "Update" -> processPanel.moveTo(2);
+                case "Delete" -> processPanel.moveTo(3);
             }
-            processPanel.notifyObservers((Process)finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
+            processPanel.notifyObservers(finalProcesses.get(tableScrollPanel.getTable().getSelectedRow()));
         });
 
 

@@ -7,10 +7,9 @@ import java.util.HashMap;
 public class MakeDocumentDetails {
     private static final HashMap<Integer,DocumentDetails> documentDetailsMap = new HashMap<>();
 
-    public static DocumentDetails getDocumentDetails(Integer id, String label, Float quantity, Float newQuantity, Float unitPrice, Document document)
+    public static DocumentDetails getDocumentDetails(Integer id, String label, Integer quantity, Integer newQuantity, Float unitPrice, Document document)
     {
-        DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document);
-        int documentDetailsHash = documentDetails.hashCode();
+        int documentDetailsHash = DocumentDetails.hashCode(id, label, quantity, newQuantity, unitPrice, document);
 
         if(documentDetailsMap.containsKey(documentDetailsHash))
         {
@@ -18,6 +17,7 @@ public class MakeDocumentDetails {
         }
         else
         {
+            DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document);
             documentDetailsMap.put(documentDetailsHash,documentDetails);
             return documentDetails;
         }

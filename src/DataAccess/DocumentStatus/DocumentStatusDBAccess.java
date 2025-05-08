@@ -1,5 +1,6 @@
 package DataAccess.DocumentStatus;
 
+import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
@@ -14,7 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
-    public ArrayList<DocumentStatus> getAllDocumentStatus() throws DatabaseConnectionFailedException, GetAllDocumentStatusException {
+    public ArrayList<DocumentStatus> getAllDocumentStatus() throws GetAllDocumentStatusException
+    {
         String query = "SELECT * FROM document_status";
 
         try{
@@ -24,20 +26,51 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             ArrayList<DocumentStatus> documentStatuses = new ArrayList<>();
 
-            while (resultSet.next()){
-                DocumentStatus documentStatus = MakeDocumentStatus.getDocumentStatus(
-                        resultSet.getInt("id"),
-                        resultSet.getString("label")
-                );
-
-                documentStatuses.add(documentStatus);
+            while (resultSet.next())
+            {
+                documentStatuses.add(makeDocumentStatus(resultSet));
             }
 
             return documentStatuses;
 
-        }catch (SQLException e){
+        }catch (SQLException | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());
             throw new GetAllDocumentStatusException();
         }
+    }
+
+    @Override
+    public void createDocumentStatus(DocumentStatus documentStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateDocumentStatus(DocumentStatus documentStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteDocumentStatus(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public DocumentStatus getDocumentStatus(Integer id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<DocumentStatus> getAllDocumentStatusByDocumentId(Integer documentId) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static DocumentStatus makeDocumentStatus(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "document_status.id")) return null;
+
+        return MakeDocumentStatus.getDocumentStatus(
+                resultSet.getInt("document_status.id"),
+                resultSet.getString("document_status.label")
+        );
     }
 }

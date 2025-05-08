@@ -38,6 +38,10 @@ public class PaymentStatus {
                 Objects.equals(label, that.label);
     }
 
+    public static int hashCode(int id, String label) {
+        return Objects.hash(id, label);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, label);

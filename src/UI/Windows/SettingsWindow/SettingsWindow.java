@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class SettingsWindow extends JFrame implements WindowObserver {
     private final WindowManager windowManager;
-    private final int width = 400;
-    private final int height = 300;
+    private final int width = 600;
+    private final int height = 500;
     private final Container container;
 
     public SettingsWindow()

@@ -3,6 +3,7 @@ package UI.Process;
 import UI.Components.Navbar.NavbarPanel;
 
 import Model.Process.Process;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ public class ProcessPanel extends JPanel implements ProcessSubject
 {
     private Container container;
     private final NavbarPanel navbarPanel;
-    private final List<ProcessObserver> observers = new ArrayList<>();
+    private static final List<ProcessObserver> observers = new ArrayList<>();
     public ProcessPanel()
     {
         setLayout(new BorderLayout());
@@ -32,10 +33,7 @@ public class ProcessPanel extends JPanel implements ProcessSubject
         add(container, BorderLayout.CENTER);
     }
 
-    public void navbarClick(int index)
-    {
-        navbarPanel.clickItem(index);
-    }
+
 
     public void navbarForceClick(int index)
     {
@@ -61,23 +59,53 @@ public class ProcessPanel extends JPanel implements ProcessSubject
         }
     }
 
+    public void moveTo(int index)
+    {
+        Class<? extends JPanel> panelClass = getClassWithIndex(index);
+
+        if (WindowManager.isPanelDisplayed(panelClass))
+        {
+            WindowManager.focusWindow(panelClass);
+        }
+        else
+        {
+            navbarPanel.clickItem(index);
+        }
+    }
 
     public void updateContent(int index)
     {
         container.removeAll();
 
-        JPanel panel = switch (index)
+        Class<? extends JPanel> panelClass = getClassWithIndex(index);
+
+        JPanel panel;
+        try
         {
-            case 0 -> new CreateProcessPanel();
-            case 1 -> new ReadProcessPanel(this);
-            case 2 -> new UpdateProcessPanel(this);
-            case 3 -> new DeleteProcessPanel(this);
-            default -> new CreateProcessPanel();
-        };
+            panel = panelClass
+                    .getDeclaredConstructor(ProcessPanel.class)
+                    .newInstance(this);
+        }
+        catch (Exception e)
+        {
+            panel = new CreateProcessPanel(this);
+        }
 
         container.add(panel, BorderLayout.CENTER);
         container.revalidate();
         container.repaint();
+    }
+
+    private Class<? extends JPanel> getClassWithIndex(int index)
+    {
+        return switch (index)
+        {
+            case 0 -> CreateProcessPanel.class;
+            case 1 -> ReadProcessPanel.class;
+            case 2 -> UpdateProcessPanel.class;
+            case 3 -> DeleteProcessPanel.class;
+            default -> CreateProcessPanel.class;
+        };
     }
 }
 

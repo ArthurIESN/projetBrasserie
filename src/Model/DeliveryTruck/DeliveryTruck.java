@@ -9,10 +9,22 @@ public class DeliveryTruck {
     private float mileage;
 
     public DeliveryTruck(Integer id,String licensePlate,float fuelQuantity,float mileage){
-        this.id = id;
+        setId(id);
         this.licensePlate = licensePlate;
         this.fuelQuantity = fuelQuantity;
         this.mileage = mileage;
+    }
+
+    private void setId(Integer id)
+    {
+        if(id == null || id <= 0)
+        {
+            id = null;
+        }
+        else
+        {
+            this.id = id;
+        }
     }
 
     public Integer getId(){
@@ -43,6 +55,11 @@ public class DeliveryTruck {
                 Objects.equals(licensePlate, deliveryTruck.licensePlate) &&
                 Objects.equals(fuelQuantity, deliveryTruck.fuelQuantity) &&
                 Objects.equals(mileage, deliveryTruck.mileage);
+    }
+
+    public static int hashCode(Integer id, String licensePlate, float fuelQuantity, float mileage)
+    {
+        return Objects.hash(id, licensePlate, fuelQuantity, mileage);
     }
 
     @Override

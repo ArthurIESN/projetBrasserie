@@ -1,6 +1,7 @@
 package UI.Process;
 
-import Controller.AppController;
+import Controller.Process.ProcessController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetAllProcessesException;
 import Model.Customer.Customer;
@@ -33,7 +34,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
 
         try
         {
-            processes = AppController.getAllProcesses();
+            processes = ProcessController.getAllProcesses();
         }
         catch (GetAllProcessesException e)
         {
@@ -62,15 +63,9 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
             Process selectedProcess = processSearch.getSelectedItem();
             if (selectedProcess != null)
             {
-
-                JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                // refresh the panel
-
-
                 try
                 {
-                    AppController.deleteProcess(selectedProcess.getId());
+                    ProcessController.deleteProcess(selectedProcess.getId());
 
                     JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -78,7 +73,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
                     processPanel.navbarForceClick(3);
 
                 }
-                catch (DeleteProcessException e1)
+                catch (DeleteProcessException | UnauthorizedAccessException e1)
                 {
                     JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -147,7 +142,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
     @Override
     public void update(Process process)
     {
-        processSearch.setSelectedItem(process);
+        processSearch.forceSetSelectedItem(process);
     }
 
 }

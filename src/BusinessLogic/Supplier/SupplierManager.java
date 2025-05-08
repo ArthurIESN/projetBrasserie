@@ -25,4 +25,24 @@ public class SupplierManager
     {
         return supplierDataAccess.getAllSuppliers();
     }
+
+    public Supplier getSupplier(int id)
+    {
+        return supplierDataAccess.getSupplier(id);
+    }
+
+    public void createSupplier(Supplier supplier)
+    {
+        supplierDataAccess.createSupplier(supplier);
+    }
+
+    public void deleteSupplier(int id)
+    {
+        supplierDataAccess.deleteSupplier(id);
+    }
+
+    public void updateSupplier(Supplier supplier)
+    {
+        supplierDataAccess.updateSupplier(supplier);
+    }
 }

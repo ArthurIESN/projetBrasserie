@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DataAccess.DatabaseConnexion;
+import DataAccess.DataAccesUtils;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
@@ -33,12 +34,7 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
             while (resultSet.next())
             {
-                ProcessStatus processStatus = MakeProcessStatus.getProcessStatus(
-                        resultSet.getInt("id"),
-                        resultSet.getString("label")
-                );
-
-                processStatuses.add(processStatus);
+                processStatuses.add(makeProcessStatus(resultSet));
             }
 
             return processStatuses;
@@ -48,5 +44,40 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
             System.err.println(e.getMessage());
             throw new GetAllProcessStatusException();
         }
+    }
+
+    @Override
+    public void createProcessStatus(ProcessStatus processStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void updateProcessStatus(ProcessStatus processStatus) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void deleteProcessStatus(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ProcessStatus getProcessStatus(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public ArrayList<ProcessStatus> getProcessStatusWithSpecificType(int id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static ProcessStatus makeProcessStatus(ResultSet resultSet) throws SQLException
+    {
+        if(!DataAccesUtils.hasColumn(resultSet, "process_status.id")) return null;
+
+        return MakeProcessStatus.getProcessStatus(
+                resultSet.getInt("process_status.id"),
+                resultSet.getString("process_status.label")
+        );
     }
 }

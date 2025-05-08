@@ -1,5 +1,6 @@
 package BrasserieManagementSystem;
 
+import Controller.AppController;
 import Environement.SystemProperties;
 import UI.Windows.WindowManager;
 
@@ -8,6 +9,7 @@ public class BrasserieManagementSystem
     public static void init()
     {
         SystemProperties.applySettings();
-        WindowManager.addWindow();
+        AppController.autoConnect();
+        WindowManager.loadWindows();
     }
 }
