@@ -5,7 +5,7 @@ public class GetAllPaymentYearsException extends Exception {
 
   public GetAllPaymentYearsException()
   {
-    this.message = "Error while getting the min and max payment date.";
+    this.message = "Error while getting all payments dates.";
   }
 
   public String getMessage()

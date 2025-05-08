@@ -4,7 +4,8 @@ package Controller;
 import BusinessLogic.Event.EventManager;
 import BusinessLogic.Search.SearchDocumentWithEventManager;
 
-import BusinessLogic.Search.SearchPaymentManager;
+import BusinessLogic.Payment.PaymentManager;
+
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Search.*;
@@ -25,21 +26,11 @@ public class SearchController {
     //@todo : refactor this in specific controllers
 
     private static final SearchDocumentWithEventManager searchDocumentWithEventManager = new SearchDocumentWithEventManager();
-    private static final SearchPaymentManager searchPaymentManager = new SearchPaymentManager();
     private static final EventManager searchEventManager = new EventManager();
 
     // fonction qui récupères toutes les années des event (recherche par années des documents impliquant des events)
     public static List<Integer> getDatesEvents(Integer idEvent) throws DatabaseConnectionFailedException{
         return searchDocumentWithEventManager.getDatesEvents(idEvent);
-    }
-
-    public static ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
-        return searchPaymentManager.getAllPaymentYears();
-    }
-
-    // Search for payments based on criteria (validated, amount, year)
-    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws SearchPaymentException {
-        return searchPaymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager
     }
 
     public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {

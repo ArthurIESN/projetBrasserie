@@ -3,38 +3,54 @@ package BusinessLogic.Payment;
 import DataAccess.Payment.PaymentDBAccess;
 import DataAccess.Payment.PaymentDataAccess;
 
+import Exceptions.Search.GetAllPaymentYearsException;
+import Exceptions.Payment.GetAllPaymentException;
+import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class PaymentManager
 {
-    private final PaymentDataAccess paymentDataAccess = new PaymentDBAccess();
+    private final PaymentDataAccess paymentDBAccess = new PaymentDBAccess();
+    public PaymentManager() {}
 
-    public ArrayList<Payment> getAllPayments()
+    public ArrayList<Payment> getAllPayments() throws GetAllPaymentException
     {
-        return paymentDataAccess.getAllPayments();
+        return paymentDBAccess.getAllPayments();
+    }
+
+    public ArrayList<Payment> searchPayments(String status, double minAmount, Date year) throws SearchPaymentException {
+        ArrayList<Payment> Payments;
+
+        Payments = paymentDBAccess.searchPayment(status, minAmount, year);
+
+        return Payments;
+    }
+
+    public ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
+        return paymentDBAccess.getAllPaymentYears();
     }
 
     public Payment getPayment(int id)
     {
-        return paymentDataAccess.getPayment(id);
+        return paymentDBAccess.getPayment(id);
     }
 
     public void createPayment(Payment payment)
     {
-        paymentDataAccess.createPayment(payment);
+        paymentDBAccess.createPayment(payment);
     }
 
     public void updatePayment(Payment payment)
     {
-        paymentDataAccess.updatePayment(payment);
+        paymentDBAccess.updatePayment(payment);
     }
 
     public void deletePayment(int id)
     {
-        paymentDataAccess.deletePayment(id);
+        paymentDBAccess.deletePayment(id);
     }
-
 
 }
