@@ -17,7 +17,6 @@ public class MakePayment {
     {
         Payment payment = new Payment(id, amount, paymentDate, paymentStatus, document, process, customer);
         int paymentHash = payment.hashCode();
-
         if(paymentMap.containsKey(paymentHash))
         {
             return paymentMap.get(paymentHash);
