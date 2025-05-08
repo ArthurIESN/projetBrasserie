@@ -10,15 +10,13 @@ import DataAccess.Supplier.SupplierDBAccess;
 import DataAccess.Customer.CustomerDBAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Document.CreateDocumentException;
 import Exceptions.Process.*;
 
 import Model.Process.MakeProcess;
 import Model.Process.Process;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static java.sql.Types.INTEGER;
@@ -30,7 +28,7 @@ public class ProcessDBAccess implements ProcessDataAccess
     {
     }
 
-    public void createProcess(Process process) throws CreateProcessException
+    public int createProcess(Process process) throws CreateProcessException
     {
         String query = "INSERT INTO process (label, number, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -59,7 +57,7 @@ public class ProcessDBAccess implements ProcessDataAccess
         try
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance();
-            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            PreparedStatement statement = databaseConnexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
 
@@ -93,7 +91,19 @@ public class ProcessDBAccess implements ProcessDataAccess
                 statement.setInt(7, process.getCustomer().getId());
             }
 
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0)
+            {
+                throw new CreateDocumentException("Failed to create document, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new CreateDocumentException("Failed to create document, no ID obtained.");
+                }
+            }
         }
         catch (SQLException | DatabaseConnectionFailedException e)
         {

@@ -1,6 +1,7 @@
 package Model.DocumentDetails;
 
 import Model.Document.Document;
+import Model.Item.Item;
 
 import java.util.Objects;
 
@@ -11,9 +12,10 @@ public class DocumentDetails {
     private Integer newQuantity;
     private float unitPrice;
     private Document document;
+    private Item item;
 
     public DocumentDetails(Integer id, String label, int quantity, Integer newQuantity,
-                           float unitPrice, Document document)
+                           float unitPrice, Document document, Item item)
     {
         this.id = id;
         this.label = label;
@@ -21,6 +23,7 @@ public class DocumentDetails {
         this.newQuantity = newQuantity;
         this.unitPrice = unitPrice;
         this.document = document;
+        this.item = item;
     }
 
     public Integer getId() {
@@ -47,6 +50,10 @@ public class DocumentDetails {
         return document;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -59,23 +66,24 @@ public class DocumentDetails {
                 Objects.equals(quantity, that.quantity) &&
                 Objects.equals(newQuantity, that.newQuantity) &&
                 Objects.equals(unitPrice, that.unitPrice) &&
-                Objects.equals(document, that.document);
+                Objects.equals(document, that.document) &&
+                Objects.equals(item, that.item);
     }
 
     public static int hashCode(Integer id, String label, float quantity, float newQuantity,
-                                float unitPrice, Document document)
+                                float unitPrice, Document document, Item item)
     {
-        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document);
+        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document, item);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document);
+        return Objects.hash(id, label, quantity, newQuantity, unitPrice, document, item);
     }
 
     @Override
     public String toString() {
-        return id + " - " + label + " - " + quantity + " - " + newQuantity + " - " + unitPrice + " - " + document;
+        return id + " - " + label + " - " + quantity + " - " + newQuantity + " - " + unitPrice + " - " + document + " - " + item;
     }
 }

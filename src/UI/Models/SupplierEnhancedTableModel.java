@@ -27,7 +27,8 @@ public class SupplierEnhancedTableModel extends AbstractEnhancedTableModel<Suppl
             return " - ";
         }
 
-        return switch (columnIndex) {
+        return switch (columnIndex)
+        {
             case 0 -> supplier.getId();
             case 1 -> supplier.getName();
             default -> null;

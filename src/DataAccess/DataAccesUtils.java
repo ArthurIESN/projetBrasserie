@@ -19,7 +19,9 @@ public class DataAccesUtils
                 String fullColumnName = metaData.getTableName(i) + "." + columnLabel;
 
                 if (columnName.equalsIgnoreCase(columnLabel) || columnName.equalsIgnoreCase(fullColumnName)) {
-                    return true;
+                    // if value is null, it means the column is not present
+                    Object value = rs.getObject(i);
+                    return value != null;
                 }
             }
         } catch (Exception e) {

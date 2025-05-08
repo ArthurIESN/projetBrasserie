@@ -8,7 +8,7 @@ import Exceptions.Process.*;
 import Model.Process.Process;
 
 public interface ProcessDataAccess {
-    void createProcess(Process process) throws CreateProcessException;
+    int createProcess(Process process) throws CreateProcessException;
 
     void deleteProcess(Integer id) throws DeleteProcessException;
 

@@ -65,7 +65,7 @@ public class DocumentDBAccess implements DocumentDataAccess
     }
 
     @Override
-    public void createDocument(Document document) throws CreateDocumentException {
+    public int createDocument(Document document) throws CreateDocumentException {
         String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, vat_amount, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -87,29 +87,74 @@ public class DocumentDBAccess implements DocumentDataAccess
 
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
-            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
-            statement.setDate(3, document.getDeliveryTruck() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null);
+
+            if (document.getDeliveryTruck() != null) {
+                statement.setDate(3, new java.sql.Date(document.getDeadLine().getTime()));
+            } else {
+                statement.setNull(3, java.sql.Types.DATE);
+            }
+
             statement.setFloat(4, document.getReduction());
             statement.setString(5, document.getValidity());
             statement.setBoolean(6, document.getIsDelivered());
-            statement.setDate(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null);
+
+            if (document.getDeliveryDate() != null) {
+                statement.setDate(7, new java.sql.Date(document.getDeliveryDate().getTime()));
+            } else {
+                statement.setNull(7, java.sql.Types.DATE);
+            }
+
             statement.setBoolean(8, document.getDepositIsPaid());
             statement.setFloat(9, document.getDepositAmount());
-            statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
+
+            if (document.getDesiredDeliveryDate() != null) {
+                statement.setDate(10, new java.sql.Date(document.getDesiredDeliveryDate().getTime()));
+            } else {
+                statement.setNull(10, java.sql.Types.DATE);
+            }
+
             statement.setFloat(11, document.getVatAmount());
             statement.setFloat(12, document.getTotalInclusiveOfTaxe());
             statement.setFloat(13, document.getTotalVat());
             statement.setFloat(14, document.getTotalExclVat());
-            statement.setInt(15, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null);
-            statement.setInt(16,document.getDocumentStatus().getId());
-            statement.setInt(17,document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null);
+
+            if (document.getCollectionAgency() != null) {
+                statement.setInt(15, document.getCollectionAgency().getId());
+            } else {
+                statement.setNull(15, java.sql.Types.INTEGER);
+            }
+
+            statement.setInt(16, document.getDocumentStatus().getId());
+
+            if (document.getDeliveryTruck() != null) {
+                statement.setInt(17, document.getDeliveryTruck().getId());
+            } else {
+                statement.setNull(17, java.sql.Types.INTEGER);
+            }
+
             statement.setInt(18, document.getProcess().getId());
 
-            statement.executeUpdate();
 
-        }catch (SQLException | DatabaseConnectionFailedException e){
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new CreateDocumentException("Failed to create document, no rows affected.");
+            }
+
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new CreateDocumentException("Failed to create document, no ID obtained.");
+                }
+            }
+
+        }catch (SQLException | DatabaseConnectionFailedException e)
+        {
             System.err.println(e.getMessage());
             throw new CreateDocumentException();
         }

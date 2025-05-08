@@ -5,6 +5,7 @@ import DataAccess.ProcessStatus.ProcessStatusDataAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
+import Exceptions.ProcessStatus.GetProcessStatusException;
 import Model.ProcessStatus.ProcessStatus;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ProcessStatusManager
         processStatusDataAccess.deleteProcessStatus(id);
     }
 
-    public ProcessStatus getProcessStatus(int id)
+    public ProcessStatus getProcessStatus(int id) throws GetProcessStatusException
     {
         return processStatusDataAccess.getProcessStatus(id);
     }

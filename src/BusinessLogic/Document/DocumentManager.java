@@ -18,9 +18,9 @@ public class DocumentManager
         return documentDataAccess.getAllCurrentCommandsForAnItem(item);
     }
 
-    public void createDocument(Document document)
+    public int createDocument(Document document)
     {
-        documentDataAccess.createDocument(document);
+        return documentDataAccess.createDocument(document);
     }
 
     public void updateDocument(Document document)

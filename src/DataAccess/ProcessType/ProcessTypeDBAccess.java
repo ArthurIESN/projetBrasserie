@@ -2,6 +2,7 @@ package DataAccess.ProcessType;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
+import Exceptions.ProcessType.GetProcessTypeException;
 import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
 
@@ -61,8 +62,31 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
     }
 
     @Override
-    public ProcessType getProcessType(int id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public ProcessType getProcessType(int id) throws GetProcessTypeException
+    {
+        String query = "SELECT * FROM process_type WHERE id = ?";
+
+        try
+        {
+            Connection connection = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                return makeProcessType(resultSet);
+            }
+        }
+        catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new GetProcessTypeException("Error while getting process type" );
+        }
+
+        return null;
     }
 
     public static ProcessType makeProcessType(ResultSet resultSet) throws SQLException

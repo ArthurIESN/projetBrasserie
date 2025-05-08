@@ -27,9 +27,9 @@ public class ProcessController {
         return processManager.getProcess(id);
     }
 
-    public static void createProcess(Process process) throws CreateProcessException
+    public static int createProcess(Process process) throws CreateProcessException
     {
-        processManager.createProcess(process);
+        return processManager.createProcess(process);
     }
 
     public static void deleteProcess(Integer id) throws DeleteProcessException, UnauthorizedAccessException

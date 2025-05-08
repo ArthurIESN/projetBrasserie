@@ -4,6 +4,7 @@ import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
+import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
 import Model.DocumentStatus.MakeDocumentStatus;
 import com.sun.source.tree.ArrayAccessTree;
@@ -55,8 +56,29 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
     }
 
     @Override
-    public DocumentStatus getDocumentStatus(Integer id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public DocumentStatus getDocumentStatus(Integer id) throws GetDocumentStatusException
+    {
+        String query = "SELECT * FROM document_status WHERE id = ?";
+
+        try{
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next())
+            {
+                return makeDocumentStatus(resultSet);
+            }
+            else
+            {
+                throw new GetDocumentStatusException("Document status not found");
+            }
+
+        }catch (SQLException | DatabaseConnectionFailedException e){
+            System.err.println(e.getMessage());
+            throw new GetDocumentStatusException("Error while getting document status");
+        }
     }
 
     @Override

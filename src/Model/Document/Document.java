@@ -57,7 +57,7 @@ public class Document {
         this.documentStatus = documentStatus;
     }
 
-    private void setId(Integer id)
+    public void setId(Integer id)
     {
         if(id == null || id <= 0)
         {
@@ -73,6 +73,7 @@ public class Document {
     public Integer getId() {
         return id;
     }
+
 
     public String getLabel() {
         return label;

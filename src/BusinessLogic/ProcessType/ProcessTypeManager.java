@@ -4,6 +4,7 @@ import DataAccess.ProcessType.ProcessTypeDataAccess;
 import DataAccess.ProcessType.ProcessTypeDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
+import Exceptions.ProcessType.GetProcessTypeException;
 import Model.ProcessType.ProcessType;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ProcessTypeManager
         typeDataAccess.deleteProcessType(id);
     }
 
-    public ProcessType getProcessType(int id)
+    public ProcessType getProcessType(int id) throws GetProcessTypeException
     {
         return typeDataAccess.getProcessType(id);
     }

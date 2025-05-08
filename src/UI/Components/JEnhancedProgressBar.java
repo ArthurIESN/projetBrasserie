@@ -52,20 +52,16 @@ public class JEnhancedProgressBar extends JPanel
             int textX = Math.max(0, (width - textWidth) / 2);
             int textY = height / 2 + fm.getAscent() / 2 - 2;
 
-            // Sauvegarde du clip original
             Shape oldClip = g2d.getClip();
 
-            // Partie couverte (progress) - Texte en blanc
             g2d.setClip(0, 0, progressWidth, height);
             g2d.setColor(Color.WHITE);
             g2d.drawString(progressText, textX, textY);
 
-            // Partie non couverte - Texte en gris foncé
             g2d.setClip(progressWidth, 0, width - progressWidth, height);
             g2d.setColor(new Color(60, 60, 60));
             g2d.drawString(progressText, textX, textY);
 
-            // Restaurer le clip
             g2d.setClip(oldClip);
         }
 

@@ -12,6 +12,7 @@ import DataAccess.DataAccesUtils;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 
+import Exceptions.ProcessStatus.GetProcessStatusException;
 import Model.ProcessStatus.MakeProcessStatus;
 import Model.ProcessStatus.ProcessStatus;
 
@@ -62,8 +63,32 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
     }
 
     @Override
-    public ProcessStatus getProcessStatus(int id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public ProcessStatus getProcessStatus(int id) throws GetProcessStatusException
+    {
+        String query = "SELECT * FROM process_status WHERE id = ?";
+
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+            {
+                return makeProcessStatus(resultSet);
+            }
+            else
+            {
+                throw new GetProcessStatusException("Process status not found");
+            }
+        }
+        catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new GetProcessStatusException("Failed to get process status");
+        }
     }
 
     @Override

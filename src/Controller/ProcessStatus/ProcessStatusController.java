@@ -2,6 +2,7 @@ package Controller.ProcessStatus;
 
 import BusinessLogic.ProcessStatus.ProcessStatusManager;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
+import Exceptions.ProcessStatus.GetProcessStatusException;
 import Model.ProcessStatus.ProcessStatus;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class ProcessStatusController {
         return processStatusManager.getAllProcessStatus();
     }
 
-    public static ProcessStatus getProcessStatus(int id)
+    public static ProcessStatus getProcessStatus(int id) throws GetProcessStatusException
     {
         return processStatusManager.getProcessStatus(id);
     }

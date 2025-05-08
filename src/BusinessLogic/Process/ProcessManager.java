@@ -35,9 +35,9 @@ public class ProcessManager
         return processDataAccess.getProcess(id);
     }
 
-    public void createProcess(Process process) throws CreateProcessException
+    public int createProcess(Process process) throws CreateProcessException
     {
-        processDataAccess.createProcess(process);
+        return processDataAccess.createProcess(process);
     }
 
     public void deleteProcess(Integer id) throws DeleteProcessException
