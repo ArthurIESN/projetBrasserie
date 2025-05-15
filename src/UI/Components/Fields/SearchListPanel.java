@@ -99,10 +99,13 @@ public class SearchListPanel<T> extends JPanel {
         listModel.clear();
         filteredData = new ArrayList<>();
 
-        for (T item : data) {
-            if (toStringFunction.apply(item).toLowerCase().contains(searchText)) {
-                listModel.addElement(toStringFunction.apply(item));
-                filteredData.add(item);
+        if(data != null)
+        {
+            for (T item : data) {
+                if (toStringFunction.apply(item).toLowerCase().contains(searchText)) {
+                    listModel.addElement(toStringFunction.apply(item));
+                    filteredData.add(item);
+                }
             }
         }
     }

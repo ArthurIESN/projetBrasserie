@@ -37,14 +37,6 @@ public class ProcessDBAccess implements ProcessDataAccess
         {
             throw new CreateProcessException("Process cannot be null");
         }
-        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
-        {
-            throw new CreateProcessException("Label cannot be empty");
-        }
-        else if(process.getNumber() <= 0)
-        {
-            throw new CreateProcessException("Number cannot be 0");
-        }
         else if(process.getType() == null)
         {
             throw new CreateProcessException("Type cannot be null");
@@ -97,8 +89,10 @@ public class ProcessDBAccess implements ProcessDataAccess
                 throw new CreateDocumentException("Failed to create document, no rows affected.");
             }
 
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
+            try (ResultSet generatedKeys = statement.getGeneratedKeys())
+            {
+                if (generatedKeys.next())
+                {
                     return generatedKeys.getInt(1);
                 } else {
                     throw new CreateDocumentException("Failed to create document, no ID obtained.");
@@ -130,33 +124,13 @@ public class ProcessDBAccess implements ProcessDataAccess
         {
             throw new UpdateProcessException("Process cannot be null");
         }
-        else if(process.getId() == null)
-        {
-            throw new UpdateProcessException("ID cannot be null");
-        }
-        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
-        {
-            throw new UpdateProcessException("Label cannot be empty");
-        }
-        else if(process.getNumber() <= 0)
-        {
-            throw new UpdateProcessException("Number must be greater or equal to 0");
-        }
         else if(process.getType() == null)
         {
             throw new UpdateProcessException("Type cannot be null");
         }
-        else if(process.getType().getId() == null)
-        {
-            throw new UpdateProcessException("Type ID cannot be null");
-        }
         else if(process.getProcessStatus() == null)
         {
             throw new UpdateProcessException("Process status cannot be null");
-        }
-        else if(process.getProcessStatus().getId() == null)
-        {
-            throw new UpdateProcessException("Process status ID cannot be null");
         }
 
         try

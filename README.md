@@ -23,16 +23,7 @@ Must be placed in the `lib` folder and renamed to `bcrypt.jar`
 - `DB_HOST` - Database host
 - `DB_PORT` - Database port
 
-#### Macos exclusive
-- `MACOS_MENU_BAR_ENABLED` - Show the menu bar in macOS instead of on the app display
 
-Set to 1 
-
-![macosMenuBar_readme.png](resources%2FreadmeImages%2FmacosMenuBar_1_readme.png)
-
-Set to 0
-
-![macosMenuBar_readme.png](resources%2FreadmeImages%2FmacosMenuBar_0_readme.png)
 
 ## Components
 - `TableModelMaker` - Make a table model from a list of models (combined multiple models into one). The component can also open/close a model from the list.

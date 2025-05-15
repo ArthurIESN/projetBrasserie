@@ -12,7 +12,7 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
 
     public EmployeeEnhancedTableModel(ArrayList<Employee> employees)
     {
-        super("Employee", new String[]{"ID", "Last Name", "First Name", "Birthdate", "Password"}, employees);
+        super("Employee", new String[]{"ID", "Last Name", "First Name", "Birthdate", "Is Married", "Password"}, employees);
     }
 
     public EmployeeEnhancedTableModel()
@@ -36,7 +36,8 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
             case 1 -> employee.getLastName();
             case 2 -> employee.getFirstName();
             case 3 -> DateController.getShowDateString(employee.getBirthDate());
-            case 4 -> getHidePassword(employee.getPassword());
+            case 4 -> employee.isMarried() ? "Yes" : "No";
+            case 5 -> getHidePassword(employee.getPassword());
             default -> null;
         };
     }
