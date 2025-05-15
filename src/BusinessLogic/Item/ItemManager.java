@@ -11,8 +11,7 @@ import Exceptions.Vat.WrongVatCodeException;
 import Model.Item.Item;
 import Model.Vat.Vat;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ItemManager
 {
@@ -23,6 +22,24 @@ public class ItemManager
     {
         return itemDBAccess.getAllItems();
     }
+
+    public boolean enoughItemQuantity(HashMap<Item, Integer> items) {
+        boolean allItemsHaveEnoughQuantity = true;
+        Iterator<Map.Entry<Item, Integer>> iterator = items.entrySet().iterator();
+
+        while (allItemsHaveEnoughQuantity && iterator.hasNext()) {
+            Map.Entry<Item, Integer> entry = iterator.next();
+            Item item = entry.getKey();
+            int requiredQuantity = entry.getValue();
+
+            if (item.getCurrentQuantity() < requiredQuantity) {
+                allItemsHaveEnoughQuantity = false;
+            }
+        }
+
+        return allItemsHaveEnoughQuantity;
+    }
+
 
     public ArrayList<Item> searchItem(String vatCode, int minItem, int maxItem, int minPrice, int maxPrice) throws WrongVatCodeException, SearchItemException
     {

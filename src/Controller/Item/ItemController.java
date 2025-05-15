@@ -11,6 +11,7 @@ import Model.Item.Item;
 import Model.Vat.Vat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemController {
@@ -19,6 +20,11 @@ public class ItemController {
     public static ArrayList<Item> getAllItems() throws GetAllItemsException
     {
         return itemManager.getAllItems();
+    }
+
+    public static boolean enoughItemQuantity(HashMap<Item, Integer> items)
+    {
+        return itemManager.enoughItemQuantity(items);
     }
 
     public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {

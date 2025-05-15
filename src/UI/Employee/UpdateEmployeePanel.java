@@ -42,7 +42,7 @@ public class UpdateEmployeePanel extends JPanel implements EmployeeObserver
             return;
         }
 
-        if(!employeeModelPanel.isEmployeeValid()) return;
+        if(employeeModelPanel.isEmployeeInvalid()) return;
 
         EmployeeStatus employeeStatus = employeeModelPanel.getEmployeeStatusSearchField().getSelectedItem();
         Employee employee = MakeEmployee.getEmployee(
@@ -50,6 +50,7 @@ public class UpdateEmployeePanel extends JPanel implements EmployeeObserver
                 employeeModelPanel.getFirstNameField().getText(),
                 employeeModelPanel.getLastNameField().getText(),
                 employeeModelPanel.getBirthDateField().getDate(),
+                employeeModelPanel.getMarriedField().isSelected(),
                 employeeModelPanel.getEmployeeSearchField().getSelectedItem().getPassword(),
                 employeeStatus
         );

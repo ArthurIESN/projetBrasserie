@@ -4,8 +4,10 @@ import Controller.BusinessTasks.CustomerOrderController;
 import Controller.Customer.CustomerController;
 import Controller.Item.ItemController;
 import Controller.Locality.LocalityController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Tasks.RestockItem.CustomerOrder.ExecuteOrderException;
 import Model.Customer.Customer;
 import Model.Item.Item;
 import Model.Locality.Locality;
@@ -105,7 +107,7 @@ public class CustomerOrderPanel extends JPanel
 
         desiredDeliveryDateField = new JDateField();
         desiredDeliveryDateField.setPlaceholder("Enter desired delivery date");
-        desiredDeliveryDateField.setMinDate(new Date());
+        desiredDeliveryDateField.setMinDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
 
 
         JButton commandButton = new JButton("Execute Command");
@@ -122,6 +124,19 @@ public class CustomerOrderPanel extends JPanel
         rightPanel.add(gridCommand);
 
         add(rightPanel, BorderLayout.CENTER);
+    }
+
+    private void checkItemQuantity(Item item, int quantity, JLabel messageLabel)
+    {
+        if (item.getCurrentQuantity() < quantity)
+        {
+            messageLabel.setText("Not enough quantity available. Available: " + item.getCurrentQuantity());
+            messageLabel.setForeground(Color.RED);
+        }
+        else
+        {
+            messageLabel.setText("");
+        }
     }
 
     private void createVatPanel()
@@ -215,12 +230,15 @@ public class CustomerOrderPanel extends JPanel
             {
                 JLabel label = new JLabel(item.getLabel() + " - " + item.getPrice() + " €" + " - " + item.getVat().getRate() + "%");
 
+                JLabel messageLabel = new JLabel();
+
                 JNumberField numberField = new JNumberField(Utils.NumberType.INTEGER);
                 numberField.setPlaceholder("Enter quantity");
                 numberField.setAllowNegative(false);
                 numberField.setMinMax(0, 100);
                 numberField.onFocusLost(e ->
                 {
+                    checkItemQuantity(item, numberField.getInt(), messageLabel);
                     calculateTaxes();
                 });
 
@@ -231,6 +249,7 @@ public class CustomerOrderPanel extends JPanel
                 panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
                 panel.add(label);
+                panel.add(messageLabel);
                 panel.add(numberField);
                 numberFieldPanel.add(panel);
                 numberFieldHashMap.put(item, panel);
@@ -259,7 +278,7 @@ public class CustomerOrderPanel extends JPanel
         HashMap<Item, Integer> items = new HashMap<>();
         for (Item item : numberFieldHashMap.keySet())
         {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
             if (field != null)
             {
                 items.put(item, field.getInt());
@@ -285,7 +304,7 @@ public class CustomerOrderPanel extends JPanel
         HashMap<Item, Integer> items = new HashMap<>();
         for (Item item : numberFieldHashMap.keySet())
         {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
             if (field != null)
             {
                 items.put(item, field.getInt());
@@ -293,7 +312,44 @@ public class CustomerOrderPanel extends JPanel
         }
 
 
-        CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
+        try
+        {
+            CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
+            refreshPanel();
+        }
+        catch (UnauthorizedAccessException | ExecuteOrderException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void refreshPanel()
+    {
+        // Clear or reset data in components
+        customerSearch.setSelectedItem(null);
+        customerLocalitySearch.setData(null);
+        itemList.clearSelection();
+        depositField.setText("");
+        desiredDeliveryDateField.setDate(null);
+        numberFieldHashMap.clear();
+        numberFieldPanel.removeAll();
+
+        // refresh vat values
+        for (JLabel label : vatLabels)
+        {
+            label.setText("0.00 €");
+        }
+
+
+        vatValues = new float[]{0, 0, 0, 0};
+
+
+
+        // Revalidate and repaint the panel
+        scrollPane.revalidate();
+        scrollPane.repaint();
+        this.revalidate();
+        this.repaint();
     }
 
     private boolean isOrderValid()
@@ -324,10 +380,15 @@ public class CustomerOrderPanel extends JPanel
 
         for (Item item : numberFieldHashMap.keySet())
         {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
-            if (field == null || field.getInt() <= 0)
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
+            if ((field == null || field.getInt() <= 0))
             {
                 JOptionPane.showMessageDialog(this, "Please enter a valid quantity for item: " + item.getLabel(), "Invalid Quantity", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            else if(field.getInt() > item.getCurrentQuantity())
+            {
+                JOptionPane.showMessageDialog(this, "Not enough quantity available for item: " + item.getLabel() + ". Available: " + item.getCurrentQuantity(), "Insufficient Quantity", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         }

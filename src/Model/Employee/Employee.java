@@ -10,16 +10,18 @@ public class Employee {
     private String lastName;
     private String firstName;
     private Date birthDate;
+    private boolean isMarried;
     private String password;
     private EmployeeStatus employeeStatus;
 
-    public Employee (Integer id, String lastName, String firstName, Date birthDate, String password,
+    public Employee (Integer id, String lastName, String firstName, Date birthDate, boolean isMarried, String password,
                      EmployeeStatus employeeStatus)
     {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
+        this.isMarried = isMarried;
         this.password = password;
         this.employeeStatus = employeeStatus;
     }
@@ -38,6 +40,10 @@ public class Employee {
 
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public boolean isMarried() {
+        return isMarried;
     }
 
     public String getPassword() {
@@ -64,18 +70,19 @@ public class Employee {
                 Objects.equals(lastName, employee.lastName) &&
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(birthDate, employee.birthDate) &&
+                Objects.equals(isMarried, employee.isMarried) &&
                 Objects.equals(employeeStatus, employee.employeeStatus);
     }
 
-    public static int hashCode(Integer id, String lastName, String firstName, Date birthDate,
+    public static int hashCode(Integer id, String lastName, String firstName, Date birthDate, boolean isMarried,
                                 EmployeeStatus employeeStatus)
     {
-        return Objects.hash(id, lastName, firstName, birthDate, employeeStatus);
+        return Objects.hash(id, lastName, firstName, birthDate, isMarried, employeeStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firstName, birthDate, employeeStatus);
+        return Objects.hash(id, lastName, firstName, birthDate, isMarried, employeeStatus);
     }
 
     @Override

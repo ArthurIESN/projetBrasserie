@@ -3,11 +3,8 @@ package DataAccess.Employee;
 import java.util.ArrayList;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Employee.CreateEmployeeException;
-import Exceptions.Employee.DeleteEmployeeException;
-import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Employee.*;
 
-import Exceptions.Employee.UpdateEmployeeException;
 import Model.Employee.Employee;
 
 
@@ -15,9 +12,9 @@ import Model.Employee.Employee;
 public interface EmployeeDataAccess
 {
     ArrayList<Employee> getAllEmployees() throws GetAllEmployeesException;
-    Employee getEmployee(int id);
+    Employee getEmployee(int id) throws GetEmployeeException;
     void createEmployee(Employee employee) throws CreateEmployeeException;
     void deleteEmployee(int id) throws DeleteEmployeeException;
     void updateEmployee(Employee employee) throws UpdateEmployeeException;
-    Employee connect(Integer id, String password);
+    Employee connect(Integer id, String password) throws ConnectException;
 }

@@ -6,6 +6,7 @@ import DataAccess.Packaging.PackagingDBAccess;
 import DataAccess.Vat.VatDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Item.UpdateItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Model.Item.Item;
@@ -145,8 +146,42 @@ public class ItemDBAccess implements ItemDataAccess
     }
 
     @Override
-    public void updateItem(Item item) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void updateItem(Item item) throws UpdateItemException
+    {
+        String query = "UPDATE item " +
+                "SET label = ?, price = ?, restock_quantity = ?, current_quantity = ?, empty_returnable_bottle_quantity = ?, empty_returnable_bottle_price = ?, forecast_date = ?, forecast_quantity = ?, min_quantity = ? " +
+                "WHERE id = ?";
+
+        try
+        {
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+
+            statement.setString(1, item.getLabel());
+            statement.setFloat(2, item.getPrice());
+            statement.setInt(3, item.getRestockQuantity());
+            statement.setInt(4, item.getCurrentQuantity());
+            statement.setInt(5, item.getEmptyReturnableBottleQuantity());
+            statement.setFloat(6, item.getEmptyReturnableBottlePrice());
+            statement.setDate(7, new java.sql.Date(item.getForecastDate().getTime()));
+            statement.setInt(8, item.getForecastQuantity());
+            statement.setInt(9, item.getMinQuantity());
+            statement.setInt(10, item.getId());
+
+            int num = statement.executeUpdate();
+
+            if (num == 0)
+            {
+                System.out.println("No item found with id: " + item.getId());
+                throw new UpdateItemException("No item found with this id");
+            }
+
+        } catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println("Sql error: " + e.getMessage());
+            throw new UpdateItemException("Error while updating item");
+        }
     }
 
     @Override

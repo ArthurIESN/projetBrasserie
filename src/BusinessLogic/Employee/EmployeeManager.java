@@ -78,12 +78,13 @@ public class EmployeeManager
     {
         LocalDate minDate = LocalDate.now().minusYears(18);
         LocalDate maxDate = LocalDate.now().minusYears(100);
+
         return (confirmId && (employee.getId() == null || employee.getId() <= 0)) ||
                 employee.getFirstName() == null || employee.getFirstName().isEmpty() ||
                 employee.getLastName() == null || employee.getLastName().isEmpty() ||
                 employee.getBirthDate() == null ||
-                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isBefore(minDate) ||
-                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isAfter(maxDate) ||
+                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isAfter(minDate) || // Too young
+                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isBefore(maxDate) || // Too old
                 (!withoutPassword && (employee.getPassword() == null || employee.getPassword().isEmpty())) ||
                 employee.getEmployeeStatus() == null;
     }

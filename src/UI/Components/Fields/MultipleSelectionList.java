@@ -98,6 +98,11 @@ public class MultipleSelectionList<T> extends JPanel {
 
     }
 
+    public void clearSelection()
+    {
+        list.clearSelection();
+    }
+
     public void setOnSelectionChange(Consumer<ArrayList<T>> onSelectionChange) {
         this.onSelectionChange = onSelectionChange;
     }

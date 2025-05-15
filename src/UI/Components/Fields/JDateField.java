@@ -2,6 +2,7 @@ package UI.Components.Fields;
 
 import BusinessLogic.DateLogic;
 import Controller.Date.DateController;
+import Exceptions.Date.MinMaxDatesException;
 
 import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
@@ -35,8 +36,13 @@ public class JDateField extends JEnhancedTextField
         });
     }
 
-    private void removePreviousChar(String text, int caretPosition) {
-        if (caretPosition > 0 && text.charAt(caretPosition - 1) == '/') {
+    private void removePreviousChar(String text, int caretPosition)
+    {
+
+        if(text.length() <= caretPosition) return;
+
+        if (caretPosition > 0 && text.charAt(caretPosition - 1) == '/')
+        {
             if (caretPosition > 1) {
                 // Avant de changer le texte, gardez la position du caret
                 String newText = text.substring(0, caretPosition - 2) + text.substring(caretPosition);
@@ -63,8 +69,9 @@ public class JDateField extends JEnhancedTextField
         String text = getText();
         int caretPosition = getCaretPosition();
 
-        if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ENTER) {
-            validateDate();
+        if (e.getID() != KeyEvent.KEY_TYPED)
+        {
+            super.processKeyEvent(e);
             return;
         }
 
@@ -129,7 +136,7 @@ public class JDateField extends JEnhancedTextField
         minMaxDates[1] = max;
     }
 
-    public void setMinMaxDates(Date[] minMax)
+    public void setMinMaxDates(Date[] minMax) throws MinMaxDatesException
     {
         if (minMax.length == 2)
         {
@@ -138,8 +145,7 @@ public class JDateField extends JEnhancedTextField
         }
         else
         {
-            //@todo : throw an exception
-            throw new IllegalArgumentException("Min and max dates array must have exactly 2 elements.");
+            throw new MinMaxDatesException("Min and max dates array must have exactly 2 elements.");
         }
     }
 

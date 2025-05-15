@@ -62,6 +62,11 @@ public class Item
     {
         return currentQuantity;
     }
+    public void setCurrentQuantity(int currentQuantity)
+    {
+        //@todo : check if currentQuantity is less than 0
+        this.currentQuantity = currentQuantity;
+    }
 
     public int getEmptyReturnableBottleQuantity()
     {

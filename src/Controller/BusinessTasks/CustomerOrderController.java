@@ -1,18 +1,22 @@
 package Controller.BusinessTasks;
 
+import BusinessLogic.Item.ItemManager;
 import BusinessLogic.Tasks.RestockItem.CustomerOrderManager;
 
 import Controller.AppController;
 import Controller.Document.DocumentController;
 import Controller.DocumentDetails.DocumentDetailsController;
 import Controller.DocumentStatus.DocumentStatusController;
+import Controller.Item.ItemController;
 import Controller.Process.ProcessController;
 import Controller.ProcessStatus.ProcessStatusController;
 import Controller.ProcessType.ProcessTypeController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Exceptions.ProcessType.GetProcessTypeException;
+import Exceptions.Tasks.RestockItem.CustomerOrder.ExecuteOrderException;
 import Model.Customer.Customer;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
@@ -48,19 +52,25 @@ public class CustomerOrderController
         return customerOrderManager.calculateTaxes(items, locality);
     }
 
-    public static void executeOrder(HashMap<Item, Integer> items, Customer customer, float[] values, float deposit, Date desiredDeliveryDate)
+    public static void executeOrder(HashMap<Item, Integer> items, Customer customer, float[] values, float deposit, Date desiredDeliveryDate) throws UnauthorizedAccessException, ExecuteOrderException
     {
         if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
         {
             System.out.println("Access Denied: You do not have permission to execute this order.");
-            return;
-        } // @todo throw exception
+            throw new UnauthorizedAccessException("Access Denied: You do not have permission to execute this order.");
+        }
 
         if(deposit < customerOrderManager.customerDepositMinimumAmount(customer, deposit))
         {
             System.out.println("Deposit amount is less than the minimum required.");
-            return;
-        } // @todo throw exception
+            throw new ExecuteOrderException("Deposit amount is less than the minimum required.");
+        }
+
+        if(!ItemController.enoughItemQuantity(items))
+        {
+            System.out.println("Not enough item quantity.");
+            throw new ExecuteOrderException("Not enough item quantity.");
+        }
 
         ProcessType processType = null;
         ProcessStatus processStatus = null;
@@ -79,7 +89,8 @@ public class CustomerOrderController
                 documentStatus = DocumentStatusController.getDocumentStatus(1);
            } catch (GetProcessTypeException | GetProcessStatusException | GetDocumentStatusException e)
            {
-               //@todo throw exception
+               System.out.println("Error " + e.getMessage());
+               throw new ExecuteOrderException("Error while getting information for your order");
            }
 
 
@@ -98,6 +109,10 @@ public class CustomerOrderController
 
             DocumentDetails documentDetails = new DocumentDetails(null, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
             itemDocumentDetails.add(documentDetails);
+
+            // update item quantity
+            item.setCurrentQuantity(item.getCurrentQuantity() - quantity);
+            ItemController.updateItem(item);
         }
 
         try
@@ -112,7 +127,8 @@ public class CustomerOrderController
         }
         catch (CreateProcessException e)
         {
-            //@todo throw exception
+            System.out.println("Error while creating process: " + e.getMessage());
+            throw new ExecuteOrderException("Error while creating process");
         }
 
 

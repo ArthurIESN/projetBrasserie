@@ -28,6 +28,7 @@ public class EmployeeModelPanel extends JPanel
     private JEnhancedTextField firstNameField;
     private JEnhancedTextField lastNameField;
     private JDateField birthDateField;
+    private JCheckBox marriedField;
     private JEnhancedTextField passwordField;
     private SearchListPanel<EmployeeStatus> employeeStatusSearchField;
     private JButton button;
@@ -92,6 +93,9 @@ public class EmployeeModelPanel extends JPanel
         birthDateField.setMaxDate(Date.from(LocalDate.now().minusYears(18).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         birthDateField.setMinDate(Date.from(LocalDate.now().minusYears(100).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
+        marriedField = new JCheckBox("Married");
+        marriedField.setSelected(false);
+
         passwordField = new JEnhancedTextField();
         passwordField.setPlaceholder("Password");
 
@@ -103,6 +107,7 @@ public class EmployeeModelPanel extends JPanel
         gridEmployee.addField("First Name *", firstNameField);
         gridEmployee.addField("Last Name *", lastNameField);
         gridEmployee.addField("Birth Date *", birthDateField);
+        gridEmployee.addField("Married", marriedField);
         gridEmployee.addField("Password *", passwordField);
         gridEmployee.addField("Select an Employee Status *", employeeStatusSearchField);
         gridEmployee.addField(button);
@@ -118,51 +123,51 @@ public class EmployeeModelPanel extends JPanel
         add(gridEmployee, BorderLayout.CENTER);
     }
 
-    public boolean isEmployeeValid()
+    public boolean isEmployeeInvalid()
     {
         if(isUpdateEmployee && (employeeSearchField == null || employeeSearchField.getSelectedItem() == null))
         {
             JOptionPane.showMessageDialog(null, "Please select an employee", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(isUpdateEmployee && idField.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the employee id", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(firstNameField.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the first name", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(lastNameField.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the last name", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(birthDateField.getDate() == null)
         {
             JOptionPane.showMessageDialog(this, "Please fill in the birth date", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(passwordField.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please fill in the password", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         if(employeeStatusSearchField.getSelectedItem() == null)
         {
             JOptionPane.showMessageDialog(this, "Please select an employee status", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public void onButtonClicked(ActionListener actionListener)
@@ -201,6 +206,11 @@ public class EmployeeModelPanel extends JPanel
     public JDateField getBirthDateField()
     {
         return birthDateField;
+    }
+
+    public JCheckBox getMarriedField()
+    {
+        return marriedField;
     }
 
     public JEnhancedTextField getPasswordField()
