@@ -1,21 +1,23 @@
 package Model.Packaging;
 
+import Exceptions.Packaging.PackagingException;
+
 import java.util.Objects;
 
 public class Packaging
 {
-    private int id;
+    private Integer id;
     private String label;
     private int quantity;
 
-    public Packaging(int id, String label, int quantity)
+    public Packaging(Integer id, String label, int quantity) throws PackagingException
     {
-        this.id = id;
-        this.label = label;
-        this.quantity = quantity;
+        setId(id);
+        setLabel(label);
+        setQuantity(quantity);
     }
 
-    public int getId()
+    public Integer getId()
     {
         return id;
     }
@@ -28,6 +30,32 @@ public class Packaging
     public int getQuantity()
     {
         return quantity;
+    }
+
+    public void setId(Integer id) throws PackagingException{
+        if(id == null || id <= 0)
+        {
+            throw new PackagingException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
+    public void setLabel(String label) throws PackagingException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new PackagingException("Label cannot be null or empty");
+        }
+        this.label = label;
+    }
+
+    public void setQuantity(int quantity) throws PackagingException
+    {
+        if(quantity < 0)
+        {
+            throw new PackagingException("Quantity cannot be negative");
+        }
+        this.quantity = quantity;
     }
 
     @Override

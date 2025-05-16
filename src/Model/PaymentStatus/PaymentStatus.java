@@ -1,29 +1,37 @@
 package Model.PaymentStatus;
 
+import Exceptions.PaymentStatus.PaymentStatusException;
+
 import java.util.Objects;
 
 public class PaymentStatus {
     private int id;
     private String label;
 
-    public PaymentStatus(int id, String label) {
-        this.id = id;
-        this.label = label;
+    public PaymentStatus(int id, String label) throws PaymentStatusException {
+        setId(id);
+        setLabel(label);
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setId(Integer id) throws PaymentStatusException {
+        if (id == null || id <= 0) {
+            throw new PaymentStatusException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
+    public void setLabel(String label) throws PaymentStatusException {
+        if (label == null || label.isEmpty()) {
+            throw new PaymentStatusException("Label cannot be null or empty");
+        }
         this.label = label;
     }
 

@@ -1,4 +1,6 @@
 package Model.Payment;
+import Exceptions.Payment.PaymentException;
+import Exceptions.PaymentStatus.PaymentStatusException;
 import Model.PaymentStatus.PaymentStatus;
 import Model.Customer.Customer;
 import Model.Process.Process;
@@ -7,7 +9,7 @@ import Model.Document.Document;
 import java.util.Date;
 
 public class Payment {
-    private int id;
+    private Integer id;
     private double amount;
     private Date paymentDate;
     private PaymentStatus paymentStatus;
@@ -17,40 +19,31 @@ public class Payment {
 
     // Constructeur
 
-    public Payment(int id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,Model.Process.Process process, Customer customer) {
-        this.id = id;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.paymentStatus = paymentStatus;
-        this.document = document;
-        this.process = process;
-        this.customer = customer;
+    public Payment(Integer id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,
+                   Model.Process.Process process, Customer customer) throws PaymentException
+            {
+        setId(id);
+        setAmount(amount);
+        setPaymentDate(paymentDate);
+        setPaymentDate(paymentDate);
+        setPaymentStatus(paymentStatus);
+        setDocument(document);
+        setProcess(process);
+        setCustomer(customer);
     }
 
     // Getters et setters pour chaque champ
 
-    public int getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     public Date getPaymentDate() {
         return paymentDate;
-    }
-
-    public void setPaymentDate(java.sql.Date paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public PaymentStatus getPaymentStatus() {
@@ -61,23 +54,61 @@ public class Payment {
         return document;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
     public Process getProcess() {
         return process;
-    }
-
-    public void setProcess(Model.Process.Process process) {
-        this.process = process;
     }
 
     public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+
+    public void setId(Integer id) throws PaymentException {
+        if(id == null || id <= 0){
+            throw new IllegalArgumentException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
+    public void setAmount (double amount) throws PaymentException {
+        if (amount < 0) {
+            throw new PaymentException("Amount cannot be negative");
+        }
+        this.amount = amount;
+    }
+
+    public void setPaymentDate(Date paymentDate) throws PaymentException {
+        if (paymentDate == null) {
+            throw new PaymentException("Payment date cannot be null");
+        }
+        this.paymentDate = paymentDate;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) throws PaymentException{
+        if (paymentStatus == null) {
+            throw new PaymentException("Payment status cannot be null");
+        }
+        this.paymentStatus = paymentStatus;
+    }
+
+    public void setDocument(Document document) throws PaymentException{
+        if(document == null) {
+            throw new PaymentException("Document cannot be null");
+        }
+        this.document = document;
+    }
+
+    public void setProcess(Process process) throws PaymentException {
+        if (process == null) {
+            throw new PaymentException("Process cannot be null");
+        }
+        this.process = process;
+    }
+
+    public void setCustomer(Customer customer) throws PaymentException {
+        if (customer == null) {
+            throw new PaymentException("Customer cannot be null");
+        }
         this.customer = customer;
     }
 
