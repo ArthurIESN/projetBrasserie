@@ -6,6 +6,8 @@ import Model.Item.Item;
 
 import DataAccess.Document.DocumentDataAccess;
 
+import Exceptions.Document.CreateDocumentException;
+
 import java.util.ArrayList;
 
 
@@ -18,7 +20,7 @@ public class DocumentManager
         return documentDataAccess.getAllCurrentCommandsForAnItem(item);
     }
 
-    public int createDocument(Document document)
+    public int createDocument(Document document) throws CreateDocumentException
     {
         return documentDataAccess.createDocument(document);
     }

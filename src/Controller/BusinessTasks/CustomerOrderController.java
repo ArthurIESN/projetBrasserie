@@ -13,6 +13,7 @@ import Controller.ProcessStatus.ProcessStatusController;
 import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
+import Exceptions.Item.UpdateItemException;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Exceptions.ProcessType.GetProcessTypeException;
@@ -98,7 +99,7 @@ public class CustomerOrderController
         Document document = new Document(null, "AUTO_CUSTOMER_ORDER_DOCUMENT",
                 currentDate, null, 0.f, "",
                 false, deliveryDate, deposit > 0,
-                deposit, desiredDeliveryDate, 0.f, values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+                deposit, desiredDeliveryDate,  values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
 
         ArrayList<DocumentDetails> itemDocumentDetails = new ArrayList<>();
 
@@ -112,7 +113,17 @@ public class CustomerOrderController
 
             // update item quantity
             item.setCurrentQuantity(item.getCurrentQuantity() - quantity);
-            ItemController.updateItem(item);
+
+            try
+            {
+                ItemController.updateItem(item);
+            }
+            catch (UpdateItemException e)
+            {
+                System.out.println("Error while updating item quantity: " + e.getMessage());
+                throw new ExecuteOrderException("Error while updating item quantity");
+            }
+
         }
 
         try

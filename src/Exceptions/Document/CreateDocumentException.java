@@ -1,6 +1,6 @@
 package Exceptions.Document;
 
-public class CreateDocumentException extends RuntimeException {
+public class CreateDocumentException extends Exception {
     private final String message;
 
     public CreateDocumentException(String message) {

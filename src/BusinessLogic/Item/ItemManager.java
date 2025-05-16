@@ -4,6 +4,7 @@ import DataAccess.Item.ItemDBAccess;
 import DataAccess.Item.ItemDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Item.UpdateItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
@@ -68,7 +69,7 @@ public class ItemManager
         itemDBAccess.createItem(item);
     }
 
-    public void updateItem(Item item)
+    public void updateItem(Item item) throws UpdateItemException
     {
         itemDBAccess.updateItem(item);
     }

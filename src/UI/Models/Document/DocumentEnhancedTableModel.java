@@ -9,7 +9,7 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
 {
     public DocumentEnhancedTableModel(ArrayList<Document> data)
     {
-        super("Document", new String[]{"ID", "Label", "Date", "Deadline", "Reduction", "Validity", "Is Delivered", "Delivery Date", "Deposit Is Paid", "Deposit Amount", "Desired Delivery Date", "Vat Amount", "Total Inclusive Of Taxe", "Total Vat", "Total Excl Vat"}, data);
+        super("Document", new String[]{"ID", "Label", "Date", "Deadline", "Reduction", "Validity", "Is Delivered", "Delivery Date", "Deposit Is Paid", "Deposit Amount", "Desired Delivery Date",  "Total Inclusive Of Taxe", "Total Vat", "Total Excl Vat"}, data);
     }
 
     @Override
@@ -34,10 +34,9 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
             case 8 -> document.getDepositIsPaid();
             case 9 -> document.getDepositAmount();
             case 10 -> document.getDesiredDeliveryDate();
-            case 11 -> document.getVatAmount();
-            case 12 -> document.getTotalInclusiveOfTaxe();
-            case 13 -> document.getTotalVat();
-            case 14 -> document.getTotalExclVat();
+            case 11 -> document.getTotalInclusiveOfTaxe();
+            case 12 -> document.getTotalVat();
+            case 13 -> document.getTotalExclVat();
             default -> null;
         };
     }
@@ -46,7 +45,7 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
     public Class<?> getColumnClass(int columnIndex)
     {
         return switch (columnIndex) {
-            case 0, 4, 8, 9, 11, 12, 13, 14 -> Integer.class;
+            case 0, 4, 8, 9, 11, 12, 13 -> Integer.class;
             case 2, 3, 7, 10 -> java.util.Date.class;
             default -> String.class;
         };
