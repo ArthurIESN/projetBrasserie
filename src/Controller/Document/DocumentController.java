@@ -2,6 +2,7 @@ package Controller.Document;
 
 import BusinessLogic.Document.DocumentManager;
 
+import Exceptions.Document.CreateDocumentException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -16,7 +17,7 @@ public class DocumentController
         return documentManager.getAllCurrentCommandsForAnItem(item);
     }
 
-    public static int createDocument(Document document)
+    public static int createDocument(Document document) throws CreateDocumentException
     {
         return documentManager.createDocument(document);
     }

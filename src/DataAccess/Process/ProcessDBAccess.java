@@ -86,7 +86,7 @@ public class ProcessDBAccess implements ProcessDataAccess
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0)
             {
-                throw new CreateDocumentException("Failed to create document, no rows affected.");
+                throw new CreateProcessException("Failed to create process, no rows affected.");
             }
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys())
@@ -95,7 +95,7 @@ public class ProcessDBAccess implements ProcessDataAccess
                 {
                     return generatedKeys.getInt(1);
                 } else {
-                    throw new CreateDocumentException("Failed to create document, no ID obtained.");
+                    throw new CreateProcessException("Failed to create process, no ID obtained.");
                 }
             }
         }
@@ -281,7 +281,8 @@ public class ProcessDBAccess implements ProcessDataAccess
         }
     }
 
-    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType {
+    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
+    {
         ArrayList<Process> processes = new ArrayList<>();
 
         String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, " +
@@ -305,8 +306,10 @@ public class ProcessDBAccess implements ProcessDataAccess
             while (resultSet.next()){
                 processes.add(makeProcess(resultSet));
             }
-        }catch (SQLException | DatabaseConnectionFailedException e ){
+        }catch (SQLException | DatabaseConnectionFailedException e )
+        {
             System.err.println(e.getMessage());
+            throw new GetProcessWithSpecificType();
         }
 
         return processes;

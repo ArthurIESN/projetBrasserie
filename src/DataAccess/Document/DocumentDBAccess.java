@@ -117,26 +117,25 @@ public class DocumentDBAccess implements DocumentDataAccess
                 statement.setNull(10, java.sql.Types.DATE);
             }
 
-            statement.setFloat(11, document.getVatAmount());
-            statement.setFloat(12, document.getTotalInclusiveOfTaxe());
-            statement.setFloat(13, document.getTotalVat());
-            statement.setFloat(14, document.getTotalExclVat());
+            statement.setFloat(11, document.getTotalInclusiveOfTaxe());
+            statement.setFloat(12, document.getTotalVat());
+            statement.setFloat(13, document.getTotalExclVat());
 
             if (document.getCollectionAgency() != null) {
-                statement.setInt(15, document.getCollectionAgency().getId());
+                statement.setInt(14, document.getCollectionAgency().getId());
             } else {
-                statement.setNull(15, java.sql.Types.INTEGER);
+                statement.setNull(14, java.sql.Types.INTEGER);
             }
 
-            statement.setInt(16, document.getDocumentStatus().getId());
+            statement.setInt(15, document.getDocumentStatus().getId());
 
             if (document.getDeliveryTruck() != null) {
-                statement.setInt(17, document.getDeliveryTruck().getId());
+                statement.setInt(16, document.getDeliveryTruck().getId());
             } else {
-                statement.setNull(17, java.sql.Types.INTEGER);
+                statement.setNull(16, java.sql.Types.INTEGER);
             }
 
-            statement.setInt(18, document.getProcess().getId());
+            statement.setInt(17, document.getProcess().getId());
 
 
             int affectedRows = statement.executeUpdate();
@@ -196,7 +195,6 @@ public class DocumentDBAccess implements DocumentDataAccess
                 resultSet.getBoolean("document.deposit_is_paid"),
                 resultSet.getFloat("document.deposit_amount"),
                 resultSet.getDate("document.desired_delivery_date"),
-                resultSet.getFloat("document.vat_amount"),
                 resultSet.getFloat("document.total_inclusive_of_taxe"),
                 resultSet.getFloat("document.total_vat"),
                 resultSet.getFloat("document.total_excl_vat"),

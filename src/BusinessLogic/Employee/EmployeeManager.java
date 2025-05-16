@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import BusinessLogic.Utils.HashUtils;
 import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Employee.EmployeeDataAccess;
-import Exceptions.Employee.CreateEmployeeException;
-import Exceptions.Employee.DeleteEmployeeException;
-import Exceptions.Employee.GetAllEmployeesException;
-import Exceptions.Employee.UpdateEmployeeException;
+import Exceptions.Employee.*;
 import Model.Employee.Employee;
 
 
@@ -22,7 +19,7 @@ public class EmployeeManager
 
     }
 
-    public Employee connect(Integer id, String password)
+    public Employee connect(Integer id, String password) throws ConnectException
     {
         return employeeDataAccess.connect(id, password);
     }
@@ -69,7 +66,7 @@ public class EmployeeManager
         employeeDataAccess.updateEmployee(employee);
     }
 
-    public Employee getEmployee(int id)
+    public Employee getEmployee(int id) throws GetEmployeeException
     {
         return employeeDataAccess.getEmployee(id);
     }

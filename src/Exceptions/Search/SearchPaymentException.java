@@ -1,6 +1,6 @@
 package Exceptions.Search;
 
-public class SearchPaymentException extends RuntimeException {
+public class SearchPaymentException extends Exception {
         private final String message;
         public SearchPaymentException()
         {

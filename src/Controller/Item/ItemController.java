@@ -3,6 +3,7 @@ package Controller.Item;
 import BusinessLogic.Item.ItemManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Item.UpdateItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
@@ -40,7 +41,8 @@ public class ItemController {
         itemManager.createItem(item);
     }
 
-    public static void updateItem(Item item) {
+    public static void updateItem(Item item)  throws UpdateItemException
+    {
         itemManager.updateItem(item);
     }
 

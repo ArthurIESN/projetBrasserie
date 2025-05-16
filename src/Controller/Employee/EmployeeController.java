@@ -3,10 +3,7 @@ package Controller.Employee;
 import BusinessLogic.Employee.EmployeeManager;
 import Controller.AppController;
 import Exceptions.Access.UnauthorizedAccessException;
-import Exceptions.Employee.CreateEmployeeException;
-import Exceptions.Employee.DeleteEmployeeException;
-import Exceptions.Employee.GetAllEmployeesException;
-import Exceptions.Employee.UpdateEmployeeException;
+import Exceptions.Employee.*;
 import Model.Employee.Employee;
 import Model.EmployeeStatus.EmployeeStatus;
 
@@ -51,7 +48,7 @@ public class EmployeeController
         employeeManager.updateEmployee(employee, password);
     }
 
-    public static Employee getEmployee(int id)
+    public static Employee getEmployee(int id) throws GetEmployeeException
     {
         return employeeManager.getEmployee(id);
     }

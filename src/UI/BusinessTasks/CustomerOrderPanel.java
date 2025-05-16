@@ -88,12 +88,14 @@ public class CustomerOrderPanel extends JPanel
         customerSearch.onSelectedItemChange(selectedCustomer -> updateCustomerLocalities());
 
         customerLocalitySearch = new SearchListPanel<>(new ArrayList<>(), locality -> locality.getAddress() + " " + locality.getPostalCode() + " " + locality.getNumber() + " " + locality.getCountry().getLabel());
+        customerLocalitySearch.getSearchField().setPlaceholder("Search for a locality");
         customerLocalitySearch.onSelectedItemChange(selectedLocality ->
         {
             calculateTaxes();
         });
 
         itemList = new MultipleSelectionList<>(items, Item::getLabel);
+        itemList.getSearchField().setPlaceholder("Search for items");
         itemList.setOnSelectionChange(selectedItems ->
         {
             updateFieldsQuantity(itemList.getSelectedItems());
