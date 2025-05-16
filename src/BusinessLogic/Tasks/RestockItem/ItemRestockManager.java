@@ -65,9 +65,7 @@ public class ItemRestockManager
     private Item.RestockItem calculateRestockItem(Item item, Date date, Date currentDate)
     {
         int restockQty = item.getRestockQuantity();
-        System.out.println("Restock quantity: " + restockQty);
         int futureStock = (int)((restockQty + item.getForecastQuantity()) / (monthsImpact(DateController.getMonthsBetweenDates(currentDate, date)) + 1));
-        System.out.println("Future stock: " + futureStock);
         int predictedQuantity = restockQty - futureStock > 0 ? restockQty : 0;
 
         return new Item.RestockItem(predictedQuantity, date, null);

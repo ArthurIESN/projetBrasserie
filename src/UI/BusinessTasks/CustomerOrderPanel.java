@@ -2,6 +2,7 @@ package UI.BusinessTasks;
 
 import Controller.BusinessTasks.CustomerOrderController;
 import Controller.Customer.CustomerController;
+import Controller.Document.DocumentController;
 import Controller.Item.ItemController;
 import Controller.Locality.LocalityController;
 import Exceptions.Access.UnauthorizedAccessException;
@@ -286,7 +287,7 @@ public class CustomerOrderPanel extends JPanel
                 items.put(item, field.getInt());
             }
         }
-        vatValues = CustomerOrderController.calculateTaxes(items, customerLocalitySearch.getSelectedItem());
+        vatValues = DocumentController.calculateTaxes(items, customerLocalitySearch.getSelectedItem());
 
         vatLabels.get(0).setText(String.format("%.2f €", vatValues[0]));
         vatLabels.get(1).setText(String.format("%.2f €", vatValues[1]));
