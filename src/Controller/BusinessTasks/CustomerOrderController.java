@@ -12,6 +12,7 @@ import Controller.Process.ProcessController;
 import Controller.ProcessStatus.ProcessStatusController;
 import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Access.UnauthorizedAccessException;
+import Exceptions.Document.CreateDocumentException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Exceptions.Item.UpdateItemException;
 import Exceptions.Process.CreateProcessException;
@@ -136,7 +137,7 @@ public class CustomerOrderController
                 DocumentDetailsController.createDocumentDetails(documentDetails);
             }
         }
-        catch (CreateProcessException e)
+        catch (CreateProcessException | CreateDocumentException e)
         {
             System.out.println("Error while creating process: " + e.getMessage());
             throw new ExecuteOrderException("Error while creating process");
