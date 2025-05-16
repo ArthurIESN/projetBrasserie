@@ -16,7 +16,7 @@ public class PaymentManager
     private final PaymentDataAccess paymentDBAccess = new PaymentDBAccess();
     public PaymentManager() {}
 
-    public ArrayList<Payment> getAllPayments() throws GetAllPaymentException
+    public ArrayList<Payment> getAllPayments()
     {
         return paymentDBAccess.getAllPayments();
     }

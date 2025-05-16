@@ -121,7 +121,22 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setObject(16, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
             statement.setObject(17, document.getProcess() != null ? document.getProcess().getId() : null, Types.INTEGER);
 
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new CreateDocumentException("Failed to create document, no rows affected.");
+            }
+
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys())
+            {
+                if (generatedKeys.next())
+                {
+                    return generatedKeys.getInt(1);
+                } else
+                {
+                    throw new CreateDocumentException("Failed to create document, no ID obtained.");
+                }
+            }
 
         }catch (SQLException | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());

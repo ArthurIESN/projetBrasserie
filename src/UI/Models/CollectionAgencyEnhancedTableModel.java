@@ -5,7 +5,7 @@ import UI.Components.EnhancedTable.AbstractEnhancedTableModel;
 
 import java.util.ArrayList;
 
-public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableModel {
+public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableModel<CollectionAgency> {
     public CollectionAgencyEnhancedTableModel(ArrayList<CollectionAgency> data){
         super("Collection Agency", new String[]{"ID", "Name"}, data);
     }

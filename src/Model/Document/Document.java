@@ -192,9 +192,6 @@ public class Document {
         this.desiredDeliveryDate = desiredDeliveryDate;
     }
 
-    public void setVatAmount(Float vatAmount) {
-        this.VatAmount = vatAmount;
-    }
 
 
 

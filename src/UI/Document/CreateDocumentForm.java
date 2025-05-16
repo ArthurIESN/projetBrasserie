@@ -86,7 +86,6 @@ public class CreateDocumentForm extends JPanel {
                 documentModelPanel.getDesiredDeliveryDate().getDate(),
                 ((Vat) documentModelPanel.getComboBoxVat().getSelectedItem()).getRate(),
                 documentModelPanel.getTotalIncludingTax(),
-                documentModelPanel.getTotalVatAmount(),
                 documentModelPanel.getTotalExcludingTax(),
                 null,
                 (DocumentStatus) documentModelPanel.getDocumentStatusSearch().getSelectedItem(),
