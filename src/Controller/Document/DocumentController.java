@@ -7,8 +7,10 @@ import Exceptions.Document.UpdateDocumentException;
 import Exceptions.Document.CreateDocumentException;
 import Model.Document.Document;
 import Model.Item.Item;
+import Model.Locality.Locality;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DocumentController
 {
@@ -17,6 +19,11 @@ public class DocumentController
     public static ArrayList<Document> getAllCurrentCommandsForAnItem(Item item)
     {
         return documentManager.getAllCurrentCommandsForAnItem(item);
+    }
+
+    public static float[] calculateTaxes(HashMap<Item, Integer> items, Locality locality)
+    {
+        return documentManager.calculateTaxes(items, locality);
     }
 
     public static int createDocument(Document document) throws CreateDocumentException

@@ -1,6 +1,6 @@
 package Controller.Date;
 
-import BusinessLogic.DateLogic;
+import BusinessLogic.Date.DateLogic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

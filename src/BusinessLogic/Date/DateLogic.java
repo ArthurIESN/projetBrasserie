@@ -1,4 +1,4 @@
-package BusinessLogic;
+package BusinessLogic.Date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +28,9 @@ public class DateLogic
     public String getClosestValidDate(String text, Date[] minMaxDates)
     {
         Calendar calendar = Calendar.getInstance();
+
+        if(text == null) text = "" ;
+
         try
         {
             calendar.setTime(dateFormat.parse(text));
@@ -35,14 +38,26 @@ public class DateLogic
         catch (ParseException e)
         {
             // If parsing fails, adjust the date parts
-            String[] parts = text.split("/");
-            int day = parts.length > 0 ? Integer.parseInt(parts[0]) : 1;
-            int month = parts.length > 1 ? Integer.parseInt(parts[1]) - 1 : 0; // Calendar months are 0-based
-            int year = parts.length > 2 ? Integer.parseInt(parts[2]) : calendar.get(Calendar.YEAR);
 
-            calendar.set(Calendar.DAY_OF_MONTH, Math.min(day, calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
-            calendar.set(Calendar.MONTH, Math.min(month, 11));
-            calendar.set(Calendar.YEAR, year);
+            String[] parts = text.split("/");
+
+            try
+            {
+                int day = parts.length > 0 && !parts[0].isEmpty() ? Integer.parseInt(parts[0]) : 1;
+                int month = parts.length > 1 && !parts[1].isEmpty()? Integer.parseInt(parts[1]) - 1 : 0; // Calendar months are 0-based
+                int year = parts.length > 2 && !parts[2].isEmpty()? Integer.parseInt(parts[2]) : calendar.get(Calendar.YEAR);
+
+                calendar.set(Calendar.DAY_OF_MONTH, Math.min(day, calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
+                calendar.set(Calendar.MONTH, Math.min(month, 11));
+                calendar.set(Calendar.YEAR, year);
+            }
+            catch (NumberFormatException ex)
+            {
+                // If parsing fails, set to default values
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.MONTH, 0);
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+            }
         }
 
         // check for min max dates

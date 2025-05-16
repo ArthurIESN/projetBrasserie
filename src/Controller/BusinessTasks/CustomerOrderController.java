@@ -49,11 +49,6 @@ public class CustomerOrderController
         return customerOrderManager.customerDepositMinimumAmount(customer, totalPrice);
     }
 
-    public static float[] calculateTaxes(HashMap<Item, Integer> items, Locality locality)
-    {
-        return customerOrderManager.calculateTaxes(items, locality);
-    }
-
     public static void executeOrder(HashMap<Item, Integer> items, Customer customer, float[] values, float deposit, Date desiredDeliveryDate) throws UnauthorizedAccessException, ExecuteOrderException
     {
         if(!AppController.hasAccess(EmployeeStatus.Status.Manager))

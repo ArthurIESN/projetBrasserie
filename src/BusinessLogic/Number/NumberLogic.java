@@ -58,6 +58,12 @@ public class NumberLogic
             }
         }
 
+        // if no decimal space but has a point, remove the point
+        if (text.indexOf('.') != -1 && text.indexOf('.') == text.length() - 1)
+        {
+            text = text.substring(0, text.length() - 1);
+        }
+
         return text;
     }
 
@@ -102,6 +108,17 @@ public class NumberLogic
             {
                 text = String.valueOf(minMax[1]);
             }
+        }
+
+        // remove first 0s
+        if (text.length() > 1 && text.startsWith("0"))
+        {
+            StringBuilder sb = new StringBuilder(text);
+            while (sb.length() > 1 && sb.charAt(0) == '0')
+            {
+                sb.deleteCharAt(0);
+            }
+            text = sb.toString();
         }
 
         return text;

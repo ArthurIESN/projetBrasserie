@@ -178,20 +178,4 @@ public class SearchListPanel<T> extends JPanel {
             System.out.println("ITEM NOT FOUND");
         }
     }
-
-    public void test(T item){
-        if(item == null){
-            searchField.updateText("");
-            updateList();
-        }else if(data.stream().anyMatch(d -> toStringFunction.apply(d).equals(toStringFunction.apply(item)))){
-            searchField.updateText(toStringFunction.apply(item));
-            updateList();
-            resultList.setSelectedIndex(filteredData.indexOf(item));
-        }else {
-            searchField.updateText("");
-            updateList();
-            resultList.clearSelection();
-            System.out.println("ITEM NOT FOUND");
-        }
-    }
 }

@@ -31,36 +31,7 @@ public class CustomerOrderManager
         return totalPrice * MIN_DEPOSIT_PERCENTAGE;
     }
 
-    public float[] calculateTaxes(HashMap<Item, Integer> items, Locality locality)
-    {
-        /*
-        * 0 - Total Vat
-        * 1 -  Total Delivery Cost
-        * 2 -  Total VAT Inclusive
-        * 3 - Total Price
-         */
-        float[] values = {0, 0, 0, 0};
 
-        for (Map.Entry<Item, Integer> entry : items.entrySet())
-        {
-            int quantity = entry.getValue();
-            Item item = entry.getKey();
-
-            values[3] += item.getPrice() * quantity;
-            values[0] += item.getPrice() * quantity*  (item.getVat().getRate() / 100);
-        }
-
-        values[1] = values[3] + values[0];
-
-        if(locality != null)
-        {
-            values[2] = locality.getCountry().getDeliveryCost();
-        }
-
-        values[3] += values[2] + values[0];
-
-        return values;
-    }
 
     public void executeOrder(HashMap<Item, Integer> items, Customer customer, Employee employee, ProcessStatus processStatus, ProcessType processType, float[] values)
     {
