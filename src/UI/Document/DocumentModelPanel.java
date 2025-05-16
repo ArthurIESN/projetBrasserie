@@ -311,7 +311,11 @@ public class DocumentModelPanel extends JPanel {
 
         multipleSelectionListItems.setVisible(false);
 
-        multipleSelectionListItems.setOnSelectionChange(selectedItems -> updateFieldsQuantity(multipleSelectionListItems.getSelectedItems()));
+
+        multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
+            updateFieldsQuantity(multipleSelectionListItems.getSelectedItems());
+        });
+
 
         // 0
         allComponents.add(deliveryDateField);
@@ -483,13 +487,24 @@ public class DocumentModelPanel extends JPanel {
             }
         }
 
+        HashMap<Item, Integer> items = new HashMap<>();
+        for (Item item : numberFieldHashMap.keySet())
+        {
+            JNumberField field = numberFieldHashMap.get(item);
+            if (field != null)
+            {
+                items.put(item, field.getInt());
+            }
+        }
+
         for (Item item : multipleSelectionListItems.getSelectedItems()) {
             Float quantity = numberFieldHashMap.get(item).getFloat();
 
             if (quantity > 0) {
                 Float unitPrice = item.getPrice();
                 Float vatRate = comboBoxVat.getSelectedItem().getRate();
-                Float[] values = calculVat(unitPrice, quantity, vatRate);
+
+                Float[] values = calculVat(unitPrice,quantity,vatRate);
 
                 if (vatItemHashMap.containsKey(item.getId())) {
                     tvaFields = vatItemHashMap.get(item.getId());
@@ -595,13 +610,13 @@ public class DocumentModelPanel extends JPanel {
         reduction = 0;
         ArrayList<Integer> indexes = new ArrayList<>();
         switch (this.typeDocument) {
-            case "Order":
+            case "Customer Order":
                 indexes = modelsDocuments.get(1);
                 for (Integer index : indexes) {
                     allComponents.get(index).setVisible(true);
                 }
                 break;
-            case "order_fourn":
+            case "Order":
                 indexes = modelsDocuments.get(0);
                 for (Integer index : indexes) {
                     allComponents.get(index).setVisible(true);
@@ -662,7 +677,7 @@ public class DocumentModelPanel extends JPanel {
             }
         }
 
-        if (typeDocument == "order_fourn") {
+        if (typeDocument == "Order") {
             if (supplierSearch.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Please select a supplier", "Error", JOptionPane.ERROR_MESSAGE);
                 return true;

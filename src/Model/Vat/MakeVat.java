@@ -1,5 +1,8 @@
 package Model.Vat;
 
+import Exceptions.Vat.VatException;
+
+import javax.swing.*;
 import java.util.HashMap;
 
 public class MakeVat
@@ -16,8 +19,15 @@ public class MakeVat
         }
         else
         {
-            Vat vat = new Vat(code, rate);
-            vatMap.put(vatHash, vat);
+            Vat vat;
+            try{
+                vat = new Vat(code, rate);
+                vatMap.put(vatHash, vat);
+
+            }catch (VatException e){
+                vat = null;
+                System.err.println("Error creating Vat: " + e.getMessage());
+            }
             return vat;
         }
     }

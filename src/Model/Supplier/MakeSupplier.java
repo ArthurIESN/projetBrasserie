@@ -1,5 +1,7 @@
 package Model.Supplier;
 
+import Exceptions.Supplier.SupplierException;
+
 import java.util.HashMap;
 
 public class MakeSupplier
@@ -16,8 +18,14 @@ public class MakeSupplier
         }
         else
         {
-            Supplier supplier = new Supplier(id, name);
-            supplierMap.put(supplierHash, supplier);
+            Supplier supplier;
+            try {
+                supplier = new Supplier(id, name);
+                supplierMap.put(supplierHash, supplier);
+            }catch (SupplierException e){
+                supplier = null;
+                System.err.println("Error creating Supplier: " + e.getMessage());
+            }
             return supplier;
         }
     }

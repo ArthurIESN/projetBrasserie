@@ -1,5 +1,7 @@
 package Model.PaymentStatus;
 
+import Exceptions.PaymentStatus.PaymentStatusException;
+
 import java.util.HashMap;
 
 public class MakePaymentStatus {
@@ -15,8 +17,15 @@ public class MakePaymentStatus {
         }
         else
         {
-            PaymentStatus paymentStatus = new PaymentStatus(id, label);
-            paymentStatusMap.put(paymentStatusHash, paymentStatus);
+            PaymentStatus paymentStatus;
+            try {
+                paymentStatus = new PaymentStatus(id, label);
+                paymentStatusMap.put(paymentStatusHash, paymentStatus);
+            } catch (PaymentStatusException e) {
+                paymentStatus = null;
+                System.err.println("Error creating PaymentStatus: " + e.getMessage());
+            }
+
             return paymentStatus;
         }
     }

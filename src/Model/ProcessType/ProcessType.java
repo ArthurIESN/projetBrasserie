@@ -1,14 +1,16 @@
 package Model.ProcessType;
 
+import Exceptions.ProcessType.ProcessTypeException;
+
 import java.util.Objects;
 
 public class ProcessType {
     private Integer id;
     private String label;
 
-    public ProcessType(Integer id, String label) {
-        this.id = id;
-        this.label = label;
+    public ProcessType(Integer id, String label) throws ProcessTypeException {
+        setId(id);
+        setLabel(label);
     }
 
     public Integer getId() {
@@ -17,6 +19,20 @@ public class ProcessType {
 
     public String getLabel() {
         return label;
+    }
+
+    public void setId(Integer id) throws ProcessTypeException {
+        if(id == null || id <= 0){
+            throw new ProcessTypeException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
+    public void setLabel(String label) throws ProcessTypeException {
+        if(label == null || label.isEmpty()){
+            throw new ProcessTypeException("Label cannot be null or empty");
+        }
+        this.label = label;
     }
 
     @Override

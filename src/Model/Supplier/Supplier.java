@@ -1,14 +1,16 @@
 package Model.Supplier;
 
+import Exceptions.Supplier.SupplierException;
+
 import java.util.Objects;
 
 public class Supplier {
     private Integer id;
     private String name;
 
-    public Supplier(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public Supplier(Integer id, String name) throws SupplierException {
+        setId(id);
+        setName(name);
     }
 
     public Integer getId() {
@@ -17,6 +19,20 @@ public class Supplier {
 
     public String getName() {
         return name;
+    }
+
+    public void setId(Integer id) throws SupplierException {
+       if(id == null && id <= 0){
+           throw new SupplierException("ID cannot be null");
+       }
+       this.id = id;
+    }
+
+    public void setName(String name) throws SupplierException {
+        if(name == null || name.isEmpty()){
+            throw new SupplierException("Name cannot be null or empty");
+        }
+        this.name = name;
     }
 
     @Override

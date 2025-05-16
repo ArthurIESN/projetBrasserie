@@ -1,5 +1,7 @@
 package Model.Process;
 
+import Exceptions.Process.ProcessException;
+import Exceptions.ProcessStatus.ProcessStatusException;
 import Model.Customer.Customer;
 import Model.Employee.Employee;
 import Model.ProcessStatus.ProcessStatus;
@@ -20,14 +22,14 @@ public class Process {
     private Customer customer;
 
     public Process(Integer id, String label, int number, Supplier supplier, ProcessType type, ProcessStatus processStatus,
-                   Employee employee, Customer customer)
+                   Employee employee, Customer customer) throws ProcessException
     {
-        this.id = id;
-        this.label = label;
-        this.number = number;
+        setId(id);
+        setLabel(label);
+        setNumber(number);
         this.supplier = supplier;
-        this.type = type;
-        this.processStatus = processStatus;
+        setType(type);
+        setProcessStatus(processStatus);
         this.employee = employee;
         this.customer = customer;
     }
@@ -36,9 +38,6 @@ public class Process {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getLabel() {
         return label;
@@ -48,12 +47,47 @@ public class Process {
         return number;
     }
 
-    public void setNumber(int number)
-    {
-        if(number < 0)
-        {
-            this.number = number;
+    public void setId(Integer id) throws ProcessException {
+        if(id == null || id <= 0){
+            throw new ProcessException("ID cannot be null or less than or equal to 0");
         }
+        this.id = id;
+    }
+
+    public void setNumber(int number) throws ProcessException
+    {
+        if(number >= 0)
+        {
+            throw new ProcessException("Number cannot be less than 0");
+        }
+        this.number = number;
+    }
+
+    public void setLabel(String message) throws ProcessException
+    {
+        if(message == null || message.isEmpty())
+        {
+            throw new ProcessException("Label cannot be null or empty");
+        }
+        this.label = message;
+    }
+
+    public void setType(ProcessType type) throws ProcessException
+    {
+        if(type == null)
+        {
+            throw new ProcessException("Type cannot be null");
+        }
+        this.type = type;
+    }
+
+    public void setProcessStatus(ProcessStatus processStatus) throws ProcessException
+    {
+        if(processStatus == null)
+        {
+            throw new ProcessException("Process status cannot be null");
+        }
+        this.processStatus = processStatus;
     }
 
     public Supplier getSupplier() {
@@ -75,6 +109,7 @@ public class Process {
     public Customer getCustomer() {
         return customer;
     }
+
 
 
     @Override

@@ -1,5 +1,7 @@
 package Model.ProcessType;
 
+import Exceptions.ProcessType.ProcessTypeException;
+
 import java.util.HashMap;
 
 public class MakeProcessType
@@ -16,8 +18,17 @@ public class MakeProcessType
         }
         else
         {
-            ProcessType type = new ProcessType(id, label);
-            makeType.put(typeHash, type);
+            ProcessType type;
+            try
+            {
+                type = new ProcessType(id, label);
+                makeType.put(typeHash, type);
+            }
+            catch (ProcessTypeException e)
+            {
+                type = null;
+                System.err.println("Error creating ProcessType: " + e.getMessage());
+            }
             return type;
         }
     }

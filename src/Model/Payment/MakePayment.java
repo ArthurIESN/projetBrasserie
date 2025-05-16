@@ -1,5 +1,6 @@
 package Model.Payment;
 
+import Exceptions.Payment.PaymentException;
 import Model.Document.Document;
 import Model.PaymentStatus.PaymentStatus;
 import Model.Process.Process;
@@ -23,8 +24,18 @@ public class MakePayment {
         }
         else
         {
-            Payment payment = new Payment(id, amount, paymentDate, paymentStatus, document, process, customer);
-            paymentMap.put(paymentHash, payment);
+            Payment payment;
+            try
+            {
+                payment = new Payment(id, amount, paymentDate, paymentStatus, document, process, customer);
+                paymentMap.put(paymentHash, payment);
+            }
+            catch (PaymentException e)
+            {
+                payment = null;
+                System.err.println("Error creating Payment: " + e.getMessage());
+            }
+
             return payment;
         }
     }

@@ -1,14 +1,16 @@
 package Model.Vat;
 
+import Exceptions.Vat.VatException;
+
 import java.util.Objects;
 
 public class Vat {
     private String code;
     private float rate;
 
-    public Vat(String code, float rate) {
-        this.code = code;
-        this.rate = rate;
+    public Vat(String code, float rate) throws VatException {
+        setCode(code);
+        setRate(rate);
     }
 
     public String getCode() {
@@ -17,6 +19,20 @@ public class Vat {
 
     public float getRate() {
         return rate;
+    }
+
+    public void setCode(String code) throws VatException {
+        if(code == null){
+            throw new VatException("Code cannot be null");
+        }
+        this.code = code;
+    }
+
+    public void setRate(float rate) throws VatException{
+        if(rate < 0 && rate > 100){
+            throw new VatException("Rate must be between 0 and 100");
+        }
+        this.rate = rate;
     }
 
     @Override

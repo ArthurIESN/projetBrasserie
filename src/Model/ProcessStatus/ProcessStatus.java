@@ -1,14 +1,17 @@
 package Model.ProcessStatus;
 
+import Exceptions.ProcessStatus.ProcessStatusException;
+import Exceptions.ProcessType.ProcessTypeException;
+
 import java.util.Objects;
 
 public class ProcessStatus {
     private Integer id;
     private String label;
 
-    public ProcessStatus(Integer id, String label) {
-        this.id = id;
-        this.label = label;
+    public ProcessStatus(Integer id, String label) throws ProcessStatusException {
+        setId(id);
+        setLabel(label);
     }
 
     public Integer getId() {
@@ -17,6 +20,20 @@ public class ProcessStatus {
 
     public String getLabel() {
         return label;
+    }
+
+    public void setId(Integer id) throws ProcessStatusException {
+        if (id == null || id <= 0) {
+            throw new ProcessStatusException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
+    public void setLabel(String label) throws ProcessStatusException {
+        if (label == null || label.isEmpty()) {
+            throw new ProcessStatusException("Label cannot be null or empty");
+        }
+        this.label = label;
     }
 
     @Override

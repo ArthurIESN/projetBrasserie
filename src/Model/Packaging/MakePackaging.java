@@ -1,5 +1,7 @@
 package Model.Packaging;
 
+import Exceptions.Packaging.PackagingException;
+
 import java.util.HashMap;
 
 public class MakePackaging
@@ -16,8 +18,18 @@ public class MakePackaging
         }
         else
         {
-            Packaging packaging = new Packaging(id, label, quantity);
-            packagingMap.put(packagingHash, packaging);
+            Packaging packaging;
+            try
+            {
+                packaging = new Packaging(id, label, quantity);
+                packagingMap.put(packagingHash, packaging);
+            }
+            catch (PackagingException e)
+            {
+                packaging = null;
+                System.err.println("Error creating Packaging: " + e.getMessage());
+            }
+
             return packaging;
         }
     }

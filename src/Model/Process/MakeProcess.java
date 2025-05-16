@@ -1,5 +1,6 @@
 package Model.Process;
 
+import Exceptions.Process.ProcessException;
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
 import Model.ProcessStatus.MakeProcessStatus;
@@ -35,8 +36,17 @@ public class MakeProcess
         }
         else
         {
-            Process process = new Process(id, label, number, supplier, type, processStatus, employee, customer);
-            processMap.put(processHash, process);
+            Process process;
+            try
+            {
+                process = new Process(id, label, number, supplier, type, processStatus, employee, customer);
+                processMap.put(processHash, process);
+            }
+            catch (ProcessException e)
+            {
+                process = null;
+                System.err.println("Error creating Process: " + e.getMessage());
+            }
             return process;
         }
     }

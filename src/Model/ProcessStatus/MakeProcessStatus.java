@@ -1,5 +1,7 @@
 package Model.ProcessStatus;
 
+import Exceptions.ProcessStatus.ProcessStatusException;
+
 import java.util.HashMap;
 
 public class MakeProcessStatus
@@ -16,8 +18,14 @@ public class MakeProcessStatus
         }
         else
         {
-            ProcessStatus processStatus = new ProcessStatus(id, label);
-            processStatusMap.put(processStatusHash, processStatus);
+            ProcessStatus processStatus;
+            try{
+                processStatus = new ProcessStatus(id, label);
+                processStatusMap.put(processStatusHash, processStatus);
+            }catch (ProcessStatusException e){
+                processStatus = null;
+                System.err.println("Error creating ProcessStatus: " + e.getMessage());
+            }
             return processStatus;
         }
     }
