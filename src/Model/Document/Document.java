@@ -140,6 +140,65 @@ public class Document {
 
     public DocumentStatus getDocumentStatus(){return documentStatus;}
 
+    public void setProcess(Process process) {
+        this.process = process;
+    }
+
+    public void setDocumentStatus(DocumentStatus documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public void setDeliveryTruck(DeliveryTruck deliveryTruck) {
+        this.deliveryTruck = deliveryTruck;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDeadLine(Date deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public void setReduction(Float reduction) {
+        this.reduction = reduction;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
+    }
+
+    public void setIsDelivered(Boolean isDelivered) {
+        this.isDelivered = isDelivered;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public void setDepositIsPaid(Boolean depositIsPaid) {
+        this.depositIsPaid = depositIsPaid;
+    }
+
+    public void setDepositAmount(Float depositAmount) {
+        this.depositAmount = depositAmount;
+    }
+
+    public void setDesiredDeliveryDate(Date desiredDeliveryDate) {
+        this.desiredDeliveryDate = desiredDeliveryDate;
+    }
+
+    public void setVatAmount(Float vatAmount) {
+        this.VatAmount = vatAmount;
+    }
+
+
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

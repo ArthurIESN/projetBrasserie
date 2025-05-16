@@ -2,14 +2,22 @@ package UI.Document;
 
 import Model.Document.Document;
 import UI.Components.Navbar.NavbarPanel;
+import UI.Models.Document.DocumentObserver;
+import UI.Models.Document.DocumentSubject;
+import UI.Process.CreateProcessPanel;
+import UI.Process.DeleteProcessPanel;
+import UI.Windows.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class DocumentPanel extends JPanel {
+public class DocumentPanel extends JPanel implements DocumentSubject {
+
     private Container container;
     private NavbarPanel navbarPanel;
+    private static final List<DocumentObserver> observers= new ArrayList<>();
 
     public DocumentPanel(){
         setLayout(new BorderLayout());
@@ -30,6 +38,24 @@ public class DocumentPanel extends JPanel {
         add(container,BorderLayout.CENTER);
     }
 
+    public void navbarForceClick(int index){navbarPanel.forceClickItem(index);}
+
+    @Override
+    public void addObserver(DocumentObserver observer) {
+       observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(DocumentObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(Document document) {
+        for (DocumentObserver observer : observers) {
+            observer.update(document);
+        }
+    }
 
     public void navBarClick(int index){
         navbarPanel.clickItem(index);
@@ -38,17 +64,48 @@ public class DocumentPanel extends JPanel {
     private void updateContent(int index){
         container.removeAll();
 
-        JPanel jPanel = switch (index){
+        Class<? extends JPanel> panelClass = getClassWithIndex(index);
+
+        JPanel panel;
+
+        try{
+            panel = panelClass
+                    .getDeclaredConstructor(DocumentPanel.class)
+                    .newInstance(this);
+        }catch (Exception e){
+            panel = new CreateDocumentForm();
+        }
+
+      /*  JPanel jPanel = switch (index){
             case 0 -> new CreateDocumentForm();
             case 1 -> new ReadDocumentForm(this);
             case 2 -> new UpdateDocumentForm(this);
             case 3 -> new DeleteDocumentForm(this);
             default -> new DocumentPanel();
-        };
+        };*/
 
-        container.add(jPanel,BorderLayout.CENTER);
+        container.add(panel,BorderLayout.CENTER);
         container.revalidate();
         container.repaint();
+    }
+
+    public void moveTo(int index){
+        Class<? extends JPanel> panelClass = getClassWithIndex(index);
+        if(WindowManager.isPanelDisplayed(panelClass)){
+            WindowManager.focusWindow(panelClass);
+        }else {
+            navbarPanel.clickItem(index);
+        }
+    }
+
+    private Class<? extends JPanel> getClassWithIndex(int index){
+        return switch (index) {
+           case 0 -> CreateDocumentForm.class;
+           case 1 -> ReadDocumentForm.class;
+           case 2 -> UpdateDocumentForm.class;
+           case 3 -> DeleteProcessPanel.class;
+           default -> CreateProcessPanel.class;
+        };
     }
 
 }

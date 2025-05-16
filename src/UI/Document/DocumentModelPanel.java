@@ -1,21 +1,21 @@
 package UI.Document;
 
-import BusinessLogic.DeliveryTruck.DeliveryTruckManager;
 import Controller.Customer.CustomerController;
 import Controller.DeliveryTruck.DeliveryTruckController;
+import Controller.Document.DocumentController;
 import Controller.DocumentStatus.DocumentStatusController;
 import Controller.Item.ItemController;
 import Controller.Process.ProcessController;
 import Controller.Supplier.SupplierController;
 import Controller.VAT.VATController;
 import Exceptions.Customer.GetAllCustomersException;
+import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
+import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.Supplier.GetAllSuppliersException;
 import Exceptions.Vat.GetAllVatsException;
-import Model.CollectionAgency.CollectionAgency;
-import Model.CollectionAgency.CollectionAgency;
 import Model.Customer.Customer;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
@@ -32,12 +32,10 @@ import static java.util.Arrays.asList;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import Utils.Utils;
 
@@ -62,35 +60,32 @@ public class DocumentModelPanel extends JPanel {
     private JButton calculateVatButton;
     private JNumberField reductionField;
     private JNumberField depositAmountField;
-    private JButton create;
+    private JButton button;
 
     private JLabel totalExclVatLabel;
     private JLabel totalInclVatLabel;
     private JLabel totalVatLabel;
     private JLabel depositAmountLabel;
 
+    private boolean updateDocument;
     private float totalExcludingTax;
     private float totalIncludingTax;
     private float totalVatAmount;
     private float reduction;
     private float depositAmount;
 
-    private ArrayList<Process> processes;
     private ArrayList<SearchListPanel> searchListPanelsOrderFourn;
-    private ArrayList<JComponent> allComponents;
-    private ArrayList<Item> items;
-    private ArrayList<DocumentStatus> documentStatuses;
     private ArrayList<String> deliveryStatusOptions;
-    private ArrayList<Vat> vats;
-    private ArrayList<Customer> customers;
-    private ArrayList<Supplier> suppliers;
-    private ArrayList<DeliveryTruck> deliveryTrucks;
+    private ArrayList<JComponent> allComponents;
+    private ArrayList<Process> processes;
+    private ArrayList<Document> documents;
 
     private SearchListPanel<DocumentStatus> documentStatusSearch;
     private SearchListPanel<Process> processesSearch;
     private SearchListPanel<Customer> customerSearch;
     private SearchListPanel<DeliveryTruck> deliveryTruckSearch;
     private SearchListPanel<Supplier> supplierSearch;
+    private SearchListPanel<Document> documentSearch;
     MultipleSelectionList<Item> multipleSelectionListItems;
 
     private ComboBoxPanel<Vat> comboBoxVat;
@@ -105,10 +100,41 @@ public class DocumentModelPanel extends JPanel {
     private HashMap<Integer, ArrayList<JPanel>> panelsVatFieldsHashMap;
 
 
-    public DocumentModelPanel(boolean isUpdate) {
+    public DocumentModelPanel(boolean updateDocument) {
         setLayout(new BorderLayout());
 
+        this.updateDocument = updateDocument;
+
         Date today = new Date();
+
+        processes = new ArrayList<>();
+        allComponents = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
+        ArrayList<DocumentStatus> documentStatuses = new ArrayList<>();
+        ArrayList<Vat> vats = new ArrayList<>();
+        ArrayList<Customer> customers = new ArrayList<>();
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ArrayList<DeliveryTruck> deliveryTrucks = new ArrayList<>();
+
+        // @todo : ajouter une exception pour getAllDeliveryTrucks
+        try {
+            if(updateDocument){
+                documents = DocumentController.getAllDocuments();
+            }
+
+            customers = CustomerController.getAllCustomers();
+            deliveryTrucks = DeliveryTruckController.getAllDeliveryTrucks();
+            suppliers = SupplierController.getAllSuppliers();
+            vats = VATController.getAllVats();
+            items = ItemController.getAllItems();
+            documentStatuses = DocumentStatusController.getAllDocumentStatus();
+
+        } catch (GetAllCustomersException | GetAllDocumentsException | GetAllSuppliersException
+                 | GetAllVatsException | GetAllItemsException | GetAllDocumentStatusException |
+                 GetAllDeliveryTrucksException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
 
         modelsDocuments = new HashMap<>();
         vatItemHashMap = new HashMap<>();
@@ -123,6 +149,29 @@ public class DocumentModelPanel extends JPanel {
         numberFieldPanel.setBorder(BorderFactory.createTitledBorder("Number Field"));
 
         gridDocument = new GridBagLayoutHelper();
+
+        if(updateDocument){
+            documentSearch = new SearchListPanel<>(documents,Document::getLabel);
+            documentSearch.getSearchField().setPlaceholder("Select Document");
+
+            documentSearch.onSelectedItemChange(e -> {
+                List<JComponent> componentsToExclude = List.of(
+                        customerSearch,
+                        supplierSearch,
+                        multipleSelectionListItems,
+                        numberFieldPanel,
+                        calculateVatButton
+                );
+
+                for (Component component : gridDocument.getComponents()) {
+                    if (!componentsToExclude.contains(component)) {
+                        component.setVisible(true);
+                    }
+                }
+            });
+
+            gridDocument.addField(documentSearch);
+        }
 
         searchListsVatPanel = new JPanel();
         searchListsVatPanel.setLayout(new BoxLayout(searchListsVatPanel, BoxLayout.Y_AXIS));
@@ -189,52 +238,21 @@ public class DocumentModelPanel extends JPanel {
         numberFieldHashMap = new HashMap<>();
 
         searchListPanelsOrderFourn = new ArrayList<>(Arrays.asList());
-        items = new ArrayList<>();
-        documentStatuses = new ArrayList<>();
         deliveryStatusOptions = new ArrayList<>(Arrays.asList("Yes", "No"));
-        processes = new ArrayList<>();
-        vats = new ArrayList<>();
-        allComponents = new ArrayList<>();
-        customers = new ArrayList<>();
-        suppliers = new ArrayList<>();
-        deliveryTrucks = new ArrayList<>();
 
-        try {
-            customers = CustomerController.getAllCustomers();
-        } catch (GetAllCustomersException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
 
         customerSearch = new SearchListPanel<>(customers, Customer::getFullName);
         customerSearch.setVisible(false);
         customerSearch.getSearchField().setPlaceholder("Select Customer");
 
-        // @todo : ajouter une exception pour getAllDeliveryTrucks
-        try {
-            deliveryTrucks = DeliveryTruckController.getAllDeliveryTrucks();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
         deliveryTruckSearch = new SearchListPanel<>(deliveryTrucks, DeliveryTruck::getLicensePlate);
         deliveryTruckSearch.setVisible(false);
         deliveryTruckSearch.getSearchField().setPlaceholder("Select Delivery Truck");
-
-        try {
-            suppliers = SupplierController.getAllSuppliers();
-        } catch (GetAllSuppliersException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
 
         supplierSearch = new SearchListPanel<>(suppliers, Supplier::getName);
         supplierSearch.setVisible(false);
         supplierSearch.getSearchField().setPlaceholder("Select Supplier");
 
-        try {
-            vats = VATController.getAllVats();
-        } catch (GetAllVatsException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
 
         comboBoxVat = new ComboBoxPanel<>(vats, Vat::getCode);
 
@@ -288,17 +306,6 @@ public class DocumentModelPanel extends JPanel {
         totalPanel.add(totalVatAmountPanel);
         totalPanel.add(totalDepositAmountPanel);
 
-        try {
-            items = ItemController.getAllItems();
-        } catch (GetAllItemsException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        try {
-            documentStatuses = DocumentStatusController.getAllDocumentStatus();
-        } catch (GetAllDocumentStatusException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
 
         multipleSelectionListItems = new MultipleSelectionList<>(items, Item::getLabel);
 
@@ -345,8 +352,6 @@ public class DocumentModelPanel extends JPanel {
         dateField = new JDateField();
         dateField.setDate(today);
 
-
-
         checkBoxIsDelivered = new JCheckBox("Is Delivered ?");
 
         documentStatusSearch = new SearchListPanel<>(documentStatuses, DocumentStatus::getLabel);
@@ -360,16 +365,7 @@ public class DocumentModelPanel extends JPanel {
             updateCalculVat();
         });
 
-        create = new JButton("Create");
-        create.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Mettre la fonction de vérification ici
-                // Si ok la fonction du Controller
-
-
-            }
-        });
+        button = new JButton();
 
         gridDocument.addField(labelField);
         gridDocument.addField(dateField);
@@ -382,16 +378,23 @@ public class DocumentModelPanel extends JPanel {
         gridDocument.addField(multipleSelectionListItems);
         gridDocument.addField(numberFieldPanel);
         gridDocument.addField(calculateVatButton);
+        gridDocument.addField(button);
 
         searchListsVatPanel.add(comboBoxVat);
         searchListsVatPanel.add(totalPanel);
 
         westPanel.add(searchListsVatPanel, BorderLayout.NORTH);
 
+        if(updateDocument)
+        {
+            for(int i = 1; i < gridDocument.getComponents().length; i++)
+            {
+                gridDocument.getComponents()[i].setVisible(false);
+            }
+        }
 
         add(gridDocument, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
-
 
     }
 
@@ -694,19 +697,20 @@ public class DocumentModelPanel extends JPanel {
             return true;
         }
 
-        if (multipleSelectionListItems.getSelectedItems().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select at least one item", "Error", JOptionPane.ERROR_MESSAGE);
-            return true;
-        }
-
-        for (Item item : multipleSelectionListItems.getSelectedItems()) {
-            int id = item.getId();
-            if (!numberFieldHashMap.containsKey(id)) {
-                JOptionPane.showMessageDialog(this, "Please fill in the quantity for item " + item.getLabel(), "Error", JOptionPane.ERROR_MESSAGE);
+        if(!updateDocument) {
+            if (multipleSelectionListItems.getSelectedItems().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please select at least one item", "Error", JOptionPane.ERROR_MESSAGE);
                 return true;
             }
-        }
 
+            for (Item item : multipleSelectionListItems.getSelectedItems()) {
+                int id = item.getId();
+                if (!numberFieldHashMap.containsKey(id)) {
+                    JOptionPane.showMessageDialog(this, "Please fill in the quantity for item " + item.getLabel(), "Error", JOptionPane.ERROR_MESSAGE);
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -731,11 +735,15 @@ public class DocumentModelPanel extends JPanel {
         return checkBoxIsDelivered.isSelected();
     }
 
-    public SearchListPanel getDocumentStatusSearch() {
+    public JCheckBox getCheckBoxIsDelivered() {
+        return checkBoxIsDelivered;
+    }
+
+    public SearchListPanel<DocumentStatus> getDocumentStatusSearch() {
         return documentStatusSearch;
     }
 
-    public SearchListPanel getProcessesSearch() {
+    public SearchListPanel<Process> getProcessesSearch() {
         return processesSearch;
     }
 
@@ -751,7 +759,7 @@ public class DocumentModelPanel extends JPanel {
         return numberFieldHashMap;
     }
 
-    public ComboBoxPanel getComboBoxValidity() {
+    public ComboBoxPanel<String> getComboBoxValidity() {
         return comboBoxValidity;
     }
 
@@ -763,12 +771,20 @@ public class DocumentModelPanel extends JPanel {
         return reduction;
     }
 
+    public JNumberField getReductionField(){
+        return reductionField;
+    }
+
     public JCheckBox getCheckBoxDepositIsPaid() {
         return checkBoxDepositIsPaid;
     }
 
     public float getDepositAmount() {
         return depositAmount;
+    }
+
+    public JNumberField getDepositAmountField(){
+        return  depositAmountField;
     }
 
     public ComboBoxPanel getComboBoxVat() {
@@ -785,5 +801,25 @@ public class DocumentModelPanel extends JPanel {
 
     public float getTotalVatAmount(){
         return totalVatAmount;
+    }
+
+    public SearchListPanel<Document> getDocumentSearch() {
+        return documentSearch;
+    }
+
+    public SearchListPanel<DeliveryTruck> getDeliveryTruckSearch() {
+        return deliveryTruckSearch;
+    }
+
+    public void setTextButton(String text){
+        button.setText(text);
+    }
+
+    public void onButtonClicked(ActionListener actionListener){
+        button.addActionListener(actionListener);
+    }
+
+    public void onSearchDocumentChange(ActionListener actionListener){
+        documentSearch.onSelectedItemChange(actionListener);
     }
 }

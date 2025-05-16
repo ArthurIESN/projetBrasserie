@@ -1,6 +1,7 @@
 package Controller.DeliveryTruck;
 
 import BusinessLogic.DeliveryTruck.DeliveryTruckManager;
+import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
 import Model.DeliveryTruck.DeliveryTruck;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class DeliveryTruckController
         return deliveryTruckManager.getDeliveryTruck(id);
     }
 
-    public static ArrayList<DeliveryTruck> getAllDeliveryTrucks()
+    public static ArrayList<DeliveryTruck> getAllDeliveryTrucks() throws GetAllDeliveryTrucksException
     {
         return deliveryTruckManager.getAllDeliveryTrucks();
     }

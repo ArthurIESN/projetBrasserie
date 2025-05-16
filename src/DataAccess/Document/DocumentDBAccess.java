@@ -10,6 +10,8 @@ import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Document.GetAllDocumentsException;
+import Exceptions.Document.UpdateDocumentException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
 import Model.Item.Item;
@@ -110,50 +112,18 @@ public class DocumentDBAccess implements DocumentDataAccess
 
             statement.setBoolean(8, document.getDepositIsPaid());
             statement.setFloat(9, document.getDepositAmount());
-
-            if (document.getDesiredDeliveryDate() != null) {
-                statement.setDate(10, new java.sql.Date(document.getDesiredDeliveryDate().getTime()));
-            } else {
-                statement.setNull(10, java.sql.Types.DATE);
-            }
-
+            statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
             statement.setFloat(11, document.getTotalInclusiveOfTaxe());
             statement.setFloat(12, document.getTotalVat());
             statement.setFloat(13, document.getTotalExclVat());
+            statement.setObject(14, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null, Types.INTEGER);
+            statement.setObject(15, document.getDocumentStatus() != null ? document.getDocumentStatus().getId() : null, Types.INTEGER);
+            statement.setObject(16, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
+            statement.setObject(17, document.getProcess() != null ? document.getProcess().getId() : null, Types.INTEGER);
 
-            if (document.getCollectionAgency() != null) {
-                statement.setInt(14, document.getCollectionAgency().getId());
-            } else {
-                statement.setNull(14, java.sql.Types.INTEGER);
-            }
+            statement.executeUpdate();
 
-            statement.setInt(15, document.getDocumentStatus().getId());
-
-            if (document.getDeliveryTruck() != null) {
-                statement.setInt(16, document.getDeliveryTruck().getId());
-            } else {
-                statement.setNull(16, java.sql.Types.INTEGER);
-            }
-
-            statement.setInt(17, document.getProcess().getId());
-
-
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new CreateDocumentException("Failed to create document, no rows affected.");
-            }
-
-
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new CreateDocumentException("Failed to create document, no ID obtained.");
-                }
-            }
-
-        }catch (SQLException | DatabaseConnectionFailedException e)
-        {
+        }catch (SQLException | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());
             throw new CreateDocumentException();
         }
@@ -161,7 +131,93 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     @Override
     public void updateDocument(Document document) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        String query = "UPDATE document SET " +
+                "label = ?, " +
+                "date = ?, " +
+                "reduction = ?, " +
+                "validity = ?, " +
+                "is_delivered = ?, " +
+                "delivery_date = ?, " +
+                "deposit_is_paid = ?, " +
+                "deposit_amount = ?, " +
+                "desired_delivery_date = ?, " +
+                "id_document_status = ?, " +
+                "id_delivery_truck = ?, " +
+                "id_process = ? " +
+                "WHERE document.id = ? ";
+
+        if(document == null){
+            throw new UpdateDocumentException("Document cannot be null");
+        }else if(document.getLabel().isEmpty()){
+            throw new UpdateDocumentException("Label cannot be empty");
+        }else if(document.getDate() == null){
+            throw new UpdateDocumentException("Date cannot be null");
+        }else if(document.getValidity() == null){
+            throw new UpdateDocumentException("Validity cannot be null");
+        }else if(document.getDocumentStatus() == null){
+            throw new UpdateDocumentException("Document status cannot be null");
+        }else if(document.getProcess() == null){
+            throw new UpdateDocumentException("Process cannot be null");
+        }else if(document.getDesiredDeliveryDate() == null){
+            // @todo retirer les logs
+            System.out.println(document.getDesiredDeliveryDate());
+            System.out.println("Desired delivery date cannot be null ---- c'est dans la db");
+            throw new UpdateDocumentException("Desired delivery date cannot be null");
+        }else if(document.getDeliveryDate() == null){
+            throw new UpdateDocumentException("Delivery date cannot be null");
+        }
+
+        if(document.getDepositIsPaid() == null){
+            throw new UpdateDocumentException("Deposit is paid cannot be null");
+        }else {
+            if(document.getDepositAmount() == null){
+                throw new UpdateDocumentException("Deposit amount cannot be null");
+            }
+        }
+
+        try{
+            Connection databaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+
+            statement.setString(1, document.getLabel());
+            statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
+            statement.setString(4, document.getValidity());
+            statement.setBoolean(5, document.getIsDelivered());
+            statement.setDate(6, new java.sql.Date(document.getDeliveryDate().getTime()));
+            statement.setBoolean(7, document.getDepositIsPaid());
+            statement.setDate(9, new java.sql.Date(document.getDesiredDeliveryDate().getTime()));
+            statement.setInt(10, document.getDocumentStatus().getId());
+            statement.setInt(12, document.getProcess().getId());
+            statement.setInt(13, document.getId());
+
+            if(document.getReduction() == null){
+                statement.setNull(3, Types.FLOAT);
+            }else {
+                statement.setFloat(3, document.getReduction());
+            }
+
+            if(document.getDepositAmount() == null){
+                statement.setNull(8, Types.FLOAT);
+            }else {
+                statement.setFloat(8, document.getDepositAmount());
+            }
+
+            if(document.getDeliveryTruck() == null){
+                statement.setNull(11, Types.INTEGER);
+            }else {
+                statement.setInt(11, document.getDeliveryTruck().getId());
+            }
+
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected == 0){
+                throw new UpdateDocumentException("Invalid document ID : " + document.getId());
+            }
+        }catch (SQLException | DatabaseConnectionFailedException e){
+            System.err.println(e.getMessage());
+            throw new UpdateDocumentException();
+        }
+
     }
 
     @Override
@@ -176,7 +232,35 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     @Override
     public ArrayList<Document> getAllDocuments() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        String query = "SELECT * FROM document " +
+                " LEFT JOIN collection_agency ON document.id_collection_agency = collection_agency.id " +
+                " LEFT JOIN document_status ON document.id_document_status = document_status.id " +
+                " LEFT JOIN delivery_truck ON document.id_delivery_truck = delivery_truck.id " +
+                " LEFT JOIN process ON document.id_process = process.id " +
+                " LEFT JOIN supplier ON process.id_supplier = supplier.id " +
+                " LEFT JOIN customer ON process.num_customer = customer.num_customer " +
+                " LEFT JOIN customer_status ON customer.id_customer_status = customer_status.id " +
+                " LEFT JOIN  process_type ON process.id_process_type = process_type.id " +
+                " LEFT JOIN  process_status ON process.id_process_status = process_status.id " +
+                " LEFT JOIN  employee ON process.id_employee = employee.id " +
+                " LEFT JOIN employee_status ON employee.id_employee_status = employee_status.id ";
+        try{
+            Connection databaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<Document> documents = new ArrayList<>();
+
+            while(resultSet.next()){
+                documents.add(makeDocument(resultSet));
+            }
+
+            return documents;
+        }
+        catch (SQLException | DatabaseConnectionFailedException e){
+            System.err.println(e.getMessage());
+            throw new GetAllDocumentsException();
+        }
     }
 
     public static Document makeDocument(ResultSet resultSet) throws SQLException

@@ -153,8 +153,14 @@ public class SearchListPanel<T> extends JPanel {
         }
     }
 
-    public void forceSetSelectedItem(T item)
+    public void  forceSetSelectedItem(T item)
     {
+        // @todo retirer le debug
+        System.out.println(data.contains(item) + " Vérification contains");
+
+        //@todo retirer le debug
+        System.out.println("Item to string debug : " + toStringFunction.apply(item));
+
         if (item == null) {
             searchField.updateText("");
             updateList();
@@ -166,6 +172,22 @@ public class SearchListPanel<T> extends JPanel {
         }
         else
         {
+            searchField.updateText("");
+            updateList();
+            resultList.clearSelection();
+            System.out.println("ITEM NOT FOUND");
+        }
+    }
+
+    public void test(T item){
+        if(item == null){
+            searchField.updateText("");
+            updateList();
+        }else if(data.stream().anyMatch(d -> toStringFunction.apply(d).equals(toStringFunction.apply(item)))){
+            searchField.updateText(toStringFunction.apply(item));
+            updateList();
+            resultList.setSelectedIndex(filteredData.indexOf(item));
+        }else {
             searchField.updateText("");
             updateList();
             resultList.clearSelection();

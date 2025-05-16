@@ -153,7 +153,8 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
     public void updateText(String text)
     {
         setText(text);
-
+        //@todo retirer le debug
+        System.out.println("Debug du text : " + text);
         if(!text.isEmpty())
         {
             setForeground(textColor);

@@ -103,4 +103,5 @@ public class ComboBoxPanel<T> extends JPanel
             comboBox.setSelectedItem(items.get(index));
         }
     }
+
 }
