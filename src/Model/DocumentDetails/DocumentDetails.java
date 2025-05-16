@@ -1,5 +1,6 @@
 package Model.DocumentDetails;
 
+import Exceptions.DocumentDetails.DocumentDetailsException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -15,43 +16,98 @@ public class DocumentDetails {
     private Item item;
 
     public DocumentDetails(Integer id, String label, int quantity, Integer newQuantity,
-                           float unitPrice, Document document, Item item)
+                           float unitPrice, Document document, Item item) throws DocumentDetailsException
     {
-        this.id = id;
-        this.label = label;
-        this.quantity = quantity;
+        setId(id);
+        setLabel(label);
+        setQuantity(quantity);
         this.newQuantity = newQuantity;
-        this.unitPrice = unitPrice;
-        this.document = document;
-        this.item = item;
+        setUnitPrice(unitPrice);
+        setDocument(document);
+        setItem(item);
     }
 
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) throws DocumentDetailsException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new DocumentDetailsException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
     public String getLabel() {
         return label;
+    }
+
+    public void setLabel(String label) throws DocumentDetailsException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new DocumentDetailsException("Label cannot be null or empty");
+        }
+        this.label = label;
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
+    public void setQuantity(Integer quantity) throws DocumentDetailsException
+    {
+        if(quantity == null || quantity <= 0)
+        {
+            throw new DocumentDetailsException("Quantity cannot be null or less than or equal to 0");
+        }
+        this.quantity = quantity;
+    }
+
     public Integer getNewQuantity() {
         return newQuantity;
     }
 
+
     public float getUnitPrice() {
         return unitPrice;
+    }
+
+    public void setUnitPrice(float unitPrice) throws DocumentDetailsException
+    {
+        if(unitPrice < 0)
+        {
+            throw new DocumentDetailsException("Unit price cannot be negative");
+        }
+        this.unitPrice = unitPrice;
     }
 
     public Document getDocument() {
         return document;
     }
 
+    public void setDocument(Document document) throws DocumentDetailsException
+    {
+        if(document == null)
+        {
+            throw new DocumentDetailsException("Document cannot be null");
+        }
+        this.document = document;
+    }
+
     public Item getItem() {
         return item;
+    }
+
+    public void setItem(Item item) throws DocumentDetailsException
+    {
+        if(item == null)
+        {
+            throw new DocumentDetailsException("Item cannot be null");
+        }
+        this.item = item;
     }
 
     @Override

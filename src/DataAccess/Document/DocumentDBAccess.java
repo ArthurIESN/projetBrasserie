@@ -7,11 +7,15 @@ import DataAccess.DataAccesUtils;
 import DataAccess.DeliveryTruck.DeliveryTruckDBAccess;
 import DataAccess.DocumentStatus.DocumentStatusDBAccess;
 import DataAccess.Process.ProcessDBAccess;
+import Exceptions.CollectionAgency.CollectionAgencyException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
+import Exceptions.DeliveryTruck.DeliveryTruckException;
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Document.DocumentException;
 import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.Document.UpdateDocumentException;
+import Exceptions.DocumentStatus.DocumentStatusException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
 import Model.Item.Item;
@@ -54,7 +58,12 @@ public class DocumentDBAccess implements DocumentDataAccess
 
             while (resultSet.next())
             {
-                documents.add(makeDocument(resultSet));
+                Document document = makeDocument(resultSet);
+
+                if (document != null)
+                {
+                    documents.add(document);
+                }
             }
 
             return documents;
@@ -266,10 +275,16 @@ public class DocumentDBAccess implements DocumentDataAccess
 
             ArrayList<Document> documents = new ArrayList<>();
 
-            while(resultSet.next()){
-                documents.add(makeDocument(resultSet));
-            }
+            while(resultSet.next())
+            {
+                Document document = makeDocument(resultSet);
 
+                if(document !=null)
+                {
+                    documents.add(document);
+                }
+
+            }
             return documents;
         }
         catch (SQLException | DatabaseConnectionFailedException e){

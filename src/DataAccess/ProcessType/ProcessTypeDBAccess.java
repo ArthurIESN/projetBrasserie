@@ -3,6 +3,7 @@ package DataAccess.ProcessType;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Exceptions.ProcessType.GetProcessTypeException;
+import Model.Process.Process;
 import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
 
@@ -34,7 +35,12 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
             while (resultSet.next())
             {
-                types.add(makeProcessType(resultSet));
+                ProcessType processType = makeProcessType(resultSet);
+
+                if(processType != null)
+                {
+                    types.add(processType);
+                }
             }
 
             return types;

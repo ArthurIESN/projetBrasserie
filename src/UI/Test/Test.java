@@ -2,6 +2,7 @@ package UI.Test;
 
 import BusinessLogic.Utils.HashUtils;
 import Controller.Date.DateController;
+import Model.Customer.MakeCustomer;
 import UI.Components.Fields.JDateField;
 import Utils.Utils;
 
@@ -40,6 +41,8 @@ public class Test extends JPanel
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
         GridBagLayoutHelper gridBagLayoutHelper = new GridBagLayoutHelper();
+
+        Customer customer = MakeCustomer.getCustomer(-1, "test", "test", 0, "test", null);
 
         Date date = new Date();
 

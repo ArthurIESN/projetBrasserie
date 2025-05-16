@@ -1,5 +1,7 @@
 package Model.DeliveryTruck;
 
+import Exceptions.DeliveryTruck.DeliveryTruckException;
+
 import java.util.HashMap;
 
 public class MakeDeliveryTruck
@@ -17,9 +19,17 @@ public class MakeDeliveryTruck
         }
         else
         {
-            DeliveryTruck deliveryTruck = new DeliveryTruck(id, plateNumber, fuelQuantity, mileage);
-            deliveryTruckMap.put(deliveryTruckHash, deliveryTruck);
-            return deliveryTruck;
+            try
+            {
+                DeliveryTruck deliveryTruck = new DeliveryTruck(id, plateNumber, fuelQuantity, mileage);
+                deliveryTruckMap.put(deliveryTruckHash, deliveryTruck);
+                return deliveryTruck;
+            }
+            catch (DeliveryTruckException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

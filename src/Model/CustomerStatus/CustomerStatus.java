@@ -1,26 +1,29 @@
 package Model.CustomerStatus;
 
+import Exceptions.CustomerStatus.CustomerStatusException;
+
 import java.util.Objects;
 
-public class CustomerStatus {
+public class CustomerStatus
+{
+
     private Integer id;
     private String label;
 
-    public CustomerStatus(Integer id, String label) {
+    public CustomerStatus(Integer id, String label) throws CustomerStatusException
+    {
         setId(id);
-        this.label = label;
+        setLabel(label);
     }
 
-    private void setId(Integer id)
+    private void setId(Integer id) throws CustomerStatusException
     {
         if(id == null || id <= 0)
         {
-            id = null;
+            throw new CustomerStatusException("CustomerStatus ID must be a positive integer.");
         }
-        else
-        {
-            this.id = id;
-        }
+
+        this.id = id;
     }
 
     public Integer getId() {
@@ -29,6 +32,16 @@ public class CustomerStatus {
 
     public String getLabel() {
         return label;
+    }
+
+    public void setLabel(String label) throws CustomerStatusException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new CustomerStatusException("CustomerStatus label cannot be null or empty.");
+        }
+
+        this.label = label;
     }
 
     @Override

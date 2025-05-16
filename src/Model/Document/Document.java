@@ -1,5 +1,6 @@
 package Model.Document;
 
+import Exceptions.Document.DocumentException;
 import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
@@ -33,33 +34,37 @@ public class Document {
                     Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, Float depositAmount,
                     Date desiredDeliveryDate, Float totalInclusiveOfTaxe, Float totalVat,
                     Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
-                    Process process,DocumentStatus documentStatus)
+                    Process process,DocumentStatus documentStatus) throws DocumentException
     {
         setId(id);
-        this.label = label;
-        this.date = date;
-        this.deadLine = deadLine;
-        this.reduction = reduction;
-        this.validity = validity;
-        this.isDelivered = isDelivered;
-        this.deliveryDate = deliveryDate;
-        this.depositIsPaid = depositIsPaid;
-        this.depositAmount = depositAmount;
-        this.desiredDeliveryDate = desiredDeliveryDate;
-        this.totalInclusiveOfTaxe = totalInclusiveOfTaxe;
-        this.totalVat = totalVat;
-        this.totalExclVat = totalExclVat;
-        this.collectionAgency = collectionAgency;
-        this.deliveryTruck = deliveryTruck;
-        this.process = process;
-        this.documentStatus = documentStatus;
+        setLabel(label);
+        setDate(date);
+        setDeadLine(deadLine);
+        setReduction(reduction);
+        setValidity(validity);
+        setIsDelivered(isDelivered);
+        setDeliveryDate(deliveryDate);
+        setDepositIsPaid(depositIsPaid);
+        setDepositAmount(depositAmount);
+        setDesiredDeliveryDate(desiredDeliveryDate);
+        setTotalInclusiveOfTaxe(totalInclusiveOfTaxe);
+        setTotalVat(totalVat);
+        setTotalExclVat(totalExclVat);
+        setCollectionAgency(collectionAgency);
+        setDeliveryTruck(deliveryTruck);
+        setProcess(process);
+        setDocumentStatus(documentStatus);
     }
 
-    public void setId(Integer id)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) throws DocumentException
     {
         if(id == null || id <= 0)
         {
-            id = null;
+            throw new DocumentException("ID cannot be null or less than 1");
         }
         else
         {
@@ -68,49 +73,107 @@ public class Document {
     }
 
 
-    public Integer getId() {
-        return id;
-    }
-
-
     public String getLabel() {
         return label;
+    }
+
+    public void setLabel(String label) throws DocumentException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new DocumentException("Label cannot be null or empty");
+        }
+        else
+        {
+            this.label = label;
+        }
     }
 
     public Date getDate() {
         return date;
     }
 
+    public void setDate(Date date) throws DocumentException
+    {
+        if(date == null)
+        {
+            throw new DocumentException("Date cannot be null");
+        }
+        else
+        {
+            this.date = date;
+        }
+    }
+
     public Date getDeadLine() {
         return deadLine;
+    }
+
+    public void setDeadLine(Date deadLine)
+    {
+        this.deadLine = deadLine;
     }
 
     public Float getReduction() {
         return reduction;
     }
 
+    public void setReduction(Float reduction)
+    {
+        this.reduction = reduction;
+    }
+
     public String getValidity() {
         return validity;
+    }
+
+    public void setValidity(String validity)
+    {
+        this.validity = validity;
     }
 
     public Boolean getIsDelivered() {
         return isDelivered;
     }
 
+    public void setIsDelivered(Boolean isDelivered)
+    {
+        this.isDelivered = isDelivered;
+    }
+
     public Date getDeliveryDate() {
         return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate)
+    {
+        this.deliveryDate = deliveryDate;
     }
 
     public Boolean getDepositIsPaid() {
         return depositIsPaid;
     }
 
+    public void setDepositIsPaid(Boolean depositIsPaid)
+    {
+        this.depositIsPaid = depositIsPaid;
+    }
+
     public Float getDepositAmount() {
         return depositAmount;
     }
 
+    public void setDepositAmount(Float depositAmount)
+    {
+        this.depositAmount = depositAmount;
+    }
+
     public Date getDesiredDeliveryDate() {
         return desiredDeliveryDate;
+    }
+
+    public void setDesiredDeliveryDate(Date desiredDeliveryDate) {
+        this.desiredDeliveryDate = desiredDeliveryDate;
     }
 
 
@@ -118,16 +181,33 @@ public class Document {
         return totalInclusiveOfTaxe;
     }
 
+    public void setTotalInclusiveOfTaxe(Float totalInclusiveOfTaxe) {
+        this.totalInclusiveOfTaxe = totalInclusiveOfTaxe;
+    }
+
     public Float getTotalVat() {
         return totalVat;
     }
+
+    public void setTotalVat(Float totalVat) {
+        this.totalVat = totalVat;
+    }
+
 
     public Float getTotalExclVat() {
         return totalExclVat;
     }
 
+    public void setTotalExclVat(Float totalExclVat) {
+        this.totalExclVat = totalExclVat;
+    }
+
     public CollectionAgency getCollectionAgency() {
         return collectionAgency;
+    }
+
+    public void setCollectionAgency(CollectionAgency collectionAgency) {
+        this.collectionAgency = collectionAgency;
     }
 
     public DeliveryTruck getDeliveryTruck() {
@@ -150,46 +230,6 @@ public class Document {
 
     public void setDeliveryTruck(DeliveryTruck deliveryTruck) {
         this.deliveryTruck = deliveryTruck;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setDeadLine(Date deadLine) {
-        this.deadLine = deadLine;
-    }
-
-    public void setReduction(Float reduction) {
-        this.reduction = reduction;
-    }
-
-    public void setValidity(String validity) {
-        this.validity = validity;
-    }
-
-    public void setIsDelivered(Boolean isDelivered) {
-        this.isDelivered = isDelivered;
-    }
-
-    public void setDeliveryDate(Date deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
-    public void setDepositIsPaid(Boolean depositIsPaid) {
-        this.depositIsPaid = depositIsPaid;
-    }
-
-    public void setDepositAmount(Float depositAmount) {
-        this.depositAmount = depositAmount;
-    }
-
-    public void setDesiredDeliveryDate(Date desiredDeliveryDate) {
-        this.desiredDeliveryDate = desiredDeliveryDate;
     }
 
 

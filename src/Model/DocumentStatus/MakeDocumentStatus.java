@@ -1,5 +1,7 @@
 package Model.DocumentStatus;
 
+import Exceptions.DocumentStatus.DocumentStatusException;
+
 import javax.swing.*;
 import java.util.HashMap;
 
@@ -16,9 +18,18 @@ public class MakeDocumentStatus {
         }
         else
         {
-            DocumentStatus documentStatus = new DocumentStatus(id, label);
-            documentStatusMap.put(documentStatusHash,documentStatus);
-            return documentStatus;
+            try
+            {
+                DocumentStatus documentStatus = new DocumentStatus(id, label);
+                documentStatusMap.put(documentStatusHash,documentStatus);
+                return documentStatus;
+            }
+            catch (DocumentStatusException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
+
         }
     }
 }

@@ -34,7 +34,12 @@ public class SupplierDBAccess implements SupplierDataAccess
 
             while (resultSet.next())
             {
-                suppliers.add(makeSupplier(resultSet));
+                Supplier supplier = makeSupplier(resultSet);
+
+                if(supplier != null)
+                {
+                    suppliers.add(supplier);
+                }
             }
 
             return suppliers;

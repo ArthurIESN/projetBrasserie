@@ -1,6 +1,7 @@
 package UI.Document;
 
 import Controller.Document.DocumentController;
+import Exceptions.Document.DocumentException;
 import Exceptions.Document.UpdateDocumentException;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
@@ -51,8 +52,16 @@ public class UpdateDocumentForm extends JPanel implements DocumentObserver {
         DocumentStatus documentStatus = documentModelPanel.getDocumentStatusSearch().getSelectedItem();
         DeliveryTruck deliveryTruck = documentModelPanel.getDeliveryTruckSearch().getSelectedItem();
 
-        document.setLabel(documentModelPanel.getLabelField().getText());
-        document.setDate(new Date());
+        try
+        {
+            document.setLabel(documentModelPanel.getLabelField().getText());
+            document.setDate(new Date());
+        }catch (DocumentException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         document.setIsDelivered(documentModelPanel.getCheckBoxIsDelivered().isSelected());
         Date date = documentModelPanel.getDeliveryDateField().getDate();
         document.setDeliveryDate(date);

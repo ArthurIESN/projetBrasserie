@@ -1,34 +1,49 @@
 package Model.CollectionAgency;
 
+import Exceptions.CollectionAgency.CollectionAgencyException;
+
 import java.util.Objects;
 
 public class CollectionAgency {
     private Integer id;
     private String name;
 
-    public CollectionAgency(Integer id,String name){
-        setId(id);
-        this.name = name;
-    }
-
-    private void setId(Integer id)
+    public CollectionAgency(Integer id,String name) throws CollectionAgencyException
     {
-        if(id == null || id <= 0)
-        {
-            id = null;
-        }
-        else
-        {
-            this.id = id;
-        }
+        setId(id);
+        setName(name);
     }
 
-    public Integer getId(){
+
+    public Integer getId()
+    {
         return this.id;
     }
 
-    public String getName(){
+    public void setId(Integer id) throws CollectionAgencyException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new CollectionAgencyException("ID must be a positive integer");
+        }
+
+        this.id = id;
+    }
+
+    public String getName()
+    {
         return this.name;
+    }
+
+    public void setName(String name) throws CollectionAgencyException
+    {
+
+        if(name == null || name.isEmpty())
+        {
+            throw new CollectionAgencyException("Name cannot be null or empty");
+        }
+
+        this.name = name;
     }
 
     @Override

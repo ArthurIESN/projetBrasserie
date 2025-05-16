@@ -1,5 +1,6 @@
 package Model.Locality;
 
+import Exceptions.Locality.LocalityException;
 import Model.Country.Country;
 
 import java.util.HashMap;
@@ -18,9 +19,17 @@ public class MakeLocality
         }
         else
         {
-            Locality locality = new Locality(id, address, postalCode, number, country);
-            localityMap.put(localityHash, locality);
-            return locality;
+            try
+            {
+                Locality locality = new Locality(id, address, postalCode, number, country);
+                localityMap.put(localityHash, locality);
+                return locality;
+            }
+            catch (LocalityException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }
