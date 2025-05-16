@@ -319,7 +319,9 @@ public class ProcessDBAccess implements ProcessDataAccess
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
-                processes.add(makeProcess(resultSet));
+                Process process = makeProcess(resultSet);
+                System.out.println(process + " Ceci est la daronne de gregory");
+                processes.add(process);
             }
         }catch (SQLException | DatabaseConnectionFailedException e ){
             System.err.println(e.getMessage());

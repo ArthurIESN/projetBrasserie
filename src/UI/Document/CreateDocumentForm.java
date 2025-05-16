@@ -12,6 +12,7 @@ import Model.DocumentStatus.DocumentStatus;
 import Model.Item.Item;
 import Model.Process.Process;
 import Model.ProcessType.ProcessType;
+import Model.Vat.Vat;
 import UI.Components.Fields.SearchListPanel;
 import UI.Components.GridBagLayoutHelper;
 
@@ -57,8 +58,12 @@ public class CreateDocumentForm extends JPanel {
             documentModelPanel.update();
         });
 
+        documentModelPanel.setTextButton("Create Document");
+
 
         gridDocument.addField(documentModelPanel);
+
+        documentModelPanel.onButtonClicked(e -> createDocument());
 
         add(gridDocument, BorderLayout.CENTER);
 
@@ -79,7 +84,7 @@ public class CreateDocumentForm extends JPanel {
                 documentModelPanel.getCheckBoxDepositIsPaid().isSelected(),
                 documentModelPanel.getDepositAmount(),
                 documentModelPanel.getDesiredDeliveryDate().getDate(),
-                (Float) documentModelPanel.getComboBoxVat().getSelectedItem(),
+                ((Vat) documentModelPanel.getComboBoxVat().getSelectedItem()).getRate(),
                 documentModelPanel.getTotalIncludingTax(),
                 documentModelPanel.getTotalVatAmount(),
                 documentModelPanel.getTotalExcludingTax(),
@@ -100,6 +105,7 @@ public class CreateDocumentForm extends JPanel {
             ArrayList<Item> items = documentModelPanel.getMultipleSelectionListItems().getSelectedItems();
 
             for (Item item : items){
+                // @todo faire la création de document_details
                 float newQuantity = documentModelPanel.getNumberFieldHashMap().get(item.getId()).getFloat();
                 // Code pour l'ajout d'une ligne dans document_details en rapport avec chaque item
                 // mais avec toujours le même id de document

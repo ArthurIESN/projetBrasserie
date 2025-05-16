@@ -2,6 +2,7 @@ package BusinessLogic.DeliveryTruck;
 
 import DataAccess.DeliveryTruck.DeliveryTruckDBAccess;
 import DataAccess.DeliveryTruck.DeliveryTruckDataAccess;
+import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
 import Model.DeliveryTruck.DeliveryTruck;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class DeliveryTruckManager
         return deliveryTruckDataAccess.getDeliveryTruck(id);
     }
 
-    public ArrayList<DeliveryTruck> getAllDeliveryTrucks()
+    public ArrayList<DeliveryTruck> getAllDeliveryTrucks() throws GetAllDeliveryTrucksException
     {
         return deliveryTruckDataAccess.getAllDeliveryTrucks();
     }

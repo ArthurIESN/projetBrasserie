@@ -2,6 +2,8 @@ package Controller.Document;
 
 import BusinessLogic.Document.DocumentManager;
 
+import Exceptions.Document.GetAllDocumentsException;
+import Exceptions.Document.UpdateDocumentException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -21,7 +23,7 @@ public class DocumentController
         documentManager.createDocument(document);
     }
 
-    public static void updateDocument(Document document)
+    public static void updateDocument(Document document)throws UpdateDocumentException
     {
         documentManager.updateDocument(document);
     }
@@ -36,7 +38,7 @@ public class DocumentController
         return documentManager.getDocument(id);
     }
 
-    public static ArrayList<Document> getAllDocuments()
+    public static ArrayList<Document> getAllDocuments() throws GetAllDocumentsException
     {
         return documentManager.getAllDocuments();
     }

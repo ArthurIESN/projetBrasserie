@@ -77,9 +77,10 @@ public class Process {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
+        System.out.println("this : " + this);
 
         Process process = (Process) obj;
-
+        System.out.println("Process " + process);
         return Objects.equals(id, process.id) &&
                 Objects.equals(label, process.label) &&
                 Objects.equals(number, process.number) &&
