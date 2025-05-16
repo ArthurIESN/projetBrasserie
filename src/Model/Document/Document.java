@@ -20,7 +20,6 @@ public class Document {
     private Boolean depositIsPaid;
     private Float depositAmount;
     private Date desiredDeliveryDate;
-    private Float VatAmount;
     private Float totalInclusiveOfTaxe;
     private Float totalVat;
     private Float totalExclVat;
@@ -32,7 +31,7 @@ public class Document {
     // Commande client
     public Document(Integer id, String label, Date date, Date deadLine, Float reduction, String validity,
                     Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, Float depositAmount,
-                    Date desiredDeliveryDate, Float VatAmount, Float totalInclusiveOfTaxe, Float totalVat,
+                    Date desiredDeliveryDate, Float totalInclusiveOfTaxe, Float totalVat,
                     Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                     Process process,DocumentStatus documentStatus)
     {
@@ -47,7 +46,6 @@ public class Document {
         this.depositIsPaid = depositIsPaid;
         this.depositAmount = depositAmount;
         this.desiredDeliveryDate = desiredDeliveryDate;
-        this.VatAmount = VatAmount;
         this.totalInclusiveOfTaxe = totalInclusiveOfTaxe;
         this.totalVat = totalVat;
         this.totalExclVat = totalExclVat;
@@ -57,7 +55,7 @@ public class Document {
         this.documentStatus = documentStatus;
     }
 
-    private void setId(Integer id)
+    public void setId(Integer id)
     {
         if(id == null || id <= 0)
         {
@@ -73,6 +71,7 @@ public class Document {
     public Integer getId() {
         return id;
     }
+
 
     public String getLabel() {
         return label;
@@ -114,9 +113,6 @@ public class Document {
         return desiredDeliveryDate;
     }
 
-    public Float getVatAmount() {
-        return VatAmount;
-    }
 
     public Float getTotalInclusiveOfTaxe() {
         return totalInclusiveOfTaxe;
@@ -221,7 +217,6 @@ public class Document {
                 Objects.equals(depositIsPaid, document.depositIsPaid) &&
                 Objects.equals(depositAmount, document.depositAmount) &&
                 Objects.equals(desiredDeliveryDate, document.desiredDeliveryDate) &&
-                Objects.equals(VatAmount, document.VatAmount) &&
                 Objects.equals(totalInclusiveOfTaxe, document.totalInclusiveOfTaxe) &&
                 Objects.equals(totalVat, document.totalVat) &&
                 Objects.equals(totalExclVat, document.totalExclVat) &&
@@ -232,26 +227,26 @@ public class Document {
 
     public static int hashCode(Integer id, String label, Date date, Date deadLine, Float reduction,
                                String validity, Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid,
-                               Float depositAmount, Date desiredDeliveryDate, Float VatAmount,
+                               Float depositAmount, Date desiredDeliveryDate,
                                Float totalInclusiveOfTaxe, Float totalVat, Float totalExclVat,
                                CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                                Process process, DocumentStatus documentStatus)
     {
         return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
-                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTaxe,
                 totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
-                depositIsPaid, depositAmount, desiredDeliveryDate, VatAmount, totalInclusiveOfTaxe,
+                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTaxe,
                 totalVat, totalExclVat, collectionAgency, deliveryTruck, process);
     }
 
     @Override
     public String toString() {
-        return id + " - " + label + " - " + date + " - " + deadLine + " - " + reduction + " - " + validity + " - " + isDelivered + " - " + deliveryDate + " - " + depositIsPaid + " - " + depositAmount + " - " + desiredDeliveryDate + " - " + VatAmount + " - " + totalInclusiveOfTaxe + " - " + totalVat + " - " + totalExclVat + " - " + collectionAgency + " - " + deliveryTruck + " - " + process + " - " + documentStatus;
+        return id + " - " + label + " - " + date + " - " + deadLine + " - " + reduction + " - " + validity + " - " + isDelivered + " - " + deliveryDate + " - " + depositIsPaid + " - " + depositAmount + " - " + desiredDeliveryDate  + " - " + totalInclusiveOfTaxe + " - " + totalVat + " - " + totalExclVat + " - " + collectionAgency + " - " + deliveryTruck + " - " + process + " - " + documentStatus;
     }
 
 

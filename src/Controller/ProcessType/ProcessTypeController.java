@@ -2,6 +2,7 @@ package Controller.ProcessType;
 
 import BusinessLogic.ProcessType.ProcessTypeManager;
 import Exceptions.ProcessType.GetAllProcessTypesException;
+import Exceptions.ProcessType.GetProcessTypeException;
 import Model.ProcessType.ProcessType;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class ProcessTypeController
         return processTypeManager.getAllTypes();
     }
     
-    public static ProcessType getProcessType(int id)
+    public static ProcessType getProcessType(int id) throws GetProcessTypeException
     {
         return processTypeManager.getProcessType(id);
     }

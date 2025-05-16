@@ -1,5 +1,6 @@
 package DataAccess.Document;
 
+import Exceptions.Document.CreateDocumentException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -9,7 +10,7 @@ public interface DocumentDataAccess
 {
     ArrayList<Document> getAllCurrentCommandsForAnItem(Item item);
 
-    void createDocument(Document document);
+    int createDocument(Document document) throws CreateDocumentException;
     void updateDocument(Document document);
     void deleteDocument(Integer id);
     Document getDocument(Integer id);

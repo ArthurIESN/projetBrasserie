@@ -1,11 +1,17 @@
 package UI.BusinessTasks;
 
+import Controller.BusinessTasks.CustomerOrderController;
 import Controller.Customer.CustomerController;
 import Controller.Item.ItemController;
+import Controller.Locality.LocalityController;
+import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Tasks.RestockItem.CustomerOrder.ExecuteOrderException;
 import Model.Customer.Customer;
 import Model.Item.Item;
+import Model.Locality.Locality;
+import UI.Components.Fields.JDateField;
 import UI.Components.Fields.JNumberField;
 import UI.Components.Fields.MultipleSelectionList;
 import UI.Components.Fields.SearchListPanel;
@@ -18,6 +24,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Date;
 
 public class CustomerOrderPanel extends JPanel
 {
@@ -25,14 +32,27 @@ public class CustomerOrderPanel extends JPanel
     private JPanel numberFieldPanel;
     private RoundedPanel VatPanel;
     private SearchListPanel<Customer> customerSearch;
+    private SearchListPanel<Locality> customerLocalitySearch;
     private MultipleSelectionList<Item> itemList;
+    private JNumberField depositField;
+    private JDateField desiredDeliveryDateField;
     private GridBagLayoutHelper gridCommand;
-    private int[] vatValues = {0, 0, 0, 0};
-    private ArrayList<JLabel> vatLabels = new ArrayList<>();
+    private float[] vatValues = {0, 0, 0, 0};
+    private final ArrayList<JLabel> vatLabels = new ArrayList<>();
 
     private HashMap<Item, JPanel> numberFieldHashMap;
 
     public CustomerOrderPanel()
+    {
+        setLayout(new BorderLayout());
+
+        createVatPanel();
+        createRightPanel();
+
+        add(scrollPane, BorderLayout.SOUTH);
+    }
+
+    private void createRightPanel()
     {
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Item> items = new ArrayList<>();
@@ -47,8 +67,82 @@ public class CustomerOrderPanel extends JPanel
             JOptionPane.showMessageDialog(this, "Failed to load data " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        setLayout(new BorderLayout());
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
+        numberFieldHashMap = new HashMap<>();
+
+        scrollPane = new JScrollPane();
+        scrollPane.setLayout(new ScrollPaneLayout());
+        scrollPane.setPreferredSize(new Dimension(0, 200));
+        scrollPane.setMaximumSize(new Dimension(Short.MAX_VALUE, 200));
+
+
+        numberFieldPanel = new JPanel();
+        numberFieldPanel.setLayout(new BoxLayout(numberFieldPanel, BoxLayout.Y_AXIS));
+
+        scrollPane.setViewportView(numberFieldPanel);
+
+        customerSearch = new SearchListPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getId());
+        customerSearch.getSearchField().setPlaceholder("Search for a customer");
+        customerSearch.onSelectedItemChange(selectedCustomer -> updateCustomerLocalities());
+
+        customerLocalitySearch = new SearchListPanel<>(new ArrayList<>(), locality -> locality.getAddress() + " " + locality.getPostalCode() + " " + locality.getNumber() + " " + locality.getCountry().getLabel());
+        customerLocalitySearch.getSearchField().setPlaceholder("Search for a locality");
+        customerLocalitySearch.onSelectedItemChange(selectedLocality ->
+        {
+            calculateTaxes();
+        });
+
+        itemList = new MultipleSelectionList<>(items, Item::getLabel);
+        itemList.getSearchField().setPlaceholder("Search for items");
+        itemList.setOnSelectionChange(selectedItems ->
+        {
+            updateFieldsQuantity(itemList.getSelectedItems());
+            calculateTaxes();
+        });
+
+        depositField = new JNumberField(Utils.NumberType.FLOAT, 2);
+        depositField.setPlaceholder("Enter deposit amount");
+        depositField.setAllowNegative(false);
+        depositField.setMinMax(0, 0);
+
+        desiredDeliveryDateField = new JDateField();
+        desiredDeliveryDateField.setPlaceholder("Enter desired delivery date");
+        desiredDeliveryDateField.setMinDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+
+
+        JButton commandButton = new JButton("Execute Command");
+        commandButton.addActionListener(e -> executeOrder());
+
+        gridCommand = new GridBagLayoutHelper();
+        gridCommand.addField("Select a customer", customerSearch);
+        gridCommand.addField("Select a locality", customerLocalitySearch);
+        gridCommand.addField("Select items", itemList);
+        gridCommand.addField("Deposit", depositField);
+        gridCommand.addField("Desired delivery date", desiredDeliveryDateField);
+        gridCommand.addField(commandButton);
+
+        rightPanel.add(gridCommand);
+
+        add(rightPanel, BorderLayout.CENTER);
+    }
+
+    private void checkItemQuantity(Item item, int quantity, JLabel messageLabel)
+    {
+        if (item.getCurrentQuantity() < quantity)
+        {
+            messageLabel.setText("Not enough quantity available. Available: " + item.getCurrentQuantity());
+            messageLabel.setForeground(Color.RED);
+        }
+        else
+        {
+            messageLabel.setText("");
+        }
+    }
+
+    private void createVatPanel()
+    {
         VatPanel = new RoundedPanel(0, 20, 0, 20, 2);
         VatPanel.setPreferredSize(new Dimension(250, 600));
         VatPanel.setLayout(new BoxLayout(VatPanel, BoxLayout.Y_AXIS));
@@ -72,8 +166,8 @@ public class CustomerOrderPanel extends JPanel
         gbc.fill = GridBagConstraints.NONE;
         vatContainer.add(VatPanel, gbc);
 
-        String[] vatHeaders= {"TVA:", "TVAC: ", "TOTAL: ", "ETC: "};
-        Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90)};
+        String[] vatHeaders= {"VAT:", "!!VAT INCLUDED:", "DELIVERY COST:", "TOTAL: " };
+        Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90), new Color(110, 110, 110)};
 
         for (int i = 0; i < vatHeaders.length; i++)
         {
@@ -82,20 +176,10 @@ public class CustomerOrderPanel extends JPanel
             vatPanel.setBackground(new Color(73, 73, 73));
 
             JLabel label = new JLabel(vatHeaders[i]);
-            label.setForeground(Color.WHITE);
-            label.setFont(new Font("Arial", Font.PLAIN, 14));
-            label.setOpaque(true);
-            label.setBackground(colors[i]);
-            label.setAlignmentX(Component.LEFT_ALIGNMENT);
-            label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            createVatLabel(colors, i, label);
 
             JLabel valueLabel = new JLabel(vatValues[i] + " €");
-            valueLabel.setForeground(Color.WHITE);
-            valueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            valueLabel.setOpaque(true);
-            valueLabel.setBackground(colors[i]);
-            valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            valueLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            createVatLabel(colors, i, valueLabel);
 
             vatLabels.add(valueLabel);
 
@@ -108,48 +192,36 @@ public class CustomerOrderPanel extends JPanel
 
 
         add(vatContainer, BorderLayout.WEST);
+    }
 
+    private void createVatLabel(Color[] colors, int i, JLabel valueLabel)
+    {
+        valueLabel.setForeground(Color.WHITE);
+        valueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        valueLabel.setOpaque(true);
+        valueLabel.setBackground(colors[i]);
+        valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        valueLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    }
 
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+    private void updateCustomerLocalities()
+    {
+        ArrayList<Locality> localities;
 
-
-        numberFieldHashMap = new HashMap<>();
-
-        scrollPane = new JScrollPane();
-        scrollPane.setLayout(new ScrollPaneLayout());
-        scrollPane.setPreferredSize(new Dimension(0, 200));
-        scrollPane.setMaximumSize(new Dimension(Short.MAX_VALUE, 200));
-
-
-        numberFieldPanel = new JPanel();
-        numberFieldPanel.setLayout(new BoxLayout(numberFieldPanel, BoxLayout.Y_AXIS));
-
-        scrollPane.setViewportView(numberFieldPanel);
-
-        customerSearch = new SearchListPanel<>(customers, customer -> customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getId());
-        customerSearch.getSearchField().setPlaceholder("Search for a customer");
-
-        itemList = new MultipleSelectionList<>(items, Item::getLabel);
-        itemList.setOnSelectionChange(selectedItems ->
+        try
         {
-            updateFieldsQuantity(itemList.getSelectedItems());
-            calculateTaxes();
-        });
+            localities = LocalityController.getCustomerLocalities(customerSearch.getSelectedItem().getId());
+            customerLocalitySearch.setData(localities);
 
-
-        JButton commandButton = new JButton("Execute Command");
-        commandButton.addActionListener(e -> executeOrder());
-
-        gridCommand = new GridBagLayoutHelper();
-        gridCommand.addField("Select a customer", customerSearch);
-        gridCommand.addField("Select items", itemList);
-        gridCommand.addField(commandButton);
-
-        rightPanel.add(gridCommand);
-
-        add(rightPanel, BorderLayout.CENTER);
-        add(scrollPane, BorderLayout.SOUTH);
+            if(localities.isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "No localities found for this customer. No order will be available.", "No Localities", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Failed to load localities: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void updateFieldsQuantity(ArrayList<Item> items)
@@ -158,7 +230,9 @@ public class CustomerOrderPanel extends JPanel
         for(Item item : items){
             if(!numberFieldHashMap.containsKey(item))
             {
-                JLabel label = new JLabel(item.getLabel());
+                JLabel label = new JLabel(item.getLabel() + " - " + item.getPrice() + " €" + " - " + item.getVat().getRate() + "%");
+
+                JLabel messageLabel = new JLabel();
 
                 JNumberField numberField = new JNumberField(Utils.NumberType.INTEGER);
                 numberField.setPlaceholder("Enter quantity");
@@ -166,6 +240,7 @@ public class CustomerOrderPanel extends JPanel
                 numberField.setMinMax(0, 100);
                 numberField.onFocusLost(e ->
                 {
+                    checkItemQuantity(item, numberField.getInt(), messageLabel);
                     calculateTaxes();
                 });
 
@@ -176,6 +251,7 @@ public class CustomerOrderPanel extends JPanel
                 panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
                 panel.add(label);
+                panel.add(messageLabel);
                 panel.add(numberField);
                 numberFieldPanel.add(panel);
                 numberFieldHashMap.put(item, panel);
@@ -199,25 +275,25 @@ public class CustomerOrderPanel extends JPanel
 
     }
 
-    // this needs to be in the business package
     private void calculateTaxes()
     {
-        float totalItemsPrice = 0;
-        float totalVat = 0;
-        float totalTtc = 0;
-
+        HashMap<Item, Integer> items = new HashMap<>();
         for (Item item : numberFieldHashMap.keySet())
         {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
             if (field != null)
             {
-                float quantity = field.getFloat();
-                float price = item.getPrice();
-                totalItemsPrice += quantity * price;
+                items.put(item, field.getInt());
             }
         }
+        vatValues = CustomerOrderController.calculateTaxes(items, customerLocalitySearch.getSelectedItem());
 
-        vatLabels.getFirst().setText(totalItemsPrice * 0.2f + " €");
+        vatLabels.get(0).setText(String.format("%.2f €", vatValues[0]));
+        vatLabels.get(1).setText(String.format("%.2f €", vatValues[1]));
+        vatLabels.get(2).setText(String.format("%.2f €",    vatValues[2]));
+        vatLabels.get(3).setText(String.format("%.2f €", vatValues[3]));
+
+        depositField.setMinMax(0, (int)Math.ceil(vatValues[3]));
     }
 
     private void executeOrder()
@@ -227,9 +303,55 @@ public class CustomerOrderPanel extends JPanel
         if (option != JOptionPane.YES_OPTION) return;
         if(!isOrderValid()) return;
 
+        HashMap<Item, Integer> items = new HashMap<>();
+        for (Item item : numberFieldHashMap.keySet())
+        {
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
+            if (field != null)
+            {
+                items.put(item, field.getInt());
+            }
+        }
 
 
-        ArrayList<Item> selectedItems = itemList.getSelectedItems();
+        try
+        {
+            CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
+            refreshPanel();
+        }
+        catch (UnauthorizedAccessException | ExecuteOrderException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void refreshPanel()
+    {
+        // Clear or reset data in components
+        customerSearch.setSelectedItem(null);
+        customerLocalitySearch.setData(null);
+        itemList.clearSelection();
+        depositField.setText("");
+        desiredDeliveryDateField.setDate(null);
+        numberFieldHashMap.clear();
+        numberFieldPanel.removeAll();
+
+        // refresh vat values
+        for (JLabel label : vatLabels)
+        {
+            label.setText("0.00 €");
+        }
+
+
+        vatValues = new float[]{0, 0, 0, 0};
+
+
+
+        // Revalidate and repaint the panel
+        scrollPane.revalidate();
+        scrollPane.repaint();
+        this.revalidate();
+        this.repaint();
     }
 
     private boolean isOrderValid()
@@ -240,18 +362,35 @@ public class CustomerOrderPanel extends JPanel
             return false;
         }
 
+        if(customerLocalitySearch.getSelectedItem() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a locality.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         if(itemList.getSelectedItems().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please select at least one item.", "Missing Information", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
+        if(desiredDeliveryDateField.getDate() == null)
+        {
+            JOptionPane.showMessageDialog(this, "Please select a desired delivery date.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         for (Item item : numberFieldHashMap.keySet())
         {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(1);
-            if (field == null || field.getInt() <= 0)
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
+            if ((field == null || field.getInt() <= 0))
             {
                 JOptionPane.showMessageDialog(this, "Please enter a valid quantity for item: " + item.getLabel(), "Invalid Quantity", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            else if(field.getInt() > item.getCurrentQuantity())
+            {
+                JOptionPane.showMessageDialog(this, "Not enough quantity available for item: " + item.getLabel() + ". Available: " + item.getCurrentQuantity(), "Insufficient Quantity", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         }

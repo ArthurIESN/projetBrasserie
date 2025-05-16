@@ -1,4 +1,4 @@
-package Model;
+package Model.Locality;
 
 import Model.Country.Country;
 
@@ -19,6 +19,36 @@ public class Locality
         this.postalCode = postalCode;
         this.number = number;
         this.country = country;
+    }
+
+    public Integer getId()
+    {
+        return id;
+    }
+
+    public String getAddress()
+    {
+        return address;
+    }
+
+    public String getPostalCode()
+    {
+        return postalCode;
+    }
+
+    public String getNumber()
+    {
+        return number;
+    }
+
+    public Country getCountry()
+    {
+        return country;
+    }
+
+    public static int hashCode(Integer id, String address, String postalCode, String number, Country country)
+    {
+        return Objects.hash(id, address, postalCode, number, country);
     }
 
     @Override

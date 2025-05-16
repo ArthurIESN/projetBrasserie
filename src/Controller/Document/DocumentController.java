@@ -4,6 +4,7 @@ import BusinessLogic.Document.DocumentManager;
 
 import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.Document.UpdateDocumentException;
+import Exceptions.Document.CreateDocumentException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -18,9 +19,9 @@ public class DocumentController
         return documentManager.getAllCurrentCommandsForAnItem(item);
     }
 
-    public static void createDocument(Document document)
+    public static int createDocument(Document document) throws CreateDocumentException
     {
-        documentManager.createDocument(document);
+        return documentManager.createDocument(document);
     }
 
     public static void updateDocument(Document document)throws UpdateDocumentException

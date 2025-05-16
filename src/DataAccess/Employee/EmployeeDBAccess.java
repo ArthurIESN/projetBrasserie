@@ -11,16 +11,10 @@ import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.EmployeeStatus.EmployeeStatusDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Employee.CreateEmployeeException;
-import Exceptions.Employee.DeleteEmployeeException;
-import Exceptions.Employee.GetAllEmployeesException;
+import Exceptions.Employee.*;
 
-import Exceptions.Employee.UpdateEmployeeException;
-import Model.CustomerStatus.MakeCustomerStatus;
 import Model.Employee.Employee;
 import Model.Employee.MakeEmployee;
-import Model.EmployeeStatus.EmployeeStatus;
-import Model.EmployeeStatus.MakeEmployeeStatus;
 
 public class EmployeeDBAccess implements EmployeeDataAccess
 {
@@ -53,8 +47,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
         }
     }
 
-    //@todo : handle exception
-    public Employee getEmployee(int id)
+    public Employee getEmployee(int id) throws GetEmployeeException
     {
         String query = "SELECT * " +
                 "FROM employee " +
@@ -77,13 +70,13 @@ public class EmployeeDBAccess implements EmployeeDataAccess
             else
             {
                 System.out.println("No employee found with id: " + id);
-                return null;
+                throw new GetEmployeeException("No employee found with this id");
             }
         }
         catch (SQLException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
-            return null;
+            throw new GetEmployeeException("Error while getting employee");
         }
     }
 
@@ -182,9 +175,8 @@ public class EmployeeDBAccess implements EmployeeDataAccess
         }
     }
 
-    //@todo : handle exception
     @Override
-    public Employee connect(Integer id, String password)
+    public Employee connect(Integer id, String password) throws ConnectException
     {
         String queryPassword = "SELECT password " +
                 "FROM employee " +
@@ -210,19 +202,19 @@ public class EmployeeDBAccess implements EmployeeDataAccess
                 else
                 {
                     System.out.println("Password is incorrect");
-                    return null;
+                    throw new ConnectException("Password is incorrect");
                 }
             }
             else
             {
                 System.out.println("No employee found with id: " + id);
-                return null;
+                throw new ConnectException("No employee found with this id");
             }
         }
-        catch (SQLException | DatabaseConnectionFailedException e)
+        catch (SQLException | GetEmployeeException | DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
-            return null;
+            throw new ConnectException("Error while connecting employee");
         }
     }
 
@@ -236,6 +228,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
                 resultSet.getString("employee.last_name"),
                 resultSet.getString("employee.first_name"),
                 resultSet.getDate("employee.birth_date"),
+                resultSet.getBoolean("employee.is_married"),
                 resultSet.getString("employee.password"),
                 EmployeeStatusDBAccess.makeEmployeeStatus(resultSet)
         );

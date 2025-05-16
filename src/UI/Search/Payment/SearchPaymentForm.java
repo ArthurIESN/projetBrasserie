@@ -5,6 +5,7 @@ import java.awt.*;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import Controller.Payment.PaymentController;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Search.GetAllPaymentYearsException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
@@ -45,8 +46,8 @@ public class SearchPaymentForm extends JPanel
         ArrayList<Integer> paymentYears;
         try {
             // Récupérer les années depuis la base de données
-            paymentYears = SearchController.getAllPaymentYears();
-        } catch (DatabaseConnectionFailedException | GetAllPaymentYearsException e) {
+            paymentYears = PaymentController.getAllPaymentYears();
+        } catch (GetAllPaymentYearsException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             paymentYears = new ArrayList<>(); // Liste vide en cas d'erreur
         }
@@ -120,7 +121,7 @@ public class SearchPaymentForm extends JPanel
         if (isValidated){
             paymentStatus = "Validated";
         } else {
-            paymentStatus = "Refused";
+            paymentStatus = "Not validated";
         }
 
         java.sql.Date sqlDate = null;
@@ -129,7 +130,7 @@ public class SearchPaymentForm extends JPanel
         }
 
         try {
-            ArrayList<Payment> payment = SearchController.searchPayments(paymentStatus, minAmount, sqlDate);
+            ArrayList<Payment> payment = PaymentController.searchPayments(paymentStatus, minAmount, sqlDate);
             ArrayList<PaymentStatus> paymentsStatus = Utils.transformData(payment, Payment::getPaymentStatus);
             ArrayList<Document> document = Utils.transformData(payment, Payment::getDocument);
             ArrayList<Process> process = Utils.transformData(payment, Payment::getProcess);
@@ -150,7 +151,7 @@ public class SearchPaymentForm extends JPanel
                 JOptionPane.showMessageDialog(null, "No payment found", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
 
-        } catch (SearchPaymentException | DatabaseConnectionFailedException e) {
+        } catch (SearchPaymentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

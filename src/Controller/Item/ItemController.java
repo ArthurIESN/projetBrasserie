@@ -3,6 +3,7 @@ package Controller.Item;
 import BusinessLogic.Item.ItemManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Item.GetAllItemsException;
+import Exceptions.Item.UpdateItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.UnkownVatCodeException;
@@ -11,6 +12,7 @@ import Model.Item.Item;
 import Model.Vat.Vat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemController {
@@ -19,6 +21,11 @@ public class ItemController {
     public static ArrayList<Item> getAllItems() throws GetAllItemsException
     {
         return itemManager.getAllItems();
+    }
+
+    public static boolean enoughItemQuantity(HashMap<Item, Integer> items)
+    {
+        return itemManager.enoughItemQuantity(items);
     }
 
     public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
@@ -34,7 +41,8 @@ public class ItemController {
         itemManager.createItem(item);
     }
 
-    public static void updateItem(Item item) {
+    public static void updateItem(Item item)  throws UpdateItemException
+    {
         itemManager.updateItem(item);
     }
 

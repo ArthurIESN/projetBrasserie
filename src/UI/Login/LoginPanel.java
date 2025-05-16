@@ -3,6 +3,7 @@ package UI.Login;
 import Controller.AppController;
 import Controller.Employee.EmployeeController;
 import Environement.ConnexionProperties;
+import Exceptions.Employee.ConnectException;
 import Model.Employee.Employee;
 import UI.Components.Fields.JEnhancedTextField;
 import UI.Components.Fields.JNumberField;
@@ -65,21 +66,28 @@ public class LoginPanel extends JPanel
 
     private void login()
     {
-        Employee employee = AppController.connect(idField.getInt(), passwordField.getText());
-
-        if (employee != null)
+        try
         {
-            ConnexionProperties.setId(employee.getId());
-            ConnexionProperties.setPassword(passwordField.getText());
-            ConnexionProperties.setKeepConnected(keepConnected);
+            Employee employee = AppController.connect(idField.getInt(), passwordField.getText());
 
-            ConnexionProperties.saveProperties();
+            if (employee != null)
+            {
+                ConnexionProperties.setId(employee.getId());
+                ConnexionProperties.setPassword(passwordField.getText());
+                ConnexionProperties.setKeepConnected(keepConnected);
 
-            brasserieWindow.updateWindowContent(new BrasserieHomePanel());
+                ConnexionProperties.saveProperties();
+
+                brasserieWindow.updateWindowContent(new BrasserieHomePanel());
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Invalid ID or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        else
+        catch (ConnectException e)
         {
-            JOptionPane.showMessageDialog(this, "Invalid ID or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Login failed: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

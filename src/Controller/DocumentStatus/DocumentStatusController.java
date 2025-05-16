@@ -3,6 +3,7 @@ package Controller.DocumentStatus;
 import BusinessLogic.DocumentStatus.DocumentStatusManager;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
+import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class DocumentStatusController {
         documentStatusManager.deleteDocumentStatus(id);
     }
 
-    public static DocumentStatus getDocumentStatus(Integer id)
+    public static DocumentStatus getDocumentStatus(Integer id) throws GetDocumentStatusException
     {
         return documentStatusManager.getDocumentStatus(id);
     }

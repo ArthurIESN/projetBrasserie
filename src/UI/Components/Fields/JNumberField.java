@@ -118,11 +118,6 @@ public class JNumberField extends JEnhancedTextField
     @Override
     protected void processKeyEvent(KeyEvent e)
     {
-        if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ENTER) {
-            validateNumber(getText());
-            return;
-        }
-
         if (e.getID() != KeyEvent.KEY_TYPED)
         {
             super.processKeyEvent(e);

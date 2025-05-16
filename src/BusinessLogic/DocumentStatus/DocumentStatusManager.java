@@ -4,6 +4,7 @@ import DataAccess.DocumentStatus.DocumentStatusDBAccess;
 import DataAccess.DocumentStatus.DocumentStatusDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
+import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
 
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ public class DocumentStatusManager {
         documentStatusDBAccess.deleteDocumentStatus(id);
     }
 
-    public DocumentStatus getDocumentStatus(Integer id) {
+    public DocumentStatus getDocumentStatus(Integer id) throws GetDocumentStatusException
+    {
         return documentStatusDBAccess.getDocumentStatus(id);
     }
 

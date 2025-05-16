@@ -10,15 +10,13 @@ import DataAccess.Supplier.SupplierDBAccess;
 import DataAccess.Customer.CustomerDBAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Document.CreateDocumentException;
 import Exceptions.Process.*;
 
 import Model.Process.MakeProcess;
 import Model.Process.Process;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static java.sql.Types.INTEGER;
@@ -30,7 +28,7 @@ public class ProcessDBAccess implements ProcessDataAccess
     {
     }
 
-    public void createProcess(Process process) throws CreateProcessException
+    public int createProcess(Process process) throws CreateProcessException
     {
         String query = "INSERT INTO process (label, number, id_supplier, id_process_type, id_process_status, id_employee, num_customer) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -38,14 +36,6 @@ public class ProcessDBAccess implements ProcessDataAccess
         if(process == null)
         {
             throw new CreateProcessException("Process cannot be null");
-        }
-        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
-        {
-            throw new CreateProcessException("Label cannot be empty");
-        }
-        else if(process.getNumber() <= 0)
-        {
-            throw new CreateProcessException("Number cannot be 0");
         }
         else if(process.getType() == null)
         {
@@ -59,7 +49,7 @@ public class ProcessDBAccess implements ProcessDataAccess
         try
         {
             Connection databaseConnexion = DatabaseConnexion.getInstance();
-            PreparedStatement statement = databaseConnexion.prepareStatement(query);
+            PreparedStatement statement = databaseConnexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
 
@@ -93,7 +83,21 @@ public class ProcessDBAccess implements ProcessDataAccess
                 statement.setInt(7, process.getCustomer().getId());
             }
 
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0)
+            {
+                throw new CreateProcessException("Failed to create process, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys())
+            {
+                if (generatedKeys.next())
+                {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new CreateProcessException("Failed to create process, no ID obtained.");
+                }
+            }
         }
         catch (SQLException | DatabaseConnectionFailedException e)
         {
@@ -120,33 +124,13 @@ public class ProcessDBAccess implements ProcessDataAccess
         {
             throw new UpdateProcessException("Process cannot be null");
         }
-        else if(process.getId() == null)
-        {
-            throw new UpdateProcessException("ID cannot be null");
-        }
-        else if(process.getLabel().isEmpty()) //@todo : put a character limit (the same as the database) ?
-        {
-            throw new UpdateProcessException("Label cannot be empty");
-        }
-        else if(process.getNumber() <= 0)
-        {
-            throw new UpdateProcessException("Number must be greater or equal to 0");
-        }
         else if(process.getType() == null)
         {
             throw new UpdateProcessException("Type cannot be null");
         }
-        else if(process.getType().getId() == null)
-        {
-            throw new UpdateProcessException("Type ID cannot be null");
-        }
         else if(process.getProcessStatus() == null)
         {
             throw new UpdateProcessException("Process status cannot be null");
-        }
-        else if(process.getProcessStatus().getId() == null)
-        {
-            throw new UpdateProcessException("Process status ID cannot be null");
         }
 
         try
@@ -297,7 +281,8 @@ public class ProcessDBAccess implements ProcessDataAccess
         }
     }
 
-    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType {
+    public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
+    {
         ArrayList<Process> processes = new ArrayList<>();
 
         String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, " +
@@ -323,8 +308,10 @@ public class ProcessDBAccess implements ProcessDataAccess
                 System.out.println(process + " Ceci est la daronne de gregory");
                 processes.add(process);
             }
-        }catch (SQLException | DatabaseConnectionFailedException e ){
+        }catch (SQLException | DatabaseConnectionFailedException e )
+        {
             System.err.println(e.getMessage());
+            throw new GetProcessWithSpecificType();
         }
 
         return processes;

@@ -15,12 +15,12 @@ public class MakeDocument {
     public static Document getDocument(Integer id, String label, Date date, Date deadline, Float reduction,
                                        String validity, Boolean isDelivered, Date deliveryDate,
                                        Boolean depositIsPaid, Float depositAmount, Date desiredDeliveryDate,
-                                       Float vatAmount, Float totalInclusiveOfTaxe, Float totalVat,
+                                       Float totalInclusiveOfTaxe, Float totalVat,
                                        Float totalExclVat, CollectionAgency collectionAgency,
                                        DocumentStatus documentStatus, DeliveryTruck deliveryTruck, Process process)
     {
         int documentHash = Document.hashCode(id, label, date, deadline, reduction, validity,
-                isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate, vatAmount,
+                isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate,
                 totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
 
         if(documentMap.containsKey(documentHash))
@@ -30,7 +30,7 @@ public class MakeDocument {
         else
         {
             Document document = new Document(id, label, date, deadline, reduction, validity,
-                    isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate, vatAmount,
+                    isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate,
                     totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
             documentMap.put(documentHash,document);
             return document;

@@ -74,6 +74,7 @@ public class LoadingThread extends Thread
                 Thread.sleep(10);
             } catch (InterruptedException e)
             {
+                WindowManager.setWindowsEnable(true);
                 System.out.println("Thread interrupted: " + e.getMessage());
             }
         }

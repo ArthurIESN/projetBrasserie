@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import BusinessLogic.Utils.HashUtils;
 import DataAccess.Employee.EmployeeDBAccess;
 import DataAccess.Employee.EmployeeDataAccess;
-import Exceptions.Employee.CreateEmployeeException;
-import Exceptions.Employee.DeleteEmployeeException;
-import Exceptions.Employee.GetAllEmployeesException;
-import Exceptions.Employee.UpdateEmployeeException;
+import Exceptions.Employee.*;
 import Model.Employee.Employee;
 
 
@@ -22,7 +19,7 @@ public class EmployeeManager
 
     }
 
-    public Employee connect(Integer id, String password)
+    public Employee connect(Integer id, String password) throws ConnectException
     {
         return employeeDataAccess.connect(id, password);
     }
@@ -69,7 +66,7 @@ public class EmployeeManager
         employeeDataAccess.updateEmployee(employee);
     }
 
-    public Employee getEmployee(int id)
+    public Employee getEmployee(int id) throws GetEmployeeException
     {
         return employeeDataAccess.getEmployee(id);
     }
@@ -78,12 +75,13 @@ public class EmployeeManager
     {
         LocalDate minDate = LocalDate.now().minusYears(18);
         LocalDate maxDate = LocalDate.now().minusYears(100);
+
         return (confirmId && (employee.getId() == null || employee.getId() <= 0)) ||
                 employee.getFirstName() == null || employee.getFirstName().isEmpty() ||
                 employee.getLastName() == null || employee.getLastName().isEmpty() ||
                 employee.getBirthDate() == null ||
-                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isBefore(minDate) ||
-                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isAfter(maxDate) ||
+                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isAfter(minDate) || // Too young
+                employee.getBirthDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate().isBefore(maxDate) || // Too old
                 (!withoutPassword && (employee.getPassword() == null || employee.getPassword().isEmpty())) ||
                 employee.getEmployeeStatus() == null;
     }

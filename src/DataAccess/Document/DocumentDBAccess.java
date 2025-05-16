@@ -67,7 +67,7 @@ public class DocumentDBAccess implements DocumentDataAccess
     }
 
     @Override
-    public void createDocument(Document document) throws CreateDocumentException {
+    public int createDocument(Document document) throws CreateDocumentException {
         String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, vat_amount, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -89,25 +89,37 @@ public class DocumentDBAccess implements DocumentDataAccess
 
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
-            PreparedStatement statement = dataBaseConnection.prepareStatement(query);
+            PreparedStatement statement = dataBaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
-            statement.setDate(3, document.getDeliveryTruck() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null);
+
+            if (document.getDeliveryTruck() != null) {
+                statement.setDate(3, new java.sql.Date(document.getDeadLine().getTime()));
+            } else {
+                statement.setNull(3, java.sql.Types.DATE);
+            }
+
             statement.setFloat(4, document.getReduction());
             statement.setString(5, document.getValidity());
             statement.setBoolean(6, document.getIsDelivered());
-            statement.setDate(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null);
+
+            if (document.getDeliveryDate() != null) {
+                statement.setDate(7, new java.sql.Date(document.getDeliveryDate().getTime()));
+            } else {
+                statement.setNull(7, java.sql.Types.DATE);
+            }
+
             statement.setBoolean(8, document.getDepositIsPaid());
             statement.setFloat(9, document.getDepositAmount());
             statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
-            statement.setFloat(11, document.getVatAmount());
-            statement.setFloat(12, document.getTotalInclusiveOfTaxe());
-            statement.setFloat(13, document.getTotalVat());
-            statement.setFloat(14, document.getTotalExclVat());
-            statement.setObject(15, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null, Types.INTEGER);
-            statement.setObject(16, document.getDocumentStatus() != null ? document.getDocumentStatus().getId() : null, Types.INTEGER);
-            statement.setObject(17, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
-            statement.setObject(18, document.getProcess() != null ? document.getProcess().getId() : null, Types.INTEGER);
+            statement.setFloat(11, document.getTotalInclusiveOfTaxe());
+            statement.setFloat(12, document.getTotalVat());
+            statement.setFloat(13, document.getTotalExclVat());
+            statement.setObject(14, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null, Types.INTEGER);
+            statement.setObject(15, document.getDocumentStatus() != null ? document.getDocumentStatus().getId() : null, Types.INTEGER);
+            statement.setObject(16, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
+            statement.setObject(17, document.getProcess() != null ? document.getProcess().getId() : null, Types.INTEGER);
 
             statement.executeUpdate();
 
@@ -267,7 +279,6 @@ public class DocumentDBAccess implements DocumentDataAccess
                 resultSet.getBoolean("document.deposit_is_paid"),
                 resultSet.getFloat("document.deposit_amount"),
                 resultSet.getDate("document.desired_delivery_date"),
-                resultSet.getFloat("document.vat_amount"),
                 resultSet.getFloat("document.total_inclusive_of_taxe"),
                 resultSet.getFloat("document.total_vat"),
                 resultSet.getFloat("document.total_excl_vat"),
