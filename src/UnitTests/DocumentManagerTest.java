@@ -1,5 +1,6 @@
-package BusinessLogic.Document;
+package UnitTests;
 
+import BusinessLogic.Document.DocumentManager;
 import Model.Country.Country;
 import Model.Locality.Locality;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class DocumentManagerTest
 {
 
-    private DocumentManager documentManager = new DocumentManager();
+    private final DocumentManager documentManager = new DocumentManager();
     private static Locality locality;
 
     private static ArrayList<Item> items;
-    private  HashMap<Item, Integer> itemsMap = new HashMap<>();
+    private final HashMap<Item, Integer> itemsMap = new HashMap<>();
 
     @BeforeAll
     static void setUp()

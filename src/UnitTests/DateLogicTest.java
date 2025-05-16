@@ -1,4 +1,4 @@
-package BusinessLogic;
+package UnitTests;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import BusinessLogic.Date.DateLogic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
