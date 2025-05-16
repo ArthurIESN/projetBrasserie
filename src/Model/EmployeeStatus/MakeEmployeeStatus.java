@@ -2,6 +2,8 @@ package Model.EmployeeStatus;
 
 import java.util.HashMap;
 
+import Exceptions.EmployeeStatus.EmployeeStatusException;
+
 public class MakeEmployeeStatus
 {
     private static final HashMap<Integer, EmployeeStatus> employeeStatusMap = new HashMap<>();
@@ -16,9 +18,17 @@ public class MakeEmployeeStatus
         }
         else
         {
-            EmployeeStatus employeeStatus = new EmployeeStatus(id, label);
-            employeeStatusMap.put(employeeStatusHash, employeeStatus);
-            return employeeStatus;
+            try
+            {
+                EmployeeStatus employeeStatus = new EmployeeStatus(id, label);
+                employeeStatusMap.put(employeeStatusHash, employeeStatus);
+                return employeeStatus;
+            }
+            catch (EmployeeStatusException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

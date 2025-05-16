@@ -228,10 +228,11 @@ public class CustomerOrderPanel extends JPanel
     private void updateFieldsQuantity(ArrayList<Item> items)
     {
 
-        for(Item item : items){
+        for(Item item : items)
+        {
             if(!numberFieldHashMap.containsKey(item))
             {
-                JLabel label = new JLabel(item.getLabel() + " - " + item.getPrice() + " €" + " - " + item.getVat().getRate() + "%");
+                JLabel label = new JLabel(item.getLabel());
 
                 JLabel messageLabel = new JLabel();
 

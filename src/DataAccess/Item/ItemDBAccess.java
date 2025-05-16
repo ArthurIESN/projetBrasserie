@@ -11,6 +11,7 @@ import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Model.Item.Item;
 
+import Model.Item.MakeItem;
 import Model.Packaging.Packaging;
 import Model.Vat.Vat;
 
@@ -198,7 +199,7 @@ public class ItemDBAccess implements ItemDataAccess
     {
         if(!DataAccesUtils.hasColumn(resultSet, "item.id")) return null;
 
-        return new Item(
+        return  MakeItem.getItem(
                 resultSet.getInt("item.id"),
                 resultSet.getString("item.label"),
                 resultSet.getFloat("item.price"),

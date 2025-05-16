@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NumberLogicTest {
 
 
-    private NumberLogic numberLogic = new NumberLogic();
+    private final NumberLogic numberLogic = new NumberLogic();
 
     @BeforeEach
     void setUp()

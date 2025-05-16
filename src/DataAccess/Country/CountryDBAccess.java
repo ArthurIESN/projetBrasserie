@@ -1,6 +1,7 @@
 package DataAccess.Country;
 
 import DataAccess.DataAccesUtils;
+import Exceptions.Customer.CountryException;
 import Model.Country.Country;
 import Model.Country.MakeCountry;
 
@@ -35,7 +36,7 @@ public class CountryDBAccess implements CountryDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public static Country makeCountry(ResultSet resultSet) throws SQLException
+    public static Country makeCountry(ResultSet resultSet) throws SQLException, CountryException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "country.id")) return null;
 

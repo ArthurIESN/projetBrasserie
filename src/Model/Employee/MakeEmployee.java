@@ -3,6 +3,7 @@ package Model.Employee;
 import java.util.Date;
 import java.util.HashMap;
 
+import Exceptions.Employee.EmployeeException;
 import Model.EmployeeStatus.EmployeeStatus;
 import Model.EmployeeStatus.MakeEmployeeStatus;
 
@@ -20,9 +21,17 @@ public class MakeEmployee
         }
         else
         {
-            Employee employee = new Employee(id, lastName, firstName, birthDate, isMarried, password, employeeStatus);
-            employeeMap.put(employeeHash, employee);
-            return employee;
+            try
+            {
+                Employee employee = new Employee(id, lastName, firstName, birthDate, isMarried, password, employeeStatus);
+                employeeMap.put(employeeHash, employee);
+                return employee;
+            }
+            catch (EmployeeException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

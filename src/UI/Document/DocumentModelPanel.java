@@ -311,9 +311,11 @@ public class DocumentModelPanel extends JPanel {
 
         multipleSelectionListItems.setVisible(false);
 
+
         multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
             updateFieldsQuantity(multipleSelectionListItems.getSelectedItems());
         });
+
 
         // 0
         allComponents.add(deliveryDateField);

@@ -3,6 +3,7 @@ package DataAccess.Search.SearchDocumentWithEvent;
 import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Document.DocumentException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Document.Document;
@@ -110,7 +111,12 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
 
             while (resultSet.next())
             {
-                documents.add(DocumentDBAccess.makeDocument(resultSet));
+                Document document = DocumentDBAccess.makeDocument(resultSet);
+
+                if(document != null)
+                {
+                    documents.add(document);
+                }
             }
 
             return documents;

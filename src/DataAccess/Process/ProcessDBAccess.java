@@ -269,7 +269,12 @@ public class ProcessDBAccess implements ProcessDataAccess
 
             while (resultSet.next())
             {
-                processes.add(makeProcess(resultSet));
+                Process process = makeProcess(resultSet);
+
+                if(process != null)
+                {
+                    processes.add(process);
+                }
             }
 
             return processes;
@@ -305,8 +310,11 @@ public class ProcessDBAccess implements ProcessDataAccess
 
             while (resultSet.next()){
                 Process process = makeProcess(resultSet);
-                System.out.println(process + " Ceci est la daronne de gregory");
-                processes.add(process);
+
+                if(process != null)
+                {
+                    processes.add(process);
+                }
             }
         }catch (SQLException | DatabaseConnectionFailedException e )
         {

@@ -4,11 +4,13 @@ import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
 import DataAccess.Item.ItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Document.DocumentException;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
 import Model.DocumentDetails.MakeDocumentDetails;
 import DataAccess.DataAccesUtils;
+import Model.DocumentStatus.DocumentStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -104,7 +106,12 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
 
             while (resultSet.next())
             {
-                documentDetails.add(makeDocumentDetails(resultSet));
+                DocumentDetails documentDetail = makeDocumentDetails(resultSet);
+
+                if (documentDetail != null)
+                {
+                    documentDetails.add(documentDetail);
+                }
             }
 
             return documentDetails;
