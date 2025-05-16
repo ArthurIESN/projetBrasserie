@@ -1,5 +1,7 @@
 package Model.DeliveryTruck;
 
+import Exceptions.DeliveryTruck.DeliveryTruckException;
+
 import java.util.Objects;
 
 public class DeliveryTruck {
@@ -8,23 +10,22 @@ public class DeliveryTruck {
     private float fuelQuantity;
     private float mileage;
 
-    public DeliveryTruck(Integer id,String licensePlate,float fuelQuantity,float mileage){
+    public DeliveryTruck(Integer id,String licensePlate,float fuelQuantity,float mileage) throws DeliveryTruckException
+    {
         setId(id);
-        this.licensePlate = licensePlate;
-        this.fuelQuantity = fuelQuantity;
-        this.mileage = mileage;
+        setLicensePlate(licensePlate);
+        setFuelQuantity(fuelQuantity);
+        setMileage(mileage);
     }
 
-    private void setId(Integer id)
+    private void setId(Integer id) throws DeliveryTruckException
     {
         if(id == null || id <= 0)
         {
-            id = null;
+            throw new DeliveryTruckException("ID cannot be null or less than or equal to 0");
         }
-        else
-        {
-            this.id = id;
-        }
+
+        this.id = id;
     }
 
     public Integer getId(){
@@ -35,12 +36,39 @@ public class DeliveryTruck {
         return this.licensePlate;
     }
 
-    public float getFuelQuantity(){
+    public void setLicensePlate(String licensePlate) throws DeliveryTruckException {
+        if (licensePlate == null || licensePlate.isEmpty()) {
+            throw new DeliveryTruckException("License plate cannot be null or empty");
+        }
+        this.licensePlate = licensePlate;
+    }
+
+    public float getFuelQuantity()
+    {
         return this.fuelQuantity;
     }
 
-    public float getMileage(){
+    public void setFuelQuantity(float fuelQuantity) throws DeliveryTruckException
+    {
+        if (fuelQuantity < 0)
+        {
+            throw new DeliveryTruckException("Fuel quantity cannot be negative");
+        }
+        this.fuelQuantity = fuelQuantity;
+    }
+
+    public float getMileage()
+    {
         return this.mileage;
+    }
+
+    public void setMileage(float mileage) throws DeliveryTruckException
+    {
+        if (mileage < 0)
+        {
+            throw new DeliveryTruckException("Mileage cannot be negative");
+        }
+        this.mileage = mileage;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package DataAccess.CollectionAgency;
 
 import DataAccess.DataAccesUtils;
+import Exceptions.CollectionAgency.CollectionAgencyException;
 import Model.CollectionAgency.CollectionAgency;
 import Model.CollectionAgency.MakeCollectionAgency;
 

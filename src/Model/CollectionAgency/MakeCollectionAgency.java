@@ -1,5 +1,7 @@
 package Model.CollectionAgency;
 
+import Exceptions.CollectionAgency.CollectionAgencyException;
+
 import java.util.HashMap;
 
 public class MakeCollectionAgency
@@ -16,9 +18,17 @@ public class MakeCollectionAgency
         }
         else
         {
-            CollectionAgency collectionAgency = new CollectionAgency(id, name);
-            collectionAgencyMap.put(collectionAgencyHash,collectionAgency);
-            return collectionAgency;
+            try
+            {
+                CollectionAgency collectionAgency = new CollectionAgency(id, name);
+                collectionAgencyMap.put(collectionAgencyHash, collectionAgency);
+                return collectionAgency;
+            }
+            catch (CollectionAgencyException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

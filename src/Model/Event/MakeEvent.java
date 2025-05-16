@@ -19,9 +19,17 @@ public class MakeEvent {
         }
         else
         {
-            Event event = new Event(id, label, new java.util.Date(startDate.getTime()), new java.util.Date(endDate.getTime()), impact);
-            eventMap.put(eventHash,event);
-            return event;
+            try
+            {
+                Event event = new Event(id, label, startDate, endDate, impact);
+                eventMap.put(eventHash,event);
+                return event;
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

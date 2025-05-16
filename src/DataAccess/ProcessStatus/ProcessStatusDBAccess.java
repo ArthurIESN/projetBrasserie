@@ -35,7 +35,12 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
             while (resultSet.next())
             {
-                processStatuses.add(makeProcessStatus(resultSet));
+                ProcessStatus processStatus = makeProcessStatus(resultSet);
+
+                if(processStatus != null)
+                {
+                    processStatuses.add(processStatus);
+                }
             }
 
             return processStatuses;

@@ -94,7 +94,7 @@ public class DocumentModelPanel extends JPanel {
     private JCheckBox checkBoxDepositIsPaid;
     private JCheckBox checkBoxIsDelivered;
 
-    private HashMap<Integer, JNumberField> numberFieldHashMap;
+    private HashMap<Item, JNumberField> numberFieldHashMap;
     private HashMap<Integer, ArrayList<Integer>> modelsDocuments;
     private HashMap<Integer, ArrayList<JLabel>> vatItemHashMap;
     private HashMap<Integer, ArrayList<JPanel>> panelsVatFieldsHashMap;
@@ -311,10 +311,7 @@ public class DocumentModelPanel extends JPanel {
 
         multipleSelectionListItems.setVisible(false);
 
-        multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
-            ArrayList<Integer> selectedIds = Utils.transformData(selectedItems, Item::getId);
-            updateFieldsQuantity(selectedIds);
-        });
+        multipleSelectionListItems.setOnSelectionChange(selectedItems -> updateFieldsQuantity(multipleSelectionListItems.getSelectedItems()));
 
         // 0
         allComponents.add(deliveryDateField);
@@ -487,7 +484,7 @@ public class DocumentModelPanel extends JPanel {
         }
 
         for (Item item : multipleSelectionListItems.getSelectedItems()) {
-            Float quantity = numberFieldHashMap.get(item.getId()).getFloat();
+            Float quantity = numberFieldHashMap.get(item).getFloat();
 
             if (quantity > 0) {
                 Float unitPrice = item.getPrice();
@@ -614,38 +611,36 @@ public class DocumentModelPanel extends JPanel {
 
     }
 
-    private void updateFieldsQuantity(List<Integer> selectedIds) {
+    private void updateFieldsQuantity(ArrayList<Item> items)
+    {
 
-        System.out.println(selectedIds);
-        for (Integer id : selectedIds) {
-            if (!numberFieldHashMap.containsKey(id)) {
+        for (Item item : items)
+        {
+            if (!numberFieldHashMap.containsKey(item))
+            {
                 JNumberField numberField = new JNumberField(Utils.NumberType.FLOAT, 2);
                 numberField.setAllowNegative(false);
                 numberField.setPlaceholder("Enter quantity");
-                numberFieldHashMap.put(id, numberField);
-                System.out.println(numberFieldHashMap);
+
+                numberFieldHashMap.put(item, numberField);
                 numberFieldPanel.add(numberField);
             }
         }
 
-        List<Integer> idsToRemove = new ArrayList<>();
+        Iterator<Item> iterator = numberFieldHashMap.keySet().iterator();
 
-        for (Integer id : numberFieldHashMap.keySet()) {
-            if (!selectedIds.contains(id)) {
-                JNumberField fieldToRemove = numberFieldHashMap.get(id);
-                numberFieldPanel.remove(fieldToRemove);
-                idsToRemove.add(id);
-
+        while (iterator.hasNext())
+        {
+            Item item = iterator.next();
+            if (!items.contains(item))
+            {
+                numberFieldPanel.remove(numberFieldHashMap.get(item));
+                iterator.remove();
             }
-        }
-
-        for (Integer id : idsToRemove) {
-            numberFieldHashMap.remove(id);
         }
 
         numberFieldPanel.revalidate();
         numberFieldPanel.repaint();
-
     }
 
     public boolean isDocumentInvalid() {
@@ -755,7 +750,7 @@ public class DocumentModelPanel extends JPanel {
         return multipleSelectionListItems;
     }
 
-    public HashMap<Integer, JNumberField> getNumberFieldHashMap() {
+    public HashMap<Item, JNumberField> getNumberFieldHashMap() {
         return numberFieldHashMap;
     }
 

@@ -1,6 +1,9 @@
 package UnitTests;
 
 import BusinessLogic.Document.DocumentManager;
+import Exceptions.Customer.CountryException;
+import Exceptions.Item.ItemException;
+import Exceptions.Locality.LocalityException;
 import Model.Country.Country;
 import Model.Locality.Locality;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,19 +30,27 @@ class DocumentManagerTest
     @BeforeAll
     static void setUp()
     {
-        Country country = new Country(12, "Code", 10.0f);
-        locality = new Locality(23, "Addresse", "PostalCode", "City",  country);
-
-        // generate 40 items
-        items = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++)
+        try
         {
-            Vat vat = new Vat("VAT 20", 20.0f);
+            Country country = new Country(12, "Code", 10.0f);
+            locality = new Locality(23, "Addresse", "PostalCode", "City",  country);
 
-            Item item = new Item(i, "Item" + i, 10.f, 0, 0, 0, 0, null, 0, 0, null, vat);
-            items.add(item);
+            // generate 40 items
+            items = new ArrayList<>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                Vat vat = new Vat("VAT 20", 20.0f);
+
+                Item item = new Item(i, "Item" + i, 10.f, 0, 0, 0, 0, null, 0, 0, null, vat);
+                items.add(item);
+            }
         }
+        catch (CountryException | LocalityException | ItemException e)
+        {
+            System.out.println("Error creating country: " + e.getMessage());
+        }
+
     }
 
 

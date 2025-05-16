@@ -1,5 +1,6 @@
 package Model.DocumentDetails;
 
+import Exceptions.DocumentDetails.DocumentDetailsException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -18,9 +19,17 @@ public class MakeDocumentDetails {
         }
         else
         {
-            DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document, item);
-            documentDetailsMap.put(documentDetailsHash,documentDetails);
-            return documentDetails;
+            try
+            {
+                DocumentDetails documentDetails = new DocumentDetails(id, label, quantity, newQuantity, unitPrice, document, item);
+                documentDetailsMap.put(documentDetailsHash,documentDetails);
+                return documentDetails;
+            }
+            catch (DocumentDetailsException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

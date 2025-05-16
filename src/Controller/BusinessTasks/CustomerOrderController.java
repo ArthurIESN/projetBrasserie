@@ -13,12 +13,15 @@ import Controller.ProcessStatus.ProcessStatusController;
 import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Document.DocumentException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
+import Exceptions.Item.ItemException;
 import Exceptions.Item.UpdateItemException;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Exceptions.ProcessType.GetProcessTypeException;
 import Exceptions.Tasks.RestockItem.CustomerOrder.ExecuteOrderException;
+import Exceptions.DocumentDetails.DocumentDetailsException;
 import Model.Customer.Customer;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
@@ -92,10 +95,21 @@ public class CustomerOrderController
 
 
         Process process = new Process(null, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
-        Document document = new Document(null, "AUTO_CUSTOMER_ORDER_DOCUMENT",
-                currentDate, null, 0.f, "",
-                false, deliveryDate, deposit > 0,
-                deposit, desiredDeliveryDate,  values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+
+        Document document;
+        try
+        {
+             document = new Document(10, "AUTO_CUSTOMER_ORDER_DOCUMENT",
+                    currentDate, null, 0.f, "",
+                    false, deliveryDate, deposit > 0,
+                    deposit, desiredDeliveryDate,  values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+        }
+        catch (DocumentException e)
+        {
+            System.out.println("Error while creating document: " + e.getMessage());
+            throw new ExecuteOrderException("Error while creating document");
+        }
+
 
         ArrayList<DocumentDetails> itemDocumentDetails = new ArrayList<>();
 
@@ -104,11 +118,18 @@ public class CustomerOrderController
             Item item = entry.getKey();
             int quantity = entry.getValue();
 
-            DocumentDetails documentDetails = new DocumentDetails(null, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
-            itemDocumentDetails.add(documentDetails);
+            try
+            {
+                DocumentDetails documentDetails = new DocumentDetails(null, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
+                itemDocumentDetails.add(documentDetails);
 
-            // update item quantity
-            item.setCurrentQuantity(item.getCurrentQuantity() - quantity);
+                item.setCurrentQuantity(item.getCurrentQuantity() - quantity);
+            }
+            catch (DocumentDetailsException | ItemException e)
+            {
+                System.out.println("Error while creating document details: " + e.getMessage());
+                throw new ExecuteOrderException("Error while creating document details");
+            }
 
             try
             {
@@ -119,13 +140,21 @@ public class CustomerOrderController
                 System.out.println("Error while updating item quantity: " + e.getMessage());
                 throw new ExecuteOrderException("Error while updating item quantity");
             }
-
         }
 
         try
         {
             process.setId(ProcessController.createProcess(process));
-            document.setId(DocumentController.createDocument(document));
+
+            try
+            {
+                document.setId(DocumentController.createDocument(document));
+            }
+            catch (DocumentException e)
+            {
+                System.out.println("Error while creating document: " + e.getMessage());
+                throw new ExecuteOrderException("Error while creating document");
+            }
 
             for (DocumentDetails documentDetails : itemDocumentDetails)
             {

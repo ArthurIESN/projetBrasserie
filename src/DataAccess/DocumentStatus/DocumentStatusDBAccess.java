@@ -3,6 +3,7 @@ package DataAccess.DocumentStatus;
 import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.DocumentStatus.DocumentStatusException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
@@ -68,7 +69,15 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             if(resultSet.next())
             {
-                return makeDocumentStatus(resultSet);
+                DocumentStatus documentStatus = makeDocumentStatus(resultSet);
+
+                if(documentStatus != null)
+                {
+                    return documentStatus;
+                }
+
+                return null;
+
             }
             else
             {

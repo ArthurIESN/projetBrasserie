@@ -57,7 +57,12 @@ public class VatDBAccess implements VatDataAccess
 
             while (resultSet.next())
             {
-                vats.add(makeVat(resultSet));
+                Vat vat = makeVat(resultSet);
+
+                if (vat != null)
+                {
+                    vats.add(vat);
+                }
             }
         } catch (SQLException | DatabaseConnectionFailedException e)
         {

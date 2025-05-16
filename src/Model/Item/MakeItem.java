@@ -1,5 +1,6 @@
 package Model.Item;
 
+import Exceptions.Item.ItemException;
 import Model.Packaging.Packaging;
 import Model.Vat.Vat;
 
@@ -20,9 +21,17 @@ public class MakeItem
         }
         else
         {
-            Item item = new Item(id, label, price, restockQuantity, currentQuantity, emptyReturnableBottleQuantity, emptyReturnableBottlePrice, forecastDate, forecastQuantity, minQuantity, packaging, vat);
-            itemMap.put(itemHash, item);
-            return item;
+            try
+            {
+                Item item = new Item(id, label, price, restockQuantity, currentQuantity, emptyReturnableBottleQuantity, emptyReturnableBottlePrice, forecastDate, forecastQuantity, minQuantity, packaging, vat);
+                itemMap.put(itemHash, item);
+                return item;
+            }
+            catch (ItemException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

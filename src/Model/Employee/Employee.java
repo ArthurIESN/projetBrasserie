@@ -1,5 +1,6 @@
 package Model.Employee;
 
+import Exceptions.Employee.EmployeeException;
 import Model.EmployeeStatus.EmployeeStatus;
 
 import java.util.Date;
@@ -15,31 +16,79 @@ public class Employee {
     private EmployeeStatus employeeStatus;
 
     public Employee (Integer id, String lastName, String firstName, Date birthDate, boolean isMarried, String password,
-                     EmployeeStatus employeeStatus)
+                     EmployeeStatus employeeStatus) throws EmployeeException
     {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.birthDate = birthDate;
+        setId(id);
+        setLastName(lastName);
+        setFirstName(firstName);
+        setBirthDate(birthDate);
         this.isMarried = isMarried;
-        this.password = password;
-        this.employeeStatus = employeeStatus;
+        setPassword(password);
+        setEmployeeStatus(employeeStatus);
     }
 
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) throws EmployeeException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new EmployeeException("ID cannot be null or less than 1");
+        }
+        else
+        {
+            this.id = id;
+        }
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) throws EmployeeException
+    {
+        if(lastName == null || lastName.isEmpty())
+        {
+            throw new EmployeeException("Last name cannot be null or empty");
+        }
+        else
+        {
+            this.lastName = lastName;
+        }
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) throws EmployeeException
+    {
+        if(firstName == null || firstName.isEmpty())
+        {
+            throw new EmployeeException("First name cannot be null or empty");
+        }
+        else
+        {
+            this.firstName = firstName;
+        }
+    }
+
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) throws EmployeeException
+    {
+        if(birthDate == null)
+        {
+            throw new EmployeeException("Birth date cannot be null");
+        }
+        else
+        {
+            this.birthDate = birthDate;
+        }
     }
 
     public boolean isMarried() {
@@ -57,6 +106,18 @@ public class Employee {
 
     public EmployeeStatus getEmployeeStatus() {
         return employeeStatus;
+    }
+
+    public void setEmployeeStatus(EmployeeStatus employeeStatus) throws EmployeeException
+    {
+        if(employeeStatus == null)
+        {
+            throw new EmployeeException("Employee status cannot be null");
+        }
+        else
+        {
+            this.employeeStatus = employeeStatus;
+        }
     }
 
     @Override

@@ -1,24 +1,25 @@
 package Model.Locality;
 
+import Exceptions.Locality.LocalityException;
 import Model.Country.Country;
 
 import java.util.Objects;
 
 public class Locality
 {
-    private final Integer id;
-    private final String address;
-    private final String postalCode;
-    private final String number;
-    private final Country country;
+    private Integer id;
+    private String address;
+    private String postalCode;
+    private String number;
+    private Country country;
 
-    public Locality(Integer id, String address, String postalCode, String number, Country country)
+    public Locality(Integer id, String address, String postalCode, String number, Country country) throws LocalityException
     {
-        this.id = id;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.number = number;
-        this.country = country;
+        setId(id);
+        setAddress(address);
+        setPostalCode(postalCode);
+        setNumber(number);
+        setCountry(country);
     }
 
     public Integer getId()
@@ -26,9 +27,27 @@ public class Locality
         return id;
     }
 
+    public void setId(Integer id) throws LocalityException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new LocalityException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
     public String getAddress()
     {
         return address;
+    }
+
+    public void setAddress(String address) throws LocalityException
+    {
+        if(address == null || address.isEmpty())
+        {
+            throw new LocalityException("Address cannot be null or empty");
+        }
+        this.address = address;
     }
 
     public String getPostalCode()
@@ -36,14 +55,41 @@ public class Locality
         return postalCode;
     }
 
+    public void setPostalCode(String postalCode) throws LocalityException
+    {
+        if(postalCode == null || postalCode.isEmpty())
+        {
+            throw new LocalityException("Postal code cannot be null or empty");
+        }
+        this.postalCode = postalCode;
+    }
+
     public String getNumber()
     {
         return number;
     }
 
+    public void setNumber(String number) throws LocalityException
+    {
+        if(number == null || number.isEmpty())
+        {
+            throw new LocalityException("Number cannot be null or empty");
+        }
+        this.number = number;
+    }
+
     public Country getCountry()
     {
         return country;
+    }
+
+    public void setCountry(Country country) throws LocalityException
+    {
+        if(country == null)
+        {
+            throw new LocalityException("Country cannot be null");
+        }
+        this.country = country;
     }
 
     public static int hashCode(Integer id, String address, String postalCode, String number, Country country)

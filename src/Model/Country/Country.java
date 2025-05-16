@@ -1,18 +1,20 @@
 package Model.Country;
 
+import Exceptions.Customer.CountryException;
+
 import java.util.Objects;
 
 public class Country
 {
     private Integer id;
-    private final String label;
-    private final float deliveryCost;
+    private String label;
+    private float deliveryCost;
 
-    public Country(Integer id, String name, float deliveryCost)
+    public Country(Integer id, String name, float deliveryCost) throws CountryException
     {
         setId(id);
-        this.label = name;
-        this.deliveryCost = deliveryCost;
+        setLabel(name);
+        setDeliveryCost(deliveryCost);
     }
 
     public Integer getId()
@@ -20,9 +22,29 @@ public class Country
         return id;
     }
 
+    public void setId(Integer id) throws CountryException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new CountryException("ID must be a positive integer");
+        }
+
+        this.id = id;
+    }
+
     public String getLabel()
     {
         return label;
+    }
+
+    public void setLabel(String label) throws CountryException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new CountryException("Name cannot be null or empty");
+        }
+
+        this.label = label;
     }
 
     public float getDeliveryCost()
@@ -30,17 +52,16 @@ public class Country
         return deliveryCost;
     }
 
-    private void setId(Integer id)
+    public void setDeliveryCost(float deliveryCost) throws CountryException
     {
-        if(id == null || id <= 0)
+        if(deliveryCost < 0)
         {
-            id = null;
+            throw new CountryException("Delivery cost cannot be negative");
         }
-        else
-        {
-            this.id = id;
-        }
+
+        this.deliveryCost = deliveryCost;
     }
+
 
     @Override
     public boolean equals(Object obj)

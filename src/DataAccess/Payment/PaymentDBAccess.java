@@ -7,6 +7,7 @@ import DataAccess.Document.DocumentDBAccess;
 import DataAccess.PaymentStatus.PaymentStatusDBAccess;
 import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Document.DocumentException;
 import Exceptions.Search.GetAllPaymentYearsException;
 import Exceptions.Search.SearchPaymentException;
 import Model.Payment.MakePayment;
@@ -40,7 +41,8 @@ public class PaymentDBAccess implements PaymentDataAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 years.add(resultSet.getInt("year"));
             }
         } catch (SQLException | DatabaseConnectionFailedException e) {
@@ -77,7 +79,19 @@ public class PaymentDBAccess implements PaymentDataAccess
             ArrayList<Payment> payments = new ArrayList<>();
             while (resultSet.next())
             {
-                payments.add(PaymentDBAccess.makePayment(resultSet));
+                try
+                {
+                    Payment payment = makePayment(resultSet);
+
+                    if (payment != null)
+                    {
+                        payments.add(payment);
+                    }
+                }
+                catch (DocumentException e)
+                {
+                    System.err.println("Error while creating payment: " + e.getMessage());
+                }
             }
             return payments;
 
@@ -102,7 +116,7 @@ public class PaymentDBAccess implements PaymentDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public static Payment makePayment(ResultSet resultSet) throws SQLException
+    public static Payment makePayment(ResultSet resultSet) throws SQLException, DocumentException
     {
         if(!DataAccesUtils.hasColumn(resultSet, "payment.id")) return null;
 

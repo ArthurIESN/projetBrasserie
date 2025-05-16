@@ -1,22 +1,43 @@
 package Model.DocumentStatus;
 
+import Exceptions.DocumentStatus.DocumentStatusException;
+
 import java.util.Objects;
 
 public class DocumentStatus {
     private Integer id;
     private String label;
 
-    public DocumentStatus(Integer id, String label){
-        this.id = id;
-        this.label = label;
+    public DocumentStatus(Integer id, String label) throws DocumentStatusException
+    {
+        setId(id);
+        setLabel(label);
     }
 
     public Integer getId(){
         return id;
     }
 
+    public void setId(Integer id) throws DocumentStatusException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new DocumentStatusException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
     public String getLabel(){
         return label;
+    }
+
+    public void setLabel(String label) throws DocumentStatusException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new DocumentStatusException("Label cannot be null or empty");
+        }
+        this.label = label;
     }
 
     @Override

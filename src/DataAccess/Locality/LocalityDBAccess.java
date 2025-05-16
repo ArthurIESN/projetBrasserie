@@ -2,7 +2,9 @@ package DataAccess.Locality;
 
 import DataAccess.Country.CountryDBAccess;
 import DataAccess.DatabaseConnexion;
+import Exceptions.Customer.CountryException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Locality.LocalityException;
 import Model.Locality.Locality;
 import Model.Locality.MakeLocality;
 
@@ -61,7 +63,15 @@ public class LocalityDBAccess implements LocalityDataAccess
 
             while (resultSet.next())
             {
-                localities.add(makeLocalities(resultSet));
+                try
+                {
+                    localities.add(makeLocalities(resultSet));
+                }
+                catch (LocalityException | CountryException e)
+                {
+                    System.err.println(e.getMessage());
+                }
+
             }
 
             return localities;
@@ -73,7 +83,7 @@ public class LocalityDBAccess implements LocalityDataAccess
         }
     }
 
-    public static Locality makeLocalities(ResultSet resultSet) throws SQLException
+    public static Locality makeLocalities(ResultSet resultSet) throws SQLException, LocalityException, CountryException
     {
         return MakeLocality.getLocality(
                 resultSet.getInt("id"),

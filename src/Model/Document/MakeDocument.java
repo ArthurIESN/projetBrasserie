@@ -1,5 +1,6 @@
 package Model.Document;
 
+import Exceptions.Document.DocumentException;
 import Model.CollectionAgency.CollectionAgency;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DocumentStatus.DocumentStatus;
@@ -29,11 +30,20 @@ public class MakeDocument {
         }
         else
         {
-            Document document = new Document(id, label, date, deadline, reduction, validity,
-                    isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate,
-                    totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
-            documentMap.put(documentHash,document);
-            return document;
+            try
+            {
+                Document document = new Document(id, label, date, deadline, reduction, validity,
+                        isDelivered, deliveryDate, depositIsPaid, depositAmount, desiredDeliveryDate,
+                        totalInclusiveOfTaxe, totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
+                documentMap.put(documentHash, document);
+                return document;
+            }
+            catch (DocumentException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
+
         }
     }
 }

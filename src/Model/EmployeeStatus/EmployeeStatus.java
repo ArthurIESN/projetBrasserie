@@ -1,5 +1,7 @@
 package Model.EmployeeStatus;
 
+import Exceptions.EmployeeStatus.EmployeeStatusException;
+
 import java.util.Objects;
 
 public class EmployeeStatus
@@ -30,17 +32,36 @@ public class EmployeeStatus
     private Integer id;
     private String label;
 
-    public EmployeeStatus(Integer id, String label) {
-        this.id = id;
-        this.label = label;
+    public EmployeeStatus(Integer id, String label)  throws EmployeeStatusException
+    {
+        setId(id);
+        setLabel(label);
     }
 
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) throws EmployeeStatusException
+    {
+        if(id == null || id <= 0)
+        {
+            throw new EmployeeStatusException("ID cannot be null or less than or equal to 0");
+        }
+        this.id = id;
+    }
+
     public String getLabel() {
         return label;
+    }
+
+    public void setLabel(String label) throws EmployeeStatusException
+    {
+        if(label == null || label.isEmpty())
+        {
+            throw new EmployeeStatusException("Label cannot be null or empty");
+        }
+        this.label = label;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package Model.Customer;
 
+import Exceptions.Customer.CustomerException;
 import Model.CustomerStatus.CustomerStatus;
 
 import java.util.HashMap;
@@ -18,9 +19,17 @@ public class MakeCustomer
         }
         else
         {
-            Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
-            customerMap.put(customerHash, customer);
-            return customer;
+            try
+            {
+                Customer customer = new Customer(id, lastName, firstName, creditLimit, numVAT, customerStatus);
+                customerMap.put(customerHash, customer);
+                return customer;
+            }
+            catch (CustomerException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }

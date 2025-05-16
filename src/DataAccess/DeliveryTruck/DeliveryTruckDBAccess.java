@@ -4,8 +4,10 @@ import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
+import Exceptions.DeliveryTruck.DeliveryTruckException;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DeliveryTruck.MakeDeliveryTruck;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,9 +46,12 @@ public class DeliveryTruckDBAccess implements DeliveryTruckDataAccess
             PreparedStatement statement = databaseConnection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             ArrayList<DeliveryTruck> deliveryTrucks = new ArrayList<>();
-            while(resultSet.next()){
+            while(resultSet.next())
+            {
+
                 DeliveryTruck deliveryTruck = makeDeliveryTruck(resultSet);
-                if(deliveryTruck != null) {
+                if(deliveryTruck != null)
+                {
                     deliveryTrucks.add(deliveryTruck);
                 }
             }

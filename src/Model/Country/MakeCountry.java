@@ -1,5 +1,7 @@
 package Model.Country;
 
+import Exceptions.Customer.CountryException;
+
 import java.util.HashMap;
 
 public class MakeCountry
@@ -16,9 +18,17 @@ public class MakeCountry
         }
         else
         {
-            Country country = new Country(id, name, deliveryCost);
-            countryMap.put(countryHash, country);
-            return country;
+            try
+            {
+                Country country = new Country(id, name, deliveryCost);
+                countryMap.put(countryHash, country);
+                return country;
+            }
+            catch (CountryException e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
         }
     }
 }
