@@ -4,6 +4,7 @@ import BusinessLogic.Document.DocumentManager;
 import Exceptions.Customer.CountryException;
 import Exceptions.Item.ItemException;
 import Exceptions.Locality.LocalityException;
+import Exceptions.Vat.VatException;
 import Model.Country.Country;
 import Model.Locality.Locality;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,7 +47,7 @@ class DocumentManagerTest
                 items.add(item);
             }
         }
-        catch (CountryException | LocalityException | ItemException e)
+        catch (CountryException | LocalityException | ItemException | VatException e)
         {
             System.out.println("Error creating country: " + e.getMessage());
         }

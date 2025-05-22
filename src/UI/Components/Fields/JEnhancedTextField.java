@@ -1,7 +1,5 @@
 package UI.Components.Fields;
 
-import Environement.SystemProperties;
-
 import UI.Theme.ThemeManager;
 import UI.Theme.ThemeObserver;
 
@@ -59,7 +57,7 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                if (canClear && isOverClearIcon(e.getX(), e.getY()))
+                if (canClear && isHoveringClearIcon(e.getX(), e.getY()))
                 {
                     setText("");
                 }
@@ -71,7 +69,7 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
             @Override
             public void mouseMoved(MouseEvent e)
             {
-                if (canClear && isOverClearIcon(e.getX(), e.getY()))
+                if (canClear && isHoveringClearIcon(e.getX(), e.getY()))
                 {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 } else
@@ -153,8 +151,6 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
     public void updateText(String text)
     {
         setText(text);
-        //@todo retirer le debug
-        System.out.println("Debug du text : " + text);
         if(!text.isEmpty())
         {
             setForeground(textColor);
@@ -213,7 +209,7 @@ public class JEnhancedTextField extends JFormattedTextField implements ThemeObse
         }
     }
 
-    private boolean isOverClearIcon(int mouseX, int mouseY)
+    private boolean isHoveringClearIcon(int mouseX, int mouseY)
     {
         int iconWidth = clearIcon.getIconWidth();
         int iconHeight = clearIcon.getIconHeight();

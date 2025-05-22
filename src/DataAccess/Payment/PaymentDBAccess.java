@@ -14,6 +14,8 @@ import Model.Payment.MakePayment;
 import Model.Payment.Payment;
 
 import java.sql.*;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class PaymentDBAccess implements PaymentDataAccess
@@ -53,15 +55,17 @@ public class PaymentDBAccess implements PaymentDataAccess
         return years;
     }
 
-    public ArrayList<Payment> searchPayment(String status, double minAmount, Date year) throws SearchPaymentException
+    public ArrayList<Payment> searchPayment(String status, float minAmount, Date date) throws SearchPaymentException
     {
         String query =  "SELECT * " +
                 "FROM payment " +
                 "JOIN document ON payment.id_document = document.id " +
                 "JOIN process ON document.id_process = process.id " +
                 "JOIN customer ON process.num_customer = customer.num_customer " +
+                "JOIN customer_status ON customer.id_customer_status = customer_status.id " +
                 "JOIN payment_status ON payment.id_payment_status = payment_status.id " +
                 "JOIN process_type ON process.id = process_type.id " +
+                "JOIN process_status ON process.id = process_status.id " +
                 "WHERE payment.amount >= ? " +
                 "AND YEAR(payment.payment_date) = ? " +
                 "AND payment_status.label " + (status.equals("Validated") ? "=" : "!=") + " 'Validated';";
@@ -71,8 +75,11 @@ public class PaymentDBAccess implements PaymentDataAccess
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
             statement.setDouble(1, minAmount);
-            statement.setInt(2, year.toLocalDate().getYear());
+            statement.setInt(2, calendar.get(Calendar.YEAR));
 
             ResultSet resultSet = statement.executeQuery();
 

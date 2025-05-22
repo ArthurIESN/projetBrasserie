@@ -11,7 +11,7 @@ import UI.Windows.BrasserieWindow.BrasserieHomePanel;
 import UI.Process.ProcessPanel;
 import UI.Search.Document.SearchDocumentWithEventForm;
 import UI.Search.Item.SearchItemForm;
-import UI.Search.Payment.SearchPaymentForm;
+import UI.Search.Payment.SearchPaymentPanel;
 import UI.Windows.WindowManager;
 import Controller.AppController;
 
@@ -112,7 +112,7 @@ public class MenuBarBrasserie {
         });
 
         searchItems[2].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new SearchPaymentForm());
+            brasserieWindow.updateWindowContent(new SearchPaymentPanel());
         });
 
         // CRUD
