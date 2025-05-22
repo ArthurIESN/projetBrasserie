@@ -22,10 +22,7 @@ import Utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Date;
+import java.util.*;
 
 public class CustomerOrderPanel extends JPanel
 {
@@ -110,7 +107,17 @@ public class CustomerOrderPanel extends JPanel
 
         desiredDeliveryDateField = new JDateField();
         desiredDeliveryDateField.setPlaceholder("Enter desired delivery date");
-        desiredDeliveryDateField.setMinDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000) * 2 ));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Date minDate = calendar.getTime();
+
+        desiredDeliveryDateField.setMinDate(minDate);
 
 
         JButton commandButton = new JButton("Execute Command");
@@ -260,6 +267,7 @@ public class CustomerOrderPanel extends JPanel
             }
         }
 
+
         Iterator<Item> iterator = numberFieldHashMap.keySet().iterator();
         while (iterator.hasNext())
         {
@@ -267,7 +275,12 @@ public class CustomerOrderPanel extends JPanel
             if (!items.contains(item))
             {
                 JPanel fieldToRemove = numberFieldHashMap.get(item);
-                numberFieldPanel.remove(fieldToRemove);
+
+                if(fieldToRemove != null)
+                {
+                    numberFieldPanel.remove(fieldToRemove);
+                }
+
                 iterator.remove();
             }
         }
@@ -319,6 +332,9 @@ public class CustomerOrderPanel extends JPanel
         try
         {
             CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
+
+            JOptionPane.showMessageDialog(this, "Order executed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
             refreshPanel();
         }
         catch (UnauthorizedAccessException | ExecuteOrderException e)
@@ -373,6 +389,13 @@ public class CustomerOrderPanel extends JPanel
         if(itemList.getSelectedItems().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Please select at least one item.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        float minDepositAmount =  CustomerOrderController.getCustomerDepositMinimumAmount(customerSearch.getSelectedItem(), vatValues[3]);
+        if(minDepositAmount > depositField.getFloat())
+        {
+            JOptionPane.showMessageDialog(this, "Deposit amount is too low. Minimum: " + minDepositAmount,  "Invalid Deposit", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 

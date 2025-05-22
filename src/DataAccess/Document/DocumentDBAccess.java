@@ -77,8 +77,8 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     @Override
     public int createDocument(Document document) throws CreateDocumentException {
-        String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, vat_amount, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         if(document == null){
             throw new CreateDocumentException("Document is null");

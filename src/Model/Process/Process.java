@@ -56,7 +56,7 @@ public class Process {
 
     public void setNumber(int number) throws ProcessException
     {
-        if(number >= 0)
+        if(number < 0)
         {
             throw new ProcessException("Number cannot be less than 0");
         }
