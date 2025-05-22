@@ -19,8 +19,8 @@ public class SearchDocumentWithEventManager {
         return dates;
     }
 
-    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
-        return searchDocumentWithEventDBAccess.getQuantityItemWithSpecificEvent(idEvent);
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException {
+        return searchDocumentWithEventDBAccess.getQuantityItemWithSpecificEvent(idEvent, idItem);
     }
 
     public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException{

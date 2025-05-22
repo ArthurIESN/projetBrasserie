@@ -14,6 +14,7 @@ import UI.Threads.LoadingThread;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class RestockItemPanel extends JPanel {
@@ -30,7 +31,17 @@ public class RestockItemPanel extends JPanel {
 
         dateField = new JDateField();
         dateField.setPlaceholder("Enter restock date");
-        dateField.setMinDate(new Date());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000) * 2 ));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Date minDate = calendar.getTime();
+
+        dateField.setMinDate(minDate);
 
         JButton restockButton = new JButton("Restock");
         restockButton.addActionListener(e -> onRestock());

@@ -147,7 +147,12 @@ public class SearchDocumentWithEventForm extends JPanel {
 
                 documentTableModel.setData(documents);
                 tableScrollPanel.updateModel(tableModelMaker);
-                // @todo : gérer les erreurs
+
+                if(documents.isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "No documents was found for the selected filters.","No documents found",JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }catch (GetDocumentWithSpecificEventException err){
                 JOptionPane.showMessageDialog(null, err.getMessage(), "",JOptionPane.INFORMATION_MESSAGE);
             }
@@ -187,7 +192,8 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void onQuantityStepShown(){
         try {
             int idEventSelected = eventSearch.getSelectedItem().getId();
-            quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected);
+            int idItemSelected = itemSearch.getSelectedItem().getId();
+            quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected, idItemSelected);
         }catch (GetQuantityItemWithSpecificEventException e){
             System.out.println(e.getMessage());
         }
@@ -222,7 +228,8 @@ public class SearchDocumentWithEventForm extends JPanel {
         }
     }
 
-    private void onButtonStepShown(){
+    private void onButtonStepShown()
+    {
         clearPanelFilter();
         filters(yearSearch.getSelectedItem().toString());
     }

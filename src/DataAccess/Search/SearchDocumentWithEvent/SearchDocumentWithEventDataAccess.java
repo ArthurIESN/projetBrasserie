@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SearchDocumentWithEventDataAccess {
     List<Integer> getDatesEvents(Integer idEvent) throws DatabaseConnectionFailedException;
-    List<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException;
+    List<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws DatabaseConnectionFailedException, GetQuantityItemWithSpecificEventException;
 }
