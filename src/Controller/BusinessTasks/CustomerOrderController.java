@@ -112,7 +112,7 @@ public class CustomerOrderController
              document = new Document(10, "AUTO_CUSTOMER_ORDER_DOCUMENT",
                     currentDate, null, 0.f, "",
                     false, deliveryDate, deposit > 0,
-                    deposit, desiredDeliveryDate,  values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+                    deposit, desiredDeliveryDate,  values[3], values[0], values[1] - values[0], null, null, process, documentStatus);
         }
         catch (DocumentException e)
         {

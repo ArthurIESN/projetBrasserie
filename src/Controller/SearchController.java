@@ -37,8 +37,8 @@ public class SearchController {
         return  searchEventManager.getEventsWithSpecificItem(idItem);
     }
 
-    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
-        return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent);
+    public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException {
+        return searchDocumentWithEventManager.getQuantityItemWithSpecificEvent(idEvent, idItem);
     }
 
     public static ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException {

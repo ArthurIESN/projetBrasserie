@@ -6,7 +6,6 @@ import java.awt.*;
 import Controller.AppController;
 import UI.Components.MenuBarBrasserie;
 import UI.Login.LoginPanel;
-import UI.Test.Test;
 import UI.Windows.WindowManager;
 import UI.Windows.WindowObserver;
 
@@ -35,8 +34,6 @@ public class BrasserieWindow extends JFrame implements WindowObserver
 
         menuBarBrasserie = new MenuBarBrasserie(this);
         setJMenuBar(menuBarBrasserie.getMenuBar());
-
-        updateWindowContent(new Test());
 
         addWindowListener(new java.awt.event.WindowAdapter()
         {

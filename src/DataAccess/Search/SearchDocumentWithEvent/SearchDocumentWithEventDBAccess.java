@@ -58,22 +58,31 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
 
     }
 
-    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent) throws GetQuantityItemWithSpecificEventException {
-        String query = "SELECT  new_quantity  FROM document_details dd " +
-                "JOIN event_document_details edd ON edd.id_document_details = dd.id " +
-                "WHERE edd.id_event = ?";
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
+    {
+        String query = "SELECT DISTINCT new_quantity  FROM document_details " +
+                "JOIN event_document_details ON event_document_details.id_document_details = document_details.id " +
+                "JOIN item ON item.id = document_details.id_item " +
+                "WHERE event_document_details.id_event = ? " +
+                "AND item.id = ?";
 
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
+
             preparedStatement.setInt(1,idEvent);
+            preparedStatement.setInt(2,idItem);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             ArrayList<Integer> quantities = new ArrayList<>();
-            while(resultSet.next()){
+
+            while(resultSet.next())
+            {
                 quantities.add(resultSet.getInt("new_quantity"));
             }
             return quantities;
-        }catch (SQLException  | DatabaseConnectionFailedException e){
+        }catch (SQLException  | DatabaseConnectionFailedException e)
+        {
             System.err.println(e.getMessage());
             throw new GetQuantityItemWithSpecificEventException();
         }
@@ -102,10 +111,10 @@ public class SearchDocumentWithEventDBAccess implements SearchDocumentWithEventD
         try {
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
-            preparedStatement.setInt(1, 1);
-            preparedStatement.setInt(2, 1);
-            preparedStatement.setInt(3, 10);
-            preparedStatement.setInt(4, 2025);
+            preparedStatement.setInt(1, idItem);
+            preparedStatement.setInt(2, idEvent);
+            preparedStatement.setInt(3, quantity);
+            preparedStatement.setInt(4, year);
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Document> documents = new ArrayList<>();
 
