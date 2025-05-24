@@ -64,9 +64,7 @@ public class SearchItemForm extends JPanel
         gridSearchForm.addField("VAT Code", searchVat);
 
         searchVat.onSelectedItemChange(vat ->
-        {
-            setQuantityAndPrice();
-        });
+                setQuantityAndPrice());
 
 
         // Item Stock Quantity Field

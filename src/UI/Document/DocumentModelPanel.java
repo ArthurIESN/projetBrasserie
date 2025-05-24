@@ -147,13 +147,13 @@ public class DocumentModelPanel extends JPanel {
             documentSearch.getSearchField().setPlaceholder("Select Document");
 
             documentSearch.onSelectedItemChange(e -> {
-                List<JComponent> componentsToExclude = List.of(
+                ArrayList<JComponent> componentsToExclude =  new ArrayList<>(asList(
                         customerSearch,
                         supplierSearch,
                         multipleSelectionListItems,
                         numberFieldPanel,
                         calculateVatButton
-                );
+                ));
 
                 for (Component component : gridDocument.getComponents()) {
                     if (!componentsToExclude.contains(component)) {
@@ -430,11 +430,11 @@ public class DocumentModelPanel extends JPanel {
     }
 
     //@todo : mettre dans la couche buisness logique
-    private Float[] calculVat(Float unitPrice, Float quantity, Float vatRate) {
-        Float[] result = new Float[3];
+    private float[] calculVat(float unitPrice, float quantity, float vatRate) {
+        float[] result = new float[3];
 
         float totalExcludingTax = unitPrice * quantity;
-        Float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
+        float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
         float vatAmount = totalIncludingTax - totalExcludingTax;
 
         result[0] = totalExcludingTax;
@@ -465,10 +465,10 @@ public class DocumentModelPanel extends JPanel {
             float quantity = numberFieldHashMap.get(item).getFloat();
 
             if (quantity > 0) {
-                Float unitPrice = item.getPrice();
-                Float vatRate = comboBoxVat.getSelectedItem().getRate();
+                float unitPrice = item.getPrice();
+                float vatRate = comboBoxVat.getSelectedItem().getRate();
 
-                Float[] values = calculVat(unitPrice,quantity,vatRate);
+                float[] values = calculVat(unitPrice,quantity,vatRate);
 
                 if (vatItemHashMap.containsKey(item.getId())) {
                     tvaFields = vatItemHashMap.get(item.getId());
@@ -761,7 +761,7 @@ public class DocumentModelPanel extends JPanel {
         return  depositAmountField;
     }
 
-    public ComboBoxPanel getComboBoxVat() {
+    public ComboBoxPanel<Vat> getComboBoxVat() {
         return comboBoxVat;
     }
 

@@ -16,7 +16,7 @@ public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableMod
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        CollectionAgency collectionAgency = (CollectionAgency) getData().get(rowIndex);
+        CollectionAgency collectionAgency = getData().get(rowIndex);
 
         if (collectionAgency == null){
             return " - ";

@@ -98,9 +98,7 @@ public class SearchPaymentPanel extends JPanel
         tableModelMaker.setTable(tableScrollPanel);
         add(tableScrollPanel, BorderLayout.SOUTH);
 
-        searchButton.addActionListener(e -> {
-            searchPayments();
-        });
+        searchButton.addActionListener(e -> searchPayments());
 
     }
 
