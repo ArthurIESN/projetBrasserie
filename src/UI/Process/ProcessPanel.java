@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ProcessPanel extends JPanel implements ProcessSubject
 {
-    private Container container;
+    private final Container container;
     private final NavbarPanel navbarPanel;
     private static final List<ProcessObserver> observers = new ArrayList<>();
     public ProcessPanel()

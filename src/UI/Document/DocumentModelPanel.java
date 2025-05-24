@@ -40,64 +40,56 @@ import java.util.List;
 import Utils.Utils;
 
 public class DocumentModelPanel extends JPanel {
-    private JPanel numberFieldPanel;
-    private JPanel westPanel;
-    private JPanel searchListsVatPanel;
-    private JPanel depositPanel;
-    private JPanel totalIncludingTaxPanel;
-    private JPanel totalExcludingTaxPanel;
-    private JPanel totalVatAmountPanel;
-    private JPanel totalDepositAmountPanel;
-    private JPanel totalPanel;
+    private final JPanel numberFieldPanel;
+    private final JPanel searchListsVatPanel;
+    private final JPanel depositPanel;
 
-    private GridBagLayoutHelper gridDocument;
+    private final GridBagLayoutHelper gridDocument;
 
-    private JEnhancedTextField labelField;
-    private JDateField deliveryDateField;
-    private JDateField desiredDeliveryDate;
+    private final JEnhancedTextField labelField;
+    private final JDateField deliveryDateField;
+    private final JDateField desiredDeliveryDate;
     private String typeDocument;
-    private JDateField dateField;
+    private final JDateField dateField;
     private JButton calculateVatButton;
-    private JNumberField reductionField;
-    private JNumberField depositAmountField;
-    private JButton button;
+    private final JNumberField reductionField;
+    private final JNumberField depositAmountField;
+    private final JButton button;
 
-    private JLabel totalExclVatLabel;
-    private JLabel totalInclVatLabel;
-    private JLabel totalVatLabel;
-    private JLabel depositAmountLabel;
+    private final JLabel totalExclVatLabel;
+    private final JLabel totalInclVatLabel;
+    private final JLabel totalVatLabel;
+    private final JLabel depositAmountLabel;
 
-    private boolean updateDocument;
+    private final boolean updateDocument;
     private float totalExcludingTax;
     private float totalIncludingTax;
     private float totalVatAmount;
     private float reduction;
     private float depositAmount;
 
-    private ArrayList<SearchListPanel> searchListPanelsOrderFourn;
-    private ArrayList<String> deliveryStatusOptions;
-    private ArrayList<JComponent> allComponents;
+    private final ArrayList<JComponent> allComponents;
     private ArrayList<Process> processes;
     private ArrayList<Document> documents;
 
-    private SearchListPanel<DocumentStatus> documentStatusSearch;
-    private SearchListPanel<Process> processesSearch;
+    private final SearchListPanel<DocumentStatus> documentStatusSearch;
+    private final SearchListPanel<Process> processesSearch;
     private SearchListPanel<Customer> customerSearch;
-    private SearchListPanel<DeliveryTruck> deliveryTruckSearch;
+    private final SearchListPanel<DeliveryTruck> deliveryTruckSearch;
     private SearchListPanel<Supplier> supplierSearch;
     private SearchListPanel<Document> documentSearch;
     MultipleSelectionList<Item> multipleSelectionListItems;
 
-    private ComboBoxPanel<Vat> comboBoxVat;
-    private ComboBoxPanel<String> comboBoxValidity;
+    private final ComboBoxPanel<Vat> comboBoxVat;
+    private final ComboBoxPanel<String> comboBoxValidity;
 
-    private JCheckBox checkBoxDepositIsPaid;
-    private JCheckBox checkBoxIsDelivered;
+    private final JCheckBox checkBoxDepositIsPaid;
+    private final JCheckBox checkBoxIsDelivered;
 
-    private HashMap<Item, JNumberField> numberFieldHashMap;
-    private HashMap<Integer, ArrayList<Integer>> modelsDocuments;
-    private HashMap<Integer, ArrayList<JLabel>> vatItemHashMap;
-    private HashMap<Integer, ArrayList<JPanel>> panelsVatFieldsHashMap;
+    private final HashMap<Item, JNumberField> numberFieldHashMap;
+    private final HashMap<Integer, ArrayList<Integer>> modelsDocuments;
+    private final HashMap<Integer, ArrayList<JLabel>> vatItemHashMap;
+    private final HashMap<Integer, ArrayList<JPanel>> panelsVatFieldsHashMap;
 
 
     public DocumentModelPanel(boolean updateDocument) {
@@ -140,7 +132,7 @@ public class DocumentModelPanel extends JPanel {
         vatItemHashMap = new HashMap<>();
         panelsVatFieldsHashMap = new HashMap<>();
 
-        westPanel = new JPanel(new BorderLayout());
+        JPanel westPanel = new JPanel(new BorderLayout());
         westPanel.setVisible(false);
 
         numberFieldPanel = new JPanel();
@@ -237,10 +229,6 @@ public class DocumentModelPanel extends JPanel {
 
         numberFieldHashMap = new HashMap<>();
 
-        searchListPanelsOrderFourn = new ArrayList<>(Arrays.asList());
-        deliveryStatusOptions = new ArrayList<>(Arrays.asList("Yes", "No"));
-
-
         customerSearch = new SearchListPanel<>(customers, Customer::getFullName);
         customerSearch.setVisible(false);
         customerSearch.getSearchField().setPlaceholder("Select Customer");
@@ -261,20 +249,20 @@ public class DocumentModelPanel extends JPanel {
         JLabel titleTotalVat = new JLabel("Total VAT: ");
         JLabel titleDepositAmount = new JLabel("Deposit Amount: ");
 
-        totalPanel = new JPanel();
+        JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BoxLayout(totalPanel, BoxLayout.Y_AXIS));
         totalPanel.setBorder(BorderFactory.createTitledBorder("Total Panel"));
 
-        totalExcludingTaxPanel = new JPanel();
+        JPanel totalExcludingTaxPanel = new JPanel();
         totalExcludingTaxPanel.setLayout(new BoxLayout(totalExcludingTaxPanel, BoxLayout.X_AXIS));
 
-        totalIncludingTaxPanel = new JPanel();
+        JPanel totalIncludingTaxPanel = new JPanel();
         totalIncludingTaxPanel.setLayout(new BoxLayout(totalIncludingTaxPanel, BoxLayout.X_AXIS));
 
-        totalVatAmountPanel = new JPanel();
+        JPanel totalVatAmountPanel = new JPanel();
         totalVatAmountPanel.setLayout(new BoxLayout(totalVatAmountPanel, BoxLayout.X_AXIS));
 
-        totalDepositAmountPanel = new JPanel();
+        JPanel totalDepositAmountPanel = new JPanel();
         totalDepositAmountPanel.setLayout(new BoxLayout(totalDepositAmountPanel, BoxLayout.X_AXIS));
 
         depositAmountLabel = new JLabel();
@@ -404,12 +392,9 @@ public class DocumentModelPanel extends JPanel {
         setLabelField(typeDocument);
     }
 
-    private void showFieldDepositAmount(boolean show) {
-        if (show) {
-            depositAmountField.setVisible(true);
-        } else {
-            depositAmountField.setVisible(false);
-        }
+    private void showFieldDepositAmount(boolean show)
+    {
+        depositAmountField.setVisible(show);
 
         depositPanel.revalidate();
         depositPanel.repaint();
@@ -757,11 +742,11 @@ public class DocumentModelPanel extends JPanel {
         return processesSearch;
     }
 
-    public SearchListPanel getSupplierSearch() {
+    public SearchListPanel<Supplier> getSupplierSearch() {
         return supplierSearch;
     }
 
-    public MultipleSelectionList getMultipleSelectionListItems() {
+    public MultipleSelectionList<Item> getMultipleSelectionListItems() {
         return multipleSelectionListItems;
     }
 
@@ -773,7 +758,7 @@ public class DocumentModelPanel extends JPanel {
         return comboBoxValidity;
     }
 
-    public SearchListPanel getCustomerSearch() {
+    public SearchListPanel<Customer> getCustomerSearch() {
         return customerSearch;
     }
 

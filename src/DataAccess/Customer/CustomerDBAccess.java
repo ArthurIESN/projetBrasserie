@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.CustomerStatus.CustomerStatusDBAccess;
 
@@ -15,8 +15,6 @@ import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Model.Customer.Customer;
 import Model.Customer.MakeCustomer;
-import Model.CustomerStatus.CustomerStatus;
-import Model.CustomerStatus.MakeCustomerStatus;
 
 public class CustomerDBAccess implements CustomerDataAccess
 {
@@ -67,7 +65,7 @@ public class CustomerDBAccess implements CustomerDataAccess
 
     public static Customer makeCustomer(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "customer.num_customer")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "customer.num_customer")) return null;
 
         return MakeCustomer.getCustomer(
                 resultSet.getInt("customer.num_customer"),

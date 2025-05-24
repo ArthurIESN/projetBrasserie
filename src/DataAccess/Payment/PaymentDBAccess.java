@@ -1,7 +1,7 @@
 package DataAccess.Payment;
 
 import DataAccess.Customer.CustomerDBAccess;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
 import DataAccess.PaymentStatus.PaymentStatusDBAccess;
@@ -125,7 +125,7 @@ public class PaymentDBAccess implements PaymentDataAccess
 
     public static Payment makePayment(ResultSet resultSet) throws SQLException, DocumentException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "payment.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "payment.id")) return null;
 
         return MakePayment.getPayment(
                 resultSet.getInt("payment.id"),

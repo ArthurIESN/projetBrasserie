@@ -1,7 +1,6 @@
 package DataAccess.Event;
 
-import BusinessLogic.Event.EventManager;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetDatesEventsException;
@@ -16,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class EventDBAccess implements EventDataAccess
 {
@@ -132,7 +130,7 @@ public class EventDBAccess implements EventDataAccess
 
     public static Event makeEvent(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "event.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "event.id")) return null;
 
         return MakeEvent.getEvent(
                 resultSet.getInt("event.id"),

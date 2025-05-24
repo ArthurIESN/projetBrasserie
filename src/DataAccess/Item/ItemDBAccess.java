@@ -1,6 +1,6 @@
 package DataAccess.Item;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.Packaging.PackagingDBAccess;
 import DataAccess.Vat.VatDBAccess;
@@ -12,7 +12,6 @@ import Exceptions.Search.SearchItemException;
 import Model.Item.Item;
 
 import Model.Item.MakeItem;
-import Model.Packaging.Packaging;
 import Model.Vat.Vat;
 
 
@@ -114,7 +113,7 @@ public class ItemDBAccess implements ItemDataAccess
 
         try
         {
-            Connection databaseConnexion = DatabaseConnexion.getInstance();;
+            Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
 
             statement.setString(1, tvaCode);
@@ -197,7 +196,7 @@ public class ItemDBAccess implements ItemDataAccess
 
     public static Item makeItem(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "item.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "item.id")) return null;
 
         return  MakeItem.getItem(
                 resultSet.getInt("item.id"),

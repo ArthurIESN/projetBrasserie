@@ -6,9 +6,9 @@ import Model.Item.Item;
 import java.util.Objects;
 
 public class ItemDocumentDetails {
-    private Integer id;
-    private DocumentDetails documentDetails;
-    private Item item;
+    private final Integer id;
+    private final DocumentDetails documentDetails;
+    private final Item item;
 
     public ItemDocumentDetails(Integer id, DocumentDetails documentDetails, Item item) {
         this.id = id;

@@ -32,18 +32,18 @@ import java.util.ArrayList;
 
 public class ProcessModelPanel extends JPanel
 {
-    private GridBagLayoutHelper gridProcess;
-    private JButton button;
+    private final GridBagLayoutHelper gridProcess;
+    private final JButton button;
     private SearchListPanel<Process> processSearch;
     private JEnhancedTextField IdField;
     private JNumberField processIdField;
-    private JEnhancedTextField processLabelField;
-    private JNumberField processNumberField;
-    private SearchListPanel<Customer> customerSearch;
-    private SearchListPanel<Supplier> supplierSearch;
-    private SearchListPanel<ProcessStatus> processStatusSearch;
-    private SearchListPanel<Employee> employeeSearch;
-    private SearchListPanel<ProcessType> typeSearch;
+    private final JEnhancedTextField processLabelField;
+    private final JNumberField processNumberField;
+    private final SearchListPanel<Customer> customerSearch;
+    private final SearchListPanel<Supplier> supplierSearch;
+    private final SearchListPanel<ProcessStatus> processStatusSearch;
+    private final SearchListPanel<Employee> employeeSearch;
+    private final SearchListPanel<ProcessType> typeSearch;
     public ProcessModelPanel(boolean updateProcess)
     {
         ArrayList<Customer> customers = new ArrayList<>();

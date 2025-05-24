@@ -12,11 +12,9 @@ import java.awt.*;
 public class UpdateEmployeePanel extends JPanel implements EmployeeObserver
 {
     private final EmployeeModelPanel employeeModelPanel;
-    private final EmployeePanel employeePanel;
 
     public UpdateEmployeePanel(EmployeePanel employeePanel)
     {
-        this.employeePanel = employeePanel;
 
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Update an employee");

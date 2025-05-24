@@ -9,14 +9,12 @@ import java.awt.event.ActionListener;
 public class JEnhancedTableScrollPanel extends JScrollPane
 {
     private final JEnhancedTable table;
-    private final int rows;
 
     public JEnhancedTableScrollPanel(TableModel model, JPanel target, int rows)
     {
         table = new JEnhancedTable(model);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        this.rows = rows;
         if(rows > 0)
         {
             setPreferredSize(new Dimension(getPreferredSize().width, table.getRowHeight() * rows));
@@ -60,7 +58,7 @@ public class JEnhancedTableScrollPanel extends JScrollPane
         table.addMouseListener(new java.awt.event.MouseAdapter()
         {
             //  ON WINDOWS, mousePressed does not trigger the popup menu
-            // ON LINUX, mouseReleased does not trigger the popup menu
+            // ON LINUX, mouseReleased does not trigger the popup menu,
             // so we need to handle both events
             @Override
             public void mousePressed(java.awt.event.MouseEvent e)
@@ -96,9 +94,9 @@ public class JEnhancedTableScrollPanel extends JScrollPane
         super.paintComponent(g);
         if (hasFocus()) {
             Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(Color.RED); // Changez la couleur de la bordure ici
-            g2.setStroke(new BasicStroke(2)); // Définissez l'épaisseur de la bordure
-            g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1); // Dessinez la bordure
+            g2.setColor(Color.RED);
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
         }
     }
 }

@@ -20,7 +20,7 @@ public class JEnhancedTable extends JTable implements ThemeObserver
 
 {
     private ComponentListener resizeListener;
-    private static Color backbroundRowColor = new Color(0, 0, 0, 0);
+    private static final Color backbroundRowColor = new Color(0, 0, 0, 0);
     private static Color alternateBackgroundRowColor = new Color(70, 70, 70);
     private static Color selectedRowColor = new Color(100, 100, 100);
 

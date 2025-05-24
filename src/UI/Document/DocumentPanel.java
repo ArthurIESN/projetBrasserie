@@ -15,8 +15,8 @@ import java.util.List;
 
 public class DocumentPanel extends JPanel implements DocumentSubject {
 
-    private Container container;
-    private NavbarPanel navbarPanel;
+    private final Container container;
+    private final NavbarPanel navbarPanel;
     private static final List<DocumentObserver> observers= new ArrayList<>();
 
     public DocumentPanel(){
@@ -75,14 +75,6 @@ public class DocumentPanel extends JPanel implements DocumentSubject {
         }catch (Exception e){
             panel = new CreateDocumentForm();
         }
-
-      /*  JPanel jPanel = switch (index){
-            case 0 -> new CreateDocumentForm();
-            case 1 -> new ReadDocumentForm(this);
-            case 2 -> new UpdateDocumentForm(this);
-            case 3 -> new DeleteDocumentForm(this);
-            default -> new DocumentPanel();
-        };*/
 
         container.add(panel,BorderLayout.CENTER);
         container.revalidate();

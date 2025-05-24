@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import BusinessLogic.Utils.HashUtils;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import DataAccess.EmployeeStatus.EmployeeStatusDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -129,7 +129,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
         {
             System.err.println(e.getMessage());
 
-            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            if(DataAccessUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
             {
                 throw new DeleteEmployeeException("Cannot delete employee. This employee is linked to an other entity");
             }
@@ -222,7 +222,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
     public static Employee makeEmployee(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "employee.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "employee.id")) return null;
 
         return MakeEmployee.getEmployee(
                 resultSet.getInt("employee.id"),

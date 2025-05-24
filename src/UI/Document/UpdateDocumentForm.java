@@ -70,7 +70,6 @@ public class UpdateDocumentForm extends JPanel implements DocumentObserver {
         document.setValidity(documentModelPanel.getComboBoxValidity().getSelectedItem());
         document.setDepositIsPaid(documentModelPanel.getCheckBoxDepositIsPaid().isSelected());
         document.setDepositAmount(documentModelPanel.getDepositAmountField().getFloat());
-        System.out.println("Ceci est le process que je passe - " + process.getLabel());
         document.setProcess(process);
         document.setDocumentStatus(documentStatus);
         document.setDeliveryTruck(deliveryTruck);

@@ -1,7 +1,7 @@
 package Exceptions.PaymentStatus;
 
 public class PaymentStatusException extends RuntimeException {
-    private String message;
+    private final String message;
     public PaymentStatusException(String message) {
         this.message = message;
     }

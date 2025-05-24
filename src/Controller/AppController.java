@@ -10,7 +10,7 @@ import UI.Windows.WindowManager;
 public class AppController
 {
     private static Employee currentConnectedEmployee = null;
-    private static EmployeeManager employeeManager = new EmployeeManager();
+    private static final EmployeeManager employeeManager = new EmployeeManager();
 
     public static Employee getCurrentConnectedEmployee()
     {

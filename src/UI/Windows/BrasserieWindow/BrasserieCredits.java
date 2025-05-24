@@ -17,14 +17,11 @@ public class BrasserieCredits extends JPanel
         add("Martin Gregory");
     }};
 
-    private JScrollPane scrollPane;
-    private JPanel creditsPanel;
-
     public BrasserieCredits()
     {
-        scrollPane = new JScrollPane();
+        JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBorder(null);
-        creditsPanel = new JPanel();
+        JPanel creditsPanel = new JPanel();
 
         creditsPanel.setLayout(new BoxLayout(creditsPanel, BoxLayout.Y_AXIS));
         scrollPane.setViewportView(creditsPanel);

@@ -1,6 +1,6 @@
 package DataAccess.PaymentStatus;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import Model.PaymentStatus.PaymentStatus;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +37,7 @@ public class PaymentStatusDBAccess  implements PaymentStatusDataAccess
 
     public static PaymentStatus makePaymentStatus(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "payment_status.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "payment_status.id")) return null;
 
         return new PaymentStatus(
                 resultSet.getInt("payment_status.id"),
