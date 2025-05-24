@@ -22,7 +22,8 @@ public class EmployeeDBAccess implements EmployeeDataAccess
     {
         String query = "SELECT *, employee.id_employee_status as id_employee_status " +
                 "FROM employee " +
-                "JOIN employee_status ON employee.id_employee_status = employee_status.id";
+                "JOIN employee_status ON employee.id_employee_status = employee_status.id " +
+                "ORDER BY employee.id";
 
         try
         {

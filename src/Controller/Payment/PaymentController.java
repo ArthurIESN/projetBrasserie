@@ -5,7 +5,7 @@ import Exceptions.Search.GetAllPaymentYearsException;
 import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class PaymentController
@@ -17,13 +17,15 @@ public class PaymentController
         return paymentManager.getAllPayments();
     }
 
-    public static ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {
+    public static ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException
+    {
         return paymentManager.getAllPaymentYears();
     }
 
     // Search for payments based on criteria (validated, amount, year)
-    public static ArrayList<Payment> searchPayments(String paymentStatus, double minAmount, Date year) throws SearchPaymentException {
-        return paymentManager.searchPayments(paymentStatus, minAmount, year);  // Call the Payments Manager
+    public static ArrayList<Payment> searchPayments(String paymentStatus, float minAmount, Date date) throws SearchPaymentException
+    {
+        return paymentManager.searchPayments(paymentStatus, minAmount, date);
     }
 
     public static Payment getPayment(int id)

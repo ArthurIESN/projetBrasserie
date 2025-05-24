@@ -28,7 +28,7 @@ public class CustomerOrderManager
     {
         if(Objects.equals(customer.getCustomerStatus().getLabel(), "VIP")) return 0.f;
 
-        return totalPrice * MIN_DEPOSIT_PERCENTAGE;
+        return Math.round((totalPrice * MIN_DEPOSIT_PERCENTAGE) * 100f) / 100f;
     }
 
 

@@ -61,7 +61,7 @@ public class CustomerOrderController
             throw new UnauthorizedAccessException("Access Denied: You do not have permission to execute this order.");
         }
 
-        if(deposit < customerOrderManager.customerDepositMinimumAmount(customer, deposit))
+        if(deposit < customerOrderManager.customerDepositMinimumAmount(customer, values[3]))
         {
             System.out.println("Deposit amount is less than the minimum required.");
             throw new ExecuteOrderException("Deposit amount is less than the minimum required.");
@@ -73,9 +73,9 @@ public class CustomerOrderController
             throw new ExecuteOrderException("Not enough item quantity.");
         }
 
-        ProcessType processType = null;
-        ProcessStatus processStatus = null;
-        DocumentStatus documentStatus = null;
+        ProcessType processType;
+        ProcessStatus processStatus;
+        DocumentStatus documentStatus;
         Employee employee = AppController.getCurrentConnectedEmployee();
 
 
@@ -95,10 +95,14 @@ public class CustomerOrderController
            }
 
         Process process;
-        try{
-             process = new Process(null, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
-        }catch (ProcessException e){
-            System.out.println("Error while creating process: " + e.getMessage());
+
+        try
+        {
+             process = new Process(10, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
+        }
+        catch (ProcessException e)
+        {
+          System.out.println("Error while creating process: " + e.getMessage());
             throw new ExecuteOrderException("Error while creating process");
         }
 
@@ -109,7 +113,7 @@ public class CustomerOrderController
              document = new Document(10, "AUTO_CUSTOMER_ORDER_DOCUMENT",
                     currentDate, null, 0.f, "",
                     false, deliveryDate, deposit > 0,
-                    deposit, desiredDeliveryDate,  values[3], values[0], values[1] + values[2], null, null, process, documentStatus);
+                    deposit, desiredDeliveryDate,  values[3], values[0], values[3] - values[0], null, null, process, documentStatus);
         }
         catch (DocumentException e)
         {
@@ -127,7 +131,7 @@ public class CustomerOrderController
 
             try
             {
-                DocumentDetails documentDetails = new DocumentDetails(null, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
+                DocumentDetails documentDetails = new DocumentDetails(10, "CUSTOMER ORDER", quantity, null, item.getPrice(), document, item);
                 itemDocumentDetails.add(documentDetails);
 
                 item.setCurrentQuantity(item.getCurrentQuantity() - quantity);
@@ -170,11 +174,8 @@ public class CustomerOrderController
         }
         catch (CreateProcessException | CreateDocumentException | ProcessException e)
         {
-            System.out.println("Error while creating process: " + e.getMessage());
-            throw new ExecuteOrderException("Error while creating process");
+            System.out.println("Error while creating : " + e.getMessage());
+            throw new ExecuteOrderException("Error while creating");
         }
-
-
-
     }
 }

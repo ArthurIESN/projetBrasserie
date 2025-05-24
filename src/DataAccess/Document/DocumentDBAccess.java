@@ -77,8 +77,8 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     @Override
     public int createDocument(Document document) throws CreateDocumentException {
-        String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, vat_amount, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO document (label, date, deadline, reduction, validity, is_delivered, delivery_date, deposit_is_paid, deposit_amount, desired_delivery_date, total_inclusive_of_taxe, total_vat, total_excl_vat, id_collection_agency, id_document_status, id_delivery_truck, id_process) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         if(document == null){
             throw new CreateDocumentException("Document is null");
@@ -267,7 +267,8 @@ public class DocumentDBAccess implements DocumentDataAccess
                 " LEFT JOIN  process_type ON process.id_process_type = process_type.id " +
                 " LEFT JOIN  process_status ON process.id_process_status = process_status.id " +
                 " LEFT JOIN  employee ON process.id_employee = employee.id " +
-                " LEFT JOIN employee_status ON employee.id_employee_status = employee_status.id ";
+                " LEFT JOIN employee_status ON employee.id_employee_status = employee_status.id " +
+                "ORDER BY document.id ";
         try{
             Connection databaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnection.prepareStatement(query);

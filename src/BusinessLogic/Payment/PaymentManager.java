@@ -8,7 +8,7 @@ import Exceptions.Payment.GetAllPaymentException;
 import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class PaymentManager
@@ -21,12 +21,9 @@ public class PaymentManager
         return paymentDBAccess.getAllPayments();
     }
 
-    public ArrayList<Payment> searchPayments(String status, double minAmount, Date year) throws SearchPaymentException {
-        ArrayList<Payment> Payments;
-
-        Payments = paymentDBAccess.searchPayment(status, minAmount, year);
-
-        return Payments;
+    public ArrayList<Payment> searchPayments(String status, float minAmount, Date date) throws SearchPaymentException
+    {
+        return paymentDBAccess.searchPayment(status, minAmount, date);
     }
 
     public ArrayList<Integer> getAllPaymentYears() throws GetAllPaymentYearsException {

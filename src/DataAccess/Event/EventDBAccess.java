@@ -33,7 +33,7 @@ public class EventDBAccess implements EventDataAccess
         try{
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement statement = dataBaseConnection.prepareStatement(query);
-            statement.setInt(1,idItem);
+            statement.setInt(1, idItem);
             ResultSet resultSet = statement.executeQuery();
 
             ArrayList<Event> events = new ArrayList<>();

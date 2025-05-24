@@ -120,10 +120,14 @@ public class DateLogic
 
     public int getMonthsBetweenDates(Date startDate, Date endDate)
     {
-        LocalDate startDateLocal = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate endDateLocal = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        java.util.Date startUtilDate = new java.util.Date(startDate.getTime());
+        java.util.Date endUtilDate = new java.util.Date(endDate.getTime());
 
-        return (int) ChronoUnit.MONTHS.between(endDateLocal, startDateLocal);
+
+        LocalDate startDateLocal = endUtilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDateLocal = startUtilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return (int) Math.abs(ChronoUnit.MONTHS.between(endDateLocal, startDateLocal));
     }
 
     public String getDateString(Date date)
