@@ -1,7 +1,7 @@
 package DataAccess.Vat;
 
 import DataAccess.DatabaseConnexion;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Vat.GetAllVatsException;
@@ -100,7 +100,7 @@ public class VatDBAccess implements VatDataAccess
 
     public static Vat makeVat(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "vat.code")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "vat.code")) return null;
 
         return MakeVat.getVat(
                 resultSet.getString("vat.code"),

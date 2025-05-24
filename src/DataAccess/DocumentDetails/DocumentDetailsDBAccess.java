@@ -4,7 +4,6 @@ import DataAccess.DatabaseConnexion;
 import DataAccess.Document.DocumentDBAccess;
 import DataAccess.Item.ItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Document.DocumentException;
 import Exceptions.DocumentDetails.CreateDocumentDetailsException;
 import Exceptions.DocumentDetails.GetDocumentDetailsFromDocumentsException;
 import Exceptions.Search.GetQuantityItemWithSpecificEventException;
@@ -12,8 +11,7 @@ import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
 import Model.DocumentDetails.MakeDocumentDetails;
-import DataAccess.DataAccesUtils;
-import Model.DocumentStatus.DocumentStatus;
+import DataAccess.DataAccessUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -148,7 +146,7 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
 
     public static DocumentDetails makeDocumentDetails(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "document_details.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "document_details.id")) return null;
 
         return MakeDocumentDetails.getDocumentDetails(
                 resultSet.getInt("document_details.id"),

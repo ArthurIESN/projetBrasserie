@@ -25,14 +25,14 @@ public class EmployeeModelPanel extends JPanel
 {
     private SearchListPanel<Employee> employeeSearchField;
     private JNumberField idField;
-    private JEnhancedTextField firstNameField;
-    private JEnhancedTextField lastNameField;
-    private JDateField birthDateField;
-    private JCheckBox marriedField;
-    private JEnhancedTextField passwordField;
-    private SearchListPanel<EmployeeStatus> employeeStatusSearchField;
-    private JButton button;
-    private GridBagLayoutHelper gridEmployee;
+    private final JEnhancedTextField firstNameField;
+    private final JEnhancedTextField lastNameField;
+    private final JDateField birthDateField;
+    private final JCheckBox marriedField;
+    private final JEnhancedTextField passwordField;
+    private final SearchListPanel<EmployeeStatus> employeeStatusSearchField;
+    private final JButton button;
+    private final GridBagLayoutHelper gridEmployee;
     private boolean isUpdateEmployee = false;
 
     public EmployeeModelPanel(boolean updateEmployee)

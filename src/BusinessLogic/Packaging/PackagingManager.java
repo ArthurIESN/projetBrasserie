@@ -35,8 +35,8 @@ public class PackagingManager
         return packagingDataAccess.getPackaging(id);
     }
 
-    public ArrayList<Packaging> getAllPackagings()
+    public ArrayList<Packaging> getAllPackages()
     {
-        return packagingDataAccess.getAllPackagings();
+        return packagingDataAccess.getAllPackages();
     }
 }

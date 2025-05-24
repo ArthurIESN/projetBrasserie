@@ -6,9 +6,9 @@ import Model.Event.Event;
 import java.util.Objects;
 
 public class EventDocumentDetails {
-    private Integer id;
-    private DocumentDetails documentDetails;
-    private Event event;
+    private final Integer id;
+    private final DocumentDetails documentDetails;
+    private final Event event;
 
     public EventDocumentDetails(Integer id, DocumentDetails documentDetails, Event event) {
         this.id = id;

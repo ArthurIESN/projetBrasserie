@@ -29,8 +29,8 @@ public class PackagingController
         return packagingManager.getPackaging(id);
     }
 
-    public static ArrayList<Packaging> getAllPackagings()
+    public static ArrayList<Packaging> getAllPackages()
     {
-        return packagingManager.getAllPackagings();
+        return packagingManager.getAllPackages();
     }
 }

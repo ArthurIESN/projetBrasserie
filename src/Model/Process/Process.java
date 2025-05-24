@@ -15,11 +15,11 @@ public class Process {
     private Integer id;
     private String label;
     private int number;
-    private Supplier supplier;
+    private final Supplier supplier;
     private ProcessType type;
     private ProcessStatus processStatus;
-    private Employee employee;
-    private Customer customer;
+    private final Employee employee;
+    private final Customer customer;
 
     public Process(Integer id, String label, int number, Supplier supplier, ProcessType type, ProcessStatus processStatus,
                    Employee employee, Customer customer) throws ProcessException

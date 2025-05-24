@@ -1,7 +1,7 @@
 package Exceptions.Process;
 
 public class ProcessException extends Exception {
-   private String message;
+   private final String message;
     public ProcessException(String message) {
          this.message = message;
     }

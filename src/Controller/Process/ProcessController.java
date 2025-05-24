@@ -19,7 +19,7 @@ public class ProcessController {
 
     public static ArrayList<Process> getAllProcesses() throws GetAllProcessesException
     {
-        return processManager.getAllProcessess();
+        return processManager.getAllProcesses();
     }
 
     public static Process getProcess(Integer id) throws GetProcessException

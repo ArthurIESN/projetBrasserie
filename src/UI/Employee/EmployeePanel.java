@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EmployeePanel extends JPanel implements EmployeeSubject
 {
-    private Container container;
+    private final Container container;
     private final NavbarPanel navbarPanel;
     private static final List<EmployeeObserver> observers = new ArrayList<>();
 

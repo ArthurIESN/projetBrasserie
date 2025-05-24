@@ -21,7 +21,7 @@ public class Document {
     private Boolean depositIsPaid;
     private Float depositAmount;
     private Date desiredDeliveryDate;
-    private Float totalInclusiveOfTaxe;
+    private Float totalInclusiveOfTax;
     private Float totalVat;
     private Float totalExclVat;
     private CollectionAgency collectionAgency;
@@ -29,12 +29,11 @@ public class Document {
     private Process process;
     private DocumentStatus documentStatus;
 
-    // Commande client
     public Document(Integer id, String label, Date date, Date deadLine, Float reduction, String validity,
                     Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid, Float depositAmount,
-                    Date desiredDeliveryDate, Float totalInclusiveOfTaxe, Float totalVat,
+                    Date desiredDeliveryDate, Float totalInclusiveOfTax, Float totalVat,
                     Float totalExclVat, CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
-                    Process process,DocumentStatus documentStatus) throws DocumentException
+                    Process process, DocumentStatus documentStatus) throws DocumentException
     {
         setId(id);
         setLabel(label);
@@ -47,7 +46,7 @@ public class Document {
         setDepositIsPaid(depositIsPaid);
         setDepositAmount(depositAmount);
         setDesiredDeliveryDate(desiredDeliveryDate);
-        setTotalInclusiveOfTaxe(totalInclusiveOfTaxe);
+        setTotalInclusiveOfTax(totalInclusiveOfTax);
         setTotalVat(totalVat);
         setTotalExclVat(totalExclVat);
         setCollectionAgency(collectionAgency);
@@ -177,12 +176,12 @@ public class Document {
     }
 
 
-    public Float getTotalInclusiveOfTaxe() {
-        return totalInclusiveOfTaxe;
+    public Float getTotalInclusiveOfTax() {
+        return totalInclusiveOfTax;
     }
 
-    public void setTotalInclusiveOfTaxe(Float totalInclusiveOfTaxe) {
-        this.totalInclusiveOfTaxe = totalInclusiveOfTaxe;
+    public void setTotalInclusiveOfTax(Float totalInclusiveOfTax) {
+        this.totalInclusiveOfTax = totalInclusiveOfTax;
     }
 
     public Float getTotalVat() {
@@ -254,7 +253,7 @@ public class Document {
                 Objects.equals(depositIsPaid, document.depositIsPaid) &&
                 Objects.equals(depositAmount, document.depositAmount) &&
                 Objects.equals(desiredDeliveryDate, document.desiredDeliveryDate) &&
-                Objects.equals(totalInclusiveOfTaxe, document.totalInclusiveOfTaxe) &&
+                Objects.equals(totalInclusiveOfTax, document.totalInclusiveOfTax) &&
                 Objects.equals(totalVat, document.totalVat) &&
                 Objects.equals(totalExclVat, document.totalExclVat) &&
                 Objects.equals(collectionAgency, document.collectionAgency) &&
@@ -265,25 +264,25 @@ public class Document {
     public static int hashCode(Integer id, String label, Date date, Date deadLine, Float reduction,
                                String validity, Boolean isDelivered, Date deliveryDate, Boolean depositIsPaid,
                                Float depositAmount, Date desiredDeliveryDate,
-                               Float totalInclusiveOfTaxe, Float totalVat, Float totalExclVat,
+                               Float totalInclusiveOfTax, Float totalVat, Float totalExclVat,
                                CollectionAgency collectionAgency, DeliveryTruck deliveryTruck,
                                Process process, DocumentStatus documentStatus)
     {
         return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
-                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTaxe,
+                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTax,
                 totalVat, totalExclVat, collectionAgency, deliveryTruck, process, documentStatus);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, label, date, deadLine, reduction, validity, isDelivered, deliveryDate,
-                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTaxe,
+                depositIsPaid, depositAmount, desiredDeliveryDate, totalInclusiveOfTax,
                 totalVat, totalExclVat, collectionAgency, deliveryTruck, process);
     }
 
     @Override
     public String toString() {
-        return id + " - " + label + " - " + date + " - " + deadLine + " - " + reduction + " - " + validity + " - " + isDelivered + " - " + deliveryDate + " - " + depositIsPaid + " - " + depositAmount + " - " + desiredDeliveryDate  + " - " + totalInclusiveOfTaxe + " - " + totalVat + " - " + totalExclVat + " - " + collectionAgency + " - " + deliveryTruck + " - " + process + " - " + documentStatus;
+        return id + " - " + label + " - " + date + " - " + deadLine + " - " + reduction + " - " + validity + " - " + isDelivered + " - " + deliveryDate + " - " + depositIsPaid + " - " + depositAmount + " - " + desiredDeliveryDate  + " - " + totalInclusiveOfTax + " - " + totalVat + " - " + totalExclVat + " - " + collectionAgency + " - " + deliveryTruck + " - " + process + " - " + documentStatus;
     }
 
 

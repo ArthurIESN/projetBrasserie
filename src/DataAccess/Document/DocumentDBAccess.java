@@ -2,15 +2,13 @@ package DataAccess.Document;
 
 import DataAccess.CollectionAgency.CollectionAgencyDBAccess;
 import DataAccess.DatabaseConnexion;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 
 import DataAccess.DeliveryTruck.DeliveryTruckDBAccess;
 import DataAccess.DocumentStatus.DocumentStatusDBAccess;
 import DataAccess.Process.ProcessDBAccess;
-import Exceptions.CollectionAgency.CollectionAgencyException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
-import Exceptions.DeliveryTruck.DeliveryTruckException;
 import Exceptions.Document.*;
 import Exceptions.DocumentStatus.DocumentStatusException;
 import Exceptions.Process.DeleteProcessException;
@@ -107,7 +105,7 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setBoolean(8, document.getDepositIsPaid());
             statement.setFloat(9, document.getDepositAmount());
             statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
-            statement.setFloat(11, document.getTotalInclusiveOfTaxe());
+            statement.setFloat(11, document.getTotalInclusiveOfTax());
             statement.setFloat(12, document.getTotalVat());
             statement.setFloat(13, document.getTotalExclVat());
             statement.setObject(14, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null, Types.INTEGER);
@@ -339,7 +337,7 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     public static Document makeDocument(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "document.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "document.id")) return null;
 
         return MakeDocument.getDocument(
                 resultSet.getInt("document.id"),

@@ -1,7 +1,6 @@
 package DataAccess.CollectionAgency;
 
-import DataAccess.DataAccesUtils;
-import Exceptions.CollectionAgency.CollectionAgencyException;
+import DataAccess.DataAccessUtils;
 import Model.CollectionAgency.CollectionAgency;
 import Model.CollectionAgency.MakeCollectionAgency;
 
@@ -39,7 +38,7 @@ public class CollectionAgencyDBAccess implements CollectionAgencyDataAccess
 
     public static CollectionAgency makeCollectionAgency(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "collection_agency.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "collection_agency.id")) return null;
 
         return MakeCollectionAgency.getCollectionAgency
                 (

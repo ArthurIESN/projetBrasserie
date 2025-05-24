@@ -13,12 +13,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class MultipleSelectionList<T> extends JPanel {
-    private JList<String> list;
+    private final JList<String> list;
     private final DefaultListModel<String> listModel;
     private final ArrayList<T> originalData;
     private final ArrayList<T> filteredData;
     private final HashSet<T> selectedItems;
-    private Function<T, String> toStringFunction;
+    private final Function<T, String> toStringFunction;
     private Consumer<ArrayList<T>> onSelectionChange;
     private int currentIndex = -1;
     private final JEnhancedTextField searchField;

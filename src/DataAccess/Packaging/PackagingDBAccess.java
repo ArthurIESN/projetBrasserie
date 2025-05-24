@@ -3,7 +3,7 @@ package DataAccess.Packaging;
 import Model.Packaging.MakePackaging;
 import Model.Packaging.Packaging;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,13 +32,13 @@ public class PackagingDBAccess implements PackagingDataAccess
     }
 
     @Override
-    public ArrayList<Packaging> getAllPackagings() {
+    public ArrayList<Packaging> getAllPackages() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static Packaging makePackaging(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "packaging.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "packaging.id")) return null;
 
         return MakePackaging.getPackaging(
                 resultSet.getInt("packaging.id"),

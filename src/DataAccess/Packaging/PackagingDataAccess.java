@@ -10,5 +10,5 @@ public interface PackagingDataAccess
     void updatePackaging(Packaging packaging);
     void deletePackaging(int id);
     Packaging getPackaging(int id);
-    ArrayList<Packaging> getAllPackagings();
+    ArrayList<Packaging> getAllPackages();
 }

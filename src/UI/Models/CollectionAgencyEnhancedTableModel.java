@@ -30,10 +30,8 @@ public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableMod
     }
 
     @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        return switch (columnIndex) {
-            case 0 -> Integer.class;
-            default -> String.class;
-        };
+    public Class<?> getColumnClass(int columnIndex)
+    {
+        return columnIndex == 0 ? Integer.class : String.class;
     }
 }

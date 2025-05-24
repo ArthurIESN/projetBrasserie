@@ -37,7 +37,6 @@ public class SearchPaymentPanel extends JPanel
 
     private final JCheckBox validatedPaymentCheckBox;
     private final JNumberField amountField;
-    private final JButton searchButton;
     private final ComboBoxPanel<Integer> yearComboBox;
 
 
@@ -76,7 +75,7 @@ public class SearchPaymentPanel extends JPanel
         add(gridSearchForm, BorderLayout.CENTER);
 
         // add a button to search
-        searchButton = new JButton("Start search");
+        JButton searchButton = new JButton("Start search");
         gridSearchForm.addField(searchButton);
 
         // Empty table

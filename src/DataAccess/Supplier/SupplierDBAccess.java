@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
@@ -70,7 +70,7 @@ public class SupplierDBAccess implements SupplierDataAccess
 
     public static Supplier makeSupplier(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "supplier.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "supplier.id")) return null;
 
         return MakeSupplier.getSupplier(
                 resultSet.getInt("supplier.id"),

@@ -1,6 +1,6 @@
 package DataAccess.EmployeeStatus;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Model.EmployeeStatus.EmployeeStatus;
@@ -67,7 +67,7 @@ public class EmployeeStatusDBAccess implements EmployeeStatusDataAccess
 
     public static EmployeeStatus makeEmployeeStatus(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "employee_status.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "employee_status.id")) return null;
 
         return MakeEmployeeStatus.getEmployeeStatus(
                 resultSet.getInt("employee_status.id"),

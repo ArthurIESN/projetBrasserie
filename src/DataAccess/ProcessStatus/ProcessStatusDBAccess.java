@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DataAccess.DatabaseConnexion;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
@@ -103,7 +103,7 @@ public class ProcessStatusDBAccess implements ProcessStatusDataAccess
 
     public static ProcessStatus makeProcessStatus(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "process_status.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "process_status.id")) return null;
 
         return MakeProcessStatus.getProcessStatus(
                 resultSet.getInt("process_status.id"),
