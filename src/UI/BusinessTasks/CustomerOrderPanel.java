@@ -174,7 +174,7 @@ public class CustomerOrderPanel extends JPanel
         gbc.fill = GridBagConstraints.NONE;
         vatContainer.add(VatPanel, gbc);
 
-        String[] vatHeaders= {"VAT:", "!!VAT INCLUDED:", "DELIVERY COST:", "TOTAL: " };
+        String[] vatHeaders= {"VAT:", "VAT INCLUDED:", "DELIVERY COST:", "TOTAL:" };
         Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90), new Color(110, 110, 110)};
 
         for (int i = 0; i < vatHeaders.length; i++)

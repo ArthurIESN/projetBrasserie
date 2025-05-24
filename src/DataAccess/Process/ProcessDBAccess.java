@@ -11,6 +11,7 @@ import DataAccess.Customer.CustomerDBAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Employee.DeleteEmployeeException;
 import Exceptions.Process.*;
 
 import Model.Process.MakeProcess;
@@ -197,11 +198,23 @@ public class ProcessDBAccess implements ProcessDataAccess
             statement.setInt(1, id);
             int rowsAffected = statement.executeUpdate();
 
-            if (rowsAffected == 0) {
+            if (rowsAffected == 0)
+            {
                 throw new DeleteProcessException("Invalid process ID: " + id);
             }
         }
-        catch (SQLException | DatabaseConnectionFailedException e)
+        catch (SQLException  e)
+        {
+            System.err.println(e.getMessage());
+
+            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            {
+                throw new DeleteProcessException("Cannot delete process. This process is linked to an other entity");
+            }
+
+            throw new DeleteProcessException("Error while deleting process");
+        }
+        catch (DatabaseConnectionFailedException e)
         {
             System.err.println(e.getMessage());
             throw new DeleteProcessException();
@@ -256,7 +269,8 @@ public class ProcessDBAccess implements ProcessDataAccess
                 "LEFT JOIN employee          ON process.id_employee = employee.id " +
                 "LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
                 "LEFT JOIN customer          ON process.num_customer = customer.num_customer " +
-                "LEFT JOIN customer_status   ON customer.id_customer_status = customer_status.id ";
+                "LEFT JOIN customer_status   ON customer.id_customer_status = customer_status.id " +
+                "ORDER BY process.id";
 
         try
         {

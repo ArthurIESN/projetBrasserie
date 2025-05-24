@@ -15,6 +15,7 @@ import Model.Item.Item;
 import Model.Vat.Vat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +44,7 @@ class DocumentManagerTest
             {
                 Vat vat = new Vat("VAT 20", 20.0f);
 
-                Item item = new Item(i, "Item" + i, 10.f, 0, 0, 0, 0, null, 0, 0, null, vat);
+                Item item = new Item(i + 1, "Item" + i, 10.f, 0, 0, 0, 0, new Date(), 0, 0, null, vat);
                 items.add(item);
             }
         }
