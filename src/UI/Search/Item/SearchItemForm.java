@@ -5,12 +5,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import Controller.Item.ItemController;
-import Controller.VAT.VATController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Controller.Vat.VATController;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
 import Exceptions.Vat.GetAllVatsException;
-import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Packaging.Packaging;
 import Model.Vat.Vat;

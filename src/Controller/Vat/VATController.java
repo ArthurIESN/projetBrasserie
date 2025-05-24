@@ -1,4 +1,4 @@
-package Controller.VAT;
+package Controller.Vat;
 
 import BusinessLogic.Vat.VatManager;
 import Exceptions.Vat.GetAllVatsException;
