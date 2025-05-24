@@ -1,9 +1,13 @@
 package BusinessLogic.Document;
 
 import DataAccess.Document.DocumentDBAccess;
+
 import Exceptions.Document.DeleteDocumentException;
+import Exceptions.Document.GetAllCurrentCommandsForAnItemException;
+
 import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.Document.UpdateDocumentException;
+import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Model.Document.Document;
 import Model.Item.Item;
 
@@ -21,7 +25,7 @@ public class DocumentManager
 {
     private final DocumentDataAccess documentDataAccess = new DocumentDBAccess();
 
-    public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item)
+    public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item) throws GetAllCurrentCommandsForAnItemException
     {
         return documentDataAccess.getAllCurrentCommandsForAnItem(item);
     }
@@ -49,6 +53,11 @@ public class DocumentManager
     public ArrayList<Document> getAllDocuments() throws GetAllDocumentsException
     {
         return documentDataAccess.getAllDocuments();
+    }
+
+    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException
+    {
+        return documentDataAccess.getDocumentsWithSpecificEvent(idItem, idEvent, quantity, year);
     }
 
     public float[] calculateTaxes(HashMap<Item, Integer> items, Locality locality)

@@ -19,8 +19,10 @@ import Utils.Utils;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class ReadDocumentForm extends JPanel {
-    public ReadDocumentForm(DocumentPanel documentPanel){
+public class ReadDocumentForm extends JPanel
+{
+    public ReadDocumentForm(DocumentPanel documentPanel)
+    {
         ArrayList<Document> documents;
 
         try{
@@ -36,6 +38,7 @@ public class ReadDocumentForm extends JPanel {
         menuItems.add("Delete");
 
         TableModelMaker tableModelMaker = new TableModelMaker();
+
         DocumentEnhancedTableModel documentTableModel = new DocumentEnhancedTableModel(documents);
 
         ArrayList<DocumentStatus> documentStatuses = Utils.transformData(documents, Document::getDocumentStatus);
@@ -61,5 +64,18 @@ public class ReadDocumentForm extends JPanel {
         add(tableScrollPanel);
         tableModelMaker.setTable(tableScrollPanel);
         tableScrollPanel.updateModel(tableModelMaker);
+
+
+        ArrayList<Document> finalDocuments = documents;
+
+        tableScrollPanel.addMenuOnRows(menuItems, action ->
+        {
+            switch (action.getActionCommand())
+            {
+                case "Update" -> documentPanel.moveTo(2);
+                case "Delete" -> documentPanel.moveTo(3);
+            }
+            documentPanel.notifyObservers(finalDocuments.get(tableScrollPanel.getTable().getSelectedRow()));
+        });
     }
 }

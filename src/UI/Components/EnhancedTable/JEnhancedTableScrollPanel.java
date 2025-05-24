@@ -57,7 +57,11 @@ public class JEnhancedTableScrollPanel extends JScrollPane
             popupMenu.add(item);
         }
 
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            //  ON WINDOWS, mousePressed does not trigger the popup menu
+            // ON LINUX, mouseReleased does not trigger the popup menu
+            // so we need to handle both events
             @Override
             public void mousePressed(java.awt.event.MouseEvent e)
             {
@@ -69,9 +73,6 @@ public class JEnhancedTableScrollPanel extends JScrollPane
                 }
             }
 
-            // @todo : ON WINDOWS, mousePressed does not trigger the popup menu
-            // Mouse Released does. IDK why. NEED TO CHECK IF mousePressed AND mouseReleased ca be used at the same time
-            // mouseReleased doesn't work on MacOS. :) :) :) :)
             @Override
             public void mouseReleased(java.awt.event.MouseEvent e)
             {

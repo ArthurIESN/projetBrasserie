@@ -3,6 +3,7 @@ package BusinessLogic.Event;
 import DataAccess.Event.EventDBAccess;
 import DataAccess.Event.EventDataAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
@@ -14,6 +15,11 @@ public class EventManager {
     private final EventDataAccess eventDBAccess = new EventDBAccess();
 
     public EventManager(){}
+
+    public ArrayList<Integer> getDatesEvents(Integer idEvent) throws GetDatesEventsException
+    {
+        return eventDBAccess.getDatesEvents(idEvent);
+    }
 
     public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException {
         return eventDBAccess.getEventsWithSpecificItem(idItem);

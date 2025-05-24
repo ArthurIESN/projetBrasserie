@@ -159,12 +159,6 @@ public class SearchListPanel<T> extends JPanel {
 
     public void  forceSetSelectedItem(T item)
     {
-        // @todo retirer le debug
-        System.out.println(data.contains(item) + " Vérification contains");
-
-        //@todo retirer le debug
-        System.out.println("Item to string debug : " + toStringFunction.apply(item));
-
         if (item == null) {
             searchField.updateText("");
             updateList();
