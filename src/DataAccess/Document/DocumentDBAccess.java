@@ -229,7 +229,7 @@ public class DocumentDBAccess implements DocumentDataAccess
         }catch (SQLException e){
             System.err.println(e.getMessage());
 
-            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            if(DataAccessUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
             {
                 throw new DeleteDocumentException("Cannot delete document. This document is linked to an other entity");
             }
