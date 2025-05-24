@@ -14,7 +14,7 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
 
     public DocumentEnhancedTableModel()
     {
-        this(new ArrayList<Document>());
+        this(new ArrayList<>());
     }
 
     @Override

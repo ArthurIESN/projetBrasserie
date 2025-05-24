@@ -1,6 +1,5 @@
 package Model.Payment;
 import Exceptions.Payment.PaymentException;
-import Exceptions.PaymentStatus.PaymentStatusException;
 import Model.PaymentStatus.PaymentStatus;
 import Model.Customer.Customer;
 import Model.Process.Process;

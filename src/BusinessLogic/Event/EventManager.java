@@ -2,7 +2,6 @@ package BusinessLogic.Event;
 
 import DataAccess.Event.EventDBAccess;
 import DataAccess.Event.EventDataAccess;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;

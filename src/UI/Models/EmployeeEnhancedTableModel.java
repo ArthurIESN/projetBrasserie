@@ -17,7 +17,7 @@ public class EmployeeEnhancedTableModel extends AbstractEnhancedTableModel<Emplo
 
     public EmployeeEnhancedTableModel()
     {
-        this(new ArrayList<Employee>());
+        this(new ArrayList<>());
     }
 
     @Override

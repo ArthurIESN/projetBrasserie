@@ -2,7 +2,6 @@ package BusinessLogic.ProcessType;
 
 import DataAccess.ProcessType.ProcessTypeDataAccess;
 import DataAccess.ProcessType.ProcessTypeDBAccess;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Exceptions.ProcessType.GetProcessTypeException;
 import Model.ProcessType.ProcessType;

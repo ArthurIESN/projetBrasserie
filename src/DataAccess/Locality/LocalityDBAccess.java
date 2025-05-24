@@ -63,14 +63,7 @@ public class LocalityDBAccess implements LocalityDataAccess
 
             while (resultSet.next())
             {
-                try
-                {
-                    localities.add(makeLocalities(resultSet));
-                }
-                catch (LocalityException | CountryException e)
-                {
-                    System.err.println(e.getMessage());
-                }
+                localities.add(makeLocalities(resultSet));
 
             }
 
@@ -83,7 +76,7 @@ public class LocalityDBAccess implements LocalityDataAccess
         }
     }
 
-    public static Locality makeLocalities(ResultSet resultSet) throws SQLException, LocalityException, CountryException
+    public static Locality makeLocalities(ResultSet resultSet) throws SQLException, CountryException
     {
         return MakeLocality.getLocality(
                 resultSet.getInt("id"),

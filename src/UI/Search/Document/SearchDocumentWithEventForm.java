@@ -20,7 +20,6 @@ import UI.Components.StepManager;
 import UI.Models.Document.DocumentEnhancedTableModel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

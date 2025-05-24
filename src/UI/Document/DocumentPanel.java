@@ -5,7 +5,6 @@ import UI.Components.Navbar.NavbarPanel;
 import UI.Models.Document.DocumentObserver;
 import UI.Models.Document.DocumentSubject;
 import UI.Process.CreateProcessPanel;
-import UI.Process.DeleteProcessPanel;
 import UI.Windows.WindowManager;
 
 import javax.swing.*;

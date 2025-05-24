@@ -8,7 +8,6 @@ import Exceptions.Vat.VatException;
 import Model.Country.Country;
 import Model.Locality.Locality;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Model.Item.Item;
@@ -102,7 +101,7 @@ class DocumentManagerTest
 
         // locality null
         itemsMap.clear();
-        itemsMap.put(items.get(0), 1);
+        itemsMap.put(items.getFirst(), 1);
 
         values = documentManager.calculateTaxes(itemsMap, null);
         assertEquals(2.f, values[0]);

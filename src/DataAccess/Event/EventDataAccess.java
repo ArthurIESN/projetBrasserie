@@ -1,6 +1,5 @@
 package DataAccess.Event;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
@@ -8,7 +7,6 @@ import Model.Event.Event;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public interface EventDataAccess {
 

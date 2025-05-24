@@ -1,7 +1,6 @@
 package Model.ProcessStatus;
 
 import Exceptions.ProcessStatus.ProcessStatusException;
-import Exceptions.ProcessType.ProcessTypeException;
 
 import java.util.Objects;
 

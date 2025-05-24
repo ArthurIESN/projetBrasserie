@@ -14,7 +14,7 @@ public class CustomerStatusEnhancedTableModel extends AbstractEnhancedTableModel
 
     public CustomerStatusEnhancedTableModel()
     {
-        this(new ArrayList<CustomerStatus>());
+        this(new ArrayList<>());
     }
 
     @Override

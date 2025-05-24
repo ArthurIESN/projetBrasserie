@@ -14,7 +14,7 @@ public class SupplierEnhancedTableModel extends AbstractEnhancedTableModel<Suppl
 
     public SupplierEnhancedTableModel()
     {
-        this(new ArrayList<Supplier>());
+        this(new ArrayList<>());
     }
 
     @Override

@@ -1,12 +1,10 @@
 package Model.Payment;
 
 import Exceptions.Payment.PaymentException;
-import Model.Document.Document;
 import Model.PaymentStatus.PaymentStatus;
 import Model.Process.Process;
 import Model.Customer.Customer;
 import Model.Document.Document;
-import Model.ProcessType.ProcessType;
 
 import java.sql.Date;
 import java.util.HashMap;

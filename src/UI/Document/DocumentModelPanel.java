@@ -175,9 +175,7 @@ public class DocumentModelPanel extends JPanel {
         depositPanel.setVisible(false);
 
         calculateVatButton = new JButton("Calculate");
-        calculateVatButton.addActionListener(e -> {
-            updateCalculVat();
-        });
+        calculateVatButton.addActionListener(e -> updateCalculVat());
 
         deliveryDateField = new JDateField();
         deliveryDateField.setPlaceholder("Delivery Date");
@@ -200,17 +198,12 @@ public class DocumentModelPanel extends JPanel {
         });
 
         ArrayList<String> optionsValidity = new ArrayList<>(asList("Valid", "Invalid"));
-        comboBoxValidity = new ComboBoxPanel<String>(optionsValidity, String::toString);
+        comboBoxValidity = new ComboBoxPanel<>(optionsValidity, String::toString);
         comboBoxValidity.setVisible(false);
 
         checkBoxDepositIsPaid = new JCheckBox("Deposit is paid ?");
 
-        checkBoxDepositIsPaid.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showFieldDepositAmount(e.getStateChange() == ItemEvent.SELECTED);
-            }
-        });
+        checkBoxDepositIsPaid.addItemListener(e -> showFieldDepositAmount(e.getStateChange() == ItemEvent.SELECTED));
 
 
         depositAmountField = new JNumberField(Utils.NumberType.FLOAT, 2);
@@ -300,9 +293,7 @@ public class DocumentModelPanel extends JPanel {
         multipleSelectionListItems.setVisible(false);
 
 
-        multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
-            updateFieldsQuantity(multipleSelectionListItems.getSelectedItems());
-        });
+        multipleSelectionListItems.setOnSelectionChange(selectedItems -> updateFieldsQuantity(multipleSelectionListItems.getSelectedItems()));
 
 
         // 0
@@ -350,9 +341,7 @@ public class DocumentModelPanel extends JPanel {
         processesSearch.getSearchField().setPlaceholder("Select Process");
         processesSearch.setVisible(false);
 
-        comboBoxVat.onSelectedItemChange(vatChange -> {
-            updateCalculVat();
-        });
+        comboBoxVat.onSelectedItemChange(vatChange -> updateCalculVat());
 
         button = new JButton();
 
@@ -444,9 +433,9 @@ public class DocumentModelPanel extends JPanel {
     private Float[] calculVat(Float unitPrice, Float quantity, Float vatRate) {
         Float[] result = new Float[3];
 
-        Float totalExcludingTax = unitPrice * quantity;
+        float totalExcludingTax = unitPrice * quantity;
         Float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
-        Float vatAmount = totalIncludingTax - totalExcludingTax;
+        float vatAmount = totalIncludingTax - totalExcludingTax;
 
         result[0] = totalExcludingTax;
         result[1] = totalIncludingTax;

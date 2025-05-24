@@ -1,7 +1,6 @@
 package Controller.DocumentStatus;
 
 import BusinessLogic.DocumentStatus.DocumentStatusManager;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;

@@ -14,7 +14,7 @@ public class DocumentStatusEnhancedTableModel  extends AbstractEnhancedTableMode
 
     public DocumentStatusEnhancedTableModel()
     {
-        this(new ArrayList<DocumentStatus>());
+        this(new ArrayList<>());
     }
 
     @Override

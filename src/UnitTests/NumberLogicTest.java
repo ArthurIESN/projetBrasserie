@@ -77,8 +77,6 @@ class NumberLogicTest {
         text = "-0.01";
         assertEquals("0.01", numberLogic.validateFloat(text, false, decimalPlaces, minMax));
 
-        allowNegative = true;
-
         text = "-0.01";
         assertEquals("0", numberLogic.validateFloat(text, true, decimalPlaces, minMax));
 
@@ -175,8 +173,6 @@ class NumberLogicTest {
 
         text = "-99.9";
         assertEquals("100", numberLogic.validateInteger(text, false, minMax));
-
-        allowNegative = true;
 
         text = "-50";
         assertEquals("0", numberLogic.validateInteger(text, true, minMax));

@@ -3,7 +3,6 @@ package UI.Process;
 import Controller.Process.ProcessController;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.ProcessException;
-import Model.Process.MakeProcess;
 import Model.Process.Process;
 
 import javax.swing.*;

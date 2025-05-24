@@ -1,7 +1,6 @@
 package UI.Login;
 
 import Controller.AppController;
-import Controller.Employee.EmployeeController;
 import Environement.ConnexionProperties;
 import Exceptions.Employee.ConnectException;
 import Model.Employee.Employee;
