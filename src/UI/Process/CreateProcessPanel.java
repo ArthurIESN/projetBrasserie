@@ -2,6 +2,7 @@ package UI.Process;
 
 import Controller.Process.ProcessController;
 import Exceptions.Process.CreateProcessException;
+import Exceptions.Process.ProcessException;
 import Model.Process.MakeProcess;
 import Model.Process.Process;
 
@@ -30,25 +31,23 @@ public class CreateProcessPanel extends JPanel
 
     private void createProcess()
     {
-
         if(processModelPanel.isProcessInvalid()) return;
-
-        // we won't check for customer, supplier and employee, as they are optional
-        Process process = MakeProcess.getProcess(null,
-                processModelPanel.getProcessLabelField().getText(),
-                processModelPanel.getProcessNumberField().getInt(),
-                processModelPanel.getSupplierSearch().getSelectedItem(),
-                processModelPanel.getTypeSearch().getSelectedItem(),
-                processModelPanel.getProcessStatusSearch().getSelectedItem(),
-                processModelPanel.getEmployeeSearch().getSelectedItem(),
-                processModelPanel.getCustomerSearch().getSelectedItem()
-        );
 
         try
         {
+            Process process = new Process(10,
+                    processModelPanel.getProcessLabelField().getText(),
+                    processModelPanel.getProcessNumberField().getInt(),
+                    processModelPanel.getSupplierSearch().getSelectedItem(),
+                    processModelPanel.getTypeSearch().getSelectedItem(),
+                    processModelPanel.getProcessStatusSearch().getSelectedItem(),
+                    processModelPanel.getEmployeeSearch().getSelectedItem(),
+                    processModelPanel.getCustomerSearch().getSelectedItem()
+            );
+
             ProcessController.createProcess(process);
             JOptionPane.showMessageDialog(this, "Process created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (CreateProcessException e)
+        } catch (ProcessException | CreateProcessException e)
         {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

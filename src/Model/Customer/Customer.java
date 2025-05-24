@@ -94,13 +94,8 @@ public class Customer
         return numVAT;
     }
 
-    public void setNumVAT(String numVAT) throws CustomerException
+    public void setNumVAT(String numVAT)
     {
-        if(numVAT == null || numVAT.isEmpty())
-        {
-            throw new CustomerException("VAT number cannot be null or empty");
-        }
-
         this.numVAT = numVAT;
     }
 

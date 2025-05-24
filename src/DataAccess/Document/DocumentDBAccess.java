@@ -267,7 +267,8 @@ public class DocumentDBAccess implements DocumentDataAccess
                 " LEFT JOIN  process_type ON process.id_process_type = process_type.id " +
                 " LEFT JOIN  process_status ON process.id_process_status = process_status.id " +
                 " LEFT JOIN  employee ON process.id_employee = employee.id " +
-                " LEFT JOIN employee_status ON employee.id_employee_status = employee_status.id ";
+                " LEFT JOIN employee_status ON employee.id_employee_status = employee_status.id " +
+                "ORDER BY document.id ";
         try{
             Connection databaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnection.prepareStatement(query);
