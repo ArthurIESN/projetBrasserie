@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class BrasserieCredits extends JPanel
 {
-    private static final ArrayList<String> authors = new ArrayList<String>()
+    private static final ArrayList<String> authors = new ArrayList<>()
     {{
         add("Ryckbosch Arthur");
         add("Michaux Dorian");
@@ -51,9 +51,6 @@ public class BrasserieCredits extends JPanel
             creditsPanel.add(authorLabel);
         }
 
-
-
-        // /Users/arthur/projet_java/projetBrasserie/src/main/resources/
         URL gifUrl = getClass().getClassLoader().getResource("Images/dorianHome.gif");
         if (gifUrl == null) {
             throw new IllegalArgumentException("Image not found: Images/dorianHome.gif");

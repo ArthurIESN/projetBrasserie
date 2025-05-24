@@ -472,18 +472,8 @@ public class DocumentModelPanel extends JPanel {
             }
         }
 
-        HashMap<Item, Integer> items = new HashMap<>();
-        for (Item item : numberFieldHashMap.keySet())
-        {
-            JNumberField field = numberFieldHashMap.get(item);
-            if (field != null)
-            {
-                items.put(item, field.getInt());
-            }
-        }
-
         for (Item item : multipleSelectionListItems.getSelectedItems()) {
-            Float quantity = numberFieldHashMap.get(item).getFloat();
+            float quantity = numberFieldHashMap.get(item).getFloat();
 
             if (quantity > 0) {
                 Float unitPrice = item.getPrice();
@@ -593,7 +583,7 @@ public class DocumentModelPanel extends JPanel {
     public void update() {
         setAllCompnentsVisibleFalse();
         reduction = 0;
-        ArrayList<Integer> indexes = new ArrayList<>();
+        ArrayList<Integer> indexes;
         switch (this.typeDocument) {
             case "Customer Order":
                 indexes = modelsDocuments.get(1);
@@ -645,7 +635,7 @@ public class DocumentModelPanel extends JPanel {
 
     public boolean isDocumentInvalid() {
 
-        if (typeDocument == "order") {
+        if (Objects.equals(typeDocument, "order")) {
             if (desiredDeliveryDate.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill in the desired delivery date", "Error", JOptionPane.ERROR_MESSAGE);
                 return true;
@@ -662,7 +652,7 @@ public class DocumentModelPanel extends JPanel {
             }
         }
 
-        if (typeDocument == "Order") {
+        if (Objects.equals(typeDocument, "Order")) {
             if (supplierSearch.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Please select a supplier", "Error", JOptionPane.ERROR_MESSAGE);
                 return true;

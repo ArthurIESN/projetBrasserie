@@ -9,7 +9,7 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
 {
     public DocumentEnhancedTableModel(ArrayList<Document> data)
     {
-        super("Document", new String[]{"ID", "Label", "Date", "Deadline", "Reduction", "Validity", "Is Delivered", "Delivery Date", "Deposit Is Paid", "Deposit Amount", "Desired Delivery Date",  "Total Inclusive Of Taxe", "Total Vat", "Total Excl Vat"}, data);
+        super("Document", new String[]{"ID", "Label", "Date", "Deadline", "Reduction", "Validity", "Is Delivered", "Delivery Date", "Deposit Is Paid", "Deposit Amount", "Desired Delivery Date",  "Total Inclusive Of Tax", "Total Vat", "Total Excl Vat"}, data);
     }
 
     public DocumentEnhancedTableModel()

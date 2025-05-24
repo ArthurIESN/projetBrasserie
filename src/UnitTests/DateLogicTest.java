@@ -51,7 +51,7 @@ class DateLogicTest {
     }
 
     @Test
-    void testgetMonthsBetweenDates() throws ParseException{
+    void testGetMonthsBetweenDates() throws ParseException{
         Date startDate;
         Date endDate;
 
@@ -85,8 +85,8 @@ class DateLogicTest {
         assertNotNull(dateLogic.getDate(validDate,minMaxDates));
         assertEquals(expectedDate,dateLogic.getDate(validDate,minMaxDates));
 
-        String invalideDate = "32/12/2025";
-        assertNull(dateLogic.getDate(invalideDate,minMaxDates));
+        String invalidDate = "32/12/2025";
+        assertNull(dateLogic.getDate(invalidDate,minMaxDates));
 
         String outOfBoundsDate = "01/01/2019";
         assertNull(dateLogic.getDate(outOfBoundsDate,minMaxDates));
@@ -110,8 +110,7 @@ class DateLogicTest {
         String outOfBoundsDate = "01/01/2019";
         assertEquals(dateFormat.format(minMaxDates[0]),dateLogic.getClosestValidDate(outOfBoundsDate,minMaxDates));
 
-        String nullInput = null;
-        assertEquals("31/12/2023",dateLogic.getClosestValidDate(nullInput,minMaxDates));
+        assertEquals("31/12/2023",dateLogic.getClosestValidDate(null,minMaxDates));
 
         String emptyInput = "";
         assertEquals("31/12/2023",dateLogic.getClosestValidDate(emptyInput,minMaxDates));

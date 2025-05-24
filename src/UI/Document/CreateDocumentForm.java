@@ -31,7 +31,6 @@ public class CreateDocumentForm extends JPanel {
         JLabel titleLabel = new JLabel("Create Document");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        // Création de la liste de process pour la liste
         ArrayList<ProcessType> processTypes = new ArrayList<>();
 
         try{

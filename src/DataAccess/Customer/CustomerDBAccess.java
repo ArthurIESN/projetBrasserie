@@ -47,20 +47,21 @@ public class CustomerDBAccess implements CustomerDataAccess
         }
     }
 
-    public Customer getCustomer(int id) {
-        return null;
+    public Customer getCustomer(int id)
+    {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void createCustomer(Customer customer) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void deleteCustomer(int id) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void updateCustomer(Customer customer) {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static Customer makeCustomer(ResultSet resultSet) throws SQLException

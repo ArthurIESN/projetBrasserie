@@ -33,7 +33,7 @@ public class EmployeeModelPanel extends JPanel
     private final SearchListPanel<EmployeeStatus> employeeStatusSearchField;
     private final JButton button;
     private final GridBagLayoutHelper gridEmployee;
-    private boolean isUpdateEmployee = false;
+    private final boolean isUpdateEmployee;
 
     public EmployeeModelPanel(boolean updateEmployee)
     {

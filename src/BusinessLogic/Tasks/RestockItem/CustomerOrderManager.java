@@ -35,8 +35,7 @@ public class CustomerOrderManager
 
     public void executeOrder(HashMap<Item, Integer> items, Customer customer, Employee employee, ProcessStatus processStatus, ProcessType processType, float[] values)
     {
-        // create the proces
-
+        //@todo remove this
     }
 
 }
