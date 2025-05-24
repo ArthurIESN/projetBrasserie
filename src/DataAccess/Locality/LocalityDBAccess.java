@@ -76,7 +76,7 @@ public class LocalityDBAccess implements LocalityDataAccess
         }
     }
 
-    public static Locality makeLocalities(ResultSet resultSet) throws SQLException, CountryException
+    public static Locality makeLocalities(ResultSet resultSet) throws SQLException
     {
         return MakeLocality.getLocality(
                 resultSet.getInt("id"),

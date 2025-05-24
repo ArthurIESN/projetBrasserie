@@ -116,7 +116,7 @@ public class PaymentDBAccess implements PaymentDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public static Payment makePayment(ResultSet resultSet) throws SQLException, DocumentException
+    public static Payment makePayment(ResultSet resultSet) throws SQLException
     {
         if(!DataAccessUtils.hasColumn(resultSet, "payment.id")) return null;
 

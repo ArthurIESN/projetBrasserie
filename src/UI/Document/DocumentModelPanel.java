@@ -7,7 +7,7 @@ import Controller.DocumentStatus.DocumentStatusController;
 import Controller.Item.ItemController;
 import Controller.Process.ProcessController;
 import Controller.Supplier.SupplierController;
-import Controller.VAT.VATController;
+import Controller.Vat.VATController;
 import Exceptions.Customer.GetAllCustomersException;
 import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
 import Exceptions.Document.GetAllDocumentsException;
@@ -35,7 +35,6 @@ import java.awt.event.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 
 import Utils.Utils;
 
