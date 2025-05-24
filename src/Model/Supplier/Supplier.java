@@ -21,8 +21,10 @@ public class Supplier {
         return name;
     }
 
-    public void setId(Integer id) throws SupplierException {
-       if(id == null && id <= 0){
+    public void setId(Integer id) throws SupplierException
+    {
+       if(id == null || id <= 0)
+       {
            throw new SupplierException("ID cannot be null");
        }
        this.id = id;

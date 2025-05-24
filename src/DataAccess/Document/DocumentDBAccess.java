@@ -216,10 +216,10 @@ public class DocumentDBAccess implements DocumentDataAccess
 
     @Override
     public void deleteDocument(Integer id) throws DeleteDocumentException {
-        String querty = "DELETE FROM document WHERE id = ?";
+        String query = "DELETE FROM document WHERE id = ?";
         try{
             Connection databaseConnection = DatabaseConnexion.getInstance();
-            PreparedStatement statement = databaseConnection.prepareStatement(querty);
+            PreparedStatement statement = databaseConnection.prepareStatement(query);
             statement.setInt(1, id);
 
             int rowsAffected = statement.executeUpdate();
@@ -241,7 +241,6 @@ public class DocumentDBAccess implements DocumentDataAccess
         }
     }
 
-    //@todo il faut l'implementer
     @Override
     public Document getDocument(Integer id) {
         throw new UnsupportedOperationException("Not implemented yet");

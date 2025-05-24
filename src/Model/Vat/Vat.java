@@ -29,7 +29,8 @@ public class Vat {
     }
 
     public void setRate(float rate) throws VatException{
-        if(rate < 0 && rate > 100){
+        if(rate < 0 || rate > 100)
+        {
             throw new VatException("Rate must be between 0 and 100");
         }
         this.rate = rate;

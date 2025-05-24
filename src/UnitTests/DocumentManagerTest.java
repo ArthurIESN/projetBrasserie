@@ -35,7 +35,7 @@ class DocumentManagerTest
         try
         {
             Country country = new Country(12, "Code", 10.0f);
-            locality = new Locality(23, "Addresse", "PostalCode", "City",  country);
+            locality = new Locality(23, "Address", "PostalCode", "City",  country);
 
             // generate 40 items
             items = new ArrayList<>();

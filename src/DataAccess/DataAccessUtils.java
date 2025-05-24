@@ -32,7 +32,7 @@ public class DataAccessUtils
 
     /**
      * ⚠️ Use only for debugging.
-     * @deprecated This method will go through all resultset resulting in an empty resultset !
+     * @deprecated This method will go through all result set resulting in an empty result set !
      */
     @Deprecated
     public static void logResultSet(ResultSet resultSet) throws SQLException
