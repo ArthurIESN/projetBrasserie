@@ -2,6 +2,8 @@ package Controller.Document;
 
 import BusinessLogic.Document.DocumentManager;
 
+
+import Exceptions.Document.DeleteDocumentException;
 import Exceptions.Document.GetAllCurrentCommandsForAnItemException;
 import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.Document.UpdateDocumentException;
@@ -38,7 +40,7 @@ public class DocumentController
         documentManager.updateDocument(document);
     }
 
-    public static void deleteDocument(Integer id)
+    public static void deleteDocument(Integer id) throws DeleteDocumentException
     {
         documentManager.deleteDocument(id);
     }

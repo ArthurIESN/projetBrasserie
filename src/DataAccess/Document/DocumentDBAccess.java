@@ -10,6 +10,8 @@ import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Exceptions.Document.*;
+import Exceptions.DocumentStatus.DocumentStatusException;
+import Exceptions.Process.DeleteProcessException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
@@ -213,10 +215,33 @@ public class DocumentDBAccess implements DocumentDataAccess
     }
 
     @Override
-    public void deleteDocument(Integer id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void deleteDocument(Integer id) throws DeleteDocumentException {
+        String querty = "DELETE FROM document WHERE id = ?";
+        try{
+            Connection databaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement statement = databaseConnection.prepareStatement(querty);
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected == 0){
+                throw new DeleteDocumentException("Invalid document ID : " + id);
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+
+            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            {
+                throw new DeleteDocumentException("Cannot delete document. This document is linked to an other entity");
+            }
+
+            throw new DeleteDocumentException("Error while deleting document");
+        }catch (DatabaseConnectionFailedException e){
+            System.err.println(e.getMessage());
+            throw new DeleteDocumentException();
+        }
     }
 
+    //@todo il faut l'implementer
     @Override
     public Document getDocument(Integer id) {
         throw new UnsupportedOperationException("Not implemented yet");

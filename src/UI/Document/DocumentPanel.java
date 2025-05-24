@@ -91,11 +91,12 @@ public class DocumentPanel extends JPanel implements DocumentSubject {
     }
 
     private Class<? extends JPanel> getClassWithIndex(int index){
+        System.out.println("Index: " + index);
         return switch (index) {
            case 0 -> CreateDocumentForm.class;
            case 1 -> ReadDocumentForm.class;
            case 2 -> UpdateDocumentForm.class;
-           case 3 -> DeleteProcessPanel.class;
+           case 3 -> DeleteDocumentForm.class;
            default -> CreateProcessPanel.class;
         };
     }

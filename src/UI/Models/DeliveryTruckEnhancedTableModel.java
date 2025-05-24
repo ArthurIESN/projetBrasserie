@@ -11,6 +11,10 @@ public class DeliveryTruckEnhancedTableModel extends AbstractEnhancedTableModel<
         super("Delivery Trucks", new String[]{"ID", "License Plate", "Fuel Quantity", "Mileage"}, data);
     }
 
+    public DeliveryTruckEnhancedTableModel() {
+        this(new ArrayList<>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         DeliveryTruck deliveryTruck = getData().get(rowIndex);

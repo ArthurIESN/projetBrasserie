@@ -1,6 +1,8 @@
 package DataAccess.Document;
 
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Document.DeleteDocumentException;
+import Exceptions.Document.UpdateDocumentException;
 import Exceptions.Document.GetAllCurrentCommandsForAnItemException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Model.Document.Document;
@@ -13,8 +15,8 @@ public interface DocumentDataAccess
     ArrayList<Document> getAllCurrentCommandsForAnItem(Item item) throws GetAllCurrentCommandsForAnItemException;
 
     int createDocument(Document document) throws CreateDocumentException;
-    void updateDocument(Document document);
-    void deleteDocument(Integer id);
+    void updateDocument(Document document) throws UpdateDocumentException;
+    void deleteDocument(Integer id) throws DeleteDocumentException;
     Document getDocument(Integer id);
     ArrayList<Document> getAllDocuments();
 
