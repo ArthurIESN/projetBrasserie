@@ -11,7 +11,7 @@ public class Employee {
     private String lastName;
     private String firstName;
     private Date birthDate;
-    private boolean isMarried;
+    private final boolean isMarried;
     private String password;
     private EmployeeStatus employeeStatus;
 

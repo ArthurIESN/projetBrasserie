@@ -46,7 +46,6 @@ public class ItemManager
     {
         ArrayList<Item> Items;
 
-        // TVA CODE IS LIKE THIS : TVAX OR TVAXX or TVAX.X
         if(!vatCode.matches("VAT[0-9]{1,2}(\\.[0-9])?"))
         {
             throw new WrongVatCodeException(vatCode);

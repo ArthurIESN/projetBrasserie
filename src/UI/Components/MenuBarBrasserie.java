@@ -18,17 +18,12 @@ import Controller.AppController;
 import javax.swing.*;
 
 public class MenuBarBrasserie {
-    private JMenuBar menuBar;
-    private JMenu brasserieMenu;
-    private JMenu searchMenu;
-    private final JMenuItem[] searchItems = new JMenuItem[3];
-    private final JMenuItem[] crudItem = new JMenuItem[3];
-    private final JMenuItem[] jobTaskItem = new JMenuItem[2];
+    private final JMenuBar menuBar;
 
     public MenuBarBrasserie(BrasserieWindow brasserieWindow){
         menuBar = new JMenuBar();
 
-        brasserieMenu = new JMenu("Brasserie");
+        JMenu brasserieMenu = new JMenu("Brasserie");
 
         menuBar.add(brasserieMenu);
 
@@ -87,10 +82,11 @@ public class MenuBarBrasserie {
         });
 
 
-        searchMenu = new JMenu("Searchs");
+        JMenu searchMenu = new JMenu("Searches");
 
         menuBar.add(searchMenu);
 
+        JMenuItem[] searchItems = new JMenuItem[3];
         searchItems[0] = new JMenuItem("1 : Search Item");
         searchItems[1] = new JMenuItem("2 : Search Document");
         searchItems[2] = new JMenuItem("3 : Search Payment");
@@ -120,6 +116,7 @@ public class MenuBarBrasserie {
 
         menuBar.add(crudMenu);
 
+        JMenuItem[] crudItem = new JMenuItem[3];
         crudItem[0] = new JMenuItem("Process");
         crudItem[1] = new JMenuItem("Document");
         crudItem[2] = new JMenuItem("Employee");
@@ -139,6 +136,7 @@ public class MenuBarBrasserie {
         JMenu jobTaskMenu = new JMenu("Job Task");
         menuBar.add(jobTaskMenu);
 
+        JMenuItem[] jobTaskItem = new JMenuItem[2];
         jobTaskItem[0] = new JMenuItem("Restock Item");
         jobTaskItem[1] = new JMenuItem("Customer Order");
 

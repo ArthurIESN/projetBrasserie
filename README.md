@@ -87,5 +87,5 @@ Search an `item` in the database. The search is done by the `VAT code` of the `i
 - `Update` an existing document
 - `Delete` a document
 
-## !!TACHE_METIER
+## !!
 

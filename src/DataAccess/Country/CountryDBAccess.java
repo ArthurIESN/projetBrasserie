@@ -1,6 +1,6 @@
 package DataAccess.Country;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import Exceptions.Customer.CountryException;
 import Model.Country.Country;
 import Model.Country.MakeCountry;
@@ -38,7 +38,7 @@ public class CountryDBAccess implements CountryDataAccess
 
     public static Country makeCountry(ResultSet resultSet) throws SQLException, CountryException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "country.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "country.id")) return null;
 
         return MakeCountry.getCountry
                 (

@@ -28,13 +28,11 @@ public class CustomerOrderPanel extends JPanel
 {
     private JScrollPane scrollPane;
     private JPanel numberFieldPanel;
-    private RoundedPanel VatPanel;
     private SearchListPanel<Customer> customerSearch;
     private SearchListPanel<Locality> customerLocalitySearch;
     private MultipleSelectionList<Item> itemList;
     private JNumberField depositField;
     private JDateField desiredDeliveryDateField;
-    private GridBagLayoutHelper gridCommand;
     private float[] vatValues = {0, 0, 0, 0};
     private final ArrayList<JLabel> vatLabels = new ArrayList<>();
 
@@ -123,7 +121,7 @@ public class CustomerOrderPanel extends JPanel
         JButton commandButton = new JButton("Execute Command");
         commandButton.addActionListener(e -> executeOrder());
 
-        gridCommand = new GridBagLayoutHelper();
+        GridBagLayoutHelper gridCommand = new GridBagLayoutHelper();
         gridCommand.addField("Select a customer", customerSearch);
         gridCommand.addField("Select a locality", customerLocalitySearch);
         gridCommand.addField("Select items", itemList);
@@ -151,17 +149,17 @@ public class CustomerOrderPanel extends JPanel
 
     private void createVatPanel()
     {
-        VatPanel = new RoundedPanel(0, 20, 0, 20, 2);
-        VatPanel.setPreferredSize(new Dimension(250, 600));
-        VatPanel.setLayout(new BoxLayout(VatPanel, BoxLayout.Y_AXIS));
-        VatPanel.setBackground(new Color(73, 73, 73));
+        RoundedPanel vatPanel1 = new RoundedPanel(0, 20, 0, 20, 2);
+        vatPanel1.setPreferredSize(new Dimension(250, 600));
+        vatPanel1.setLayout(new BoxLayout(vatPanel1, BoxLayout.Y_AXIS));
+        vatPanel1.setBackground(new Color(73, 73, 73));
 
         JLabel title = new JLabel("SUMMARY");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Arial", Font.BOLD, 16));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        VatPanel.add(title);
-        VatPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        vatPanel1.add(title);
+        vatPanel1.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JPanel vatContainer = new JPanel(new GridBagLayout());
 
@@ -172,7 +170,7 @@ public class CustomerOrderPanel extends JPanel
         gbc.weighty = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.NONE;
-        vatContainer.add(VatPanel, gbc);
+        vatContainer.add(vatPanel1, gbc);
 
         String[] vatHeaders= {"VAT:", "VAT INCLUDED:", "DELIVERY COST:", "TOTAL:" };
         Color[] colors = {Color.DARK_GRAY, new Color(50, 50, 50), new Color(70, 70, 70), new Color(90, 90, 90), new Color(110, 110, 110)};
@@ -194,8 +192,8 @@ public class CustomerOrderPanel extends JPanel
             vatPanel.add(label);
             vatPanel.add(valueLabel);
 
-            VatPanel.add(vatPanel);
-            VatPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            vatPanel1.add(vatPanel);
+            vatPanel1.add(Box.createRigidArea(new Dimension(0, 10)));
         }
 
 
@@ -292,16 +290,8 @@ public class CustomerOrderPanel extends JPanel
 
     private void calculateTaxes()
     {
-        HashMap<Item, Integer> items = new HashMap<>();
-        for (Item item : numberFieldHashMap.keySet())
-        {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
-            if (field != null)
-            {
-                items.put(item, field.getInt());
-            }
-        }
-        vatValues = DocumentController.calculateTaxes(items, customerLocalitySearch.getSelectedItem());
+        createItemsHashMap();
+        vatValues = DocumentController.calculateTaxes(createItemsHashMap(), customerLocalitySearch.getSelectedItem());
 
         vatLabels.get(0).setText(String.format("%.2f €", vatValues[0]));
         vatLabels.get(1).setText(String.format("%.2f €", vatValues[1]));
@@ -318,20 +308,9 @@ public class CustomerOrderPanel extends JPanel
         if (option != JOptionPane.YES_OPTION) return;
         if(!isOrderValid()) return;
 
-        HashMap<Item, Integer> items = new HashMap<>();
-        for (Item item : numberFieldHashMap.keySet())
-        {
-            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
-            if (field != null)
-            {
-                items.put(item, field.getInt());
-            }
-        }
-
-
         try
         {
-            CustomerOrderController.executeOrder(items, customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
+            CustomerOrderController.executeOrder(createItemsHashMap(), customerSearch.getSelectedItem(), vatValues, depositField.getFloat(), desiredDeliveryDateField.getDate());
 
             JOptionPane.showMessageDialog(this, "Order executed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -341,6 +320,19 @@ public class CustomerOrderPanel extends JPanel
         {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private HashMap<Item, Integer> createItemsHashMap() {
+        HashMap<Item, Integer> items = new HashMap<>();
+        for (Item item : numberFieldHashMap.keySet())
+        {
+            JNumberField field = (JNumberField) numberFieldHashMap.get(item).getComponent(2);
+            if (field != null)
+            {
+                items.put(item, field.getInt());
+            }
+        }
+        return items;
     }
 
     private void refreshPanel()

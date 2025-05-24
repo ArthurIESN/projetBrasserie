@@ -36,22 +36,23 @@ public class JDateField extends JEnhancedTextField
 
         if (caretPosition > 0 && text.charAt(caretPosition - 1) == '/')
         {
-            if (caretPosition > 1) {
-                // Avant de changer le texte, gardez la position du caret
+            if (caretPosition > 1)
+            {
                 String newText = text.substring(0, caretPosition - 2) + text.substring(caretPosition);
                 setText(newText);
-                setCaretPosition(caretPosition - 2);  // Positionne le caret correctement après la suppression
-            } else {
-                // Si le curseur est en début de texte, on enlève le "/" et on positionne le caret
+                setCaretPosition(caretPosition - 2);
+            } else
+            {
                 String newText = text.substring(1);
                 setText(newText);
-                setCaretPosition(0);  // Le caret retourne au début
+                setCaretPosition(0);
             }
-        } else if (caretPosition > 0) {
-            // Si on n'est pas sur un "/"
+        }
+        else if (caretPosition > 0)
+        {
             String newText = text.substring(0, caretPosition - 1) + text.substring(caretPosition);
             setText(newText);
-            setCaretPosition(caretPosition - 1);  // Positionne le caret correctement après la suppression
+            setCaretPosition(caretPosition - 1);
         }
     }
 
@@ -80,9 +81,9 @@ public class JDateField extends JEnhancedTextField
         }
 
         if (!Character.isDigit(c)) {
-            e.consume(); // ignore the event if it's not a digit or '/'
+            e.consume();
         } else if (text.length() >= 10 && e.getID() == KeyEvent.KEY_TYPED) {
-            e.consume(); // block input after 10 characters (dd/MM/yyyy)
+            e.consume();
         } else {
             super.processKeyEvent(e);
             text = getText();

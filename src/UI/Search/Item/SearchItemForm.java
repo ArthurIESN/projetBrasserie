@@ -29,14 +29,14 @@ import Utils.Utils;
 
 public class SearchItemForm extends JPanel
 {
-    private JEnhancedTableScrollPanel tableScrollPanel;
-    private TableModelMaker tableModelMaker;
-    private ItemEnhancedTableModel itemTableModel;
-    private PackagingEnhancedTableModel packagingEnhancedTableModel;
+    private final JEnhancedTableScrollPanel tableScrollPanel;
+    private final TableModelMaker tableModelMaker;
+    private final ItemEnhancedTableModel itemTableModel;
+    private final PackagingEnhancedTableModel packagingEnhancedTableModel;
 
-    private JDualSliderPanel itemQuantity;
-    private JDualSliderPanel itemPrice;
-    private ComboBoxPanel<Vat> searchVat;
+    private final JDualSliderPanel itemQuantity;
+    private final JDualSliderPanel itemPrice;
+    private final ComboBoxPanel<Vat> searchVat;
 
 
     public SearchItemForm()
@@ -123,10 +123,10 @@ public class SearchItemForm extends JPanel
         try
         {
             ArrayList<Item> items = ItemController.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
-            ArrayList<Packaging> packagings = Utils.transformData(items, Item::getPackaging);
+            ArrayList<Packaging> packages = Utils.transformData(items, Item::getPackaging);
 
             itemTableModel.setData(items);
-            packagingEnhancedTableModel.setData(packagings);
+            packagingEnhancedTableModel.setData(packages);
 
             tableScrollPanel.updateModel(tableModelMaker);
 

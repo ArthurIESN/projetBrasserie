@@ -37,9 +37,6 @@ public class CustomerStatusEnhancedTableModel extends AbstractEnhancedTableModel
     @Override
     public Class<?> getColumnClass(int columnIndex)
     {
-        return switch (columnIndex) {
-            case 0 -> Integer.class;
-            default -> String.class;
-        };
+        return columnIndex == 0 ? Integer.class : String.class;
     }
 }

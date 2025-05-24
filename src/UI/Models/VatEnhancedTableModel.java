@@ -30,10 +30,6 @@ public class VatEnhancedTableModel extends AbstractEnhancedTableModel<Vat>
     @Override
     public Class<?> getColumnClass(int columnIndex)
     {
-        return switch (columnIndex)
-        {
-            case 1 -> Double.class;
-            default -> String.class;
-        };
+        return columnIndex == 0 ? Double.class : String.class;
     }
 }

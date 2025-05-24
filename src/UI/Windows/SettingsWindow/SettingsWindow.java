@@ -9,9 +9,6 @@ import java.awt.*;
 
 public class SettingsWindow extends JFrame implements WindowObserver {
     private final WindowManager windowManager;
-    private final int width = 600;
-    private final int height = 500;
-    private final Container container;
 
     public SettingsWindow()
     {
@@ -20,6 +17,8 @@ public class SettingsWindow extends JFrame implements WindowObserver {
 
 
         setTitle("Settings");
+        int width = 600;
+        int height = 500;
         setSize(width, height);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,7 +26,7 @@ public class SettingsWindow extends JFrame implements WindowObserver {
         setVisible(true);
 
 
-        container = getContentPane();
+        Container container = getContentPane();
         container.setLayout(new BorderLayout());
 
         container.add(new SettingsPanel(this), BorderLayout.CENTER);

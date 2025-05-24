@@ -11,17 +11,15 @@ import UI.Windows.WindowObserver;
 
 public class BrasserieWindow extends JFrame implements WindowObserver
 {
-    private final WindowManager windowManager;
-    private MenuBarBrasserie menuBarBrasserie;
-    private Container container;
+    private final Container container;
     private JPanel contentPanel;
-    private JLabel userLabel;
+    private final JLabel userLabel;
 
     public BrasserieWindow()
     {
         super("Brasserie");
 
-        this.windowManager = WindowManager.getInstance();
+        WindowManager windowManager = WindowManager.getInstance();
         windowManager.addObserver(this);
 
         setSize(1280, 720);
@@ -32,7 +30,7 @@ public class BrasserieWindow extends JFrame implements WindowObserver
         container = getContentPane();
         container.setLayout(new BorderLayout());
 
-        menuBarBrasserie = new MenuBarBrasserie(this);
+        MenuBarBrasserie menuBarBrasserie = new MenuBarBrasserie(this);
         setJMenuBar(menuBarBrasserie.getMenuBar());
 
         addWindowListener(new java.awt.event.WindowAdapter()

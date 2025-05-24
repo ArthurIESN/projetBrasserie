@@ -5,9 +5,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DataAccesUtils
+public class DataAccessUtils
 {
-    private DataAccesUtils() {
+    private DataAccessUtils() {
         // Prevent instantiation
     }
     public static boolean hasColumn(ResultSet rs, String columnName) {

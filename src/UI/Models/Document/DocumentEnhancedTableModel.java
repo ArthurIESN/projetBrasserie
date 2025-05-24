@@ -34,7 +34,7 @@ public class DocumentEnhancedTableModel extends AbstractEnhancedTableModel<Docum
             case 8 -> document.getDepositIsPaid();
             case 9 -> document.getDepositAmount();
             case 10 -> document.getDesiredDeliveryDate();
-            case 11 -> document.getTotalInclusiveOfTaxe();
+            case 11 -> document.getTotalInclusiveOfTax();
             case 12 -> document.getTotalVat();
             case 13 -> document.getTotalExclVat();
             default -> null;

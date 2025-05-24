@@ -17,13 +17,11 @@ import javax.swing.*;
 
 public class LoginPanel extends JPanel
 {
-    private JLabel title;
-    private JNumberField idField;
-    private JEnhancedTextField passwordField;
-    private JCheckBox keepConnectedCheckBox;
+    private final JNumberField idField;
+    private final JEnhancedTextField passwordField;
+    private final JCheckBox keepConnectedCheckBox;
     private boolean keepConnected;
-    private JButton loginButton;
-    private BrasserieWindow brasserieWindow;
+    private final BrasserieWindow brasserieWindow;
 
     public LoginPanel(BrasserieWindow brasserieWindow)
     {
@@ -35,7 +33,7 @@ public class LoginPanel extends JPanel
         }
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        title = new JLabel("Login");
+        JLabel title = new JLabel("Login");
         title.setFont(title.getFont().deriveFont(20f));
         add(title);
 
@@ -52,7 +50,7 @@ public class LoginPanel extends JPanel
         keepConnectedCheckBox = new JCheckBox();
         keepConnectedCheckBox.addActionListener(e -> keepConnected = keepConnectedCheckBox.isSelected());
 
-        loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Login");
         loginButton.addActionListener(e -> login());
 
         layoutHelper.addField("Employee ID", idField);

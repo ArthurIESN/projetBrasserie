@@ -1,10 +1,9 @@
 package DataAccess.DeliveryTruck;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DeliveryTruck.GetAllDeliveryTrucksException;
-import Exceptions.DeliveryTruck.DeliveryTruckException;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.DeliveryTruck.MakeDeliveryTruck;
 
@@ -65,7 +64,7 @@ public class DeliveryTruckDBAccess implements DeliveryTruckDataAccess
 
     public static DeliveryTruck makeDeliveryTruck(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "delivery_truck.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "delivery_truck.id")) return null;
 
         return MakeDeliveryTruck.getDeliveryTruck(
                 resultSet.getInt("delivery_truck.id"),

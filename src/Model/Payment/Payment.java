@@ -17,8 +17,6 @@ public class Payment {
     private Model.Process.Process process;
     private Customer customer;
 
-    // Constructeur
-
     public Payment(Integer id, double amount, java.sql.Date paymentDate, PaymentStatus paymentStatus, Document document,
                    Model.Process.Process process, Customer customer) throws PaymentException
             {
@@ -31,9 +29,7 @@ public class Payment {
         setProcess(process);
         setCustomer(customer);
     }
-
-    // Getters et setters pour chaque champ
-
+    
     public Integer getId() {
         return id;
     }

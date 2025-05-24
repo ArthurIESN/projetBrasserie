@@ -1,14 +1,12 @@
 package DataAccess.DocumentStatus;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.DocumentStatus.DocumentStatusException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;
 import Model.DocumentStatus.MakeDocumentStatus;
-import com.sun.source.tree.ArrayAccessTree;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,15 +67,7 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             if(resultSet.next())
             {
-                DocumentStatus documentStatus = makeDocumentStatus(resultSet);
-
-                if(documentStatus != null)
-                {
-                    return documentStatus;
-                }
-
-                return null;
-
+                return makeDocumentStatus(resultSet);
             }
             else
             {
@@ -97,7 +87,7 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
     public static DocumentStatus makeDocumentStatus(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "document_status.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "document_status.id")) return null;
 
         return MakeDocumentStatus.getDocumentStatus(
                 resultSet.getInt("document_status.id"),

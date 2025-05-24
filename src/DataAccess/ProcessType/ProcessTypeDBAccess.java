@@ -3,12 +3,11 @@ package DataAccess.ProcessType;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Exceptions.ProcessType.GetProcessTypeException;
-import Model.Process.Process;
 import Model.ProcessType.MakeProcessType;
 import Model.ProcessType.ProcessType;
 
 import DataAccess.DatabaseConnexion;
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -97,7 +96,7 @@ public class ProcessTypeDBAccess implements ProcessTypeDataAccess
 
     public static ProcessType makeProcessType(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "process_type.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "process_type.id")) return null;
 
         return MakeProcessType.getProcessType(
                 resultSet.getInt("process_type.id"),

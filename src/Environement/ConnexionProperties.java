@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class ConnexionProperties
 {
-    private static String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
+    private static final String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
     private static final String configFilePath = rootPath + "main/resources/Properties/Connexion.properties";
     private static final Properties properties = new Properties();
 

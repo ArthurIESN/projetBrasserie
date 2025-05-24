@@ -10,7 +10,7 @@ public class DocumentDetails {
     private Integer id;
     private String label;
     private Integer quantity;
-    private Integer newQuantity;
+    private final Integer newQuantity;
     private float unitPrice;
     private Document document;
     private Item item;

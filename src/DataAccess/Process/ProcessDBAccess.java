@@ -1,6 +1,6 @@
 package DataAccess.Process;
 
-import DataAccess.DataAccesUtils;
+import DataAccess.DataAccessUtils;
 import DataAccess.DatabaseConnexion;
 
 import DataAccess.Employee.EmployeeDBAccess;
@@ -10,8 +10,6 @@ import DataAccess.Supplier.SupplierDBAccess;
 import DataAccess.Customer.CustomerDBAccess;
 
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Exceptions.Document.CreateDocumentException;
-import Exceptions.Employee.DeleteEmployeeException;
 import Exceptions.Process.*;
 
 import Model.Process.MakeProcess;
@@ -157,7 +155,7 @@ public class ProcessDBAccess implements ProcessDataAccess
         {
             System.err.println(e.getMessage());
 
-            if(DataAccesUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
+            if(DataAccessUtils.isASQLForeignKeyConstraintFails(e.getErrorCode()))
             {
                 throw new DeleteProcessException("Cannot delete process. This process is linked to an other entity");
             }
@@ -292,7 +290,7 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public static Process makeProcess(ResultSet resultSet) throws SQLException
     {
-        if(!DataAccesUtils.hasColumn(resultSet, "process.id")) return null;
+        if(!DataAccessUtils.hasColumn(resultSet, "process.id")) return null;
 
         return MakeProcess.getProcess(
                 resultSet.getInt("process.id"),

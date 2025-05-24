@@ -1,18 +1,14 @@
 package BusinessLogic.Process;
 
-import Controller.AppController;
 import Exceptions.Process.*;
 import Exceptions.Process.CreateProcessException;
 import Exceptions.Process.DeleteProcessException;
 import Exceptions.Process.GetProcessWithSpecificType;
 import Exceptions.Process.UpdateProcessException;
-import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.Process.Process;
 
 import DataAccess.Process.ProcessDBAccess;
 import DataAccess.Process.ProcessDataAccess;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
-import Model.ProcessType.ProcessType;
 
 import java.util.ArrayList;
 
@@ -25,7 +21,7 @@ public class ProcessManager
         processDataAccess = new ProcessDBAccess();
     }
 
-    public ArrayList<Process> getAllProcessess() throws GetAllProcessesException
+    public ArrayList<Process> getAllProcesses() throws GetAllProcessesException
     {
         return processDataAccess.getAllProcesses();
     }
