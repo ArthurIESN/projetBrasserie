@@ -86,18 +86,11 @@ public class PaymentDBAccess implements PaymentDataAccess
             ArrayList<Payment> payments = new ArrayList<>();
             while (resultSet.next())
             {
-                try
-                {
-                    Payment payment = makePayment(resultSet);
+                Payment payment = makePayment(resultSet);
 
-                    if (payment != null)
-                    {
-                        payments.add(payment);
-                    }
-                }
-                catch (DocumentException e)
+                if (payment != null)
                 {
-                    System.err.println("Error while creating payment: " + e.getMessage());
+                    payments.add(payment);
                 }
             }
             return payments;

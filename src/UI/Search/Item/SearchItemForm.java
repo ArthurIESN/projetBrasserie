@@ -135,8 +135,7 @@ public class SearchItemForm extends JPanel
             }
 
         }
-        catch (WrongVatCodeException | DatabaseConnectionFailedException | UnkownVatCodeException |
-               SearchItemException e)
+        catch (WrongVatCodeException | SearchItemException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -153,7 +152,7 @@ public class SearchItemForm extends JPanel
             itemQuantity.setMinMax(minMaxItem[0], minMaxItem[1]);
             itemPrice.setMinMax(minMaxItem[2], minMaxItem[3]);
         }
-        catch (GetMinMaxItemQuantityAndPriceException | DatabaseConnectionFailedException e)
+        catch (GetMinMaxItemQuantityAndPriceException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

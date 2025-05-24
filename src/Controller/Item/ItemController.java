@@ -27,11 +27,11 @@ public class ItemController {
         return itemManager.enoughItemQuantity(items);
     }
 
-    public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws DatabaseConnectionFailedException, UnkownVatCodeException, SearchItemException, WrongVatCodeException {
+    public static ArrayList<Item> searchItem(String tvaCode, int minItem, int maxItem, int minPrice, int maxPrice) throws SearchItemException, WrongVatCodeException {
         return itemManager.searchItem(tvaCode, minItem, maxItem, minPrice, maxPrice);
     }
 
-    public static int[] getMinMaxItemQuantityAndPrice(Vat vat) throws DatabaseConnectionFailedException, GetMinMaxItemQuantityAndPriceException
+    public static int[] getMinMaxItemQuantityAndPrice(Vat vat) throws GetMinMaxItemQuantityAndPriceException
     {
         return itemManager.getMinMaxItemQuantityAndPrice(vat);
     }

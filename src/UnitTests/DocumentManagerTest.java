@@ -101,7 +101,7 @@ class DocumentManagerTest
 
         // locality null
         itemsMap.clear();
-        itemsMap.put(items.get(0), 1);
+        itemsMap.put(items.getFirst(), 1);
 
         values = documentManager.calculateTaxes(itemsMap, null);
         assertEquals(2.f, values[0]);
