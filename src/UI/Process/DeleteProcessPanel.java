@@ -46,7 +46,6 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
         processSearch = new SearchListPanel<>( processes, searchProcess -> searchProcess.getLabel() + " - " + searchProcess.getNumber() + " - " + searchProcess.getProcessStatus().getLabel());
         processSearch.setPreferredSize(new Dimension(500, processSearch.getPreferredSize().height));
         processSearch.getSearchField().setPlaceholder("Search for a process");
-
         gridDeleteProcess.addField("Process", processSearch);
 
         JButton deleteButton = new JButton("Delete");

@@ -1,6 +1,7 @@
 package BusinessLogic.Document;
 
 import DataAccess.Document.DocumentDBAccess;
+import Exceptions.Document.DeleteDocumentException;
 import Exceptions.Document.GetAllDocumentsException;
 import Exceptions.Document.UpdateDocumentException;
 import Model.Document.Document;
@@ -35,7 +36,7 @@ public class DocumentManager
         documentDataAccess.updateDocument(document);
     }
 
-    public void deleteDocument(Integer id)
+    public void deleteDocument(Integer id) throws DeleteDocumentException
     {
         documentDataAccess.deleteDocument(id);
     }

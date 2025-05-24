@@ -15,8 +15,8 @@ import java.util.List;
 
 public class DocumentPanel extends JPanel implements DocumentSubject {
 
-    private Container container;
-    private NavbarPanel navbarPanel;
+    private final Container container;
+    private final NavbarPanel navbarPanel;
     private static final List<DocumentObserver> observers= new ArrayList<>();
 
     public DocumentPanel(){
@@ -76,14 +76,6 @@ public class DocumentPanel extends JPanel implements DocumentSubject {
             panel = new CreateDocumentForm();
         }
 
-      /*  JPanel jPanel = switch (index){
-            case 0 -> new CreateDocumentForm();
-            case 1 -> new ReadDocumentForm(this);
-            case 2 -> new UpdateDocumentForm(this);
-            case 3 -> new DeleteDocumentForm(this);
-            default -> new DocumentPanel();
-        };*/
-
         container.add(panel,BorderLayout.CENTER);
         container.revalidate();
         container.repaint();
@@ -99,11 +91,12 @@ public class DocumentPanel extends JPanel implements DocumentSubject {
     }
 
     private Class<? extends JPanel> getClassWithIndex(int index){
+        System.out.println("Index: " + index);
         return switch (index) {
            case 0 -> CreateDocumentForm.class;
            case 1 -> ReadDocumentForm.class;
            case 2 -> UpdateDocumentForm.class;
-           case 3 -> DeleteProcessPanel.class;
+           case 3 -> DeleteDocumentForm.class;
            default -> CreateProcessPanel.class;
         };
     }

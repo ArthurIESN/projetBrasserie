@@ -12,6 +12,11 @@ public class DocumentStatusEnhancedTableModel  extends AbstractEnhancedTableMode
         super("Document Status", new String[]{"ID", "Label"}, data);
     }
 
+    public DocumentStatusEnhancedTableModel()
+    {
+        this(new ArrayList<DocumentStatus>());
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
