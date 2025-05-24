@@ -18,6 +18,7 @@ import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Exceptions.Item.ItemException;
 import Exceptions.Item.UpdateItemException;
 import Exceptions.Process.CreateProcessException;
+import Exceptions.Process.ProcessException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Exceptions.ProcessType.GetProcessTypeException;
 import Exceptions.Tasks.RestockItem.CustomerOrder.ExecuteOrderException;
@@ -93,8 +94,14 @@ public class CustomerOrderController
                throw new ExecuteOrderException("Error while getting information for your order");
            }
 
+        Process process;
+        try{
+             process = new Process(null, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
+        }catch (ProcessException e){
+            System.out.println("Error while creating process: " + e.getMessage());
+            throw new ExecuteOrderException("Error while creating process");
+        }
 
-        Process process = new Process(null, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
 
         Document document;
         try
@@ -161,7 +168,7 @@ public class CustomerOrderController
                 DocumentDetailsController.createDocumentDetails(documentDetails);
             }
         }
-        catch (CreateProcessException | CreateDocumentException e)
+        catch (CreateProcessException | CreateDocumentException | ProcessException e)
         {
             System.out.println("Error while creating process: " + e.getMessage());
             throw new ExecuteOrderException("Error while creating process");
