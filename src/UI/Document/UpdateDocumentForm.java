@@ -88,7 +88,6 @@ public class UpdateDocumentForm extends JPanel implements DocumentObserver {
     private void updateDocumentSearch(){
         Document selectedDocument = documentModelPanel.getDocumentSearch().getSelectedItem();
 
-        //todo supprimer cette ligne si elle est toujours en commentaire
         documentModelPanel.loadDataAndShowProcesses(selectedDocument.getProcess().getType().getId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");

@@ -5,6 +5,9 @@ import DataAccess.Document.DocumentDBAccess;
 import DataAccess.Item.ItemDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Document.DocumentException;
+import Exceptions.DocumentDetails.CreateDocumentDetailsException;
+import Exceptions.DocumentDetails.GetDocumentDetailsFromDocumentsException;
+import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
@@ -25,7 +28,7 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
     }
 
     @Override
-    public void createDocumentDetails(DocumentDetails documentDetails)
+    public void createDocumentDetails(DocumentDetails documentDetails) throws CreateDocumentDetailsException
     {
         String query = "INSERT INTO document_details (label, quantity, new_quantity, unit_price, id_document, id_item) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -37,16 +40,7 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
 
             preparedStatement.setString(1, documentDetails.getLabel());
             preparedStatement.setInt(2, documentDetails.getQuantity());
-
-            if(documentDetails.getNewQuantity() == null)
-            {
-                preparedStatement.setNull(3, java.sql.Types.INTEGER);
-            }
-            else
-            {
-                preparedStatement.setInt(3, documentDetails.getNewQuantity());
-            }
-
+            preparedStatement.setObject(3, documentDetails.getNewQuantity(), java.sql.Types.INTEGER);
             preparedStatement.setFloat(4, documentDetails.getUnitPrice());
             preparedStatement.setInt(5, documentDetails.getDocument().getId());
             preparedStatement.setInt(6, documentDetails.getItem().getId());
@@ -54,9 +48,10 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
             preparedStatement.executeUpdate();
 
 
-        } catch (SQLException | DatabaseConnectionFailedException e) {
-            //@todo : throw exception
+        } catch (SQLException | DatabaseConnectionFailedException e)
+        {
             System.out.println("Error while creating document details: " + e.getMessage());
+            throw new CreateDocumentDetailsException("Error while creating document details: ");
         }
     }
 
@@ -81,7 +76,7 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
     }
 
     @Override
-    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents)
+    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException
     {
         ArrayList<Integer> documentIds = Utils.Utils.transformData(documents, Document::getId);
         String placeholders = String.join(",", documentIds.stream().map(id -> "?").toArray(String[]::new));
@@ -91,15 +86,13 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
                 "WHERE id_document IN (" + placeholders + ")";
 
         try (Connection connection = DatabaseConnexion.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query))
+        {
 
             for (int i = 0; i < documentIds.size(); i++)
             {
                 preparedStatement.setInt(i + 1, documentIds.get(i));
             }
-
-            // log the query
-            System.out.println("Executing query: " + preparedStatement.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<DocumentDetails> documentDetails = new ArrayList<>();
@@ -118,11 +111,39 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
 
         } catch (SQLException | DatabaseConnectionFailedException e)
         {
-            //@TODO: handle exception
             System.out.println("Error while getting documents details from documents: " + e.getMessage());
+            throw new GetDocumentDetailsFromDocumentsException("Error while getting documents details from documents");
         }
+    }
 
-        return null;
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
+    {
+        String query = "SELECT DISTINCT new_quantity  FROM document_details " +
+                "JOIN event_document_details ON event_document_details.id_document_details = document_details.id " +
+                "JOIN item ON item.id = document_details.id_item " +
+                "WHERE event_document_details.id_event = ? " +
+                "AND item.id = ?";
+
+        try{
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
+
+            preparedStatement.setInt(1,idEvent);
+            preparedStatement.setInt(2,idItem);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ArrayList<Integer> quantities = new ArrayList<>();
+
+            while(resultSet.next())
+            {
+                quantities.add(resultSet.getInt("new_quantity"));
+            }
+            return quantities;
+        }catch (SQLException  | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new GetQuantityItemWithSpecificEventException();
+        }
     }
 
     public static DocumentDetails makeDocumentDetails(ResultSet resultSet) throws SQLException
@@ -139,4 +160,6 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
                 ItemDBAccess.makeItem(resultSet)
         );
     }
+
+
 }

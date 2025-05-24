@@ -53,36 +53,12 @@ public class ProcessDBAccess implements ProcessDataAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
-
-            if(process.getSupplier() == null)
-            {
-                statement.setNull(3, INTEGER);
-            }
-            else
-            {
-                statement.setInt(3, process.getSupplier().getId());
-            }
-
+            statement.setObject(3, process.getSupplier() == null ? null : process.getSupplier().getId(), INTEGER);
             statement.setInt(4, process.getType().getId());
             statement.setInt(5, process.getProcessStatus().getId());
+            statement.setObject(6, process.getEmployee() == null ? null : process.getEmployee().getId(), INTEGER);
+            statement.setObject(7, process.getCustomer() == null ? null : process.getCustomer().getId(), INTEGER);
 
-            if(process.getEmployee() == null)
-            {
-                statement.setNull(6, INTEGER);
-            }
-            else
-            {
-                statement.setInt(6, process.getEmployee().getId());
-            }
-
-            if(process.getCustomer() == null)
-            {
-                statement.setNull(7, INTEGER);
-            }
-            else
-            {
-                statement.setInt(7, process.getCustomer().getId());
-            }
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0)
@@ -140,37 +116,11 @@ public class ProcessDBAccess implements ProcessDataAccess
             PreparedStatement statement = databaseConnexion.prepareStatement(query);
             statement.setString(1, process.getLabel());
             statement.setInt(2, process.getNumber());
-
-            if(process.getSupplier() == null || process.getSupplier().getId() == null)
-            {
-                statement.setNull(3, INTEGER);
-            }
-            else
-            {
-                statement.setInt(3, process.getSupplier().getId());
-            }
-
+            statement.setObject(3, process.getSupplier() == null ? null : process.getSupplier().getId(), INTEGER);
             statement.setInt(4, process.getType().getId());
             statement.setInt(5, process.getProcessStatus().getId());
-
-            if(process.getEmployee() == null || process.getEmployee().getId() == null)
-            {
-                statement.setNull(6, INTEGER);
-            }
-            else
-            {
-                statement.setInt(6, process.getEmployee().getId());
-            }
-
-            if(process.getCustomer() == null || process.getCustomer().getId() == null)
-            {
-                statement.setNull(7, INTEGER);
-            }
-            else
-            {
-                statement.setInt(7, process.getCustomer().getId());
-            }
-
+            statement.setObject(6, process.getEmployee() == null ? null : process.getEmployee().getId(), INTEGER);
+            statement.setObject(7, process.getCustomer() == null ? null : process.getCustomer().getId(), INTEGER);
             statement.setInt(8, process.getId());
 
             int rowsAffected = statement.executeUpdate();

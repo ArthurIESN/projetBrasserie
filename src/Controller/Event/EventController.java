@@ -1,18 +1,21 @@
 package Controller.Event;
 
 import BusinessLogic.Event.EventManager;
+import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class EventController
 {
     private static final EventManager eventManager = new EventManager();
 
-    public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException
+    public static ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException
     {
         return eventManager.getEventsWithSpecificItem(idItem);
     }
@@ -20,6 +23,11 @@ public class EventController
     public static ArrayList<Event> getEventsBeforeDate(Date date) throws GetEventsBeforeDateException
     {
         return eventManager.getEventsBeforeDate(date);
+    }
+
+    public static ArrayList<Integer> getDatesEvents(Integer idEvent) throws GetDatesEventsException
+    {
+        return eventManager.getDatesEvents(idEvent);
     }
 
     public static void createEvent(Event event)
