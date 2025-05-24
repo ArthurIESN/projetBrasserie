@@ -37,7 +37,7 @@ public class DeleteDocumentForm extends JPanel implements DocumentObserver {
         }
 
         documentPanel.addObserver(this);
-        documentSearch = new SearchListPanel<>(documents, searchDocument -> searchDocument.getLabel());
+        documentSearch = new SearchListPanel<>(documents, Document::getLabel);
         documentSearch.setPreferredSize(new java.awt.Dimension(500, documentSearch.getPreferredSize().height));
         documentSearch.getSearchField().setPlaceholder("Search for a document");
         gridDeleteDocument.addField("Document",documentSearch);

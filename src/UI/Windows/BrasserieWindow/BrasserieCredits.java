@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class BrasserieCredits extends JPanel
 {

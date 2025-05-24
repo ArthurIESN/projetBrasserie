@@ -13,7 +13,6 @@ import Model.Vat.Vat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ItemController {
     private static final ItemManager itemManager = new ItemManager();

@@ -2,7 +2,6 @@ package DataAccess.Employee;
 
 import java.util.ArrayList;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Employee.*;
 
 import Model.Employee.Employee;

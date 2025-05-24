@@ -41,17 +41,13 @@ public class MenuBarBrasserie {
 
             JMenuItem settingsItem = new JMenuItem("Settings");
             settingsItem.addActionListener(e ->
-            {
-                WindowManager.showSettingsWindow();
-            });
+                    WindowManager.showSettingsWindow());
 
             brasserieMenu.add(settingsItem);
         }
 
         disconnectItem.addActionListener(e ->
-        {
-            AppController.disconnect();
-        });
+                AppController.disconnect());
 
         brasserieMenu.add(addWindowItem);
         brasserieMenu.add(creditsItem);
@@ -59,21 +55,15 @@ public class MenuBarBrasserie {
         brasserieMenu.add(quitItem);
 
         homeItem.addActionListener(e ->
-        {
-            brasserieWindow.updateWindowContent(new BrasserieHomePanel());
-        });
+                brasserieWindow.updateWindowContent(new BrasserieHomePanel()));
 
         homeItem.doClick();
 
         addWindowItem.addActionListener(e ->
-        {
-            WindowManager.addWindow();
-        });
+                WindowManager.addWindow());
 
         creditsItem.addActionListener(e ->
-        {
-            brasserieWindow.updateWindowContent(new BrasserieCredits());
-        });
+                brasserieWindow.updateWindowContent(new BrasserieCredits()));
 
         quitItem.addActionListener(e ->
         {
@@ -97,9 +87,7 @@ public class MenuBarBrasserie {
         }
 
         searchItems[0].addActionListener(e ->
-        {
-            brasserieWindow.updateWindowContent(new SearchItemForm());
-        });
+                brasserieWindow.updateWindowContent(new SearchItemForm()));
 
         searchItems[1].addActionListener(e -> {
             JPanel panel2 = new JPanel();
@@ -107,9 +95,7 @@ public class MenuBarBrasserie {
             brasserieWindow.updateWindowContent(new SearchDocumentWithEventForm());
         });
 
-        searchItems[2].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new SearchPaymentPanel());
-        });
+        searchItems[2].addActionListener(e -> brasserieWindow.updateWindowContent(new SearchPaymentPanel()));
 
         // CRUD
         JMenu crudMenu = new JMenu("CRUD");
@@ -146,13 +132,9 @@ public class MenuBarBrasserie {
         }
 
         jobTaskItem[0].addActionListener(e ->
-        {
-            brasserieWindow.updateWindowContent(new RestockItemPanel());
-        });
+                brasserieWindow.updateWindowContent(new RestockItemPanel()));
 
-        jobTaskItem[1].addActionListener(e -> {
-            brasserieWindow.updateWindowContent(new CustomerOrderPanel());
-        });
+        jobTaskItem[1].addActionListener(e -> brasserieWindow.updateWindowContent(new CustomerOrderPanel()));
 
     }
 

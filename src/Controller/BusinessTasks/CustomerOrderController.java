@@ -1,6 +1,5 @@
 package Controller.BusinessTasks;
 
-import BusinessLogic.Item.ItemManager;
 import BusinessLogic.Tasks.RestockItem.CustomerOrderManager;
 
 import Controller.AppController;
@@ -31,15 +30,11 @@ import Model.DocumentStatus.DocumentStatus;
 import Model.Employee.Employee;
 import Model.EmployeeStatus.EmployeeStatus;
 import Model.Item.Item;
-import Model.Locality.Locality;
 import Model.Process.Process;
 import Model.ProcessStatus.ProcessStatus;
 import Model.ProcessType.ProcessType;
-import Utils.Utils;
 
-import javax.print.Doc;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Date;
 import java.time.LocalDate;

@@ -4,7 +4,6 @@ import DataAccess.Payment.PaymentDBAccess;
 import DataAccess.Payment.PaymentDataAccess;
 
 import Exceptions.Search.GetAllPaymentYearsException;
-import Exceptions.Payment.GetAllPaymentException;
 import Exceptions.Search.SearchPaymentException;
 import Model.Payment.Payment;
 

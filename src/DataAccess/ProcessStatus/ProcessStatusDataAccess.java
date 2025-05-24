@@ -1,6 +1,5 @@
 package DataAccess.ProcessStatus;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Model.ProcessStatus.ProcessStatus;

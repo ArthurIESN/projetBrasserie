@@ -6,7 +6,6 @@ import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface DocumentDetailsDataAccess

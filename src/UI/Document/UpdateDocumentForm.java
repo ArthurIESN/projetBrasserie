@@ -5,7 +5,6 @@ import Exceptions.Document.DocumentException;
 import Exceptions.Document.UpdateDocumentException;
 import Model.DeliveryTruck.DeliveryTruck;
 import Model.Document.Document;
-import Model.Document.MakeDocument;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Process.Process;
 import UI.Models.Document.DocumentObserver;

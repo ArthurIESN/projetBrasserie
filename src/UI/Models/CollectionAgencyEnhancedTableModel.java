@@ -11,12 +11,12 @@ public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableMod
     }
 
     public CollectionAgencyEnhancedTableModel(){
-        this(new ArrayList<CollectionAgency>());
+        this(new ArrayList<>());
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        CollectionAgency collectionAgency = (CollectionAgency) getData().get(rowIndex);
+        CollectionAgency collectionAgency = getData().get(rowIndex);
 
         if (collectionAgency == null){
             return " - ";

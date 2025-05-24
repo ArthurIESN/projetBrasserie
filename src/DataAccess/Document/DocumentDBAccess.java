@@ -10,8 +10,6 @@ import DataAccess.Process.ProcessDBAccess;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Exceptions.Document.*;
-import Exceptions.DocumentStatus.DocumentStatusException;
-import Exceptions.Process.DeleteProcessException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;

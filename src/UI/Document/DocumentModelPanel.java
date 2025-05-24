@@ -147,13 +147,13 @@ public class DocumentModelPanel extends JPanel {
             documentSearch.getSearchField().setPlaceholder("Select Document");
 
             documentSearch.onSelectedItemChange(e -> {
-                List<JComponent> componentsToExclude = List.of(
+                ArrayList<JComponent> componentsToExclude =  new ArrayList<>(asList(
                         customerSearch,
                         supplierSearch,
                         multipleSelectionListItems,
                         numberFieldPanel,
                         calculateVatButton
-                );
+                ));
 
                 for (Component component : gridDocument.getComponents()) {
                     if (!componentsToExclude.contains(component)) {
@@ -175,9 +175,7 @@ public class DocumentModelPanel extends JPanel {
         depositPanel.setVisible(false);
 
         calculateVatButton = new JButton("Calculate");
-        calculateVatButton.addActionListener(e -> {
-            updateCalculVat();
-        });
+        calculateVatButton.addActionListener(e -> updateCalculVat());
 
         deliveryDateField = new JDateField();
         deliveryDateField.setPlaceholder("Delivery Date");
@@ -200,17 +198,12 @@ public class DocumentModelPanel extends JPanel {
         });
 
         ArrayList<String> optionsValidity = new ArrayList<>(asList("Valid", "Invalid"));
-        comboBoxValidity = new ComboBoxPanel<String>(optionsValidity, String::toString);
+        comboBoxValidity = new ComboBoxPanel<>(optionsValidity, String::toString);
         comboBoxValidity.setVisible(false);
 
         checkBoxDepositIsPaid = new JCheckBox("Deposit is paid ?");
 
-        checkBoxDepositIsPaid.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showFieldDepositAmount(e.getStateChange() == ItemEvent.SELECTED);
-            }
-        });
+        checkBoxDepositIsPaid.addItemListener(e -> showFieldDepositAmount(e.getStateChange() == ItemEvent.SELECTED));
 
 
         depositAmountField = new JNumberField(Utils.NumberType.FLOAT, 2);
@@ -300,9 +293,7 @@ public class DocumentModelPanel extends JPanel {
         multipleSelectionListItems.setVisible(false);
 
 
-        multipleSelectionListItems.setOnSelectionChange(selectedItems -> {
-            updateFieldsQuantity(multipleSelectionListItems.getSelectedItems());
-        });
+        multipleSelectionListItems.setOnSelectionChange(selectedItems -> updateFieldsQuantity(multipleSelectionListItems.getSelectedItems()));
 
 
         // 0
@@ -350,9 +341,7 @@ public class DocumentModelPanel extends JPanel {
         processesSearch.getSearchField().setPlaceholder("Select Process");
         processesSearch.setVisible(false);
 
-        comboBoxVat.onSelectedItemChange(vatChange -> {
-            updateCalculVat();
-        });
+        comboBoxVat.onSelectedItemChange(vatChange -> updateCalculVat());
 
         button = new JButton();
 
@@ -441,12 +430,12 @@ public class DocumentModelPanel extends JPanel {
     }
 
     //@todo : mettre dans la couche buisness logique
-    private Float[] calculVat(Float unitPrice, Float quantity, Float vatRate) {
-        Float[] result = new Float[3];
+    private float[] calculVat(float unitPrice, float quantity, float vatRate) {
+        float[] result = new float[3];
 
-        Float totalExcludingTax = unitPrice * quantity;
-        Float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
-        Float vatAmount = totalIncludingTax - totalExcludingTax;
+        float totalExcludingTax = unitPrice * quantity;
+        float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
+        float vatAmount = totalIncludingTax - totalExcludingTax;
 
         result[0] = totalExcludingTax;
         result[1] = totalIncludingTax;
@@ -476,10 +465,10 @@ public class DocumentModelPanel extends JPanel {
             float quantity = numberFieldHashMap.get(item).getFloat();
 
             if (quantity > 0) {
-                Float unitPrice = item.getPrice();
-                Float vatRate = comboBoxVat.getSelectedItem().getRate();
+                float unitPrice = item.getPrice();
+                float vatRate = comboBoxVat.getSelectedItem().getRate();
 
-                Float[] values = calculVat(unitPrice,quantity,vatRate);
+                float[] values = calculVat(unitPrice,quantity,vatRate);
 
                 if (vatItemHashMap.containsKey(item.getId())) {
                     tvaFields = vatItemHashMap.get(item.getId());
@@ -772,7 +761,7 @@ public class DocumentModelPanel extends JPanel {
         return  depositAmountField;
     }
 
-    public ComboBoxPanel getComboBoxVat() {
+    public ComboBoxPanel<Vat> getComboBoxVat() {
         return comboBoxVat;
     }
 

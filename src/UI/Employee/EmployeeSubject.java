@@ -1,8 +1,6 @@
 package UI.Employee;
 
 import Model.Employee.Employee;
-import Model.Process.Process;
-import UI.Process.ProcessObserver;
 
 public interface EmployeeSubject
 {

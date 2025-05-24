@@ -2,7 +2,6 @@ package Model.Vat;
 
 import Exceptions.Vat.VatException;
 
-import javax.swing.*;
 import java.util.HashMap;
 
 public class MakeVat

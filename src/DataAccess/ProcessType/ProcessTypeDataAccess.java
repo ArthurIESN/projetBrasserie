@@ -1,6 +1,5 @@
 package DataAccess.ProcessType;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Exceptions.ProcessType.GetProcessTypeException;
 import Model.ProcessType.ProcessType;

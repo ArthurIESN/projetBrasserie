@@ -4,7 +4,6 @@ package DataAccess.Customer;
 import java.util.ArrayList;
 
 import Exceptions.Customer.GetAllCustomersException;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Model.Customer.Customer;
 

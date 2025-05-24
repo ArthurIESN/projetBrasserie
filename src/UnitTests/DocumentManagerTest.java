@@ -8,7 +8,6 @@ import Exceptions.Vat.VatException;
 import Model.Country.Country;
 import Model.Locality.Locality;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Model.Item.Item;

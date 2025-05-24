@@ -2,19 +2,12 @@ package Model.Process;
 
 import Exceptions.Process.ProcessException;
 import Model.Customer.Customer;
-import Model.Customer.MakeCustomer;
-import Model.ProcessStatus.MakeProcessStatus;
 import Model.ProcessStatus.ProcessStatus;
-import Model.Supplier.MakeSupplier;
 import Model.Supplier.Supplier;
 import Model.ProcessType.ProcessType;
-import Model.ProcessType.MakeProcessType;
 import Model.Employee.Employee;
-import Model.Employee.MakeEmployee;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class MakeProcess
 {

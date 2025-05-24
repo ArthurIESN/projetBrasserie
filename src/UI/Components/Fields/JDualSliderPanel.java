@@ -1,6 +1,5 @@
 package UI.Components.Fields;
 
-import Environement.SystemProperties;
 import UI.Theme.ThemeManager;
 import UI.Theme.ThemeObserver;
 
