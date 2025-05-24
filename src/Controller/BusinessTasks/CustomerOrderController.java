@@ -95,13 +95,14 @@ public class CustomerOrderController
            }
 
         Process process;
+
         try
         {
              process = new Process(10, "AUTO_CUSTOMER_ORDER_PROCESS", 1010, null, processType, processStatus, employee, customer);
         }
         catch (ProcessException e)
         {
-            System.out.println("Error while creating process: " + e.getMessage());
+          System.out.println("Error while creating process: " + e.getMessage());
             throw new ExecuteOrderException("Error while creating process");
         }
 

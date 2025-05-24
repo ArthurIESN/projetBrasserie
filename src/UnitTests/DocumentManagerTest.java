@@ -51,6 +51,8 @@ class DocumentManagerTest
         catch (CountryException | LocalityException | ItemException | VatException e)
         {
             System.out.println("Error creating country: " + e.getMessage());
+        } catch (VatException e) {
+            throw new RuntimeException(e);
         }
 
     }
