@@ -41,9 +41,7 @@ public class MenuBarBrasserie {
 
             JMenuItem settingsItem = new JMenuItem("Settings");
             settingsItem.addActionListener(e ->
-            {
-                WindowManager.showSettingsWindow();
-            });
+                    WindowManager.showSettingsWindow());
 
             brasserieMenu.add(settingsItem);
         }

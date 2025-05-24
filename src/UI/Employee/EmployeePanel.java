@@ -1,9 +1,7 @@
 package UI.Employee;
 
 import Model.Employee.Employee;
-import Model.Process.Process;
 import UI.Components.Navbar.NavbarPanel;
-import UI.Process.*;
 import UI.Windows.WindowManager;
 
 import javax.swing.*;

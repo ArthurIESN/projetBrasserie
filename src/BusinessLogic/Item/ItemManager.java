@@ -2,12 +2,10 @@ package BusinessLogic.Item;
 
 import DataAccess.Item.ItemDBAccess;
 import DataAccess.Item.ItemDataAccess;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Item.UpdateItemException;
 import Exceptions.Search.GetMinMaxItemQuantityAndPriceException;
 import Exceptions.Search.SearchItemException;
-import Exceptions.Vat.UnkownVatCodeException;
 import Exceptions.Vat.WrongVatCodeException;
 import Model.Item.Item;
 import Model.Vat.Vat;

@@ -92,14 +92,14 @@ class DateLogicTest {
         assertNull(dateLogic.getDate(outOfBoundsDate,minMaxDates));
 
         String nullInput = null;
-        assertNull(dateLogic.getDate(nullInput,minMaxDates));
+        assertNull(dateLogic.getDate(null,minMaxDates));
 
         String emptyInput = "";
         assertNull(dateLogic.getDate(emptyInput,minMaxDates));
     }
 
     @Test
-    void testGetClosesValidDate() throws ParseException{
+    void testGetClosesValidDate() {
         String validDate = "15/06/2021";
 
         assertEquals(validDate,dateLogic.getClosestValidDate(validDate,minMaxDates));

@@ -4,10 +4,7 @@ import UI.Theme.ThemeManager;
 import UI.Theme.ThemeObserver;
 
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.util.Properties;
 
 import javax.swing.*;

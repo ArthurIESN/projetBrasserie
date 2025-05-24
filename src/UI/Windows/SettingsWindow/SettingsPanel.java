@@ -1,8 +1,5 @@
 package UI.Windows.SettingsWindow;
 
-import Environement.SystemProperties;
-import UI.Components.GridBagLayoutHelper;
-
 import javax.swing.*;
 
 

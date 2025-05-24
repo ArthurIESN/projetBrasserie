@@ -14,7 +14,7 @@ public class ProcessStatusEnhancedTableModel extends AbstractEnhancedTableModel<
 
     public ProcessStatusEnhancedTableModel()
     {
-        this(new ArrayList<ProcessStatus>());
+        this(new ArrayList<>());
     }
 
     @Override

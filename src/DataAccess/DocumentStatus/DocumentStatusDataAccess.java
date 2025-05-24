@@ -1,6 +1,5 @@
 package DataAccess.DocumentStatus;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.DocumentStatus.GetAllDocumentStatusException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Model.DocumentStatus.DocumentStatus;

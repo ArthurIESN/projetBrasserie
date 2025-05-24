@@ -36,8 +36,7 @@ public class CountryDBAccess implements CountryDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public static Country makeCountry(ResultSet resultSet) throws SQLException, CountryException
-    {
+    public static Country makeCountry(ResultSet resultSet) throws SQLException {
         if(!DataAccessUtils.hasColumn(resultSet, "country.id")) return null;
 
         return MakeCountry.getCountry

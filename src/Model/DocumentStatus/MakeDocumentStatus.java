@@ -2,7 +2,6 @@ package Model.DocumentStatus;
 
 import Exceptions.DocumentStatus.DocumentStatusException;
 
-import javax.swing.*;
 import java.util.HashMap;
 
 public class MakeDocumentStatus {

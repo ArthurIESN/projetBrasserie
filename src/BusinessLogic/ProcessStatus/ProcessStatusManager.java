@@ -3,7 +3,6 @@ package BusinessLogic.ProcessStatus;
 import DataAccess.ProcessStatus.ProcessStatusDBAccess;
 import DataAccess.ProcessStatus.ProcessStatusDataAccess;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.ProcessStatus.GetAllProcessStatusException;
 import Exceptions.ProcessStatus.GetProcessStatusException;
 import Model.ProcessStatus.ProcessStatus;

@@ -14,7 +14,7 @@ public class ProcessEnhancedTableModel extends AbstractEnhancedTableModel<Proces
 
     public ProcessEnhancedTableModel()
     {
-        this(new ArrayList<Process>());
+        this(new ArrayList<>());
     }
 
     @Override

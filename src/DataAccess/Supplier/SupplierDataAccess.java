@@ -2,7 +2,6 @@ package DataAccess.Supplier;
 
 import java.util.ArrayList;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Supplier.GetAllSuppliersException;
 
 import Model.Supplier.Supplier;

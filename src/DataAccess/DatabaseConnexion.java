@@ -1,16 +1,13 @@
 package DataAccess;
 
 import Environement.DatabaseProperties;
-import com.mysql.cj.jdbc.Driver;
 
 import Environement.EnvLoader;
 import Exceptions.Environement.BadEnvValueException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnexion

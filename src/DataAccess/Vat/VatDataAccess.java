@@ -1,6 +1,5 @@
 package DataAccess.Vat;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Vat.GetAllVatsException;
 import Exceptions.Vat.UnkownVatCodeException;
 import Model.Vat.Vat;

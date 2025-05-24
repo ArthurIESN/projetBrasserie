@@ -6,8 +6,6 @@ import Exceptions.Document.CreateDocumentException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
-import Model.DocumentDetails.DocumentDetails;
-import Model.DocumentDetails.MakeDocumentDetails;
 import Model.DocumentStatus.DocumentStatus;
 import Model.Item.Item;
 import Model.Process.Process;

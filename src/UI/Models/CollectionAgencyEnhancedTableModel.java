@@ -11,7 +11,7 @@ public class CollectionAgencyEnhancedTableModel extends AbstractEnhancedTableMod
     }
 
     public CollectionAgencyEnhancedTableModel(){
-        this(new ArrayList<CollectionAgency>());
+        this(new ArrayList<>());
     }
 
     @Override

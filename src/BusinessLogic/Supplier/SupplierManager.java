@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import DataAccess.Supplier.SupplierDBAccess;
 import DataAccess.Supplier.SupplierDataAccess;
 
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
 import Exceptions.Supplier.GetAllSuppliersException;
 
 import Model.Supplier.Supplier;
