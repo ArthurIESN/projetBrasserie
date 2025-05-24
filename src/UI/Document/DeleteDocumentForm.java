@@ -105,7 +105,7 @@ public class DeleteDocumentForm extends JPanel implements DocumentObserver {
                 tableScrollPanel.updateModel(tableModelMaker);
             }
 
-        });;
+        });
         add(tableScrollPanel);
     }
 

@@ -237,29 +237,7 @@ public class CustomerOrderPanel extends JPanel
         {
             if(!numberFieldHashMap.containsKey(item))
             {
-                JLabel label = new JLabel(item.getLabel());
-
-                JLabel messageLabel = new JLabel();
-
-                JNumberField numberField = new JNumberField(Utils.NumberType.INTEGER);
-                numberField.setPlaceholder("Enter quantity");
-                numberField.setAllowNegative(false);
-                numberField.setMinMax(0, 100);
-                numberField.onFocusLost(e ->
-                {
-                    checkItemQuantity(item, numberField.getInt(), messageLabel);
-                    calculateTaxes();
-                });
-
-                JPanel panel = new JPanel();
-                panel.setLayout(new GridLayout(1, 2));
-                panel.setPreferredSize(new Dimension(0, 50));
-                panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 50));
-                panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-                panel.add(label);
-                panel.add(messageLabel);
-                panel.add(numberField);
+                JPanel panel = getJPanel(item);
                 numberFieldPanel.add(panel);
                 numberFieldHashMap.put(item, panel);
             }
@@ -286,6 +264,33 @@ public class CustomerOrderPanel extends JPanel
         scrollPane.revalidate();
         scrollPane.repaint();
 
+    }
+
+    private JPanel getJPanel(Item item) {
+        JLabel label = new JLabel(item.getLabel());
+
+        JLabel messageLabel = new JLabel();
+
+        JNumberField numberField = new JNumberField(Utils.NumberType.INTEGER);
+        numberField.setPlaceholder("Enter quantity");
+        numberField.setAllowNegative(false);
+        numberField.setMinMax(0, 100);
+        numberField.onFocusLost(e ->
+        {
+            checkItemQuantity(item, numberField.getInt(), messageLabel);
+            calculateTaxes();
+        });
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 2));
+        panel.setPreferredSize(new Dimension(0, 50));
+        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 50));
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        panel.add(label);
+        panel.add(messageLabel);
+        panel.add(numberField);
+        return panel;
     }
 
     private void calculateTaxes()
