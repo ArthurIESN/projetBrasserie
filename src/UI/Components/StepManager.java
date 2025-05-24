@@ -65,8 +65,6 @@ public class StepManager
      */
     public void completeStep(int stepIndex)
     {
-        System.out.println("Step " + (stepIndex + 1) + " completed");
-
         if (stepIndex >= components.length) return;
 
 

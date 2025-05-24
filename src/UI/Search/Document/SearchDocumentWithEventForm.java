@@ -1,8 +1,10 @@
 package UI.Search.Document;
 
+import Controller.DocumentDetails.DocumentDetailsController;
 import Controller.Item.ItemController;
-import Controller.SearchController;
-import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Controller.Event.EventController;
+import Controller.Document.DocumentController;
+import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsWithItemException;
 import Exceptions.Item.GetAllItemsException;
 import Exceptions.Search.GetDocumentWithSpecificEventException;
@@ -26,10 +28,10 @@ import java.util.List;
 public class SearchDocumentWithEventForm extends JPanel {
     private final JLabel filterLabel;
     private final StepManager stepManager;
-    private final List<String> filters = new ArrayList<>();
-    private List<Integer> years = new ArrayList<>();
-    private List<Event> events = new ArrayList<>();
-    private List<Integer> quantities = new ArrayList<>();
+    private final ArrayList<String> filters = new ArrayList<>();
+    private ArrayList<Integer> years = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Integer> quantities = new ArrayList<>();
     private final SearchListPanel<Item> itemSearch;
     private final SearchListPanel<Event> eventSearch;
     private final SearchListPanel<Integer> quantitySearch;
@@ -141,7 +143,7 @@ public class SearchDocumentWithEventForm extends JPanel {
 
         searchButton.addActionListener(e -> {
             try{
-                ArrayList<Document> documents = SearchController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
+                ArrayList<Document> documents = DocumentController.getDocumentsWithSpecificEvent(itemSearch.getSelectedItem().getId(),
                         eventSearch.getSelectedItem().getId(),quantitySearch.getSelectedItem(),
                         yearSearch.getSelectedItem());
 
@@ -173,7 +175,7 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void onEventStepShown(){
         try {
             int itemId = itemSearch.getSelectedItem().getId();
-            events = SearchController.getEventsWithSpecificItem(itemId);
+            events = EventController.getEventsWithSpecificItem(itemId);
         }catch (GetEventsWithItemException e){
             System.out.println(e.getMessage());
         }
@@ -193,7 +195,7 @@ public class SearchDocumentWithEventForm extends JPanel {
         try {
             int idEventSelected = eventSearch.getSelectedItem().getId();
             int idItemSelected = itemSearch.getSelectedItem().getId();
-            quantities = SearchController.getQuantityItemWithSpecificEvent(idEventSelected, idItemSelected);
+            quantities = DocumentDetailsController.getQuantityItemWithSpecificEvent(idEventSelected, idItemSelected);
         }catch (GetQuantityItemWithSpecificEventException e){
             System.out.println(e.getMessage());
         }
@@ -213,8 +215,8 @@ public class SearchDocumentWithEventForm extends JPanel {
     private void onYearsStepShown(){
         try{
             int idEventSelected = eventSearch.getSelectedItem().getId();
-            years = SearchController.getDatesEvents(idEventSelected);
-        }catch (DatabaseConnectionFailedException e){
+            years = EventController.getDatesEvents(idEventSelected);
+        }catch (GetDatesEventsException e){
             System.out.println(e.getMessage());
         }
         clearPanelFilter();

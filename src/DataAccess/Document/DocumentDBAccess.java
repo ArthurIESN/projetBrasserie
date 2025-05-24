@@ -11,11 +11,9 @@ import Exceptions.CollectionAgency.CollectionAgencyException;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
 
 import Exceptions.DeliveryTruck.DeliveryTruckException;
-import Exceptions.Document.CreateDocumentException;
-import Exceptions.Document.DocumentException;
-import Exceptions.Document.GetAllDocumentsException;
-import Exceptions.Document.UpdateDocumentException;
+import Exceptions.Document.*;
 import Exceptions.DocumentStatus.DocumentStatusException;
+import Exceptions.Search.GetDocumentWithSpecificEventException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
 import Model.Item.Item;
@@ -26,10 +24,8 @@ import java.util.ArrayList;
 
 public class DocumentDBAccess implements DocumentDataAccess
 {
-    public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item)
+    public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item) throws GetAllCurrentCommandsForAnItemException
     {
-        // Document -> Document_details(id_document) -> item_document_details -> item
-
         String query = "SELECT * " +
                 "FROM document " +
                 "WHERE " +
@@ -70,8 +66,8 @@ public class DocumentDBAccess implements DocumentDataAccess
 
         } catch (DatabaseConnectionFailedException | SQLException e)
         {
-            //@TODO: handle exception
-            throw new RuntimeException(e);
+            System.out.println("Error while getting all current commands for an item: " + e.getMessage());
+            throw new  GetAllCurrentCommandsForAnItemException("Error while getting all current commands for an item");
         }
     }
 
@@ -102,23 +98,11 @@ public class DocumentDBAccess implements DocumentDataAccess
 
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
-
-            if (document.getDeliveryTruck() != null) {
-                statement.setDate(3, new java.sql.Date(document.getDeadLine().getTime()));
-            } else {
-                statement.setNull(3, java.sql.Types.DATE);
-            }
-
+            statement.setObject(3, document.getDeadLine() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null, Types.DATE);
             statement.setFloat(4, document.getReduction());
             statement.setString(5, document.getValidity());
             statement.setBoolean(6, document.getIsDelivered());
-
-            if (document.getDeliveryDate() != null) {
-                statement.setDate(7, new java.sql.Date(document.getDeliveryDate().getTime()));
-            } else {
-                statement.setNull(7, java.sql.Types.DATE);
-            }
-
+            statement.setObject(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(8, document.getDepositIsPaid());
             statement.setFloat(9, document.getDepositAmount());
             statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
@@ -134,7 +118,6 @@ public class DocumentDBAccess implements DocumentDataAccess
             if (affectedRows == 0) {
                 throw new CreateDocumentException("Failed to create document, no rows affected.");
             }
-
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys())
             {
@@ -171,33 +154,35 @@ public class DocumentDBAccess implements DocumentDataAccess
                 "id_process = ? " +
                 "WHERE document.id = ? ";
 
-        if(document == null){
+        if(document == null)
+        {
             throw new UpdateDocumentException("Document cannot be null");
-        }else if(document.getLabel().isEmpty()){
+        }else if(document.getLabel().isEmpty())
+        {
             throw new UpdateDocumentException("Label cannot be empty");
         }else if(document.getDate() == null){
             throw new UpdateDocumentException("Date cannot be null");
-        }else if(document.getValidity() == null){
+        }else if(document.getValidity() == null)
+        {
             throw new UpdateDocumentException("Validity cannot be null");
-        }else if(document.getDocumentStatus() == null){
+        }else if(document.getDocumentStatus() == null)
+        {
             throw new UpdateDocumentException("Document status cannot be null");
-        }else if(document.getProcess() == null){
+        }else if(document.getProcess() == null)
+        {
             throw new UpdateDocumentException("Process cannot be null");
-        }else if(document.getDesiredDeliveryDate() == null){
-            // @todo retirer les logs
-            System.out.println(document.getDesiredDeliveryDate());
-            System.out.println("Desired delivery date cannot be null ---- c'est dans la db");
+        }else if(document.getDesiredDeliveryDate() == null)
+        {
             throw new UpdateDocumentException("Desired delivery date cannot be null");
         }else if(document.getDeliveryDate() == null){
             throw new UpdateDocumentException("Delivery date cannot be null");
         }
-
-        if(document.getDepositIsPaid() == null){
+        else if(document.getDepositIsPaid() == null)
+        {
             throw new UpdateDocumentException("Deposit is paid cannot be null");
-        }else {
-            if(document.getDepositAmount() == null){
-                throw new UpdateDocumentException("Deposit amount cannot be null");
-            }
+        }else if(document.getDepositAmount() == null)
+        {
+            throw new UpdateDocumentException("Deposit amount cannot be null");
         }
 
         try{
@@ -206,42 +191,28 @@ public class DocumentDBAccess implements DocumentDataAccess
 
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
+            statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
             statement.setString(4, document.getValidity());
             statement.setBoolean(5, document.getIsDelivered());
             statement.setDate(6, new java.sql.Date(document.getDeliveryDate().getTime()));
             statement.setBoolean(7, document.getDepositIsPaid());
+            statement.setObject(8, document.getDepositAmount() != null ? document.getDepositAmount() : null, Types.FLOAT);
             statement.setDate(9, new java.sql.Date(document.getDesiredDeliveryDate().getTime()));
             statement.setInt(10, document.getDocumentStatus().getId());
+            statement.setObject(11, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
             statement.setInt(12, document.getProcess().getId());
             statement.setInt(13, document.getId());
 
-            if(document.getReduction() == null){
-                statement.setNull(3, Types.FLOAT);
-            }else {
-                statement.setFloat(3, document.getReduction());
-            }
-
-            if(document.getDepositAmount() == null){
-                statement.setNull(8, Types.FLOAT);
-            }else {
-                statement.setFloat(8, document.getDepositAmount());
-            }
-
-            if(document.getDeliveryTruck() == null){
-                statement.setNull(11, Types.INTEGER);
-            }else {
-                statement.setInt(11, document.getDeliveryTruck().getId());
-            }
-
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected == 0){
+            if(rowsAffected == 0)
+            {
                 throw new UpdateDocumentException("Invalid document ID : " + document.getId());
             }
-        }catch (SQLException | DatabaseConnectionFailedException e){
+        }catch (SQLException | DatabaseConnectionFailedException e)
+        {
             System.err.println(e.getMessage());
             throw new UpdateDocumentException();
         }
-
     }
 
     @Override
@@ -291,6 +262,54 @@ public class DocumentDBAccess implements DocumentDataAccess
         catch (SQLException | DatabaseConnectionFailedException e){
             System.err.println(e.getMessage());
             throw new GetAllDocumentsException();
+        }
+    }
+
+    public ArrayList<Document> getDocumentsWithSpecificEvent(int idItem, int idEvent, int quantity, int year) throws GetDocumentWithSpecificEventException
+    {
+        String query = "SELECT * " +
+                "FROM document " +
+                "INNER JOIN document_details ON document.id = document_details.id_document " +
+                "INNER JOIN document_status ON document.id_document_status = document_status.id " +
+                "INNER JOIN item ON document_details.id_item = item.id " +
+                "INNER JOIN process ON document.id_process = process.id " +
+                "INNER JOIN supplier ON supplier.id = process.id_supplier " +
+                "INNER JOIN process_type ON process.id_process_type = process_type.id " +
+                "INNER JOIN process_status ON process.id_process_status = process_status.id " +
+                "LEFT JOIN employee ON employee.id = process.id_employee  " +
+                "LEFT JOIN employee_status ON employee_status.id = employee.id_employee_status  " +
+                "LEFT JOIN event_document_details ON document_details.id = event_document_details.id_document_details  " +
+                "LEFT JOIN event ON event_document_details.id_event = event.id  " +
+                "WHERE process_type.label = 'Order' AND " +
+                "    item.id = ? AND " +
+                "    event_document_details.id_event = ? AND " +
+                "    document_details.quantity = ? AND " +
+                "    YEAR(event.start_date) = ?;";
+
+        try {
+            Connection dataBaseConnection = DatabaseConnexion.getInstance();
+            PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
+            preparedStatement.setInt(1, idItem);
+            preparedStatement.setInt(2, idEvent);
+            preparedStatement.setInt(3, quantity);
+            preparedStatement.setInt(4, year);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Document> documents = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                Document document = DocumentDBAccess.makeDocument(resultSet);
+
+                if(document != null)
+                {
+                    documents.add(document);
+                }
+            }
+
+            return documents;
+        } catch (SQLException | DatabaseConnectionFailedException e) {
+            System.err.println(e.getMessage());
+            throw new GetDocumentWithSpecificEventException();
         }
     }
 

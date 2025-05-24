@@ -2,6 +2,9 @@ package BusinessLogic.DocumentDetails;
 
 import DataAccess.DocumentDetails.DocumentDetailsDBAccess;
 import DataAccess.DocumentDetails.DocumentDetailsDataAccess;
+import Exceptions.DocumentDetails.CreateDocumentDetailsException;
+import Exceptions.DocumentDetails.GetDocumentDetailsFromDocumentsException;
+import Exceptions.Search.GetQuantityItemWithSpecificEventException;
 import Model.Document.Document;
 import Model.DocumentDetails.DocumentDetails;
 
@@ -11,7 +14,8 @@ public class DocumentDetailsManager
 {
     private static final DocumentDetailsDataAccess documentDetailsDataAccess = new DocumentDetailsDBAccess();
 
-    public void createDocumentDetails(DocumentDetails documentDetails) {
+    public void createDocumentDetails(DocumentDetails documentDetails) throws CreateDocumentDetailsException
+    {
         documentDetailsDataAccess.createDocumentDetails(documentDetails);
     }
 
@@ -31,7 +35,13 @@ public class DocumentDetailsManager
         return documentDetailsDataAccess.getAllDocumentDetails();
     }
 
-    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) {
+    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException
+    {
         return documentDetailsDataAccess.getDocumentsDetailsFromDocuments(documents);
+    }
+
+    public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
+    {
+        return documentDetailsDataAccess.getQuantityItemWithSpecificEvent(idEvent, idItem);
     }
 }

@@ -18,7 +18,6 @@ import UI.Components.*;
 
 import Model.Item.Item;
 
-import Controller.SearchController;
 import UI.Components.EnhancedTable.JEnhancedTableScrollPanel;
 import UI.Components.EnhancedTable.TableModelMaker;
 import UI.Components.Fields.ComboBoxPanel;

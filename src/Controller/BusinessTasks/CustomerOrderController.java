@@ -14,6 +14,7 @@ import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Document.CreateDocumentException;
 import Exceptions.Document.DocumentException;
+import Exceptions.DocumentDetails.CreateDocumentDetailsException;
 import Exceptions.DocumentStatus.GetDocumentStatusException;
 import Exceptions.Item.ItemException;
 import Exceptions.Item.UpdateItemException;
@@ -160,17 +161,18 @@ public class CustomerOrderController
             try
             {
                 document.setId(DocumentController.createDocument(document));
+
+                for (DocumentDetails documentDetails : itemDocumentDetails)
+                {
+                    DocumentDetailsController.createDocumentDetails(documentDetails);
+                }
             }
-            catch (DocumentException e)
+            catch (DocumentException | CreateDocumentDetailsException e)
             {
                 System.out.println("Error while creating document: " + e.getMessage());
                 throw new ExecuteOrderException("Error while creating document");
             }
 
-            for (DocumentDetails documentDetails : itemDocumentDetails)
-            {
-                DocumentDetailsController.createDocumentDetails(documentDetails);
-            }
         }
         catch (CreateProcessException | CreateDocumentException | ProcessException e)
         {

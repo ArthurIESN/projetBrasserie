@@ -4,6 +4,7 @@ import BusinessLogic.Event.EventManager;
 import DataAccess.DataAccesUtils;
 import DataAccess.DatabaseConnexion;
 import Exceptions.DataAccess.DatabaseConnectionFailedException;
+import Exceptions.Event.GetDatesEventsException;
 import Exceptions.Event.GetEventsBeforeDateException;
 import Exceptions.Event.GetEventsWithItemException;
 import Model.Event.Event;
@@ -20,6 +21,30 @@ import java.util.List;
 public class EventDBAccess implements EventDataAccess
 {
     public EventDBAccess(){}
+
+    public ArrayList<Integer> getDatesEvents(Integer idEvent)  throws GetDatesEventsException
+    {
+        String query = "SELECT DISTINCT YEAR(start_date) AS start_date FROM event WHERE id = ?";
+
+        try
+        {
+            Connection connection = DatabaseConnexion.getInstance();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1,idEvent);
+            ResultSet resultSet = statement.executeQuery();
+            ArrayList<Integer> dates = new ArrayList<>();
+
+            while (resultSet.next()) {
+                dates.add(resultSet.getInt("start_date"));
+            }
+            return dates;
+        } catch (SQLException | DatabaseConnectionFailedException e)
+        {
+            System.err.println(e.getMessage());
+            throw new GetDatesEventsException("Error while getting dates of events");
+        }
+    }
 
     public ArrayList<Event> getEventsWithSpecificItem(int idItem) throws GetEventsWithItemException
     {
