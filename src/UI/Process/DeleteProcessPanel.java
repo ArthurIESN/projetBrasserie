@@ -48,36 +48,7 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
         processSearch.getSearchField().setPlaceholder("Search for a process");
         gridDeleteProcess.addField("Process", processSearch);
 
-        JButton deleteButton = new JButton("Delete");
-        deleteButton.addActionListener(e ->
-        {
-
-            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this process?", "Warning", JOptionPane.YES_NO_OPTION);
-
-            if(dialogResult == JOptionPane.NO_OPTION)
-            {
-                return;
-            }
-
-            Process selectedProcess = processSearch.getSelectedItem();
-            if (selectedProcess != null)
-            {
-                try
-                {
-                    ProcessController.deleteProcess(selectedProcess.getId());
-
-                    JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                    // refresh the panel
-                    processPanel.navbarForceClick(3);
-
-                }
-                catch (DeleteProcessException | UnauthorizedAccessException e1)
-                {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        JButton deleteButton = getJButton(processPanel);
 
         gridDeleteProcess.addField(deleteButton);
 
@@ -136,6 +107,40 @@ public class DeleteProcessPanel extends JPanel implements ProcessObserver
             }
         });
         add(tableScrollPanel);
+    }
+
+    private JButton getJButton(ProcessPanel processPanel) {
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(e ->
+        {
+
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this process?", "Warning", JOptionPane.YES_NO_OPTION);
+
+            if(dialogResult == JOptionPane.NO_OPTION)
+            {
+                return;
+            }
+
+            Process selectedProcess = processSearch.getSelectedItem();
+            if (selectedProcess != null)
+            {
+                try
+                {
+                    ProcessController.deleteProcess(selectedProcess.getId());
+
+                    JOptionPane.showMessageDialog(null, "Process deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                    // refresh the panel
+                    processPanel.navbarForceClick(3);
+
+                }
+                catch (DeleteProcessException | UnauthorizedAccessException e1)
+                {
+                    JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        return deleteButton;
     }
 
     @Override

@@ -43,34 +43,7 @@ public class DeleteEmployeePanel extends JPanel implements EmployeeObserver
 
         layoutHelper.addField("Employee", employeeSearch);
 
-        JButton deleteButton = new JButton("Delete");
-        deleteButton.addActionListener(e ->
-        {
-            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this employee?", "Warning", JOptionPane.YES_NO_OPTION);
-
-            if(dialogResult == JOptionPane.NO_OPTION)
-            {
-                return;
-            }
-
-            Employee selectedEmployee = employeeSearch.getSelectedItem();
-
-            if(selectedEmployee != null)
-            {
-                try
-                {
-                    EmployeeController.deleteEmployee(selectedEmployee.getId());
-                    JOptionPane.showMessageDialog(null, "Employee deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                    //refresh
-                    employeePanel.navbarForceClick(3);
-                }
-                catch (Exception ex)
-                {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        JButton deleteButton = getJButton(employeePanel);
 
         layoutHelper.addField(deleteButton);
 
@@ -109,6 +82,38 @@ public class DeleteEmployeePanel extends JPanel implements EmployeeObserver
         );
 
         add(tableScrollPanel, BorderLayout.SOUTH);
+    }
+
+    private JButton getJButton(EmployeePanel employeePanel) {
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(e ->
+        {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this employee?", "Warning", JOptionPane.YES_NO_OPTION);
+
+            if(dialogResult == JOptionPane.NO_OPTION)
+            {
+                return;
+            }
+
+            Employee selectedEmployee = employeeSearch.getSelectedItem();
+
+            if(selectedEmployee != null)
+            {
+                try
+                {
+                    EmployeeController.deleteEmployee(selectedEmployee.getId());
+                    JOptionPane.showMessageDialog(null, "Employee deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                    //refresh
+                    employeePanel.navbarForceClick(3);
+                }
+                catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        return deleteButton;
     }
 
 
