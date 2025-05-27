@@ -3,7 +3,9 @@ package UI.Document;
 import Controller.Document.DocumentController;
 import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Process.ProcessException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
+import Exceptions.ProcessType.ProcessTypeException;
 import Model.Document.Document;
 import Model.Document.MakeDocument;
 import Model.DocumentStatus.DocumentStatus;
@@ -32,8 +34,9 @@ public class CreateDocumentForm extends JPanel {
         ArrayList<ProcessType> processTypes = new ArrayList<>();
 
         try{
-            processTypes = ProcessTypeController.getAllTypes();
-        }catch (GetAllProcessTypesException e){
+            processTypes.add(0, new ProcessType(1, "Order"));
+            processTypes.add(1, new ProcessType(5, "Customer Order"));
+        }catch (ProcessTypeException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -48,6 +51,7 @@ public class CreateDocumentForm extends JPanel {
         }
 
         processTypeSearch.onSelectedItemChange(processTypeChange -> {
+            System.out.println("Process Type Changed: " + processTypeSearch.getSelectedItem());
             documentModelPanel.setTypeDocument(processTypeSearch.getSelectedItem().getLabel());
             documentModelPanel.loadDataAndShowProcesses(processTypeSearch.getSelectedItem().getId());
             documentModelPanel.update();

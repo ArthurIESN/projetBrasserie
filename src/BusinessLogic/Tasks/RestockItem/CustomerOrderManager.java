@@ -6,6 +6,9 @@ import Model.Item.Item;
 import Model.ProcessStatus.ProcessStatus;
 import Model.ProcessType.ProcessType;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -20,11 +23,11 @@ public class CustomerOrderManager
         return Math.round((totalPrice * MIN_DEPOSIT_PERCENTAGE) * 100f) / 100f;
     }
 
-
-
-    public void executeOrder(HashMap<Item, Integer> items, Customer customer, Employee employee, ProcessStatus processStatus, ProcessType processType, float[] values)
+    public Date getDate(int days)
     {
-        //@todo remove this
+        Date currentDate = new Date();
+        LocalDate localDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate deliveryLocalDate = localDate.plusDays(days);
+        return Date.from(deliveryLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
-
 }

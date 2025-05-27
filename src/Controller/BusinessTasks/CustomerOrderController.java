@@ -49,6 +49,11 @@ public class CustomerOrderController
         return customerOrderManager.customerDepositMinimumAmount(customer, totalPrice);
     }
 
+    public static Date getDate(int days)
+    {
+        return customerOrderManager.getDate(days);
+    }
+
     public static void executeOrder(HashMap<Item, Integer> items, Customer customer, float[] values, float deposit, Date desiredDeliveryDate) throws UnauthorizedAccessException, ExecuteOrderException
     {
         if(!AppController.hasAccess(EmployeeStatus.Status.Manager))
@@ -74,12 +79,7 @@ public class CustomerOrderController
         DocumentStatus documentStatus;
         Employee employee = AppController.getCurrentConnectedEmployee();
 
-
-        // @todo move this
-        Date currentDate = new Date();
-        LocalDate localDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate deliveryLocalDate = localDate.plusDays(7);
-        Date deliveryDate = Date.from(deliveryLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date deliveryDate = getDate(7);
         try
            {
                processType = ProcessTypeController.getProcessType(5);
@@ -108,7 +108,7 @@ public class CustomerOrderController
         try
         {
              document = new Document(10, "AUTO_CUSTOMER_ORDER_DOCUMENT",
-                    currentDate, null, 0.f, "",
+                     new Date(), null, 0.f, "",
                     false, deliveryDate, deposit > 0,
                     deposit, desiredDeliveryDate,  values[3], values[0], values[3] - values[0], null, null, process, documentStatus);
         }

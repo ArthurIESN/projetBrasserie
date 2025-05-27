@@ -327,6 +327,7 @@ public class DocumentModelPanel extends JPanel {
         labelField = new JEnhancedTextField();
         labelField.setPlaceholder("Label document");
         labelField.setEditable(false);
+        labelField.setCanClear(false);
 
         dateField = new JDateField();
         dateField.setDate(today);
