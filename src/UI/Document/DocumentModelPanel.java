@@ -1,5 +1,6 @@
 package UI.Document;
 
+import BusinessLogic.Document.DocumentManager;
 import Controller.Customer.CustomerController;
 import Controller.DeliveryTruck.DeliveryTruckController;
 import Controller.Document.DocumentController;
@@ -39,6 +40,7 @@ import java.util.*;
 import Utils.Utils;
 
 public class DocumentModelPanel extends JPanel {
+    private final DocumentManager documentManager;
     private final JPanel numberFieldPanel;
     private final JPanel searchListsVatPanel;
     private final JPanel depositPanel;
@@ -93,6 +95,8 @@ public class DocumentModelPanel extends JPanel {
 
     public DocumentModelPanel(boolean updateDocument) {
         setLayout(new BorderLayout());
+
+        documentManager = new DocumentManager();
 
         this.updateDocument = updateDocument;
 
@@ -388,61 +392,6 @@ public class DocumentModelPanel extends JPanel {
         depositPanel.repaint();
     }
 
-    //@todo : mettre dans la couche buisness logique
-    private void calculTotalVat() {
-        totalExcludingTax = 0;
-        totalIncludingTax = 0;
-        totalVatAmount = 0;
-
-        for (Map.Entry<Integer, ArrayList<JLabel>> entry : vatItemHashMap.entrySet()) {
-            ArrayList<JLabel> labelList = entry.getValue();
-
-            for (int i = 0; i < labelList.size(); i++) {
-                float value = Float.parseFloat(labelList.get(i).getText().replace(",", "."));
-                if (i == 0) {
-                    totalExcludingTax += value;
-                } else if (i == 1) {
-                    totalIncludingTax += value;
-                } else if (i == 2) {
-                    totalVatAmount += value;
-                }
-            }
-        }
-
-        if (reduction > 0) {
-            float reductionAmount = (totalExcludingTax * reduction) / 100;
-            totalExcludingTax -= reductionAmount;
-
-            totalVatAmount = totalExcludingTax * (comboBoxVat.getSelectedItem().getRate() / 100);
-
-            totalIncludingTax = totalExcludingTax + totalVatAmount;
-        }
-
-        if (depositAmount > 0) {
-            totalIncludingTax -= depositAmount;
-
-            if (totalIncludingTax < 0) {
-                totalIncludingTax = 0;
-            }
-        }
-
-    }
-
-    //@todo : mettre dans la couche buisness logique
-    private float[] calculVat(float unitPrice, float quantity, float vatRate) {
-        float[] result = new float[3];
-
-        float totalExcludingTax = unitPrice * quantity;
-        float totalIncludingTax = totalExcludingTax * (1 + vatRate / 100);
-        float vatAmount = totalIncludingTax - totalExcludingTax;
-
-        result[0] = totalExcludingTax;
-        result[1] = totalIncludingTax;
-        result[2] = vatAmount;
-
-        return result;
-    }
-
     private void updateCalculVat() {
 
         ArrayList<JLabel> tvaFields;
@@ -467,7 +416,7 @@ public class DocumentModelPanel extends JPanel {
                 float unitPrice = item.getPrice();
                 float vatRate = comboBoxVat.getSelectedItem().getRate();
 
-                float[] values = calculVat(unitPrice,quantity,vatRate);
+                float[] values = documentManager.calculVat(unitPrice,quantity,vatRate);
 
                 if (vatItemHashMap.containsKey(item.getId())) {
                     tvaFields = vatItemHashMap.get(item.getId());
@@ -530,7 +479,20 @@ public class DocumentModelPanel extends JPanel {
             }
         }
 
-        calculTotalVat();
+        float[] total = documentManager.calculTotalVat(this.reduction,this.depositAmount,vatItemHashMap, comboBoxVat.getSelectedItem().getRate());
+        for (int i = 0; i < total.length; i++) {
+            switch (i) {
+                case 0:
+                    this.totalExcludingTax = total[i];
+                    break;
+                case 1:
+                    this.totalIncludingTax = total[i];
+                    break;
+                case 2:
+                    this.totalVatAmount = total[i];
+                    break;
+            }
+        }
 
         totalExclVatLabel.setText(String.format("%.2f", totalExcludingTax) + " €");
         totalInclVatLabel.setText(String.format("%.2f", totalIncludingTax) + " €");
