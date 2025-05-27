@@ -142,7 +142,6 @@ public class DocumentDBAccess implements DocumentDataAccess
     @Override
     public void updateDocument(Document document) {
 
-        //@todo : pas complet
         String query = "UPDATE document SET " +
                 "label = ?, " +
                 "date = ?, " +
