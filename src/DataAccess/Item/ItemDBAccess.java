@@ -39,7 +39,7 @@ public class ItemDBAccess implements ItemDataAccess
 
             PreparedStatement statement = dataBaseConnection.prepareStatement(query);
 
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery();
 
             ArrayList<Item> items = new ArrayList<>();
 

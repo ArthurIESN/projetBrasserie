@@ -250,6 +250,8 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
     {
+        System.out.println("getProcessWithSpecificType called with id: " + id);
+
         String query = "SELECT * FROM process  " +
                 "LEFT JOIN supplier ON process.id_supplier = supplier.id " +
                 "JOIN process_type           ON process.id_process_type = process_type.id " +
@@ -263,9 +265,9 @@ public class ProcessDBAccess implements ProcessDataAccess
         try{
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = databaseConnexion.prepareStatement(query);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
 
-            ResultSet resultSet = preparedStatement.executeQuery(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             ArrayList<Process> processes = new ArrayList<>();
 
