@@ -38,11 +38,6 @@ public class DocumentDetailsController
         return documentDetailsManager.getAllDocumentDetails();
     }
 
-    public static ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException
-    {
-        return documentDetailsManager.getDocumentsDetailsFromDocuments(documents);
-    }
-
     public static ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
     {
         return documentDetailsManager.getQuantityItemWithSpecificEvent(idEvent, idItem);

@@ -53,7 +53,12 @@ public class EmployeeStatusDBAccess implements EmployeeStatusDataAccess
 
             while (resultSet.next())
             {
-                employeeStatuses.add(makeEmployeeStatus(resultSet));
+                EmployeeStatus employeeStatus = makeEmployeeStatus(resultSet);
+
+                if (employeeStatus != null)
+                {
+                    employeeStatuses.add(employeeStatus);
+                }
             }
 
             return employeeStatuses;

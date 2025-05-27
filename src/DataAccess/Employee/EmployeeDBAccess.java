@@ -36,7 +36,12 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
             while (resultSet.next())
             {
-                employees.add(makeEmployee(resultSet));
+                Employee employee = EmployeeDBAccess.makeEmployee(resultSet);
+
+                if (employee != null)
+                {
+                    employees.add(employee);
+                }
             }
 
             return employees;
@@ -83,6 +88,20 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
     public void createEmployee(Employee employee) throws CreateEmployeeException
     {
+        if(employee == null)
+        {
+            throw new CreateEmployeeException("Employee cannot be null");
+        }
+        else if(employee.getEmployeeStatus() == null)
+        {
+            throw new CreateEmployeeException("Employee status cannot be null");
+        }
+        else if(employee.getBirthDate() == null)
+        {
+            throw new CreateEmployeeException("Birth date cannot be null");
+        }
+
+
         String query = "INSERT INTO employee (last_name, first_name, birth_date, password, id_employee_status) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -147,6 +166,19 @@ public class EmployeeDBAccess implements EmployeeDataAccess
 
     public void updateEmployee(Employee employee) throws UpdateEmployeeException
     {
+        if(employee == null)
+        {
+            throw new UpdateEmployeeException("Employee cannot be null");
+        }
+        else if(employee.getEmployeeStatus() == null)
+        {
+            throw new UpdateEmployeeException("Employee status cannot be null");
+        }
+        else if(employee.getBirthDate() == null)
+        {
+            throw new UpdateEmployeeException("Birth date cannot be null");
+        }
+
         String query = "UPDATE employee " +
                 "SET last_name = ?, first_name = ?, birth_date = ?, id_employee_status = ? " +
                 "WHERE id = ?";
@@ -179,6 +211,16 @@ public class EmployeeDBAccess implements EmployeeDataAccess
     @Override
     public Employee connect(Integer id, String password) throws ConnectException
     {
+
+        if(id == null)
+        {
+            throw new ConnectException("ID cannot be null");
+        }
+        else if(password == null)
+        {
+            throw new ConnectException("Password cannot be null");
+        }
+
         String queryPassword = "SELECT password " +
                 "FROM employee " +
                 "WHERE id = ?";

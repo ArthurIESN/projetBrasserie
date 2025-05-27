@@ -16,6 +16,5 @@ public interface DocumentDetailsDataAccess
     DocumentDetails getDocumentDetails(Integer id);
     ArrayList<DocumentDetails> getAllDocumentDetails();
 
-    ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException;
     ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException;
 }

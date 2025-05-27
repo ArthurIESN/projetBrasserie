@@ -22,6 +22,12 @@ public class EventDBAccess implements EventDataAccess
 
     public ArrayList<Integer> getDatesEvents(Integer idEvent)  throws GetDatesEventsException
     {
+
+        if(idEvent == null)
+        {
+            throw new GetDatesEventsException("Invalid event ID provided");
+        }
+
         String query = "SELECT DISTINCT YEAR(start_date) AS start_date FROM event WHERE id = ?";
 
         try
@@ -33,7 +39,8 @@ public class EventDBAccess implements EventDataAccess
             ResultSet resultSet = statement.executeQuery();
             ArrayList<Integer> dates = new ArrayList<>();
 
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 dates.add(resultSet.getInt("start_date"));
             }
             return dates;
@@ -63,7 +70,12 @@ public class EventDBAccess implements EventDataAccess
 
             while (resultSet.next())
             {
-                events.add(makeEvent(resultSet));
+                Event event = makeEvent(resultSet);
+
+                if (event != null)
+                {
+                    events.add(event);
+                }
             }
 
          return events;
@@ -76,6 +88,11 @@ public class EventDBAccess implements EventDataAccess
     @Override
     public ArrayList<Event> getEventsBeforeDate(Date date) throws GetEventsBeforeDateException
     {
+        if(date == null)
+        {
+            throw new GetEventsBeforeDateException("Invalid date provided");
+        }
+
         String query = "SELECT * " +
                 "FROM event " +
                 "WHERE start_date <= ? " +
@@ -93,11 +110,17 @@ public class EventDBAccess implements EventDataAccess
 
             while (resultSet.next())
             {
-                events.add(makeEvent(resultSet));
+                Event event = makeEvent(resultSet);
+
+                if (event != null)
+                {
+                    events.add(event);
+                }
             }
 
             return events;
-        }catch (SQLException | DatabaseConnectionFailedException e){
+        }catch (SQLException | DatabaseConnectionFailedException e)
+        {
             System.out.println(e.getMessage());
             throw new GetEventsBeforeDateException("Error while getting events before date");
         }

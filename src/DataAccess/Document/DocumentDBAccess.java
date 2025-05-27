@@ -23,6 +23,12 @@ public class DocumentDBAccess implements DocumentDataAccess
 {
     public ArrayList<Document> getAllCurrentCommandsForAnItem(Item item) throws GetAllCurrentCommandsForAnItemException
     {
+
+        if(item == null)
+        {
+            throw new GetAllCurrentCommandsForAnItemException("Item cannot be null");
+        }
+
         String query = "SELECT * " +
                 "FROM document " +
                 "WHERE " +
@@ -96,18 +102,18 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
             statement.setObject(3, document.getDeadLine() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null, Types.DATE);
-            statement.setFloat(4, document.getReduction());
-            statement.setString(5, document.getValidity());
+            statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
+            statement.setString(5, document.getValidity()); //@todo : ca peux etre null ca ?
             statement.setBoolean(6, document.getIsDelivered());
             statement.setObject(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(8, document.getDepositIsPaid());
-            statement.setFloat(9, document.getDepositAmount());
-            statement.setDate(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
-            statement.setFloat(11, document.getTotalInclusiveOfTax());
-            statement.setFloat(12, document.getTotalVat());
-            statement.setFloat(13, document.getTotalExclVat());
+            statement.setObject(8, document.getDepositAmount() != null ? document.getDepositAmount() : null, Types.FLOAT);
+            statement.setObject(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
+            statement.setObject(11, document.getTotalInclusiveOfTax() != null ? document.getTotalInclusiveOfTax() : null, Types.FLOAT);
+            statement.setObject(12, document.getTotalVat() != null ? document.getTotalVat() : null, Types.FLOAT);
+            statement.setObject(13, document.getTotalExclVat() != null ? document.getTotalExclVat() : null, Types.FLOAT);
             statement.setObject(14, document.getCollectionAgency() != null ? document.getCollectionAgency().getId() : null, Types.INTEGER);
-            statement.setObject(15, document.getDocumentStatus() != null ? document.getDocumentStatus().getId() : null, Types.INTEGER);
+            statement.setInt(15, document.getDocumentStatus().getId());
             statement.setObject(16, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
             statement.setObject(17, document.getProcess() != null ? document.getProcess().getId() : null, Types.INTEGER);
 
@@ -136,6 +142,7 @@ public class DocumentDBAccess implements DocumentDataAccess
     @Override
     public void updateDocument(Document document) {
 
+        //@todo : pas complet
         String query = "UPDATE document SET " +
                 "label = ?, " +
                 "date = ?, " +
@@ -154,32 +161,19 @@ public class DocumentDBAccess implements DocumentDataAccess
         if(document == null)
         {
             throw new UpdateDocumentException("Document cannot be null");
-        }else if(document.getLabel().isEmpty())
+        }
+        else if(document.getLabel() == null || document.getLabel().isEmpty())
         {
             throw new UpdateDocumentException("Label cannot be empty");
-        }else if(document.getDate() == null){
-            throw new UpdateDocumentException("Date cannot be null");
-        }else if(document.getValidity() == null)
+        }else if(document.getDate() == null)
         {
-            throw new UpdateDocumentException("Validity cannot be null");
+            throw new UpdateDocumentException("Date cannot be null");
         }else if(document.getDocumentStatus() == null)
         {
             throw new UpdateDocumentException("Document status cannot be null");
         }else if(document.getProcess() == null)
         {
             throw new UpdateDocumentException("Process cannot be null");
-        }else if(document.getDesiredDeliveryDate() == null)
-        {
-            throw new UpdateDocumentException("Desired delivery date cannot be null");
-        }else if(document.getDeliveryDate() == null){
-            throw new UpdateDocumentException("Delivery date cannot be null");
-        }
-        else if(document.getDepositIsPaid() == null)
-        {
-            throw new UpdateDocumentException("Deposit is paid cannot be null");
-        }else if(document.getDepositAmount() == null)
-        {
-            throw new UpdateDocumentException("Deposit amount cannot be null");
         }
 
         try{
@@ -189,12 +183,12 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
             statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
-            statement.setString(4, document.getValidity());
+            statement.setString(4, document.getValidity()); //@todo : ca peux etre null ca ?
             statement.setBoolean(5, document.getIsDelivered());
-            statement.setDate(6, new java.sql.Date(document.getDeliveryDate().getTime()));
+            statement.setObject(6,  document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(7, document.getDepositIsPaid());
             statement.setObject(8, document.getDepositAmount() != null ? document.getDepositAmount() : null, Types.FLOAT);
-            statement.setDate(9, new java.sql.Date(document.getDesiredDeliveryDate().getTime()));
+            statement.setObject(9, document.getDesiredDeliveryDate()  != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null, Types.DATE);
             statement.setInt(10, document.getDocumentStatus().getId());
             statement.setObject(11, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
             statement.setInt(12, document.getProcess().getId());
@@ -213,8 +207,10 @@ public class DocumentDBAccess implements DocumentDataAccess
     }
 
     @Override
-    public void deleteDocument(Integer id) throws DeleteDocumentException {
+    public void deleteDocument(Integer id) throws DeleteDocumentException
+    {
         String query = "DELETE FROM document WHERE id = ?";
+
         try{
             Connection databaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement statement = databaseConnection.prepareStatement(query);

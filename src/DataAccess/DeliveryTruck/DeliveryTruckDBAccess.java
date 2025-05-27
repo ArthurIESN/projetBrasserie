@@ -47,7 +47,6 @@ public class DeliveryTruckDBAccess implements DeliveryTruckDataAccess
             ArrayList<DeliveryTruck> deliveryTrucks = new ArrayList<>();
             while(resultSet.next())
             {
-
                 DeliveryTruck deliveryTruck = makeDeliveryTruck(resultSet);
                 if(deliveryTruck != null)
                 {
@@ -56,7 +55,9 @@ public class DeliveryTruckDBAccess implements DeliveryTruckDataAccess
             }
 
             return deliveryTrucks;
-        }catch (SQLException | DatabaseConnectionFailedException e){
+        }
+        catch (SQLException | DatabaseConnectionFailedException e)
+        {
             System.err.println(e.getMessage());
             throw new GetAllDeliveryTrucksException();
         }

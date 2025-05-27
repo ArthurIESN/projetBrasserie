@@ -63,8 +63,12 @@ public class LocalityDBAccess implements LocalityDataAccess
 
             while (resultSet.next())
             {
-                localities.add(makeLocalities(resultSet));
+                Locality locality = makeLocalities(resultSet);
 
+                if (locality != null)
+                {
+                    localities.add(locality);
+                }
             }
 
             return localities;

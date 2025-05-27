@@ -75,6 +75,7 @@ public class CustomerOrderController
         Employee employee = AppController.getCurrentConnectedEmployee();
 
 
+        // @todo move this
         Date currentDate = new Date();
         LocalDate localDate = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate deliveryLocalDate = localDate.plusDays(7);
@@ -83,7 +84,7 @@ public class CustomerOrderController
            {
                processType = ProcessTypeController.getProcessType(5);
                processStatus = ProcessStatusController.getProcessStatus(1);
-                documentStatus = DocumentStatusController.getDocumentStatus(1);
+               documentStatus = DocumentStatusController.getDocumentStatus(1);
            } catch (GetProcessTypeException | GetProcessStatusException | GetDocumentStatusException e)
            {
                System.out.println("Error " + e.getMessage());
