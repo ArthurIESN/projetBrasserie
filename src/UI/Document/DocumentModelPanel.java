@@ -111,7 +111,6 @@ public class DocumentModelPanel extends JPanel {
         ArrayList<Supplier> suppliers = new ArrayList<>();
         ArrayList<DeliveryTruck> deliveryTrucks = new ArrayList<>();
 
-        // @todo : ajouter une exception pour getAllDeliveryTrucks
         try {
             if(updateDocument){
                 documents = DocumentController.getAllDocuments();
