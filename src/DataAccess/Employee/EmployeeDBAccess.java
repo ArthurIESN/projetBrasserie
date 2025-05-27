@@ -180,7 +180,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess
         }
 
         String query = "UPDATE employee " +
-                "SET last_name = ?, first_name = ?, birth_date = ?, id_employee_status = ? " +
+                "SET last_name = ?, first_name = ?, birth_date = ?, is_married = ?,  id_employee_status = ? " +
                 "WHERE id = ?";
 
         try
@@ -191,8 +191,9 @@ public class EmployeeDBAccess implements EmployeeDataAccess
             statement.setString(1, employee.getLastName());
             statement.setString(2, employee.getFirstName());
             statement.setDate(3, new java.sql.Date(employee.getBirthDate().getTime()));
-            statement.setInt(4, employee.getEmployeeStatus().getId());
-            statement.setInt(5, employee.getId());
+            statement.setBoolean(4, employee.isMarried());
+            statement.setInt(5, employee.getEmployeeStatus().getId());
+            statement.setInt(6, employee.getId());
 
             int rowCount = statement.executeUpdate();
 

@@ -78,6 +78,7 @@ public class EmployeeModelPanel extends JPanel
             idField.setCanClear(false);
             idField.setPlaceholder("Employee Id");
 
+
             gridEmployee.addField("Search for an Employee", employeeSearchField);
             gridEmployee.addField("Employee ID", idField);
         }
@@ -107,7 +108,7 @@ public class EmployeeModelPanel extends JPanel
         gridEmployee.addField("First Name *", firstNameField);
         gridEmployee.addField("Last Name *", lastNameField);
         gridEmployee.addField("Birth Date *", birthDateField);
-        gridEmployee.addField("Married", marriedField);
+        gridEmployee.addField("Married *", marriedField);
         gridEmployee.addField("Password *", passwordField);
         gridEmployee.addField("Select an Employee Status *", employeeStatusSearchField);
         gridEmployee.addField(button);
