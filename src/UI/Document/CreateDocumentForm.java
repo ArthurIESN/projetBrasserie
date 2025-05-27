@@ -94,26 +94,6 @@ public class CreateDocumentForm extends JPanel {
         }catch (CreateDocumentException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        if(!documentModelPanel.getMultipleSelectionListItems().getSelectedItems().isEmpty()){
-            ArrayList<Item> items = documentModelPanel.getMultipleSelectionListItems().getSelectedItems();
-
-            for (Item item : items){
-                // @todo faire la création de document_details
-                float newQuantity = documentModelPanel.getNumberFieldHashMap().get(item.getId()).getFloat();
-                // Code pour l'ajout d'une ligne dans document_details en rapport avec chaque item
-                // mais avec toujours le même id de document
-               /* DocumentDetails documentDetails = MakeDocumentDetails.getDocumentDetails(
-                        null,
-                        item.getLabel(),
-                        item.getCurrentQuantity(),
-                        newQuantity,
-                        item.getPrice(),
-                        document.getId(),
-                        item.getId()
-                );*/
-            }
-        }
     }
 
 }
