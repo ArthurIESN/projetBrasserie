@@ -250,8 +250,6 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
     {
-        System.out.println("getProcessWithSpecificType called with id: " + id);
-
         String query = "SELECT * FROM process  " +
                 "LEFT JOIN supplier ON process.id_supplier = supplier.id " +
                 "JOIN process_type           ON process.id_process_type = process_type.id " +

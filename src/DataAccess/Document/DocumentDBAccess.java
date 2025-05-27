@@ -103,7 +103,7 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
             statement.setObject(3, document.getDeadLine() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null, Types.DATE);
             statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
-            statement.setString(5, document.getValidity()); //@todo : ca peux etre null ca ?
+            statement.setString(5, document.getValidity());
             statement.setBoolean(6, document.getIsDelivered());
             statement.setObject(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(8, document.getDepositIsPaid());
@@ -183,7 +183,7 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
             statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
-            statement.setString(4, document.getValidity()); //@todo : ca peux etre null ca ?
+            statement.setString(4, document.getValidity());
             statement.setBoolean(5, document.getIsDelivered());
             statement.setObject(6,  document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(7, document.getDepositIsPaid());

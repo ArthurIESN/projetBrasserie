@@ -163,7 +163,6 @@ public class ItemDBAccess implements ItemDataAccess
     @Override
     public void updateItem(Item item) throws UpdateItemException
     {
-        //@todo : ya des truc qui peuvent etre null ??
         String query = "UPDATE item " +
                 "SET label = ?, " +
                 "price = ?, " +

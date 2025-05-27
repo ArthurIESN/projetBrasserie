@@ -57,7 +57,6 @@ public class PaymentDBAccess implements PaymentDataAccess
 
     public ArrayList<Payment> searchPayment(String status, float minAmount, Date date) throws SearchPaymentException
     {
-        //@todo : status pas bon
         String query =  "SELECT * " +
                 "FROM payment " +
                 "JOIN document ON payment.id_document = document.id " +
