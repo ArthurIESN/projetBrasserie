@@ -26,16 +26,17 @@ replay_pid*
 # MacOs files
 *.DS_STORE
 
-# properties files
-*.properties
-
 # Environment file
 .env
 
 # Idea files
 .idea/
 
-# iml
+# out files
+out/
+
+# lib files
+lib/
+
+# .iml
 projetBrasserie.iml
-
-
