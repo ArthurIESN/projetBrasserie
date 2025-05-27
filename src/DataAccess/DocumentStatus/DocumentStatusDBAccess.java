@@ -28,7 +28,12 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
 
             while (resultSet.next())
             {
-                documentStatuses.add(makeDocumentStatus(resultSet));
+                DocumentStatus documentStatus = makeDocumentStatus(resultSet);
+
+                if(documentStatus != null)
+                {
+                    documentStatuses.add(documentStatus);
+                }
             }
 
             return documentStatuses;
@@ -57,6 +62,11 @@ public class DocumentStatusDBAccess implements DocumentStatusDataAccess{
     @Override
     public DocumentStatus getDocumentStatus(Integer id) throws GetDocumentStatusException
     {
+        if(id == null)
+        {
+            throw new GetDocumentStatusException("Document status ID cannot be null");
+        }
+
         String query = "SELECT * FROM document_status WHERE id = ?";
 
         try{

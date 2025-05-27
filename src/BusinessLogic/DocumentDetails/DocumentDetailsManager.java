@@ -35,11 +35,6 @@ public class DocumentDetailsManager
         return documentDetailsDataAccess.getAllDocumentDetails();
     }
 
-    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException
-    {
-        return documentDetailsDataAccess.getDocumentsDetailsFromDocuments(documents);
-    }
-
     public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
     {
         return documentDetailsDataAccess.getQuantityItemWithSpecificEvent(idEvent, idItem);

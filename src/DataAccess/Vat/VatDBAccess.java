@@ -20,6 +20,11 @@ public class VatDBAccess implements VatDataAccess
 {
     public Vat getVat(String code) throws UnkownVatCodeException
     {
+        if(code == null)
+        {
+            throw new UnkownVatCodeException(code);
+        }
+
         String sql = "SELECT * FROM vat WHERE code = ?";
 
         try

@@ -3,6 +3,46 @@
 ## Java
 - Java 21 is required to run the application.
 
+
+##  Setup
+
+### Project Structure
+
+![ProjectStructure_readme.png](resources%2FreadmeImages%2FProjectStructure_lib_readme.png)
+
+- Check if all dependencies are in the `lib` folder and included in the project.
+
+![ProjectStructure_resources_readme.png](resources%2FreadmeImages%2FProjectStructure_resources_readme.png)
+
+- Check if the `resources` folder is included in the project.
+
+### Login
+
+All accounts shared the same password : `root`
+
+- Manager account 
+    - Id: `6`
+    - Password: `root`
+
+Manager has special permissions to access some features of the application like delete an `employee` or `process`.
+
+- Other accounts
+    - Id: `1`, `2`, `3`, `4`, `5`
+    - Password: `root`
+
+### Online database
+
+- Information about the online database can be found in the `db_infos.txt` file.
+
+To activate online database, you need to set up the `Database` section in the settings.
+
+In the menu bar :
+
+- On windows : `Brasserie > Settings`
+- On macOS : `command + ',' ` or `Brasserie Management System > Settings`
+
+![Settings_database_readme.png](resources%2FreadmeImages%2FSettings_database_readme.png)
+
 ## Dependencies
 
 - [mysql-connector-j-9.2.0](https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j-9.2.0.tar.gz)

@@ -57,6 +57,9 @@ public class PaymentDBAccess implements PaymentDataAccess
 
     public ArrayList<Payment> searchPayment(String status, float minAmount, Date date) throws SearchPaymentException
     {
+        //@todo : IL A MEME PAS UTILISER LE TYPE PAYMENT_STATUS PUTAIN J'EN AI MARRE !!!
+        // FAUT CHANGER CA
+
         String query =  "SELECT * " +
                 "FROM payment " +
                 "JOIN document ON payment.id_document = document.id " +

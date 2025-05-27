@@ -28,6 +28,19 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
     @Override
     public void createDocumentDetails(DocumentDetails documentDetails) throws CreateDocumentDetailsException
     {
+        if(documentDetails == null)
+        {
+            throw new CreateDocumentDetailsException("Document details cannot be null");
+        }
+        else if(documentDetails.getDocument() == null)
+        {
+            throw new CreateDocumentDetailsException("Document cannot be null");
+        }
+        else if(documentDetails.getItem() == null)
+        {
+            throw new CreateDocumentDetailsException("Item cannot be null");
+        }
+
         String query = "INSERT INTO document_details (label, quantity, new_quantity, unit_price, id_document, id_item) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -73,49 +86,9 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    @Override
-    public ArrayList<DocumentDetails> getDocumentsDetailsFromDocuments(ArrayList<Document> documents) throws GetDocumentDetailsFromDocumentsException
-    {
-        ArrayList<Integer> documentIds = Utils.Utils.transformData(documents, Document::getId);
-        String placeholders = String.join(",", documentIds.stream().map(id -> "?").toArray(String[]::new));
-
-        String query = "SELECT DISTINCT * " +
-                "FROM document_details " +
-                "WHERE id_document IN (" + placeholders + ")";
-
-        try (Connection connection = DatabaseConnexion.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(query))
-        {
-
-            for (int i = 0; i < documentIds.size(); i++)
-            {
-                preparedStatement.setInt(i + 1, documentIds.get(i));
-            }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            ArrayList<DocumentDetails> documentDetails = new ArrayList<>();
-
-            while (resultSet.next())
-            {
-                DocumentDetails documentDetail = makeDocumentDetails(resultSet);
-
-                if (documentDetail != null)
-                {
-                    documentDetails.add(documentDetail);
-                }
-            }
-
-            return documentDetails;
-
-        } catch (SQLException | DatabaseConnectionFailedException e)
-        {
-            System.out.println("Error while getting documents details from documents: " + e.getMessage());
-            throw new GetDocumentDetailsFromDocumentsException("Error while getting documents details from documents");
-        }
-    }
-
     public ArrayList<Integer> getQuantityItemWithSpecificEvent(int idEvent, int idItem) throws GetQuantityItemWithSpecificEventException
     {
+
         String query = "SELECT DISTINCT new_quantity  FROM document_details " +
                 "JOIN event_document_details ON event_document_details.id_document_details = document_details.id " +
                 "JOIN item ON item.id = document_details.id_item " +
@@ -126,8 +99,8 @@ public class DocumentDetailsDBAccess implements DocumentDetailsDataAccess
             Connection dataBaseConnection = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query);
 
-            preparedStatement.setInt(1,idEvent);
-            preparedStatement.setInt(2,idItem);
+            preparedStatement.setInt(1, idEvent);
+            preparedStatement.setInt(2, idItem);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             ArrayList<Integer> quantities = new ArrayList<>();

@@ -28,12 +28,10 @@ public class ItemDBAccess implements ItemDataAccess
 
     public ArrayList<Item> getAllItems() throws GetAllItemsException
     {
-        ArrayList<Item> items = new ArrayList<>();
-
-        String query = "SELECT *,packaging.id AS id_packaging,packaging.label AS packaging_label, " +
-                "packaging.quantity AS packaging_quantity,vat.code AS vat_code,vat.rate AS vat_rate " +
-                " FROM item INNER JOIN packaging ON item.id_packaging = packaging.id " +
-                "INNER JOIN vat ON item.code_vat = vat.code";
+        String query = "SELECT * " +
+                "FROM item " +
+                "JOIN packaging ON item.id_packaging = packaging.id " +
+                "JOIN vat ON item.code_vat = vat.code";
 
         try
         {
@@ -43,23 +41,35 @@ public class ItemDBAccess implements ItemDataAccess
 
             ResultSet resultSet = statement.executeQuery(query);
 
+            ArrayList<Item> items = new ArrayList<>();
+
             while (resultSet.next())
             {
-                items.add(makeItem(resultSet));
+                Item item = makeItem(resultSet);
+
+                if (item != null)
+                {
+                    items.add(item);
+                }
             }
+
+            return items;
         }catch (SQLException | DatabaseConnectionFailedException  e)
         {
             System.err.println(e.getMessage());
             throw new GetAllItemsException();
         }
-
-        return items;
-
     }
 
     @Override
     public int[] getMinMaxItemQuantityAndPrice(Vat vat) throws GetMinMaxItemQuantityAndPriceException
     {
+
+        if(vat == null)
+        {
+            throw new GetMinMaxItemQuantityAndPriceException("Invalid VAT code provided");
+        }
+
         String query = "SELECT " +
                 "MIN(current_quantity)  AS min_item_quantity, " +
                 "MAX(current_quantity)  AS max_item_quantity, " +
@@ -127,7 +137,12 @@ public class ItemDBAccess implements ItemDataAccess
             ArrayList<Item> items = new ArrayList<>();
             while (resultSet.next())
             {
-                items.add(makeItem(resultSet));
+                Item item = makeItem(resultSet);
+
+                if (item != null)
+                {
+                    items.add(item);
+                }
             }
 
             return items;
@@ -148,8 +163,17 @@ public class ItemDBAccess implements ItemDataAccess
     @Override
     public void updateItem(Item item) throws UpdateItemException
     {
+        //@todo : ya des truc qui peuvent etre null ??
         String query = "UPDATE item " +
-                "SET label = ?, price = ?, restock_quantity = ?, current_quantity = ?, empty_returnable_bottle_quantity = ?, empty_returnable_bottle_price = ?, forecast_date = ?, forecast_quantity = ?, min_quantity = ? " +
+                "SET label = ?, " +
+                "price = ?, " +
+                "restock_quantity = ?, " +
+                "current_quantity = ?, " +
+                "empty_returnable_bottle_quantity = ?, " +
+                "empty_returnable_bottle_price = ?, " +
+                "forecast_date = ?, " +
+                "forecast_quantity = ?, " +
+                "min_quantity = ? " +
                 "WHERE id = ?";
 
         try

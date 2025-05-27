@@ -250,27 +250,27 @@ public class ProcessDBAccess implements ProcessDataAccess
 
     public ArrayList<Process> getProcessWithSpecificType(Integer id) throws GetProcessWithSpecificType
     {
-        ArrayList<Process> processes = new ArrayList<>();
-
-        String query = "SELECT *, process.id AS id, supplier.id AS id_supplier, process_type.id AS id_type, " +
-                " process_status.id AS id_process_status, " +
-                "employee.id AS id_employee, customer.num_customer AS id_customer FROM process  LEFT JOIN supplier " +
-                "          ON process.id_supplier = supplier.id " +
-                "                JOIN process_type           ON process.id_process_type = process_type.id " +
-                "                JOIN process_status         ON process.id_process_status = process_status.id " +
-                "                LEFT JOIN employee          ON process.id_employee = employee.id " +
-                "                LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
-                "                LEFT JOIN customer          ON process.num_customer = customer.num_customer " +
-                "                LEFT JOIN customer_status   ON customer.id_customer_status = customer_status.id " +
+        String query = "SELECT * FROM process  " +
+                "LEFT JOIN supplier ON process.id_supplier = supplier.id " +
+                "JOIN process_type           ON process.id_process_type = process_type.id " +
+                "JOIN process_status         ON process.id_process_status = process_status.id " +
+                "LEFT JOIN employee          ON process.id_employee = employee.id " +
+                "LEFT JOIN employee_status   ON employee.id_employee_status = employee_status.id " +
+                "LEFT JOIN customer          ON process.num_customer = customer.num_customer " +
+                "LEFT JOIN customer_status   ON customer.id_customer_status = customer_status.id " +
                 "WHERE process_type.id = ?";
 
         try{
             Connection databaseConnexion = DatabaseConnexion.getInstance();
             PreparedStatement preparedStatement = databaseConnexion.prepareStatement(query);
             preparedStatement.setInt(1,id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()){
+            ResultSet resultSet = preparedStatement.executeQuery(query);
+
+            ArrayList<Process> processes = new ArrayList<>();
+
+            while (resultSet.next())
+            {
                 Process process = makeProcess(resultSet);
 
                 if(process != null)
@@ -278,13 +278,14 @@ public class ProcessDBAccess implements ProcessDataAccess
                     processes.add(process);
                 }
             }
-        }catch (SQLException | DatabaseConnectionFailedException e )
+
+            return processes;
+        }
+        catch (SQLException | DatabaseConnectionFailedException e )
         {
             System.err.println(e.getMessage());
             throw new GetProcessWithSpecificType();
         }
-
-        return processes;
     }
 
 
