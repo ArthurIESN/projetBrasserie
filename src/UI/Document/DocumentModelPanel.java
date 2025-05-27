@@ -638,9 +638,10 @@ public class DocumentModelPanel extends JPanel {
                 return true;
             }
 
-            for (Item item : multipleSelectionListItems.getSelectedItems()) {
-                int id = item.getId();
-                if (!numberFieldHashMap.containsKey(id)) {
+            for (Item item : multipleSelectionListItems.getSelectedItems())
+            {
+                if (!numberFieldHashMap.containsKey(item))
+                {
                     JOptionPane.showMessageDialog(this, "Please fill in the quantity for item " + item.getLabel(), "Error", JOptionPane.ERROR_MESSAGE);
                     return true;
                 }

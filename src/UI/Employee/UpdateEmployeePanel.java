@@ -70,6 +70,7 @@ public class UpdateEmployeePanel extends JPanel implements EmployeeObserver
         employeeModelPanel.getFirstNameField().updateText(employee.getFirstName());
         employeeModelPanel.getLastNameField().updateText(employee.getLastName());
         employeeModelPanel.getBirthDateField().setDate(employee.getBirthDate());
+        employeeModelPanel.getMarriedField().setSelected(employee.isMarried());
         // do not set the password
         employeeModelPanel.getEmployeeStatusSearchField().setSelectedItem(employee.getEmployeeStatus());
 

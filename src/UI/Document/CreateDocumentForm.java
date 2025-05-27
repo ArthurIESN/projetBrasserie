@@ -3,6 +3,7 @@ package UI.Document;
 import Controller.Document.DocumentController;
 import Controller.ProcessType.ProcessTypeController;
 import Exceptions.Document.CreateDocumentException;
+import Exceptions.Document.DocumentException;
 import Exceptions.Process.ProcessException;
 import Exceptions.ProcessType.GetAllProcessTypesException;
 import Exceptions.ProcessType.ProcessTypeException;
@@ -71,26 +72,36 @@ public class CreateDocumentForm extends JPanel {
     private void createDocument(){
         if(documentModelPanel.isDocumentInvalid()) return;
 
-        Document document = MakeDocument.getDocument(
-                null,
-                documentModelPanel.getLabelField().getText(),
-                documentModelPanel.getDateField().getDate(),
-                null,
-                documentModelPanel.getReduction(),
-                (String) documentModelPanel.getComboBoxValidity().getSelectedItem(),
-                documentModelPanel.getIsDelivered(),
-                documentModelPanel.getDeliveryDateField().getDate(),
-                documentModelPanel.getCheckBoxDepositIsPaid().isSelected(),
-                documentModelPanel.getDepositAmount(),
-                documentModelPanel.getDesiredDeliveryDate().getDate(),
-                ((Vat) documentModelPanel.getComboBoxVat().getSelectedItem()).getRate(),
-                documentModelPanel.getTotalIncludingTax(),
-                documentModelPanel.getTotalExcludingTax(),
-                null,
-                (DocumentStatus) documentModelPanel.getDocumentStatusSearch().getSelectedItem(),
-                null,
-                (Process) documentModelPanel.getProcessesSearch().getSelectedItem()
-        );
+        Document document;
+
+        try {
+            document = new Document(
+                    10,
+                    documentModelPanel.getLabelField().getText(),
+                    documentModelPanel.getDateField().getDate(),
+                    null,
+                    documentModelPanel.getReduction(),
+                    documentModelPanel.getComboBoxValidity().getSelectedItem(),
+                    documentModelPanel.getIsDelivered(),
+                    documentModelPanel.getDeliveryDateField().getDate(),
+                    documentModelPanel.getCheckBoxDepositIsPaid().isSelected(),
+                    documentModelPanel.getDepositAmount(),
+                    documentModelPanel.getDesiredDeliveryDate().getDate(),
+                    documentModelPanel.getComboBoxVat().getSelectedItem().getRate(),
+                    documentModelPanel.getTotalIncludingTax(),
+                    documentModelPanel.getTotalExcludingTax(),
+                    null,
+                    null,
+                    documentModelPanel.getProcessesSearch().getSelectedItem(),
+                    documentModelPanel.getDocumentStatusSearch().getSelectedItem()
+            );
+
+        }
+        catch (DocumentException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try{
             DocumentController.createDocument(document);

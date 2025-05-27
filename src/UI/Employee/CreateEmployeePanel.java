@@ -3,6 +3,7 @@ package UI.Employee;
 import Controller.Employee.EmployeeController;
 import Exceptions.Access.UnauthorizedAccessException;
 import Exceptions.Employee.CreateEmployeeException;
+import Exceptions.Employee.EmployeeException;
 import Model.Employee.Employee;
 import Model.Employee.MakeEmployee;
 
@@ -32,16 +33,25 @@ public class CreateEmployeePanel extends JPanel
     private void createEmployee()
     {
         if(employeeModelPanel.isEmployeeInvalid()) return;
+        Employee employee;
+        try
+        {
+            employee = new Employee(
+                    10,
+                    employeeModelPanel.getFirstNameField().getText(),
+                    employeeModelPanel.getLastNameField().getText(),
+                    employeeModelPanel.getBirthDateField().getDate(),
+                    employeeModelPanel.getMarriedField().isSelected(),
+                    employeeModelPanel.getPasswordField().getText(),
+                    employeeModelPanel.getEmployeeStatusSearchField().getSelectedItem()
+            );
+        }
+        catch (EmployeeException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        Employee employee = MakeEmployee.getEmployee(
-                null,
-                employeeModelPanel.getFirstNameField().getText(),
-                employeeModelPanel.getLastNameField().getText(),
-                employeeModelPanel.getBirthDateField().getDate(),
-                employeeModelPanel.getMarriedField().isSelected(),
-                employeeModelPanel.getPasswordField().getText(),
-                employeeModelPanel.getEmployeeStatusSearchField().getSelectedItem()
-        );
 
         try
         {
