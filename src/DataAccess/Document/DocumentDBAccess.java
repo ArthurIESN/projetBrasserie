@@ -155,7 +155,10 @@ public class DocumentDBAccess implements DocumentDataAccess
                 "desired_delivery_date = ?, " +
                 "id_document_status = ?, " +
                 "id_delivery_truck = ?, " +
-                "id_process = ? " +
+                "id_process = ?, " +
+                "total_inclusive_of_taxe = ?, " +
+                "total_vat = ?, " +
+                "total_excl_vat = ? " +
                 "WHERE document.id = ? ";
 
         if(document == null)
@@ -192,7 +195,10 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setInt(10, document.getDocumentStatus().getId());
             statement.setObject(11, document.getDeliveryTruck() != null ? document.getDeliveryTruck().getId() : null, Types.INTEGER);
             statement.setInt(12, document.getProcess().getId());
-            statement.setInt(13, document.getId());
+            statement.setFloat(13, document.getTotalInclusiveOfTax() != null ? document.getTotalInclusiveOfTax() : 0);
+            statement.setFloat(14, document.getTotalVat() != null ? document.getTotalVat() : 0);
+            statement.setFloat(15, document.getTotalExclVat() != null ? document.getTotalExclVat() : 0);
+            statement.setInt(16, document.getId());
 
             int rowsAffected = statement.executeUpdate();
             if(rowsAffected == 0)
