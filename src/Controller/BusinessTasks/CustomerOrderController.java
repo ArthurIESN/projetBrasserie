@@ -157,6 +157,7 @@ public class CustomerOrderController
             try
             {
                 document.setId(DocumentController.createDocument(document));
+                System.out.println(document);
 
                 for (DocumentDetails documentDetails : itemDocumentDetails)
                 {
@@ -165,7 +166,6 @@ public class CustomerOrderController
             }
             catch (DocumentException | CreateDocumentDetailsException e)
             {
-                System.out.println("Error while creating document: " + e.getMessage());
                 throw new ExecuteOrderException("Error while creating document");
             }
 

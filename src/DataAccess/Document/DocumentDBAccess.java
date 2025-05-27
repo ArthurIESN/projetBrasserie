@@ -102,12 +102,12 @@ public class DocumentDBAccess implements DocumentDataAccess
             statement.setString(1, document.getLabel());
             statement.setDate(2, new java.sql.Date(document.getDate().getTime()));
             statement.setObject(3, document.getDeadLine() != null ? new java.sql.Date(document.getDeadLine().getTime()) : null, Types.DATE);
-            statement.setObject(3, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
+            statement.setObject(4, document.getReduction() != null ? document.getReduction() : null, Types.FLOAT);
             statement.setString(5, document.getValidity());
             statement.setBoolean(6, document.getIsDelivered());
             statement.setObject(7, document.getDeliveryDate() != null ? new java.sql.Date(document.getDeliveryDate().getTime()) : null, Types.DATE);
             statement.setBoolean(8, document.getDepositIsPaid());
-            statement.setObject(8, document.getDepositAmount() != null ? document.getDepositAmount() : null, Types.FLOAT);
+            statement.setObject(9, document.getDepositAmount() != null ? document.getDepositAmount() : null, Types.FLOAT);
             statement.setObject(10, document.getDesiredDeliveryDate() != null ? new java.sql.Date(document.getDesiredDeliveryDate().getTime()) : null);
             statement.setObject(11, document.getTotalInclusiveOfTax() != null ? document.getTotalInclusiveOfTax() : null, Types.FLOAT);
             statement.setObject(12, document.getTotalVat() != null ? document.getTotalVat() : null, Types.FLOAT);
